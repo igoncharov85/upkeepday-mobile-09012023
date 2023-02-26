@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { ColorEnum } from "../../common/constants/styles/colors.enum";
+import { ColorEnum } from "../../../common/constants/styles/colors.enum";
 
 export default StyleSheet.create({
  
@@ -30,7 +30,6 @@ export default StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-end',
         textAlign: 'right',
-        marginTop: 10,
     },
     forgotPasswordText: {
         color: ColorEnum.BLACK,

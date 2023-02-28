@@ -6,12 +6,17 @@
  */
 import React from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
+import {Provider} from 'react-redux';
 import {RootNavigation} from './modules/navigation';
+import { store } from './store/store';
+
 
 function App(): JSX.Element {
   return (
     <SafeAreaView style={styles.rootComponent}>
-      <RootNavigation />
+      <Provider store={store}>
+        <RootNavigation />
+      </Provider>
     </SafeAreaView>
   );
 }

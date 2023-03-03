@@ -5,7 +5,7 @@ export default StyleSheet.create({
         width: '90%',
         justifyContent: 'flex-start',
         flexDirection: 'row',
-
+        alignItems: 'center',
     },
     headerText: {
         color: 'black',
@@ -13,4 +13,7 @@ export default StyleSheet.create({
         fontSize: 32,
         textAlign: 'left',
     },
+    buttonWrapper: {
+        marginRight: 10,
+    }
 })

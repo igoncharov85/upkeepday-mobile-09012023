@@ -2,16 +2,21 @@ import { StyleSheet } from "react-native";
 import { ColorEnum } from "../../common/constants/styles/colors.enum";
 
 export default StyleSheet.create({
- 
+
     container: {
         position: 'relative',
         backgroundColor: ColorEnum.ACCENT_BC,
         paddingTop: 20,
         flex: 1,
         height: '100%',
-        alignItems: 'center'
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingVertical: 20,
     },
-  
+    contentWrapper: {
+        width: '100%',
+        alignItems: 'center',
+    },
     formWrapper: {
         alignItems: 'center',
         width: '100%',
@@ -40,11 +45,9 @@ export default StyleSheet.create({
         opacity: 0.7,
     },
     footerWrapper: {
-        position: 'absolute',
         width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
-        bottom: 20,
     },
     footerText: {
         color: ColorEnum.BLACK,

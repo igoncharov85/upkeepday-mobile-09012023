@@ -47,6 +47,6 @@ $axiosAuth.interceptors.response.use(
         if (error.response.status === 401) {
             //dispatch(logoutAction());
         }
-        return error.response;
+        throw error.response;
     }
 );

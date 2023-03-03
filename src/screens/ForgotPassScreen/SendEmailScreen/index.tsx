@@ -16,10 +16,11 @@ import styles from './styles';
 const formInitialValues = {
   email: '',
 };
-interface ILoginScreen extends INavigationBase {
+interface ISendEmailScreen extends INavigationBase {
   setScreen: (screen: TSetPasswordScreen) => void;
 }
-export const SendEmailScreen: FC<ILoginScreen> = memo(
+
+export const SendEmailScreen: FC<ISendEmailScreen> = memo(
   ({navigation, setScreen}) => {
     const renderForm = ({
       touched,

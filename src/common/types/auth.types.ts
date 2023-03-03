@@ -1,6 +1,6 @@
 export interface ILoginRequest {
-    login: string
-    password: string
+    Login: string
+    Password: string
 }
 
 export interface IRegistrationRequest {
@@ -15,13 +15,23 @@ export interface IRegistrationRequest {
     PostalCode: string;
 }
 
+export interface IRegistrationDto {
+    data: IRegistrationRequest,
+    type: TRole
+}
+
+export interface IConfirmPassword {
+    Password: string
+    uuid: string
+}
+
 export interface IStatusResponse {
     status: string
 }
 export interface IResetItemRequest {
-    reset_item: string
+    Password: string
 }
 export interface IResetItemData {
-    password: string
+    Password: string
 }
 export type TRole = 'student' | 'teacher'

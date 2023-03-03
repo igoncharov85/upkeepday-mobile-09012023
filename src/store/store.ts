@@ -3,6 +3,8 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { persistStore, persistReducer } from "redux-persist";
 import createSagaMiddleware from 'redux-saga';
 import authReducer from './auth'
+import appReducer from './app'
+import cacheReducer from './cached'
 import rootSaga from './saga/rootSaga';
 
 const persistConfig = {
@@ -13,6 +15,8 @@ const persistConfig = {
 //reducer
 const reducer = combineReducers({
     auth: authReducer,
+    app: appReducer,
+    cache: cacheReducer
 })
 
 const sagaMiddleware = createSagaMiddleware();

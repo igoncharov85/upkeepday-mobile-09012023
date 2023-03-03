@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { ColorEnum } from "../../common/constants/styles/colors.enum";
+import { ColorEnum } from "../../../common/constants/styles/colors.enum";
 
 export default StyleSheet.create({
     container: {
@@ -13,11 +13,10 @@ export default StyleSheet.create({
     formWrapper: {
         alignItems: 'center',
         width: '100%',
-        marginTop: 10,
-        marginHorizontal: 15,
+        marginHorizontal: 20,
     },
     inputWrapper: {
-        marginVertical: 15,
+        marginVertical: 10,
         width: '90%',
     },
     buttonWrapper: {

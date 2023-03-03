@@ -1,12 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
-export interface CounterState {
+export interface AuthState {
     loading: boolean
 
 }
 
-const initialState: CounterState = {
+const initialState: AuthState = {
     loading: false
 }
 
@@ -18,6 +18,7 @@ export const authSlice = createSlice({
             state.loading = action.payload
         },
     },
+
 })
 
 // Action creators are generated for each case reducer function

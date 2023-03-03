@@ -1,24 +1,28 @@
 import {FormikProps, withFormik} from 'formik';
-import React, {FC, memo, ReactNode} from 'react';
-import {ScrollView, Text, View} from 'react-native';
-import {formicDefaultProps} from '../../../common/constants/styles/form.config';
-import {StudentRegistrationShape} from '../../../common/shemas/auth.shape';
-import {TRegistrationScreen} from '../../../common/types/component.styles';
+import React, {FC, memo} from 'react';
+import {View} from 'react-native';
+import {PasswordConfirmShape} from '../../../common/shemas/auth.shape';
+import {IConfirmPassword} from '../../../common/types/auth.types';
+import {INavigationBase} from '../../../common/types/component.styles';
 import {ScreenHeader} from '../../../components/ScreenHeader';
 import {CustomButton} from '../../../components/UI/CustomButton';
 import {CustomInput} from '../../../components/UI/CustomInput';
+import {confirmRegistrationPasswordAction} from '../../../store/auth/actions';
+import {useAppSelector} from '../../../store/hooks';
+import {dispatch} from '../../../store/store';
 import styles from './styles';
 
-const registrationProps = {
-  email: '',
-  password: '',
+const formInitialValues = {
   passwordConfirmation: '',
+  password: '',
 };
-interface IStudentRegistrationScreen {
-  setScreen: (screen: TRegistrationScreen) => any;
-}
-export const TutorRegistrationScreen: FC<IStudentRegistrationScreen> = memo(
-  ({setScreen}) => {
+interface IFinalScreen extends INavigationBase {}
+export const FinalRegistrationScreen: FC<IFinalScreen> = memo(
+  ({navigation, route}) => {
+    const {loading} = useAppSelector(state => state.auth);
+    const {registrationForm} = useAppSelector(state => state.cache);
+    const uuidToken = route?.params?.uuid;
+    console.log('uuidToken!!!!', uuidToken);
     const renderForm = ({
       touched,
       errors,
@@ -27,17 +31,13 @@ export const TutorRegistrationScreen: FC<IStudentRegistrationScreen> = memo(
       handleChange,
       handleSubmit,
       isValid,
-    }: FormikProps<typeof registrationProps>) => {
+    }: FormikProps<typeof formInitialValues>) => {
       return (
         <View style={styles.formWrapper}>
           <View style={styles.inputWrapper}>
             <CustomInput
-              onChangeText={handleChange('email')}
-              onBlur={handleBlur('email')}
-              value={values.email}
-              touched={!!touched.email}
-              validationErrorText={errors.email}
-              placeholder={'Email'}
+              disabled={true}
+              value={registrationForm?.Login || 'email'}
               labelText={'Email'}
             />
           </View>
@@ -48,6 +48,8 @@ export const TutorRegistrationScreen: FC<IStudentRegistrationScreen> = memo(
               value={values.password}
               touched={!!touched.password}
               validationErrorText={errors.password}
+              secureTextEntry
+              isPassword
               placeholder={'Password'}
               labelText={'Password'}
             />
@@ -59,39 +61,43 @@ export const TutorRegistrationScreen: FC<IStudentRegistrationScreen> = memo(
               value={values.passwordConfirmation}
               touched={!!touched.passwordConfirmation}
               validationErrorText={errors.passwordConfirmation}
-              placeholder={'Repeat password'}
-              labelText={'Repeat password'}
+              placeholder={'Password confirmation'}
+              secureTextEntry
+              isPassword
+              labelText={'Password confirmation'}
             />
           </View>
-
           <View style={styles.buttonWrapper}>
             <CustomButton
-              text={'Sign Up'}
+              text={'Confirm'}
               onPress={handleSubmit}
+              loading={loading}
               disabled={!(isValid && !!Object.keys(touched).length)}
             />
           </View>
         </View>
       );
     };
-    const RegistrationForm = withFormik<any, typeof registrationProps>({
+    const LoginForm = withFormik<any, typeof formInitialValues>({
       // Transform outer props into form values
-      validationSchema: StudentRegistrationShape,
+      validationSchema: PasswordConfirmShape,
 
       handleSubmit: values => {
         // do submitting things
-        console.log('login!!!', values);
+        const data: IConfirmPassword = {
+          Password: values.password,
+          uuid: uuidToken,
+        };
+
+        dispatch(confirmRegistrationPasswordAction(data));
       },
-      ...formicDefaultProps,
+      validateOnChange: true,
     })(renderForm);
     return (
-      <ScrollView
-        contentContainerStyle={styles.container}
-        style={styles.scroll}>
-        <ScreenHeader text={'Tutor Sign Up'} />
-        <RegistrationForm />
-        <Text style={styles.text}>I’m an existing user. Login</Text>
-      </ScrollView>
+      <View style={styles.container}>
+        <ScreenHeader text={'Finish Registration'} />
+        <LoginForm />
+      </View>
     );
   },
 );

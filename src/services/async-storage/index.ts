@@ -11,7 +11,7 @@ export class AsyncStorageService {
         }
     };
 
-    static setDataFromAsyncStorage = async (token: any) => {
+    static setToken = async (token: any) => {
         try {
             return await AsyncStorage.setItem(AsyncStorageEnum.JWT_TOKEN, token);
         } catch (e) {

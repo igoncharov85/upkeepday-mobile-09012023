@@ -5,6 +5,7 @@ export default StyleSheet.create({
     container: {
         backgroundColor: ColorEnum.ACCENT_BC,
         paddingTop: 20,
+        paddingVertical: 20,
         width: '100%',
         alignItems: 'center'
     },

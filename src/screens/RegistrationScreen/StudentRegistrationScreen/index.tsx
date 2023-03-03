@@ -1,12 +1,18 @@
 import {FormikProps, withFormik} from 'formik';
-import React, {FC, memo, ReactNode} from 'react';
+import React, {FC, memo, ReactNode, useState} from 'react';
 import {ScrollView, Text, View} from 'react-native';
+import {NavigationEnum} from '../../../common/constants/navigation';
 import {formicDefaultProps} from '../../../common/constants/styles/form.config';
 import {StudentRegistrationShape} from '../../../common/shemas/auth.shape';
+import {IRegistrationRequest} from '../../../common/types/auth.types';
 import {TRegistrationScreen} from '../../../common/types/component.styles';
 import {ScreenHeader} from '../../../components/ScreenHeader';
 import {CustomButton} from '../../../components/UI/CustomButton';
 import {CustomInput} from '../../../components/UI/CustomInput';
+import {registrationAction} from '../../../store/auth/actions';
+import {cacheRegistrationFormAction} from '../../../store/cached';
+import {useAppSelector} from '../../../store/hooks';
+import {dispatch} from '../../../store/store';
 import styles from './styles';
 
 const registrationProps = {
@@ -25,6 +31,8 @@ interface IStudentRegistrationScreen {
 }
 export const StudentRegistrationScreen: FC<IStudentRegistrationScreen> = memo(
   ({setScreen}) => {
+    const [data, setData] = useState<IRegistrationRequest>();
+    const {loading} = useAppSelector(state => state.auth);
     const renderForm = ({
       touched,
       errors,
@@ -91,17 +99,6 @@ export const StudentRegistrationScreen: FC<IStudentRegistrationScreen> = memo(
               labelText={'Address'}
             />
           </View>
-          <View style={styles.inputWrapper}>
-            <CustomInput
-              onChangeText={handleChange('country')}
-              onBlur={handleBlur('country')}
-              value={values.country}
-              touched={!!touched.country}
-              validationErrorText={errors.country}
-              placeholder={'Country'}
-              labelText={'Country'}
-            />
-          </View>
           <View style={styles.rowInput}>
             <View style={styles.inputSplitted}>
               <CustomInput
@@ -142,6 +139,7 @@ export const StudentRegistrationScreen: FC<IStudentRegistrationScreen> = memo(
             <CustomButton
               text={'Sign Up'}
               onPress={handleSubmit}
+              loading={loading}
               disabled={!(isValid && !!Object.keys(touched).length)}
             />
           </View>
@@ -153,8 +151,20 @@ export const StudentRegistrationScreen: FC<IStudentRegistrationScreen> = memo(
       validationSchema: StudentRegistrationShape,
 
       handleSubmit: values => {
-        // do submitting things
-        console.log('login!!!', values);
+        const data: IRegistrationRequest = {
+          AddressLine1: values.address,
+          Country: values.country,
+          FirstName: values.firstName,
+          LastName: values.lastName,
+          Login: values.email,
+          PhoneCountry: values.postalCode,
+          PhoneNumber: values.phoneNumber,
+          PostalCode: values.postalCode,
+          State: values.state,
+        };
+        dispatch(registrationAction({data, type: 'student'}));
+        dispatch(cacheRegistrationFormAction(data));
+        console.log('login worked', data);
       },
       ...formicDefaultProps,
     })(renderForm);
@@ -162,9 +172,15 @@ export const StudentRegistrationScreen: FC<IStudentRegistrationScreen> = memo(
       <ScrollView
         contentContainerStyle={styles.container}
         style={styles.scroll}>
-        <ScreenHeader text={'Student Sign Up'} />
+        <ScreenHeader
+          text={'Student Sign Up'}
+          withBackButton={true}
+          onBackPress={() => setScreen('type')}
+        />
         <RegistrationForm />
-        <Text style={styles.text}>I’m an existing user. Login</Text>
+        <Text style={styles.text} onPress={() => NavigationEnum.LOGIN}>
+          I’m an existing user. Login
+        </Text>
       </ScrollView>
     );
   },

@@ -1,13 +1,18 @@
 import {FormikProps, withFormik} from 'formik';
-import React, {FC, memo} from 'react';
+import React, {FC, memo, useEffect} from 'react';
 import {Text, View} from 'react-native';
 import CalendarSvg from '../../../assets/svg/CalendarSvg';
 import {NavigationEnum} from '../../common/constants/navigation';
 import {LoginSchema} from '../../common/shemas/auth.shape';
+import {ILoginRequest} from '../../common/types/auth.types';
 import {INavigationBase} from '../../common/types/component.styles';
 import {ScreenHeader} from '../../components/ScreenHeader';
 import {CustomButton} from '../../components/UI/CustomButton';
 import {CustomInput} from '../../components/UI/CustomInput';
+import NavigationActions from '../../services/navigation-service';
+import {loginAction} from '../../store/auth/actions';
+import {useAppSelector} from '../../store/hooks';
+import {dispatch} from '../../store/store';
 import styles from './styles';
 
 const formInitialValues = {
@@ -16,12 +21,16 @@ const formInitialValues = {
 };
 interface ILoginScreen extends INavigationBase {}
 export const LoginScreen: FC<ILoginScreen> = memo(({navigation}) => {
+  const {loading} = useAppSelector(state => state.auth);
   const onForgotPassRedirect = () => {
-    navigation.navigate(NavigationEnum.FORGOT_PASSWORD);
+    navigation.navigate(NavigationEnum.FORGOT_PASSWORD_SEND_EMAIL);
   };
   const onRegistrationRedirect = () => {
     navigation.navigate(NavigationEnum.REGISTRATION);
   };
+  useEffect(() => {
+    NavigationActions.setNavigator(navigation);
+  }, []);
   const renderForm = ({
     touched,
     errors,
@@ -61,7 +70,8 @@ export const LoginScreen: FC<ILoginScreen> = memo(({navigation}) => {
           <CustomButton
             text={'Login'}
             onPress={handleSubmit}
-            disabled={!(isValid && !!(Object.keys(touched).length))}
+            loading={loading}
+            disabled={!(isValid && !!Object.keys(touched).length)}
           />
         </View>
       </View>
@@ -73,22 +83,31 @@ export const LoginScreen: FC<ILoginScreen> = memo(({navigation}) => {
 
     handleSubmit: values => {
       // do submitting things
-      console.log('login!!!', values);
+      const data: ILoginRequest = {
+        Login: values.email,
+        Password: values.password,
+      };
+      dispatch(loginAction(data));
+      console.log('login worked', data);
     },
     validateOnChange: true,
   })(renderForm);
   return (
     <View style={styles.container}>
-      <ScreenHeader text={'Login'} />
-      <View style={styles.imgWrapper}>
-        <CalendarSvg />
-      </View>
+      <View style={styles.contentWrapper}>
+        <ScreenHeader text={'Login'} />
+        <View style={styles.imgWrapper}>
+          <CalendarSvg />
+        </View>
 
-      <LoginForm />
-      <View style={styles.forgotPassword}>
-        <Text onPress={onForgotPassRedirect} style={styles.forgotPasswordText}>
-          Forgot Password
-        </Text>
+        <LoginForm />
+        <View style={styles.forgotPassword}>
+          <Text
+            onPress={onForgotPassRedirect}
+            style={styles.forgotPasswordText}>
+            Forgot Password
+          </Text>
+        </View>
       </View>
 
       <View style={styles.footerWrapper}>

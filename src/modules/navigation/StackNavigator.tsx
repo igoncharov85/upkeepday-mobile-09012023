@@ -3,7 +3,10 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NavigationEnum} from '../../common/constants/navigation';
 import {LoginScreen} from '../../screens/LoginScreen';
 import {RegistrationScreen} from '../../screens/RegistrationScreen';
-import {ForgotPassword} from '../../screens/ForgotPassScreen';
+import {FinalRegistrationScreen} from '../../screens/RegistrationScreen/FinalRegistrtionScreen';
+import {HomeScreen} from '../../screens/HomeSreen';
+import {SendEmailScreen} from '../../screens/ForgotPassScreen/SendEmailScreen';
+import {SetPasswordScreen} from '../../screens/ForgotPassScreen/SetPasswordScreen';
 
 const Stack = createNativeStackNavigator();
 export const StackNavigator = memo(() => {
@@ -15,9 +18,20 @@ export const StackNavigator = memo(() => {
         component={RegistrationScreen}
       />
       <Stack.Screen
-        name={NavigationEnum.FORGOT_PASSWORD}
-        component={ForgotPassword}
+        name={NavigationEnum.FORGOT_PASSWORD_SEND_EMAIL}
+        //@ts-ignore
+        component={SendEmailScreen}
       />
+      <Stack.Screen
+        name={NavigationEnum.FORGOT_PASSWORD_SEND_PASSWORD}
+        //@ts-ignore
+        component={SetPasswordScreen}
+      />
+      <Stack.Screen
+        name={NavigationEnum.REGISTRATION_FINAL}
+        component={FinalRegistrationScreen}
+      />
+      <Stack.Screen name={NavigationEnum.HOME_SCREEN} component={HomeScreen} />
     </Stack.Navigator>
   );
 });

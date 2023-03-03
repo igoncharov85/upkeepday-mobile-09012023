@@ -8,14 +8,17 @@ import {
 } from 'react-native';
 import CheckMarkOrange from '../../../../assets/svg/CheckMarkOrange';
 import EyeSvg from '../../../../assets/svg/EyeSvg';
+import EyeSvgOpen from '../../../../assets/svg/EyeSvgOpen';
 import styles from './styles';
 
 interface ICustomInputProps extends TextInputProps {
   labelText?: string;
   isPassword?: boolean;
   validationErrorText?: string;
-  touched: boolean;
+  touched?: boolean;
+  disabled?: boolean;
 }
+
 export const CustomInput: FC<ICustomInputProps> = memo(
   ({
     labelText = '',
@@ -23,6 +26,7 @@ export const CustomInput: FC<ICustomInputProps> = memo(
     validationErrorText = '',
     touched,
     secureTextEntry,
+    disabled,
     ...props
   }) => {
     const [isVisible, setIsVisible] = useState<boolean>(!!secureTextEntry);
@@ -37,7 +41,7 @@ export const CustomInput: FC<ICustomInputProps> = memo(
           </TouchableOpacity>
         ) : (
           <TouchableOpacity onPress={switchVisible}>
-            <EyeSvg />
+            <EyeSvgOpen />
           </TouchableOpacity>
         );
       }
@@ -51,9 +55,15 @@ export const CustomInput: FC<ICustomInputProps> = memo(
         <Text style={styles.labelText}>{labelText}</Text>
         <View style={styles.container}>
           <TextInput
+            autoCapitalize="none"
             {...props}
             secureTextEntry={isVisible}
-            style={styles.input}
+            style={{
+              ...styles.input,
+              backgroundColor: disabled ? '#E5E8EB' : 'white',
+            }}
+            placeholderTextColor={'grey'}
+            editable={disabled}
           />
 
           <View style={styles.absoluteIcon}>{renderAppropriateIcon()}</View>

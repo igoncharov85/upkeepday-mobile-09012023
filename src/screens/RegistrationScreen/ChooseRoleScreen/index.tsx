@@ -2,6 +2,7 @@ import React, {FC, memo, ReactNode} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import StudentCardSvg from '../../../../assets/svg/StudentCardSvg';
 import TeacherCardRegSvg from '../../../../assets/svg/TeacherCardRegSvg';
+import { NavigationEnum } from '../../../common/constants/navigation';
 import {StyleEnum} from '../../../common/constants/styles/styles.enum';
 import {TRegistrationScreen} from '../../../common/types/component.styles';
 import {ScreenHeader} from '../../../components/ScreenHeader';
@@ -56,7 +57,7 @@ export const ChooseRoleScreen: FC<IChooseRoleScreen> = memo(({setScreen}) => {
           {renderRegistrationCard(data)}
         </View>
       ))}
-      <Text style={styles.text}>I’m an existing user. Login</Text>
+      <Text style={styles.text} onPress={() => NavigationEnum.LOGIN}>I’m an existing user. Login</Text>
       <View style={styles.row}>
         <Text style={styles.text}>Terms of use</Text>
         <Text style={styles.text}>Privacy policy</Text>

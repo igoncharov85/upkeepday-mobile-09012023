@@ -26,7 +26,10 @@ export default StyleSheet.create({
     valueText: {
         color: 'black',
         fontSize: 14,
-        textTransform: 'capitalize',
+    },
+    itemText: {
+        color: 'black',
+        fontSize: 14,
     },
     placeHolderText: {
         color: 'black',
@@ -41,7 +44,7 @@ export default StyleSheet.create({
         justifyContent: 'center',
     },
     selectItemsWrapper: {
-        maxHeight: 120,
+        maxHeight: 100,
     },
     valueWrapper: {
         width: '100%',

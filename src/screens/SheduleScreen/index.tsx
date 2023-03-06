@@ -8,7 +8,7 @@ import {dispatch} from '../../store/store';
 import styles from './styles';
 
 interface IHomeScreen extends INavigationBase {}
-export const HomeScreen: FC<IHomeScreen> = memo(({navigation}) => {
+export const ScheduleScreen: FC<IHomeScreen> = memo(({navigation}) => {
   useEffect(() => {
     NavigationActions.setNavigator(navigation);
   }, []);

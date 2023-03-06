@@ -5,5 +5,9 @@ export enum NavigationEnum {
   FORGOT_PASSWORD_SEND_EMAIL = 'navigation/FORGOT_PASSWORD_SEND_EMAIL',
   FORGOT_PASSWORD_SEND_PASSWORD = 'navigation/FORGOT_PASSWORD_SEND_PASSWORD',
   //TABS
-  HOME_SCREEN = "navigation/HOME_SCREEN"
+  HOME_SCREEN = 'navigation/HOME_SCREEN',
+  STUDENTS_TAB = 'navigation/STUDENTS_TAB',
+  SCHEDULE_TAB = 'navigation/SCHEDULE_TAB',
+  TO_DO_TAB = 'navigation/TO_DO_TAB',
+  CLASSES_TAB = 'navigation/CLASSES_TAB',
 }

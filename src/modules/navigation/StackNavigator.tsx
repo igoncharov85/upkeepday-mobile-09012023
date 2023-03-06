@@ -4,9 +4,9 @@ import {NavigationEnum} from '../../common/constants/navigation';
 import {LoginScreen} from '../../screens/LoginScreen';
 import {RegistrationScreen} from '../../screens/RegistrationScreen';
 import {FinalRegistrationScreen} from '../../screens/RegistrationScreen/FinalRegistrtionScreen';
-import {HomeScreen} from '../../screens/HomeSreen';
 import {SendEmailScreen} from '../../screens/ForgotPassScreen/SendEmailScreen';
 import {SetPasswordScreen} from '../../screens/ForgotPassScreen/SetPasswordScreen';
+import { ScheduleScreen } from '../../screens/SheduleScreen';
 
 const Stack = createNativeStackNavigator();
 export const StackNavigator = memo(() => {
@@ -31,7 +31,7 @@ export const StackNavigator = memo(() => {
         name={NavigationEnum.REGISTRATION_FINAL}
         component={FinalRegistrationScreen}
       />
-      <Stack.Screen name={NavigationEnum.HOME_SCREEN} component={HomeScreen} />
+      <Stack.Screen name={NavigationEnum.HOME_SCREEN} component={ScheduleScreen} />
     </Stack.Navigator>
   );
 });

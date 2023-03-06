@@ -30,7 +30,7 @@ export const CustomSelect: FC<ICustomSelect> = memo(
           style={styles.valueWrapper}
           activeOpacity={StyleEnum.TOUCHABLE_OPACITY}
           onPress={() => onChangeHandle(item.key)}>
-          <Text style={styles.valueText}>{item.value}</Text>
+          <Text style={styles.itemText}>{item.value}</Text>
         </TouchableOpacity>
       );
     };

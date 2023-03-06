@@ -44,7 +44,6 @@ interface IStudentRegistrationScreen extends INavigationBase {
 export const StudentRegistrationScreen: FC<IStudentRegistrationScreen> = memo(
   ({setScreen, navigation, type}) => {
     const [currentCountry, setCurrentCountry] = useState<string>('');
-    const [currentState, setCurrentState] = useState<string>('');
     const {states, countries} = useAppSelector(state => state.auth);
     const {loading} = useAppSelector(state => state.auth);
     useEffect(() => {
@@ -139,7 +138,10 @@ export const StudentRegistrationScreen: FC<IStudentRegistrationScreen> = memo(
             <View style={styles.inputSplitted}>
               <CustomSelect
                 label={'Country'}
-                onChange={handleChange('country')}
+                onChange={(value: string) => {
+                  handleChange('country')(value)
+                  setCurrentCountry(value)
+                }}
                 value={values.country}
                 options={valueToEntries(countries || [])}
                 placeholder={'Select country'}

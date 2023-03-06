@@ -22,6 +22,7 @@ export default StyleSheet.create({
         right: 15,
     },
     errorText: {
+        textTransform: 'capitalize',
         color: 'red',
         fontSize: 12,
         marginTop: 5,

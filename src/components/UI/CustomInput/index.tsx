@@ -64,6 +64,8 @@ export const CustomInput: FC<ICustomInputProps> = memo(
             }}
             placeholderTextColor={'grey'}
             editable={disabled}
+            selectTextOnFocus={true}
+            blurOnSubmit={false}
           />
 
           <View style={styles.absoluteIcon}>{renderAppropriateIcon()}</View>

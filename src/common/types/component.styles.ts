@@ -9,4 +9,4 @@ export interface IToastModal {
     autoHide?: boolean
 }
 export type TSetPasswordScreen = 'email' | 'setpass';
-export type TRegistrationScreen = 'tutor' | 'type' | 'student' | 'final'
+export type TRegistrationScreen = 'teacher' | 'type' | 'student' | 'final'

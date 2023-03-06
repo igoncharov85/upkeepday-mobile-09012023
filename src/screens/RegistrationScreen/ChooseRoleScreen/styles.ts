@@ -6,11 +6,18 @@ export default StyleSheet.create({
     container: {
         position: 'relative',
         backgroundColor: ColorEnum.ACCENT_BC,
-        paddingTop: 20,
+        paddingTop: 10,
         flex: 1,
         height: '100%',
         width: '100%',
         alignItems: 'center'
+    },
+    contentWrapper: {
+        flex: 1,
+        width: '100%',
+        paddingBottom: 45,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     headerSubTitle: {
         fontSize: 14,
@@ -23,7 +30,7 @@ export default StyleSheet.create({
         marginTop: 15,
         width: '90%',
         flexDirection: 'row',
-        justifyContent: 'flex-start',
+        justifyContent: 'center',
         marginLeft: 4,
     },
     cardText: {

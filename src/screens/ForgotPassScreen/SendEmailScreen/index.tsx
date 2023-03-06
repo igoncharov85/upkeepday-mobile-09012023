@@ -10,6 +10,9 @@ import {
 import {ScreenHeader} from '../../../components/ScreenHeader';
 import {CustomButton} from '../../../components/UI/CustomButton';
 import {CustomInput} from '../../../components/UI/CustomInput';
+import { resetPasswordSendEmailAction } from '../../../store/auth/actions';
+import { useAppSelector } from '../../../store/hooks';
+import { dispatch } from '../../../store/store';
 
 import styles from './styles';
 
@@ -17,11 +20,11 @@ const formInitialValues = {
   email: '',
 };
 interface ISendEmailScreen extends INavigationBase {
-  setScreen: (screen: TSetPasswordScreen) => void;
 }
 
 export const SendEmailScreen: FC<ISendEmailScreen> = memo(
-  ({navigation, setScreen}) => {
+  ({navigation}) => {
+    const {loading} = useAppSelector(state => state.auth);
     const renderForm = ({
       touched,
       errors,
@@ -48,7 +51,8 @@ export const SendEmailScreen: FC<ISendEmailScreen> = memo(
             <CustomButton
               text={'Continue'}
               onPress={handleSubmit}
-              disabled={!(isValid && !!Object.keys(touched).length)}
+              disabled={!isValid}
+              loading={loading}
             />
           </View>
         </View>
@@ -60,8 +64,7 @@ export const SendEmailScreen: FC<ISendEmailScreen> = memo(
       validationSchema: EmailShape,
 
       handleSubmit: values => {
-        console.log('set pass');
-        setScreen('setpass');
+        dispatch(resetPasswordSendEmailAction(values.email))
       },
       ...formicDefaultProps,
     })(renderForm);

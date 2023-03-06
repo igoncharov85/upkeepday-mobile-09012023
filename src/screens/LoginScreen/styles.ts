@@ -6,7 +6,7 @@ export default StyleSheet.create({
     container: {
         position: 'relative',
         backgroundColor: ColorEnum.ACCENT_BC,
-        paddingTop: 20,
+        paddingTop: 10,
         flex: 1,
         height: '100%',
         alignItems: 'center',

@@ -1,6 +1,7 @@
 import {FormikProps, withFormik} from 'formik';
 import React, {FC, memo} from 'react';
-import {View} from 'react-native';
+import {KeyboardAvoidingView, Platform, View} from 'react-native';
+import { keyboardSettings } from '../../../common/constants/styles/keyboard';
 import {PasswordConfirmShape} from '../../../common/shemas/auth.shape';
 import {IConfirmPassword} from '../../../common/types/auth.types';
 import {INavigationBase} from '../../../common/types/component.styles';
@@ -94,10 +95,14 @@ export const FinalRegistrationScreen: FC<IFinalScreen> = memo(
       validateOnChange: true,
     })(renderForm);
     return (
-      <View style={styles.container}>
-        <ScreenHeader text={'Finish Registration'} />
-        <LoginForm />
-      </View>
+      <KeyboardAvoidingView
+        style={{flex: 1}}
+        {...keyboardSettings}>
+        <View style={styles.container}>
+          <ScreenHeader text={'Finish Registration'} />
+          <LoginForm />
+        </View>
+      </KeyboardAvoidingView>
     );
   },
 );

@@ -1,11 +1,19 @@
 import {FormikProps, withFormik} from 'formik';
 import React, {FC, memo, useEffect} from 'react';
-import {Text, View} from 'react-native';
+import {
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  Text,
+  View,
+} from 'react-native';
 import CalendarSvg from '../../../assets/svg/CalendarSvg';
 import {NavigationEnum} from '../../common/constants/navigation';
+import {keyboardSettings} from '../../common/constants/styles/keyboard';
 import {LoginSchema} from '../../common/shemas/auth.shape';
 import {ILoginRequest} from '../../common/types/auth.types';
 import {INavigationBase} from '../../common/types/component.styles';
+import { KeyboardDismissHOC } from '../../components/hoc/KeyboardDismissHOC';
 import {ScreenHeader} from '../../components/ScreenHeader';
 import {CustomButton} from '../../components/UI/CustomButton';
 import {CustomInput} from '../../components/UI/CustomInput';
@@ -93,8 +101,8 @@ export const LoginScreen: FC<ILoginScreen> = memo(({navigation}) => {
     validateOnChange: true,
   })(renderForm);
   return (
-    <View style={styles.container}>
-      <View style={styles.contentWrapper}>
+    <KeyboardAvoidingView style={styles.container} {...keyboardSettings} keyboardVerticalOffset={100}>
+      <KeyboardDismissHOC extraStyles={styles.contentWrapper}>
         <ScreenHeader text={'Login'} />
         <View style={styles.imgWrapper}>
           <CalendarSvg />
@@ -108,13 +116,13 @@ export const LoginScreen: FC<ILoginScreen> = memo(({navigation}) => {
             Forgot Password
           </Text>
         </View>
-      </View>
+      </KeyboardDismissHOC>
 
       <View style={styles.footerWrapper}>
         <Text onPress={onRegistrationRedirect} style={styles.footerText}>
           I’m a new user. Registration
         </Text>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 });

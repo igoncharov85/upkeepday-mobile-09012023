@@ -1,7 +1,7 @@
 import { AxiosResponse } from "axios";
 import { SagaIterator } from "redux-saga";
 import { call, put, take, takeEvery } from "redux-saga/effects";
-import { setAuthLoadingAction } from "..";
+import { setAuthLoadingAction, setCountriesAction, setStatesAction, setStatesLoading } from "..";
 import { NavigationEnum } from "../../../common/constants/navigation";
 import { IConfirmPassword, ILoginRequest, IRegistrationDto, IResetItemRequest, IStatusResponse } from "../../../common/types/auth.types";
 import { IAction } from "../../../common/types/common.types";
@@ -121,9 +121,10 @@ function* resetPasswordSendPasswordWorker({
         if (status) {
             yield put(pushToastsAction({
                 type: 'info',
-                text1: 'Please check your email',
+                text1: 'Password set successfully',
                 autoHide: true,
             }))
+            NavigationActions.navigate(NavigationEnum.LOGIN)
         }
 
     } catch (error: any) {
@@ -135,6 +136,43 @@ function* resetPasswordSendPasswordWorker({
         }))
     } finally {
         yield put(setAuthLoadingAction(false));
+    }
+}
+
+function* getCountriesWorker({
+    payload,
+    type,
+}: IAction<undefined>): SagaIterator {
+    try {
+        const { data }: AxiosResponse<Array<string>, any> = yield call(
+            AuthService.getCountries
+        );
+        console.log("getCountriesWorker data", data)
+        if (data) {
+            yield put(setCountriesAction(data))
+        }
+    } catch (error: any) {
+        console.warn("getCountriesWorker", error);
+    }
+}
+function* getStatesWorker({
+    payload,
+    type,
+}: IAction<string>): SagaIterator {
+    try {
+        yield put(setStatesLoading(true))
+        const { data }: AxiosResponse<{ [key: string]: string }, any> = yield call(
+            AuthService.getStates,
+            payload
+        );
+        let normalizedStates = Object.values(data).map((el) => el)
+        if (data) {
+            yield put(setStatesAction(normalizedStates))
+        }
+    } catch (error: any) {
+        console.warn("getStatesWorker error:", error);
+    } finally {
+        yield put(setStatesLoading(false))
     }
 }
 
@@ -191,4 +229,6 @@ export function* authWatcher() {
     yield takeEvery(AuthContactsEnum.CONFIRM_REGISTRATION_PASSWORD, confirmRegistrationPasswordWorker)
     yield takeEvery(AuthContactsEnum.RESET_PASSWORD_SEND_EMAIL, sendResetMailWorker)
     yield takeEvery(AuthContactsEnum.RESET_PASSWORD_NEW_PASSWORD, resetPasswordSendPasswordWorker)
+    yield takeEvery(AuthContactsEnum.GET_STATES, getStatesWorker)
+    yield takeEvery(AuthContactsEnum.GET_COUNTRIES, getCountriesWorker)
 }

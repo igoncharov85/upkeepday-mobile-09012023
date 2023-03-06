@@ -4,8 +4,8 @@ import { ColorEnum } from "../../../common/constants/styles/colors.enum";
 export default StyleSheet.create({
     container: {
         backgroundColor: ColorEnum.ACCENT_BC,
-        paddingTop: 20,
-        paddingVertical: 20,
+        paddingTop: 10,
+        paddingVertical: 10,
         width: '100%',
         alignItems: 'center'
     },
@@ -16,6 +16,23 @@ export default StyleSheet.create({
         alignItems: 'center',
         width: '100%',
         marginHorizontal: 20,
+    },
+    pickerWrapper: {
+        backgroundColor: 'white',
+        height: 50,
+        borderRadius: 8,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        paddingHorizontal: 10,
+        shadowOpacity: 0.22,
+        shadowRadius: 2.22,
+        elevation: 3,
+        color: 'black',
+        alignItems: 'flex-start',
+        justifyContent: 'center',
     },
     inputWrapper: {
         marginVertical: 10,
@@ -29,7 +46,7 @@ export default StyleSheet.create({
         justifyContent: 'space-between',
         width: '90%',
         flexDirection: 'row',
-        alignItems: 'center'
+
     },
     inputSplitted: {
         marginVertical: 10,

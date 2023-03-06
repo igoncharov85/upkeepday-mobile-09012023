@@ -1,3 +1,5 @@
+import axios from "axios";
+import { BASE_URL_RES } from "../../../common/constants/server";
 import { IConfirmPassword, ILoginRequest, IRegistrationRequest, IResetItemData, IResetItemRequest, TRole } from "../../../common/types/auth.types";
 import { $axiosBase } from "../base.instance";
 
@@ -19,5 +21,11 @@ export class AuthService {
     }
     static async confirmRegistrationPassword({ uuid, Password }: IConfirmPassword) {
         return $axiosBase.post(`/account/confirm/${uuid}`, { Password })
+    }
+    static async getCountries() {
+        return axios.get(`${BASE_URL_RES}/reference/countries`)
+    }
+    static async getStates(country: string) {
+        return axios.get(`${BASE_URL_RES}/reference/countries/${country}`)
     }
 }

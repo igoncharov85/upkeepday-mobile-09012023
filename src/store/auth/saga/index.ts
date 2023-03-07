@@ -147,7 +147,7 @@ function* getCountriesWorker({
         const { data }: AxiosResponse<Array<string>, any> = yield call(
             AuthService.getCountries
         );
-        console.log("getCountriesWorker data", data)
+
         if (data) {
             yield put(setCountriesAction(data))
         }
@@ -161,13 +161,11 @@ function* getStatesWorker({
 }: IAction<string>): SagaIterator {
     try {
         yield put(setStatesLoading(true))
-        console.log("states update")
         const { data }: AxiosResponse<{ [key: string]: string }, any> = yield call(
             AuthService.getStates,
             payload
         );
-        let normalizedStates = Object.keys(data).map((el) => el)
-        console.log('normalizedStates', normalizedStates, data)
+        let normalizedStates = Object.values(data).map((el) => el)
         if (data) {
             yield put(setStatesAction(normalizedStates))
         }

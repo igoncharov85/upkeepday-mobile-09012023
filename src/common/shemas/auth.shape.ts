@@ -13,7 +13,7 @@ export const EmailShape = Yup.object().shape({
 export const TutorRegistrationShape = Yup.object().shape({
     email: Yup.string().matches(RegexEnum.EMAIL, 'Invalid email format').required('Required'),
     firstName: Yup.string().min(2, 'First Name must contain at least 2 characters').required('Required').max(64, 'firstName must contain less than 64 symbols').matches(/^[a-zA-Z]+$/, 'must contain only letters'),
-    lastName: Yup.string().min(4, 'Last Name must contain at least 2 characters').required('Required').max(64, 'lastName must contain less than 64 symbols').matches(/^[a-zA-Z]+$/, 'must contain only letters'),
+    lastName: Yup.string().min(2, 'Last Name must contain at least 2 characters').required('Required').max(64, 'lastName must contain less than 64 symbols').matches(/^[a-zA-Z]+$/, 'must contain only letters'),
     phoneNumber: Yup.string().matches(RegexEnum.PHONE, 'Phone number is not valid').required('Required'),
     address: Yup.string().required('Required'),
     postalCode: Yup.string().required('Required'),
@@ -24,7 +24,7 @@ export const TutorRegistrationShape = Yup.object().shape({
 export const StudentRegistrationShape = Yup.object().shape({
     email: Yup.string().matches(RegexEnum.EMAIL, 'Invalid email format').required('Required'),
     firstName: Yup.string().min(2, 'First Name must contain at least 2 characters').required('Required').max(64, 'firstName must contain less than 64 symbols').matches(/^[a-zA-Z]+$/, 'must contain only letters'),
-    lastName: Yup.string().min(4, 'Last Name must contain at least 2 characters').required('Required').max(64, 'lastName must contain less than 64 symbols').matches(/^[a-zA-Z]+$/, 'must contain only letters'),
+    lastName: Yup.string().min(2, 'Last Name must contain at least 2 characters').required('Required').max(64, 'lastName must contain less than 64 symbols').matches(/^[a-zA-Z]+$/, 'must contain only letters'),
     phoneNumber: Yup.string().matches(RegexEnum.PHONE, 'Phone number is not valid').required('Required'),
     address: Yup.string().required('Required'),
     postalCode: Yup.string().required('Required'),

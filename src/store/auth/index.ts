@@ -23,7 +23,6 @@ export const authSlice = createSlice({
             state.loading = action.payload
         },
         setStatesAction: (state, action: PayloadAction<Array<string>>) => {
-            console.log('action.payload', action.payload)
             state.states = action.payload
         },
         setCountriesAction: (state, action: PayloadAction<Array<string>>) => {

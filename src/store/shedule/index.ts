@@ -11,7 +11,7 @@ const initialState: ScheduleState = {
 }
 
 export const scheduleSlice = createSlice({
-    name: 'auth',
+    name: 'schedule',
     initialState,
     reducers: {
         setScheduleLoading: (state, action: PayloadAction<boolean>) => {

@@ -3,6 +3,14 @@ export interface IScheduleRequest {
     endDate: string
 }
 
+export interface ICreateClassRequest{
+
+}
+
+export interface ICreateClassResponse {
+
+}
+
 export interface IScheduleItem {
     WeekTimeSlotId: string
     StartDateTime: string | Date
@@ -24,4 +32,8 @@ export interface IGenerateScheduleRequest {
     Number: number,
     EndDate: string,
     WeekTimeSlots: Array<IWeekTimeSlot>
+}
+
+export interface IGenerateScheduleResponse {
+
 }

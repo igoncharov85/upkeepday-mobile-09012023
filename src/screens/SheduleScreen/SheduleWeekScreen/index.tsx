@@ -20,9 +20,7 @@ const getStartAndEndOfWeek = (date: Date) => {
 export const SheduleWeekScreen: FC<ISheduleWeekScreen> = memo(() => {
   const firstEventDate = new Date(nestedDataOfMonth[0][0].StartDateTime);
   const { startOfWeek, endOfWeek } = getStartAndEndOfWeek(firstEventDate);
-  console.log(startOfWeek,endOfWeek,'&&&&&&&&&&&&&&&&&&&&&&&&&&&&&7')
   const flattenedDataOfMonth = nestedDataOfMonth.flat();
-  console.log(flattenedDataOfMonth,'flattenedDataOfMonth')
   return (
     <View style={styles.container}>
       <DaysOfWeek />

@@ -5,10 +5,12 @@ import styles from './styles';
 interface IDaysOfWeek {}
 
 export const DaysOfWeek: FC<IDaysOfWeek> = memo(() => {
-  const today = new Date(); // get the current date
+  const today = new Date();
   const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  const startOfWeek = new Date(today.setDate(today.getDate() - today.getDay())); // get the start date of the week (Sunday)
-  const endOfWeek = new Date(today.setDate(today.getDate() - today.getDay() + 6)); // get the end date of the week (Saturday)
+  const startOfWeek = new Date(today.setDate(today.getDate() - today.getDay()));
+  const endOfWeek = new Date(
+    today.setDate(today.getDate() - today.getDay() + 6),
+  );
   const daysWeek = [];
 
   for (let i = 0; i < 7; i++) {
@@ -16,13 +18,13 @@ export const DaysOfWeek: FC<IDaysOfWeek> = memo(() => {
     day.setDate(startOfWeek.getDate() + i);
     const dayOfWeek = daysOfWeek[i];
     const dayOfMonth = day.getDate().toString();
-    const isToday = day.toDateString() === new Date().toDateString(); // check if the current day is today
-    daysWeek.push({ dayOfWeek, dayOfMonth, isToday });
+    const isToday = day.toDateString() === new Date().toDateString();
+    daysWeek.push({dayOfWeek, dayOfMonth, isToday});
   }
 
   return (
     <View style={styles.containerWekk}>
-      {daysWeek.map((item) => (
+      {daysWeek.map(item => (
         <DaysOfWeekItem
           daysOfWeek={item.dayOfWeek}
           number={item.dayOfMonth}
@@ -32,4 +34,3 @@ export const DaysOfWeek: FC<IDaysOfWeek> = memo(() => {
     </View>
   );
 });
-

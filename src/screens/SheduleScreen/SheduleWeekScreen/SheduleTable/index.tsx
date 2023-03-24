@@ -24,14 +24,21 @@ enum TimeDuration {
   OneHour = 1,
   OneAndAHalfHours = 1.5,
 }
+const isToday = (dayIndex: number) => {
+  const currentDate = new Date();
+  const currentDayIndex = currentDate.getDay();
+  return dayIndex === currentDayIndex;
+};
+
 const createWeekStructure = (
   startOfWeek: Date,
   endOfWeek: Date,
   dataOfMonth: Array<any>,
+  timeData: Array<string>,
 ) => {
   const weekStructure = new Array(7)
     .fill(null)
-    .map(() => new Array(24).fill(null));
+    .map(() => new Array(timeData.length).fill(null));
 
   dataOfMonth.forEach(event => {
     const eventDate: Date = new Date(event.StartDateTime);
@@ -41,7 +48,7 @@ const createWeekStructure = (
       weekStructure[dayIndex][hourIndex] = event;
     }
   });
-  
+
   return weekStructure;
 };
 
@@ -61,14 +68,13 @@ const generateTimeData = (startTime: string, endTime: string) => {
 
 export const SheduleTable: FC<ISheduleTable> = memo(
   ({startOfWeek, endOfWeek, dataOfMonth}) => {
+    const timeData = generateTimeData('08:00', '24:00');
     const weekStructure = createWeekStructure(
       startOfWeek,
       endOfWeek,
       dataOfMonth,
+      timeData,
     );
-    console.log(weekStructure,'weekStructureweekStructureweekStructureweekStructure')
-    const timeData = generateTimeData('00:00', '24:00');
-    console.log('------------------------------------------------------');
     return (
       <View style={styles.container}>
         <ScrollView>
@@ -80,17 +86,6 @@ export const SheduleTable: FC<ISheduleTable> = memo(
             </Column>
             <Row style={{flex: 1}}>
               {weekStructure?.map((dayEvents, dayIndex) => {
-                console.log(
-                  `+++++++++++++++++++++++++++++++++++++++++++++++\n\n\n\n`,
-                );
-                console.log(
-                  weekStructure,
-                  'weekStructure%%%%%%%%%%%%%%%%%%%%%%%%%',
-                );
-                console.log(
-                  `---------------------------------------------\n\n\n\n`,
-                );
-                // return null;
                 return (
                   <Column key={dayIndex}>
                     {dayEvents?.map((event, index) => {
@@ -111,6 +106,9 @@ export const SheduleTable: FC<ISheduleTable> = memo(
                       }
                       return <SheduleTableItem key={`${dayIndex}-${index}`} />;
                     })}
+                    {isToday(dayIndex) && (
+                      <View style={[styles.absoluteFill, styles.mask]} />
+                    )}
                   </Column>
                 );
               })}
@@ -143,4 +141,3 @@ const TimeLineItem = ({time}: {time: string}) => {
     </View>
   );
 };
-

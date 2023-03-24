@@ -7,8 +7,8 @@ import styles from './styles';
 
 interface IScheduleScroller {
   title: string;
-  onPressLeft: () => void;
-  onPressRight: () => void;
+  onPressLeft?: () => void;
+  onPressRight?: () => void;
 }
 export const ScheduleScroller: FC<IScheduleScroller> = memo(
   ({title, onPressLeft, onPressRight}) => {

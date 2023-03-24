@@ -52,6 +52,7 @@ export const SheduleTableItem: FC<ISheduleTableItem> = memo(
               start={{x: 0.5, y: 0}}
               end={{x: 0.5, y: 1}}
               style={{
+                zIndex: 10,
                 justifyContent: 'center',
                 alignItems: 'center',
                 position: 'absolute',
@@ -84,6 +85,7 @@ export const SheduleTableItem: FC<ISheduleTableItem> = memo(
               start={{x: 0.5, y: 0}}
               end={{x: 0.5, y: 1}}
               style={{
+                zIndex: 10,
                 justifyContent: 'center',
                 alignItems: 'center',
                 position: 'absolute',
@@ -103,6 +105,7 @@ export const SheduleTableItem: FC<ISheduleTableItem> = memo(
               start={{x: 0.5, y: 1}}
               end={{x: 0.5, y: 0}}
               style={{
+                zIndex: 10,
                 justifyContent: 'center',
                 alignItems: 'center',
                 position: 'absolute',

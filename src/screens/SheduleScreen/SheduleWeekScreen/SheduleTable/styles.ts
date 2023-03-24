@@ -35,11 +35,24 @@ export default StyleSheet.create({
     opacity: 0.4,
   },
   textItem: {
-    maxWidth:36,
+    maxWidth: 36,
     fontSize: 9,
     lineHeight: 11,
     color: '#fff',
     marginHorizontal: 4,
     margingVertical: 2,
+  },
+  absoluteFill: {
+    zIndex: 1,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+
+  mask: {
+    zIndex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.1)',
   },
 });

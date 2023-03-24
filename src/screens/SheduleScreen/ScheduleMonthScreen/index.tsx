@@ -1,9 +1,11 @@
 import React, {FC, memo, useEffect} from 'react';
 import {StyleProp, Text, View, ViewStyle, ScrollView} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import {dataOfMonth} from '..';
 
 import {ScheduleScroller} from '../components/ScheduleScroller';
 import styles from './styles';
+
 interface IScheduleMonthScreen {}
 enum TypeSession {
   lesson,
@@ -13,11 +15,67 @@ interface IMonthItem {
   sesion: TypeSession[];
   day: string;
 }
+
+interface Session {
+  StartDateTime: string;
+  Duration: number;
+  type: 'lesson' | 'trial';
+  className: string;
+}
+
+function getTypeSessionArray(array: any) {
+  return array.map((item: Session): TypeSession => {
+    return item.type === 'lesson' ? TypeSession.lesson : TypeSession.trial;
+  });
+}
+
+const daysInMonth = (year: number, month: number): number => {
+  return new Date(year, month + 1, 0).getDate();
+};
+
+const firstDayOfMonthIndex = (year: number, month: number): number => {
+  return new Date(year, month, 1).getDay();
+};
+
+interface EventData {
+  StartDateTime: string;
+  Duration: number;
+  type: string;
+  className: string;
+}
+
+const createMonthStructure = (dataOfMonth: EventData[][]): number[][] => {
+  const firstEventDate = new Date(dataOfMonth[0][0].StartDateTime);
+  const year = firstEventDate.getFullYear();
+  const month = firstEventDate.getMonth();
+
+  const monthDays = daysInMonth(year, month);
+  const firstDayIndex = firstDayOfMonthIndex(year, month);
+
+  const monthStructure = new Array(Math.ceil((monthDays + firstDayIndex) / 7))
+    .fill(null)
+    .map(() => new Array(7).fill(null));
+
+  for (let i = 0; i < monthDays; i++) {
+    const rowIndex = Math.floor((i + firstDayIndex) / 7);
+    const colIndex = (i + firstDayIndex) % 7;
+    monthStructure[rowIndex][colIndex] = i + 1;
+  }
+
+  return monthStructure;
+};
+
 export const ScheduleMonthScreen: FC<IScheduleMonthScreen> = memo(() => {
   const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thr', 'Fri', 'Sat'];
+
+  const monthStructure = createMonthStructure(dataOfMonth);
+  console.log(monthStructure, 'monthStructure00000');
+  const currentMonth = new Date()
+    .toLocaleString('default', {month: 'long', year: 'numeric'})
+    .replace(/,\s(\d{4})$/, ',$1');
   return (
     <View style={styles.container}>
-      <ScheduleScroller title={'March 21, 2023'} />
+      <ScheduleScroller title={currentMonth} />
       <Row>
         {days.map(day => (
           <View style={{flex: 1, alignItems: 'center'}}>
@@ -25,63 +83,25 @@ export const ScheduleMonthScreen: FC<IScheduleMonthScreen> = memo(() => {
           </View>
         ))}
       </Row>
-      <Row style={{flex: 1}}>
-        <MonthItem sesion={[]} day={'1'} />
-        <MonthItem sesion={[]} day={'2'} />
-        <MonthItem sesion={[]} day={'3'} />
-        <MonthItem sesion={[]} day={'4'} />
-        <MonthItem sesion={[]} day={'5'} />
-        <MonthItem sesion={[]} day={'6'} />
-        <MonthItem sesion={[]} day={'7'} />
-      </Row>
-      <Row style={{flex: 1}}>
-        <MonthItem sesion={[]} day={'8'} />
-        <MonthItem
-          sesion={[TypeSession.lesson, TypeSession.trial, TypeSession.trial]}
-          day={'9'}
-        />
-        <MonthItem sesion={[]} day={'10'} />
-        <MonthItem sesion={[]} day={'11'} />
-        <MonthItem sesion={[]} day={'12'} />
-        <MonthItem sesion={[]} day={'13'} />
-        <MonthItem sesion={[]} day={'14'} />
-      </Row>
-      <Row style={{flex: 1}}>
-        <MonthItem
-          sesion={[TypeSession.lesson, TypeSession.trial, TypeSession.trial]}
-          day={'15'}
-        />
-        <MonthItem sesion={[]} day={'16'} />
-        <MonthItem sesion={[]} day={'17'} />
-        <MonthItem sesion={[]} day={'18'} />
-        <MonthItem
-          sesion={[TypeSession.lesson, TypeSession.lesson]}
-          day={'19'}
-        />
-        <MonthItem sesion={[]} day={'20'} />
-        <MonthItem sesion={[]} day={'21'} />
-      </Row>
-      <Row style={{flex: 1}}>
-        <MonthItem sesion={[]} day={'22'} />
-        <MonthItem sesion={[]} day={'23'} />
-        <MonthItem sesion={[]} day={'24'} />
-        <MonthItem sesion={[]} day={'25'} />
-        <MonthItem sesion={[]} day={'26'} />
-        <MonthItem sesion={[]} day={'27'} />
-        <MonthItem sesion={[]} day={'28'} />
-      </Row>
-      <Row style={{flex: 1}}>
-        <MonthItem sesion={[]} day={'29'} />
-        <MonthItem
-          sesion={[TypeSession.lesson, TypeSession.trial]}
-          day={'30'}
-        />
-        <MonthItem sesion={[]} day={'31'} />
-        <MonthItem sesion={[]} day={' '} />
-        <MonthItem sesion={[]} day={' '} />
-        <MonthItem sesion={[]} day={' '} />
-        <MonthItem sesion={[]} day={' '} />
-      </Row>
+      <ScrollView >
+        {monthStructure.map((week, rowIndex) => (
+          <Row style={{flex: 1}} key={rowIndex}>
+            {week.map((day, colIndex) => {
+              const dayKey = `${rowIndex}-${colIndex}`;
+              if (day !== null) {
+                return (
+                  <MonthItem
+                    key={dayKey}
+                    sesion={getTypeSessionArray(dataOfMonth[day - 1])}
+                    day={day.toString()}
+                  />
+                );
+              }
+              return <MonthItem key={dayKey} sesion={[]} day={' '} />;
+            })}
+          </Row>
+        ))}
+      </ScrollView>
     </View>
   );
 });
@@ -180,6 +200,7 @@ const Row = ({
 }) => {
   return <View style={[styles.row, style ?? {}]}>{children}</View>;
 };
+
 const Column = ({children}: {children: React.ReactNode}) => {
   return <View style={styles.column}>{children}</View>;
 };

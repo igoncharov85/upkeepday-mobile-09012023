@@ -5,8 +5,9 @@ export default StyleSheet.create({
     flex: 1,
     height: '100%',
     width: '100%',
+    maxWidth: '100%',
     maxHeight: '100%',
-    alignItems: 'center',
+    paddingHorizontal: 20
   },
   text: {
     fontSize: 14,

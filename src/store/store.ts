@@ -6,6 +6,7 @@ import authReducer from './auth'
 import appReducer from './app'
 import cacheReducer from './cached'
 import rootSaga from './saga/rootSaga';
+import  scheduleReducer from './shedule';
 
 const persistConfig = {
     key: "root",
@@ -16,7 +17,8 @@ const persistConfig = {
 const reducer = combineReducers({
     auth: authReducer,
     app: appReducer,
-    cache: cacheReducer
+    cache: cacheReducer,
+    schedule: scheduleReducer
 })
 
 const sagaMiddleware = createSagaMiddleware();

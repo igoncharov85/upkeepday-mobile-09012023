@@ -1,12 +1,14 @@
 import { AxiosResponse } from "axios";
+import { err } from "react-native-svg/lib/typescript/xml";
 import { SagaIterator } from "redux-saga";
 import { call, put, take, takeEvery } from "redux-saga/effects";
 import { setAuthLoadingAction, setCountriesAction, setStatesAction, setStatesLoading } from "..";
 import { NavigationEnum } from "../../../common/constants/navigation";
-import { IConfirmPassword, ILoginRequest, IRegistrationDto, IResetItemRequest, IStatusResponse } from "../../../common/types/auth.types";
+import { IConfirmPassword, ILoginRequest, IRegistrationDto, IResetItemRequest, IStatusResponse, ITokenResponse } from "../../../common/types/auth.types";
 import { IAction } from "../../../common/types/common.types";
 import { AsyncStorageService } from "../../../services/async-storage";
 import { AuthService } from "../../../services/axios/auth";
+import { ErrorFilterService } from "../../../services/error-filter/error-filter.service";
 import NavigationActions from "../../../services/navigation-service";
 import { pushToastsAction } from "../../app";
 import { AuthContactsEnum } from "../constants";
@@ -17,13 +19,13 @@ function* loginWorker({
 }: IAction<ILoginRequest>): SagaIterator {
     try {
         yield put(setAuthLoadingAction(true));
-        const { data }: AxiosResponse<IStatusResponse, any> = yield call(
+        const { data }: AxiosResponse<ITokenResponse, any> = yield call(
             AuthService.login,
             payload
         );
 
-        if (data) {
-            console.log("status", data.status)
+        if (data?.token) {
+            call(AsyncStorageService.setToken, data.token)
             yield put(pushToastsAction({
                 type: 'info',
                 text1: 'Login successful',
@@ -34,11 +36,7 @@ function* loginWorker({
 
     } catch (error: any) {
         console.warn("registrationWorker", error);
-        yield put(pushToastsAction({
-            type: 'info',
-            text1: error.response.data.status,
-            autoHide: true,
-        }))
+        yield call(ErrorFilterService.validateError, error)
     } finally {
         yield put(setAuthLoadingAction(false));
     }
@@ -66,11 +64,7 @@ function* registrationWorker({
 
     } catch (error: any) {
         console.warn("registrationWorker", error);
-        yield put(pushToastsAction({
-            type: 'info',
-            text1: error.response.data.status,
-            autoHide: true,
-        }))
+        yield call(ErrorFilterService.validateError, error)
     } finally {
         yield put(setAuthLoadingAction(false));
     }
@@ -97,11 +91,7 @@ function* sendResetMailWorker({
 
     } catch (error: any) {
         console.warn("registrationWorker", error);
-        yield put(pushToastsAction({
-            type: 'info',
-            text1: error.response.data.status,
-            autoHide: true,
-        }))
+        yield call(ErrorFilterService.validateError, error)
     } finally {
         yield put(setAuthLoadingAction(false));
     }

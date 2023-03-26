@@ -11,7 +11,6 @@ export function* fetchUserWorker(data: IAction<null>): SagaIterator {
     try {
         const { data }: AxiosResponse<Array<Array<IUserStudent>>, any> = yield call(
             UserService.fetchAllUsers,
-
         );
         console.log("data: ", data)
     } catch (error) {

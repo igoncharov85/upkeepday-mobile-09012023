@@ -1,7 +1,7 @@
 import { AxiosResponse } from "axios";
 import { SagaIterator } from "redux-saga";
 import { call, put, takeEvery } from "redux-saga/effects";
-import { setCurrentGeneratedScheduleAction, setGeneratedScheduleEntriesAction, setScheduleLoading, setTimeSlotsAction } from "..";
+import { setCurrentScheduleEntries, setGeneratedScheduleEntriesAction, setScheduleLoading, setTimeSlotsAction } from "..";
 import { IAction } from "../../../common/types/common.types";
 import { ICreateClassRequest, IGeneratedScheduleResponse, IGenerateScheduleRequest, IScheduleItem, IScheduleRequest } from "../../../common/types/schedule.types";
 import { ScheduleService } from "../../../services/axios/schedule";
@@ -42,7 +42,7 @@ export function* generateScheduleWorker({
     if (data) {
       yield put(setTimeSlotsAction(data.WeekTimeSlots))
       yield put(setGeneratedScheduleEntriesAction(data.GeneratedScheduleEntries))
-      yield put(setCurrentGeneratedScheduleAction(data.CurrentScheduledEntries))
+      yield put(setCurrentScheduleEntries(data.CurrentScheduledEntries))
     }
 
   } catch (error) {
@@ -82,6 +82,7 @@ export function* createSchedule({
       ScheduleService.createClass,
       payload
     );
+    //TODO navigation
     console.log("createSchedule data: ", data)
   } catch (error) {
     yield call(ErrorFilterService.validateError, error)

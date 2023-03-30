@@ -24,7 +24,7 @@ export const ScheduleScreen: FC<IHomeScreen> = memo(({navigation}) => {
 
   useEffect(() => {
     console.log('worked');
-    dispatch(
+    /*dispatch(
       createScheduleAction({
         ClassName: 'Music',
         ClassLocationType: 1,
@@ -106,7 +106,7 @@ export const ScheduleScreen: FC<IHomeScreen> = memo(({navigation}) => {
           },
         ],
       }),
-    );
+    );*/
     //dispatch(fetchUsersAction())
     /*dispatch(
       generateScheduleAction({

@@ -10,7 +10,6 @@ export interface IExistingStudent {
     StudentId: number
 }
 export interface ICreateClassRequest {
-
     ClassName: string
     ClassLocationType: number,
     ClassLocationId: number,
@@ -23,7 +22,6 @@ export interface ICreateClassRequest {
     NewStudents: Array<IUserStudent>
     WeekTimeSlots: Array<IWeekTimeSlot>
     ScheduledEntries: Array<IGeneratedScheduleEntries>
-
 }
 
 export interface ICreateClassResponse {
@@ -36,6 +34,8 @@ export interface IGeneratedScheduleResponse {
     WeekTimeSlots: Array<IWeekTimeSlot>
 }
 
+
+//Model that describe field in schedule that will generated
 export interface IWeekTimeSlot {
     Duration: number,
     DayOfWeek: number,

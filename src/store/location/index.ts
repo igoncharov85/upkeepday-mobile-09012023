@@ -4,6 +4,7 @@ import { ILocation } from '../../common/types/location';
 
 export interface ILocationState {
     loading: boolean;
+    //USE for locations
     locations: Array<ILocation>
 }
 

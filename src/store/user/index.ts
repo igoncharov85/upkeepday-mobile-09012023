@@ -13,12 +13,15 @@ const userSlice = createSlice({
     initialState,
     name: 'user',
     reducers: {
-        setStudent: (state, action: PayloadAction<Array<IUserStudent>>) => {
+        setStudentAction: (state, action: PayloadAction<Array<IUserStudent>>) => {
             state.students = action.payload
+        },
+        addStudentAction: (state, action: PayloadAction<IUserStudent>) => {
+            state.students = [action.payload, ...state.students]
         },
     },
 })
 
 
-export const { setStudent } = userSlice.actions
+export const { setStudentAction, addStudentAction } = userSlice.actions
 export default userSlice.reducer

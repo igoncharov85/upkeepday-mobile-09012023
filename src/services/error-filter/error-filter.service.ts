@@ -6,12 +6,12 @@ export class ErrorFilterService {
         if (withPush) {
             dispatch(pushToastsAction({
                 type: 'info',
-                text1: error.response.data.status,
+                text1: error?.response?.data?.status,
                 autoHide: true,
             }))
         }
         if (withLog) {
-            console.log(`withLog: ${error.response.data}`)
+            console.log(`withLog: ${JSON.stringify(error)}`)
         }
 
     }

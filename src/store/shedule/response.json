@@ -1,0 +1,75 @@
+{
+  "CurrentScheduledEntries": [],
+  "GeneratedScheduleEntries": [
+    {
+      "Duration": 60,
+      "StartDateTime": "2023-01-03T17:30:00",
+      "WeekTimeSlotId": "3e26e8f8-8b69-4610-9d57-cee83dc6a67e"
+    },
+    {
+      "Duration": 60,
+      "StartDateTime": "2023-01-05T16:00:00",
+      "WeekTimeSlotId": "99f99312-814c-4f16-b39b-8a0a1b9f543c"
+    },
+    {
+      "Duration": 60,
+      "StartDateTime": "2023-01-05T18:30:00",
+      "WeekTimeSlotId": "19ffcbb6-de6f-4912-ada9-77996bcc8ce6"
+    },
+    {
+      "Duration": 60,
+      "StartDateTime": "2023-01-10T17:30:00",
+      "WeekTimeSlotId": "3e26e8f8-8b69-4610-9d57-cee83dc6a67e"
+    },
+    {
+      "Duration": 60,
+      "StartDateTime": "2023-01-12T16:00:00",
+      "WeekTimeSlotId": "99f99312-814c-4f16-b39b-8a0a1b9f543c"
+    },
+    {
+      "Duration": 60,
+      "StartDateTime": "2023-01-12T18:30:00",
+      "WeekTimeSlotId": "19ffcbb6-de6f-4912-ada9-77996bcc8ce6"
+    },
+    {
+      "Duration": 60,
+      "StartDateTime": "2023-01-17T17:30:00",
+      "WeekTimeSlotId": "3e26e8f8-8b69-4610-9d57-cee83dc6a67e"
+    },
+    {
+      "Duration": 60,
+      "StartDateTime": "2023-01-19T16:00:00",
+      "WeekTimeSlotId": "99f99312-814c-4f16-b39b-8a0a1b9f543c"
+    },
+    {
+      "Duration": 60,
+      "StartDateTime": "2023-01-19T18:30:00",
+      "WeekTimeSlotId": "19ffcbb6-de6f-4912-ada9-77996bcc8ce6"
+    },
+    {
+      "Duration": 60,
+      "StartDateTime": "2023-01-24T17:30:00",
+      "WeekTimeSlotId": "3e26e8f8-8b69-4610-9d57-cee83dc6a67e"
+    }
+  ],
+  "WeekTimeSlots": [
+    {
+      "DayOfWeek": 1,
+      "Duration": 60,
+      "StartTime": "17:30:00",
+      "WeekTimeSlotId": "3e26e8f8-8b69-4610-9d57-cee83dc6a67e"
+    },
+    {
+      "DayOfWeek": 3,
+      "Duration": 60,
+      "StartTime": "18:30:00",
+      "WeekTimeSlotId": "19ffcbb6-de6f-4912-ada9-77996bcc8ce6"
+    },
+    {
+      "DayOfWeek": 3,
+      "Duration": 60,
+      "StartTime": "16:00:00",
+      "WeekTimeSlotId": "99f99312-814c-4f16-b39b-8a0a1b9f543c"
+    }
+  ]
+}

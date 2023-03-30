@@ -8,9 +8,9 @@ export class ScheduleService {
         return $axiosAuth.delete(`tutor/schedules/${startDate}/${endDate}`)
     }
     static async generateScheduleEntry(data: IGenerateScheduleRequest){
-        return $axiosAuth.post(`schedules/generate_schedule_entry`, {data})
+        return $axiosAuth.post(`schedule/generate_schedule_entry`, data)
     }
     static async createClass(data: ICreateClassRequest){
-        return $axiosAuth.post(`tutor/classes`, {data})
+        return $axiosAuth.post(`tutor/classes`, data)
     }
 }

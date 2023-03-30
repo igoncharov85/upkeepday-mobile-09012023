@@ -28,7 +28,7 @@ $axiosAuth.interceptors.request.use(
         console.log(`request: ${config.baseURL}${config.url}`);
         config.headers = {
             Accept: "application/json",
-            Authorization: `Bearer ${token}`,
+            Authorization: `${token}`,
         };
         return config;
     },

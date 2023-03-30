@@ -1,9 +1,28 @@
+import { IUserStudent } from "./user"
+
 export interface IScheduleRequest {
     startDate: string,
     endDate: string
 }
 
+
+export interface IExistingStudent {
+    StudentId: number
+}
 export interface ICreateClassRequest {
+
+    ClassName: string
+    ClassLocationType: number,
+    ClassLocationId: number,
+    StartDate: string,
+    EndScheduleType: string,
+    EndNumber: number,
+    MakeupRequired: boolean,
+    TrackPrepayment: boolean,
+    ExistingStudents: Array<IExistingStudent>
+    NewStudents: Array<IUserStudent>
+    WeekTimeSlots: Array<IWeekTimeSlot>
+    ScheduledEntries: Array<IGeneratedScheduleEntries>
 
 }
 
@@ -12,15 +31,14 @@ export interface ICreateClassResponse {
 }
 
 export interface IGeneratedScheduleResponse {
-    GeneratedScheduleEntries: Array<IGeneratedScheduleEntries>,
-    CurrentScheduledEntries: Array<any>,
+    GeneratedScheduleEntries: Array<IGeneratedScheduleEntries>
+    CurrentScheduledEntries: Array<IGeneratedScheduleEntries>
     WeekTimeSlots: Array<IWeekTimeSlot>
 }
 
-export interface WeekTimeSlots {
-    WeekTimeSlotId: string,
+export interface IWeekTimeSlot {
     Duration: number,
-    DayOfWeek: 1,
+    DayOfWeek: number,
     StartTime: string,
 }
 
@@ -37,18 +55,11 @@ export interface IScheduleItem {
     ScheduleEntryId: number
 }
 
-export interface IWeekTimeSlot {
-    DayOfWeek: number,
-    StartTime: string,
-    Duration: number,
-    WeekTimeSlotId: string,
-}
 export interface IGenerateScheduleRequest {
-    TeacherId: number,
     ScheduleType: string,
-    StartDate: string, //2023-03-24
+    StartDate: string,
     Number: number,
-    EndDate: string,
     WeekTimeSlots: Array<IWeekTimeSlot>
 }
+
 

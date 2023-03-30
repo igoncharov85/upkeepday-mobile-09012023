@@ -23,13 +23,13 @@ export const locationService = createSlice({
             state.locations = action.payload
         },
         addLocationsAction: (state, action: PayloadAction<ILocation>) => {
-            state.locations = [action.payload ,...state.locations]
+            state.locations = [action.payload, ...state.locations]
         },
     },
 
 })
 
 // Action creators are generated for each case reducer function
-export const { setLocationLoading, setLocationsAction,addLocationsAction } = locationService.actions
+export const { setLocationLoading, setLocationsAction, addLocationsAction } = locationService.actions
 
 export default locationService.reducer

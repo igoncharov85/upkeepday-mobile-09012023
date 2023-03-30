@@ -10,10 +10,11 @@ export interface IUserStudent {
     FirstName: string
     LastName: string,
     Email: string,
-    PhoneCountry: string,
+    PhoneCountry:  | number,
     PhoneNumber: string,
     StudentId: number,
     EnrolledClasses: Array<IEnrolledClass>
+    Notes?: string
 }
 
 export interface IUserCreateRequest {

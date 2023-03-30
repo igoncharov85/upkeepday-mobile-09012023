@@ -7,7 +7,8 @@ export class LocationService {
     }
 
     static addLocation(data: ILocationRequest) {
-        return $axiosAuth.post('/tutor/locations/', {data: {...data}})
+        console.log(data)
+        return $axiosAuth.post('/tutor/locations/', data)
     }
 
     static fetchLocationById(id: string) {

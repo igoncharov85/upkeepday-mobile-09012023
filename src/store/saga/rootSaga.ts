@@ -8,8 +8,8 @@ export default function* rootSaga(): Generator {
     try {
         yield spawn(authWatcher)
         yield spawn(scheduleWatcher)
-        yield spawn(locationSagaWatcher)
         yield spawn(userWatcher)
+        yield spawn(locationSagaWatcher)
     } catch (error) {
         console.warn("Error in rootSaga", error);
     }

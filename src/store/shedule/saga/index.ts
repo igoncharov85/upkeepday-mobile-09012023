@@ -1,84 +1,99 @@
 import { AxiosResponse } from "axios";
 import { SagaIterator } from "redux-saga";
 import { call, put, takeEvery } from "redux-saga/effects";
-import { setScheduleLoading } from "..";
+import { setCurrentGeneratedScheduleAction, setGeneratedScheduleEntriesAction, setScheduleLoading, setTimeSlotsAction } from "..";
 import { IAction } from "../../../common/types/common.types";
-import { IGeneratedScheduleResponse, IGenerateScheduleRequest, IScheduleItem, IScheduleRequest } from "../../../common/types/schedule.types";
+import { ICreateClassRequest, IGeneratedScheduleResponse, IGenerateScheduleRequest, IScheduleItem, IScheduleRequest } from "../../../common/types/schedule.types";
 import { ScheduleService } from "../../../services/axios/schedule";
 import { ErrorFilterService } from "../../../services/error-filter/error-filter.service";
 import { ScheduleConstantsEnum } from "../constants";
 
 //TODO
-export function* fetchSchedulesWatcher({
-    payload,
-    type,
-}: IAction<IScheduleRequest>):SagaIterator {
-   try{
+export function* fetchSchedulesWorker({
+  payload,
+  type,
+}: IAction<IScheduleRequest>): SagaIterator {
+  try {
     yield put(setScheduleLoading(true));
     const { data }: AxiosResponse<Array<IScheduleItem>, any> = yield call(
-        ScheduleService.fetchSchedule,
-        payload
+      ScheduleService.fetchSchedule,
+      payload
     );
     console.log("data: ", data)
-   }catch(error){
+  } catch (error) {
     yield call(ErrorFilterService.validateError, error)
-   }
+  } finally {
+    yield put(setScheduleLoading(false));
+  }
 }
 
 //TODO
-export function* generateScheduleWatcher({
+export function* generateScheduleWorker({
   payload,
   type,
-}: IAction<IGenerateScheduleRequest>):SagaIterator {
- try{
-  yield put(setScheduleLoading(true));
-  const { data }: AxiosResponse<Array<IGeneratedScheduleResponse>, any> = yield call(
+}: IAction<IGenerateScheduleRequest>): SagaIterator {
+  try {
+    yield put(setScheduleLoading(true));
+    const { data }: AxiosResponse<IGeneratedScheduleResponse, any> = yield call(
       ScheduleService.generateScheduleEntry,
       payload
-  );
-  console.log("data: ", data)
- }catch(error){
-  yield call(ErrorFilterService.validateError, error)
- }
+    );
+    console.log("data: ", data)
+    if (data) {
+      yield put(setTimeSlotsAction(data.WeekTimeSlots))
+      yield put(setGeneratedScheduleEntriesAction(data.GeneratedScheduleEntries))
+      yield put(setCurrentGeneratedScheduleAction(data.CurrentScheduledEntries))
+    }
+
+  } catch (error) {
+    yield call(ErrorFilterService.validateError, error)
+  } finally {
+    yield put(setScheduleLoading(false));
+  }
 }
 
 //TODO
-export function* deleteScheduleByPeriodWatcher({
+export function* deleteScheduleByPeriodWorker({
   payload,
   type,
-}: IAction<IScheduleRequest>):SagaIterator {
- try{
-  yield put(setScheduleLoading(true));
-  const { data }: AxiosResponse<Array<IGeneratedScheduleResponse>, any> = yield call(
+}: IAction<IScheduleRequest>): SagaIterator {
+  try {
+    yield put(setScheduleLoading(true));
+    const { data }: AxiosResponse<Array<IGeneratedScheduleResponse>, any> = yield call(
       ScheduleService.deleteSchedules,
       payload
-  );
-  console.log("data: ", data)
- }catch(error){
-  yield call(ErrorFilterService.validateError, error)
- }
+    );
+    console.log("data: ", data)
+  } catch (error) {
+    yield call(ErrorFilterService.validateError, error)
+  } finally {
+    yield put(setScheduleLoading(false));
+  }
 }
 
 //TODO
 export function* createSchedule({
   payload,
   type,
-}: IAction<IScheduleRequest>):SagaIterator {
- try{
-  yield put(setScheduleLoading(true));
-  const { data }: AxiosResponse<Array<IGeneratedScheduleResponse>, any> = yield call(
+}: IAction<ICreateClassRequest>): SagaIterator {
+  try {
+    yield put(setScheduleLoading(true));
+    const { data }: AxiosResponse<Array<IGeneratedScheduleResponse>, any> = yield call(
       ScheduleService.createClass,
       payload
-  );
-  console.log("data: ", data)
- }catch(error){
-  yield call(ErrorFilterService.validateError, error)
- }
+    );
+    console.log("createSchedule data: ", data)
+  } catch (error) {
+    yield call(ErrorFilterService.validateError, error)
+  }
+  finally {
+    yield put(setScheduleLoading(false));
+  }
 }
 
-export function* scheduleWatcher(){
-  yield takeEvery(ScheduleConstantsEnum.FETCH_SCHEDULES_BY_PERIOD, fetchSchedulesWatcher)
-  yield takeEvery(ScheduleConstantsEnum.GENERATE_SCHEDULE_ENTRY, generateScheduleWatcher)
-  yield takeEvery(ScheduleConstantsEnum.DELETE_SCHEDULE_BY_PERIOD, deleteScheduleByPeriodWatcher)
+export function* scheduleWatcher() {
+  yield takeEvery(ScheduleConstantsEnum.FETCH_SCHEDULES_BY_PERIOD, fetchSchedulesWorker)
+  yield takeEvery(ScheduleConstantsEnum.GENERATE_SCHEDULE_ENTRY, generateScheduleWorker)
+  yield takeEvery(ScheduleConstantsEnum.DELETE_SCHEDULE_BY_PERIOD, deleteScheduleByPeriodWorker)
   yield takeEvery(ScheduleConstantsEnum.CREATE_CLASS, createSchedule)
 }

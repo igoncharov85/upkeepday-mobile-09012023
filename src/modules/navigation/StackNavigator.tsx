@@ -1,4 +1,4 @@
-import React, {memo} from 'react';
+import React, {memo, useEffect, useState} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NavigationEnum} from '../../common/constants/navigation';
 import {LoginScreen} from '../../screens/LoginScreen';
@@ -7,11 +7,17 @@ import {FinalRegistrationScreen} from '../../screens/RegistrationScreen/FinalReg
 import {SendEmailScreen} from '../../screens/ForgotPassScreen/SendEmailScreen';
 import {SetPasswordScreen} from '../../screens/ForgotPassScreen/SetPasswordScreen';
 import { ScheduleScreen } from '../../screens/SheduleScreen';
+import { AsyncStorageService } from '../../services/async-storage';
+import { useAppSelector } from '../../store/hooks';
 
 const Stack = createNativeStackNavigator();
 export const StackNavigator = memo(() => {
+  const {isAuth} = useAppSelector((store) => store.auth)
+  useEffect(()=> {
+    
+  }, [])
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
+    <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName={isAuth ? NavigationEnum.HOME_SCREEN : NavigationEnum.LOGIN}>
       <Stack.Screen name={NavigationEnum.LOGIN} component={LoginScreen} />
       <Stack.Screen
         name={NavigationEnum.REGISTRATION}

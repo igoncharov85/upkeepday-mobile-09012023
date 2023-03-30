@@ -2,7 +2,7 @@ import { AxiosResponse } from "axios";
 import { err } from "react-native-svg/lib/typescript/xml";
 import { SagaIterator } from "redux-saga";
 import { call, put, take, takeEvery } from "redux-saga/effects";
-import { setAuthLoadingAction, setCountriesAction, setStatesAction, setStatesLoading } from "..";
+import { setAuthLoadingAction, setCountriesAction, setIsAuthAction, setStatesAction, setStatesLoading } from "..";
 import { NavigationEnum } from "../../../common/constants/navigation";
 import { IConfirmPassword, ILoginRequest, IRegistrationDto, IResetItemRequest, IStatusResponse, ITokenResponse } from "../../../common/types/auth.types";
 import { IAction } from "../../../common/types/common.types";
@@ -25,7 +25,9 @@ function* loginWorker({
         );
 
         if (data?.token) {
-            call(AsyncStorageService.setToken, data.token)
+            yield call(AsyncStorageService.setToken, data.token)
+            yield put(setIsAuthAction(true))
+            console.log(data.token)
             yield put(pushToastsAction({
                 type: 'info',
                 text1: 'Login successful',
@@ -206,6 +208,7 @@ function* logoutWorker({
     try {
         yield call(AsyncStorageService.setToken, "")
         yield call(NavigationActions.navigate, NavigationEnum.LOGIN)
+        yield put(setIsAuthAction(false))
 
     } catch (error) {
         console.error("fechGeneralRatingWithParamsWorker", error);

@@ -14,13 +14,15 @@ export function* fetchLocationsWorker({
     type,
 }: IAction<null>): SagaIterator {
     try {
+        console.log("GET LOCATIONS!!!!")
         yield put(setLocationLoading(true));
-        const { data }: AxiosResponse<Array<ILocation>, any> = yield call(
+        const data: AxiosResponse<Array<ILocation>, any> = yield call(
             LocationService.fetchLocations,
         );
 
-        if(data){
-            yield put(setLocationsAction(data))
+        if(data?.data){
+            console.log('locations:', data.data)
+            yield put(setLocationsAction(data?.data))
         }
        
 
@@ -36,6 +38,7 @@ export function* addLocationWorker({
     type,
 }: IAction<ILocationRequest>): SagaIterator {
     try {
+        console.log("ADD Location")
         yield put(setLocationLoading(true));
         const { data }: AxiosResponse<ILocation, any> = yield call(
             LocationService.addLocation,
@@ -43,6 +46,7 @@ export function* addLocationWorker({
         );
 
         if(data){
+            console.log("data add location", data)
             yield put(addLocationsAction(data))
         }
        

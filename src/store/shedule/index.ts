@@ -7,7 +7,7 @@ export interface ScheduleState {
     GeneratedScheduleEntries: Array<IGeneratedScheduleEntries>,
     CurrentScheduledEntries: any[],
     WeekTimeSlots: Array<IWeekTimeSlot>,
-    schedulesItems: Array<IScheduleItem>
+    currentGeneratedScheduleItems: Array<IGeneratedScheduleEntries>
 }
 
 const initialState: ScheduleState = {
@@ -15,7 +15,7 @@ const initialState: ScheduleState = {
     GeneratedScheduleEntries: [],
     CurrentScheduledEntries: [],
     WeekTimeSlots: [],
-    schedulesItems: [],
+    currentGeneratedScheduleItems: [],
 }
 
 export const scheduleSlice = createSlice({
@@ -25,8 +25,8 @@ export const scheduleSlice = createSlice({
         setScheduleLoading: (state, action: PayloadAction<boolean>) => {
             state.loading = action.payload
         },
-        setSchedulesAction: (state, action: PayloadAction<Array<IScheduleItem>>) => {
-            state.schedulesItems = action.payload
+        setCurrentGeneratedScheduleAction: (state, action: PayloadAction<Array<IGeneratedScheduleEntries>>) => {
+            state.currentGeneratedScheduleItems = action.payload
         },
         setTimeSlotsAction: (state, action: PayloadAction<Array<IWeekTimeSlot>>) => {
             state.WeekTimeSlots = action.payload
@@ -39,6 +39,6 @@ export const scheduleSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setScheduleLoading, setGeneratedScheduleEntriesAction, setSchedulesAction, setTimeSlotsAction } = scheduleSlice.actions
+export const { setScheduleLoading, setGeneratedScheduleEntriesAction, setCurrentGeneratedScheduleAction, setTimeSlotsAction } = scheduleSlice.actions
 
 export default scheduleSlice.reducer

@@ -1,0 +1,71 @@
+import {StyleSheet} from 'react-native';
+
+export default StyleSheet.create({
+  container: {
+    flex: 1,
+    marginHorizontal: 20,
+    marginVertical: 8,
+  },
+  interactive: {
+    marginTop: 8,
+    height: 52,
+    paddingLeft: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 8,
+    position: 'relative',
+    // backgroundColor: 'white',
+    // height: 50,
+    // borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    paddingHorizontal: 10,
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
+    color: 'black',
+  },
+  interactiveText: {
+    fontSize: 14,
+    lineHeight: 19,
+    color: '#000000',
+    fontWeight: '500',
+  },
+  interactiveChildren: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  switchButton: {
+    backgroundColor: 'rgba(165, 175, 196, 0.5)',
+    width: 85,
+    height: 38,
+    paddingHorizontal: 5,
+    paddingVertical: 3,
+    borderRadius: 9,
+  },
+  switchButtonCircle: {
+    width: 42,
+    height: 32,
+    backgroundColor: '#FBFCFD',
+    borderRadius: 2200,
+    overflow: 'hidden',
+  },
+  dateContainer: {
+    height: 38,
+    width: 105,
+    borderRadius: 9,
+    overflow: 'hidden',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 10,
+  },
+  dateText: {
+    fontSize: 15,
+    lineHeight: 18,
+  },
+});

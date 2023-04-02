@@ -1,43 +1,48 @@
-import React, {memo} from 'react';
-import {Text, View} from 'react-native';
-
+import React, {FC, memo} from 'react';
+import {StyleSheet, Text, View} from 'react-native';
+import {CancellationModal} from '../../components/CancellationModal';
 import styles from './styles';
-
-enum typeLesson {
-  lesson,
-  trial,
+enum LessonType {
+  Lesson,
+  Trial,
 }
 
-interface ISessionItem {
+interface SessionItemProps {
   id: string;
   name: string;
   timeStart: string;
-  timeСontinued: string;
-  type: typeLesson;
+  timeContinued: string;
+  type: LessonType;
 }
 
-export const SessionItem: React.FC<ISessionItem> = memo(
-  ({name, timeСontinued, timeStart, type}) => (
-    <View style={styles.container}>
-      <Text style={styles.timeStart}>{timeStart}</Text>
-      <View
-        style={[
-          styles.item,
-          type == typeLesson.trial ? styles.item_trial : styles.item_lesson,
-        ]}>
-        <View
-          style={[
-            styles.decorItemLine,
-            type == typeLesson.trial
-              ? styles.decorItemLine_trial
-              : styles.decorItemLine_lesson,
-          ]}
-        />
-        <View style={styles.itemInfo}>
-          <Text style={styles.title}>{name}</Text>
-          <Text style={styles.time}>{timeСontinued}</Text>
+export const SessionItem: FC<SessionItemProps> = memo(
+  ({name, timeContinued, timeStart, type}) => {
+    const isTrialLesson = type === LessonType.Trial;
+
+    return (
+      <CancellationModal>
+        <View style={styles.container}>
+          <Text style={styles.timeStart}>{timeStart}</Text>
+          <View
+            style={[
+              styles.item,
+              isTrialLesson ? styles.itemTrial : styles.itemLesson,
+            ]}>
+            <View
+              style={[
+                styles.decorItemLine,
+                isTrialLesson
+                  ? styles.decorItemLineTrial
+                  : styles.decorItemLineLesson,
+              ]}
+            />
+            <View style={styles.itemInfo}>
+              <Text style={styles.title}>{name}</Text>
+              <Text style={styles.time}>{timeContinued}</Text>
+            </View>
+          </View>
         </View>
-      </View>
-    </View>
-  ),
+      </CancellationModal>
+    );
+  },
 );

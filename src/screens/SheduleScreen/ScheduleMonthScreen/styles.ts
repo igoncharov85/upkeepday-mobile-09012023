@@ -3,11 +3,6 @@ import {StyleSheet} from 'react-native';
 export default StyleSheet.create({
   container: {
     flex: 1,
-    // height: '100%',
-    // maxWidth: '100%',
-    // maxHeight: '100%',
-    // alignItems: 'center',
-    // justifyContent: 'center',
   },
   column: {
     flexDirection: 'column',
@@ -23,5 +18,23 @@ export default StyleSheet.create({
     color: '#171930',
     mixBlendMode: 'normal',
     opacity: 0.4,
+  },
+  monthItemText: {
+    fontStyle: 'normal',
+    fontWeight: '400',
+    fontSize: 13,
+    lineHeight: 19,
+    color: '#171930',
+    alignItems: 'center',
+  },
+  monthItemActiveText: {
+    fontWeight: '600',
+    color: '#fff',
+  },
+  numberOfClasses: {
+    fontSize: 9,
+    fontWeight: '500',
+    lineHeight: 11,
+    color: '#fff',
   },
 });

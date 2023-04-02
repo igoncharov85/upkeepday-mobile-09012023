@@ -7,8 +7,7 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingBottom: 18,
-    paddingTop: 6
-
+    paddingTop: 6,
   },
   item: {
     backgroundColor: 'white',
@@ -20,17 +19,15 @@ export default StyleSheet.create({
     borderRadius: 4,
     overflow: 'hidden',
   },
-  item_trial: {
+  itemTrial: {
     height: 98,
   },
-  item_lesson: {
+  itemLesson: {
     height: 69,
   },
   itemInfo: {
     marginLeft: 14,
     flexDirection: 'column',
-    justifyContent: 'space-evenly',
-    height: '100%',
   },
   decorItemLine: {
     position: 'absolute',
@@ -40,10 +37,10 @@ export default StyleSheet.create({
     height: '100%',
     width: 4,
   },
-  decorItemLine_trial: {
+  decorItemLineTrial: {
     backgroundColor: '#FF7F09',
   },
-  decorItemLine_lesson: {
+  decorItemLineLesson: {
     backgroundColor: '#9A80BA',
   },
   timeStart: {
@@ -53,11 +50,13 @@ export default StyleSheet.create({
     opacity: 0.4,
   },
   title: {
+    marginTop: 12,
     fontSize: 14,
     lineHeight: 18,
     fontWeight: '700',
   },
   time: {
+    marginTop: 8,
     fontSize: 14,
     lineHeight: 22,
     color: '#7E8CA0',

@@ -54,7 +54,7 @@ export const RootNavigation = memo(() => {
     .minDistance(45)
     .onEnd(event => {
       if (event.translationX > 0 && navigationRef && navigationRef.current) {
-        goBackPanHandler()
+        goBackPanHandler();
       }
     });
   return (

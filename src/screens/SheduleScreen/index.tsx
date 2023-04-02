@@ -17,9 +17,6 @@ import {CancellationScreen} from '../CancellationScreen';
 
 interface IHomeScreen extends INavigationBase {}
 export const ScheduleScreen: FC<IHomeScreen> = memo(() => {
-
-
-
   return (
     <View style={styles.container}>
       <SheduleHeader text="Schedule" />

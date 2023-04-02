@@ -1,17 +1,21 @@
-import React, {FC, memo, useEffect} from 'react';
+import React, {FC, memo} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 import styles from './styles';
-interface IAddSession {
+
+interface AddSessionProps {
   title: string;
   onPress?: () => void;
+  disabled?: boolean;
 }
-interface IAddSessionModal {
+
+interface AddSessionModalProps {
   visible: boolean;
   visibleHandler?: () => void;
 }
-export const AddSessionModal: FC<IAddSessionModal> = memo(
+
+export const AddSessionModal: FC<AddSessionModalProps> = memo(
   ({visible, visibleHandler}) => {
     return visible ? (
       <LinearGradient
@@ -21,21 +25,21 @@ export const AddSessionModal: FC<IAddSessionModal> = memo(
         angle={223.05}
         useAngle={true}
         style={styles.container}>
-        <View></View>
+        <View />
         <View style={{width: '100%', alignItems: 'center'}}>
-          <AddSessionBlock title={'Add Trial'} onPress={visibleHandler} />
-          <AddSessionBlock title={'Add Trial'} onPress={visibleHandler} />
+          <SessionButton title={'Add Trial'} disabled={true} />
+          <SessionButton title={'Add Class'} onPress={visibleHandler} />
         </View>
       </LinearGradient>
     ) : null;
   },
 );
 
-const AddSessionBlock: FC<IAddSession> = ({title, onPress}) => {
+const SessionButton: FC<AddSessionProps> = ({title, onPress, disabled}) => {
   return (
-    <TouchableOpacity onPress={onPress}>
-      <View style={styles.sessionBlock}>
-        <Text style={styles.sessionText}>{title}</Text>
+    <TouchableOpacity onPress={onPress} disabled={disabled}>
+      <View style={[styles.sessionBlock, disabled ? styles.sessionBlockDisabled : null]}>
+        <Text style={[styles.sessionText, , disabled ? styles.sessionTextDisabled : null]}>{title}</Text>
       </View>
     </TouchableOpacity>
   );

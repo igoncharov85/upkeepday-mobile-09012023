@@ -17,6 +17,7 @@ interface ICustomInputProps extends TextInputProps {
   validationErrorText?: string;
   touched?: boolean;
   disabled?: boolean;
+  style?: {};
 }
 
 export const CustomInput: FC<ICustomInputProps> = memo(
@@ -27,6 +28,7 @@ export const CustomInput: FC<ICustomInputProps> = memo(
     touched,
     secureTextEntry,
     disabled,
+    style,
     ...props
   }) => {
     const [isVisible, setIsVisible] = useState<boolean>(!!secureTextEntry);
@@ -61,6 +63,7 @@ export const CustomInput: FC<ICustomInputProps> = memo(
             style={{
               ...styles.input,
               backgroundColor: disabled ? '#E5E8EB' : 'white',
+              ...style,
             }}
             placeholderTextColor={'grey'}
             editable={disabled}

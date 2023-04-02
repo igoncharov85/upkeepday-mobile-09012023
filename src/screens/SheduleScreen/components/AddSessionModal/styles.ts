@@ -18,10 +18,16 @@ export default StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
   },
+  sessionBlockDisabled: {
+    backgroundColor: '#6D7B98',
+  },
   sessionText: {
     color: '#060633',
     fontSize: 15,
     lineHeight: 17,
     fontWeight: '600',
+  },
+  sessionTextDisabled: {
+    color: '#fff',
   },
 });

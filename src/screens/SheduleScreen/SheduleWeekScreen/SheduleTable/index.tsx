@@ -18,12 +18,7 @@ enum TypeSession {
   lesson,
   trial,
 }
-enum TimeDuration {
-  HalfHour = 0.5,
-  ThreeQuarterHour = 0.75,
-  OneHour = 1,
-  OneAndAHalfHours = 1.5,
-}
+
 const isToday = (dayIndex: number) => {
   const currentDate = new Date();
   const currentDayIndex = currentDate.getDay();

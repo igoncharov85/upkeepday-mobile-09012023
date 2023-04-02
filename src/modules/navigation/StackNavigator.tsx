@@ -6,13 +6,18 @@ import {RegistrationScreen} from '../../screens/RegistrationScreen';
 import {FinalRegistrationScreen} from '../../screens/RegistrationScreen/FinalRegistrtionScreen';
 import {SendEmailScreen} from '../../screens/ForgotPassScreen/SendEmailScreen';
 import {SetPasswordScreen} from '../../screens/ForgotPassScreen/SetPasswordScreen';
-import { ScheduleScreen } from '../../screens/SheduleScreen';
+import {ScheduleScreen} from '../../screens/SheduleScreen';
+import {ScheduleMonthScreen} from '../../screens/SheduleScreen/ScheduleMonthScreen';
+import {ScheduleDayScreen} from '../../screens/SheduleScreen/SheduleDayScreen';
+import {SheduleWeekScreen} from '../../screens/SheduleScreen/SheduleWeekScreen';
+import {CancellationScreen} from '../../screens/CancellationScreen';
+import {CancellationModal} from '../../screens/SheduleScreen/components/CancellationModal';
 
 const Stack = createNativeStackNavigator();
 export const StackNavigator = memo(() => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name={NavigationEnum.LOGIN} component={LoginScreen} />
+      <Stack.Screen name={NavigationEnum.LOGIN} component={ScheduleScreen} />
       <Stack.Screen
         name={NavigationEnum.REGISTRATION}
         component={RegistrationScreen}
@@ -31,7 +36,31 @@ export const StackNavigator = memo(() => {
         name={NavigationEnum.REGISTRATION_FINAL}
         component={FinalRegistrationScreen}
       />
-      <Stack.Screen name={NavigationEnum.HOME_SCREEN} component={ScheduleScreen} />
+      <Stack.Screen
+        name={NavigationEnum.SHEDULE_DAY}
+        component={ScheduleDayScreen}
+      />
+      <Stack.Screen
+        name={NavigationEnum.SHEDULE_WEEK}
+        component={SheduleWeekScreen}
+      />
+      <Stack.Screen
+        name={NavigationEnum.SHEDULE_MONTH}
+        component={ScheduleMonthScreen}
+      />
+
+      <Stack.Screen
+        name={NavigationEnum.HOME_SCREEN}
+        component={ScheduleScreen}
+      />
+      <Stack.Screen
+        name={NavigationEnum.CANCELLATION_MODAL}
+        component={CancellationModal}
+      />
+      <Stack.Screen
+        name={NavigationEnum.CANCELLATION_SCREEN}
+        component={CancellationScreen}
+      />
     </Stack.Navigator>
   );
 });

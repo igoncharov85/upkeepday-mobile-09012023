@@ -12,7 +12,7 @@ enum TypeSession {
   trial,
 }
 interface IMonthItem {
-  sesion: TypeSession[];
+  sesion?: number;
   day: string;
 }
 
@@ -69,7 +69,6 @@ export const ScheduleMonthScreen: FC<IScheduleMonthScreen> = memo(() => {
   const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thr', 'Fri', 'Sat'];
 
   const monthStructure = createMonthStructure(dataOfMonth);
-  console.log(monthStructure, 'monthStructure00000');
   const currentMonth = new Date()
     .toLocaleString('default', {month: 'long', year: 'numeric'})
     .replace(/,\s(\d{4})$/, ',$1');
@@ -83,7 +82,7 @@ export const ScheduleMonthScreen: FC<IScheduleMonthScreen> = memo(() => {
           </View>
         ))}
       </Row>
-      <ScrollView >
+      <ScrollView>
         {monthStructure.map((week, rowIndex) => (
           <Row style={{flex: 1}} key={rowIndex}>
             {week.map((day, colIndex) => {
@@ -92,12 +91,12 @@ export const ScheduleMonthScreen: FC<IScheduleMonthScreen> = memo(() => {
                 return (
                   <MonthItem
                     key={dayKey}
-                    sesion={getTypeSessionArray(dataOfMonth[day - 1])}
+                    sesion={dataOfMonth[day - 1].length}
                     day={day.toString()}
                   />
                 );
               }
-              return <MonthItem key={dayKey} sesion={[]} day={' '} />;
+              return <MonthItem key={dayKey} day={' '} />;
             })}
           </Row>
         ))}
@@ -107,90 +106,35 @@ export const ScheduleMonthScreen: FC<IScheduleMonthScreen> = memo(() => {
 });
 
 const MonthItem: FC<IMonthItem> = ({sesion, day}) => {
-  const today = day == '21';
-  return today ? (
-    <View style={{flex: 1, height: 92, alignItems: 'center'}}>
-      <Text
-        style={{
-          fontStyle: 'normal',
-          fontWeight: '400',
-          fontSize: 13,
-          lineHeight: 19,
-          color: '#171930',
-          alignItems: 'center',
-        }}>
-        {day}
-      </Text>
-      <ScrollView></ScrollView>
-    </View>
-  ) : (
-    <View style={{flex: 1, height: 92, alignItems: 'center'}}>
-      <Text
-        style={{
-          fontStyle: 'normal',
-          fontWeight: '400',
-          fontSize: 13,
-          lineHeight: 19,
-          color: '#171930',
-          alignItems: 'center',
-        }}>
-        {day}
-      </Text>
-      <ScrollView>
-        {sesion.map(type => (
-          <SesionItem typeSession={type} />
-        ))}
-      </ScrollView>
-    </View>
-  );
-};
-const SesionItem = ({typeSession}: {typeSession: TypeSession}) => {
-  const trialParam = {
-    colors: ['#E9600D', '#F3922C', '#FFCE50'],
-    colorsWithOpacity: [
-      'rgba(233,96,13,0.19)',
-      'rgba(243,146,44,0.19)',
-      'rgba(255,206,80,0.19)',
-    ],
-    locations: [0, 0.4581, 1],
-  };
-  const lessonParam = {
-    colors: ['#654EA3', '#EAAFC8'],
-    colorsWithOpacity: ['rgba(101,78,163,0.19)', 'rgba(234,175,200,0.19)'],
-    locations: [0, 1],
-  };
-  const getParams = () => {
-    switch (typeSession) {
-      case TypeSession.lesson:
-        return lessonParam;
-      case TypeSession.trial:
-        return trialParam;
-    }
-  };
   return (
-    <View style={{flex: 1, height: 16, width: 41, marginTop: 4}}>
+    <View style={{flex: 1, height: 92, alignItems: 'center', margin: 1}}>
       <LinearGradient
-        colors={getParams().colorsWithOpacity}
-        locations={getParams().locations}
-        style={{borderRadius: 9}}>
-        <Row style={{alignItems: 'center', justifyContent: 'space-evenly'}}>
-          <View
-            style={{width: 5, height: 5, borderRadius: 5, overflow: 'hidden'}}>
-            <LinearGradient
-              colors={getParams().colors}
-              style={{flex: 1}}
-              start={{x: 0, y: 0}}
-              end={{x: 1, y: 0}}
-            />
-          </View>
-          <Text style={{fontSize: 9}}>
-            {typeSession == TypeSession.lesson ? 'Class' : 'Trial'}
-          </Text>
-        </Row>
+        colors={
+          sesion ? ['#EAAFC8', '#654EA3'] : ['transparent', 'transparent']
+        }
+        start={{x: 0, y: 0}}
+        end={{x: 0, y: 1}}
+        style={{
+          width: '100%',
+          height: '100%',
+          borderRadius: 9,
+          alignItems: 'center',
+        }}>
+        <Text
+          style={[
+            styles.monthItemText,
+            sesion ? styles.monthItemActiveText : null,
+          ]}>
+          {day}
+        </Text>
+        {sesion ? (
+          <Text style={styles.numberOfClasses}>{`${sesion} Sessions`}</Text>
+        ) : null}
       </LinearGradient>
     </View>
   );
 };
+
 const Row = ({
   children,
   style,

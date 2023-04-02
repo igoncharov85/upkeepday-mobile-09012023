@@ -1,10 +1,18 @@
 import React, {memo, useState} from 'react';
-import {ScrollView, Text, View} from 'react-native';
+import {
+  ScrollView,
+  Text,
+  Modal,
+  TouchableOpacity,
+  View,
+  Animated,
+  StyleSheet,
+} from 'react-native';
 
 import {dataOfMonth} from '..';
 import {INavigationBase} from '../../../common/types/component.styles';
 import {ScheduleScroller} from '../components/ScheduleScroller';
-import SessionItemList from './SessionList';
+import {SessionItemList} from './SessionList';
 
 import styles from './styles';
 
@@ -13,9 +21,9 @@ enum LessonType {
   Trial,
 }
 
-interface ScheduleDayScreenProps {}
+interface IScheduleDayScreen {}
 
-export const ScheduleDayScreen: React.FC<ScheduleDayScreenProps> = memo(() => {
+export const ScheduleDayScreen: React.FC<IScheduleDayScreen> = memo(() => {
   const [currentIndex, setCurrentIndex] = useState(new Date().getDate() - 1);
   const [currentDayData, setCurrentDayData] = useState(
     dataOfMonth[new Date().getDate() - 1],
@@ -45,7 +53,7 @@ export const ScheduleDayScreen: React.FC<ScheduleDayScreenProps> = memo(() => {
   });
 
   const today = new Date();
-
+  console.log(today, 'today');
   return (
     <View>
       <ScheduleScroller

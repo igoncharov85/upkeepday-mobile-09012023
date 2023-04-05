@@ -4,8 +4,11 @@ import { persistStore, persistReducer } from "redux-persist";
 import createSagaMiddleware from 'redux-saga';
 import authReducer from './auth'
 import appReducer from './app'
+import locationReducer from './location'
+import userReducer from './user'
 import cacheReducer from './cached'
 import rootSaga from './saga/rootSaga';
+import  scheduleReducer from './shedule';
 
 const persistConfig = {
     key: "root",
@@ -16,7 +19,10 @@ const persistConfig = {
 const reducer = combineReducers({
     auth: authReducer,
     app: appReducer,
-    cache: cacheReducer
+    cache: cacheReducer,
+    schedule: scheduleReducer,
+    location: locationReducer,
+    user: userReducer
 })
 
 const sagaMiddleware = createSagaMiddleware();

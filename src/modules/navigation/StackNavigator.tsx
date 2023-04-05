@@ -1,11 +1,12 @@
-import React, { memo } from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { NavigationEnum } from '../../common/constants/navigation';
-import { LoginScreen } from '../../screens/LoginScreen';
-import { RegistrationScreen } from '../../screens/RegistrationScreen';
-import { FinalRegistrationScreen } from '../../screens/RegistrationScreen/FinalRegistrtionScreen';
-import { SendEmailScreen } from '../../screens/ForgotPassScreen/SendEmailScreen';
-import { SetPasswordScreen } from '../../screens/ForgotPassScreen/SetPasswordScreen';
+
+import React, {memo, useEffect, useState} from 'react';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {NavigationEnum} from '../../common/constants/navigation';
+import {LoginScreen} from '../../screens/LoginScreen';
+import {RegistrationScreen} from '../../screens/RegistrationScreen';
+import {FinalRegistrationScreen} from '../../screens/RegistrationScreen/FinalRegistrtionScreen';
+import {SendEmailScreen} from '../../screens/ForgotPassScreen/SendEmailScreen';
+import {SetPasswordScreen} from '../../screens/ForgotPassScreen/SetPasswordScreen';
 import { ScheduleScreen } from '../../screens/SheduleScreen';
 import { ScheduleMonthScreen } from '../../screens/SheduleScreen/ScheduleMonthScreen';
 import { ScheduleDayScreen } from '../../screens/SheduleScreen/SheduleDayScreen';
@@ -14,12 +15,21 @@ import { CancellationScreen } from '../../screens/CancellationScreen';
 import { CancellationModal } from '../../screens/SheduleScreen/components/CancellationModal';
 import { AddClassScreen } from '../../screens/AddClassScreen';
 import { SelectDateScreen } from '../../screens/SelectDateScreen';
+import { AsyncStorageService } from '../../services/async-storage';
+import { useAppSelector } from '../../store/hooks';
+
 
 const Stack = createNativeStackNavigator();
 export const StackNavigator = memo(() => {
+  const {isAuth} = useAppSelector((store) => store.auth)
+  useEffect(()=> {
+    
+  }, [])
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name={NavigationEnum.LOGIN} component={ScheduleScreen} />
+
+    <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName={isAuth ? NavigationEnum.HOME_SCREEN : NavigationEnum.LOGIN}>
+      <Stack.Screen name={NavigationEnum.LOGIN} component={LoginScreen} />
+
       <Stack.Screen
         name={NavigationEnum.REGISTRATION}
         component={RegistrationScreen}

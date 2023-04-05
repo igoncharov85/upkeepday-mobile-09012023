@@ -28,6 +28,9 @@ export interface IConfirmPassword {
 export interface IStatusResponse {
     status: string
 }
+export interface ITokenResponse {
+    token: string
+}
 export interface IResetItemRequest {
     Password: string
 }

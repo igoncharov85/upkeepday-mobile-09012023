@@ -10,7 +10,7 @@ export default StyleSheet.create({
     headerText: {
         color: 'black',
         fontWeight: '700',
-        fontSize: 32,
+        fontSize: 24,
         textAlign: 'left',
     },
     buttonWrapper: {

@@ -1,10 +1,10 @@
-import {useNavigation} from '@react-navigation/native';
-import React, {FC, memo, useEffect, useRef, useState} from 'react';
-import {Text, View, TouchableOpacity, Button, Animated} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
+import React, { FC, memo, useEffect, useRef, useState } from 'react';
+import { Text, View, TouchableOpacity, Button, Animated } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
-import {ScreenHeader} from '../../components/ScreenHeader';
-import {CustomInput} from '../../components/UI/CustomInput';
+import { ScreenHeader } from '../../components/ScreenHeader';
+import { CustomInput } from '../../components/UI/CustomInput';
 import {
   calculateEndDate,
   formatDate,
@@ -12,26 +12,40 @@ import {
 import CalendarComponent from '../SheduleScreen/components/CalendarComponent';
 import TimePicker from '../SheduleScreen/components/TimePicker';
 import styles from './styles';
+import { MessageBlock } from './components/MessageBlock';
+import { CustomButton } from '../../components/UI/CustomButton';
 enum DateItemType {
   Date = 'date',
   Time = 'time',
 }
-interface ICancellationScreen {}
+interface ICancellationScreen { }
 export const CancellationScreen: FC<ICancellationScreen> = memo(() => {
+  const navigation = useNavigation();
   const [allDay, setAllDay] = useState(false);
-
+  const [messageVisible, setMessageVisible] = useState(false);
+  const onConfirmPress = () => {
+    setMessageVisible(true)
+  }
+  const onFinishPress = () => {
+    navigation.goBack()
+  }
   const toggleAllDay = () => {
     setAllDay(!allDay);
   };
   useEffect(() => {
     console.log(allDay);
   }, [allDay]);
-  const navigation = useNavigation();
   const startTime = '2024-01-17T17:30:00';
   const duration = 1230;
   const endTime = calculateEndDate(startTime, duration);
   return (
-    <ScrollView>
+    <ScrollView
+      contentContainerStyle={{
+        // flexGrow: 1,
+        // alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingVertical: 20,
+      }}>
       <View style={styles.container}>
         <ScreenHeader
           text={'Cancellation'}
@@ -44,19 +58,28 @@ export const CancellationScreen: FC<ICancellationScreen> = memo(() => {
         </InteractivePartItem>
         <DateOfChangeItem allDay={allDay} title={'Start'} time={startTime} />
         <DateOfChangeItem allDay={allDay} title={'End'} time={endTime} />
-
-        <CustomInput
-          multiline={true}
-          numberOfLines={4}
-          style={{height: 78, fontSize: 14, fontWeight: '500', lineHeight: 19}}
-        />
+        {!messageVisible && (
+          <TouchableOpacity style={styles.confirm} onPress={onConfirmPress}>
+            <Text style={styles.confirmText}>Confirm</Text>
+          </TouchableOpacity>)}
+        {messageVisible && (
+          <>
+            <View style={{ flex: 1 }} />
+            <Text style={styles.notification}>
+              CP will send automatic notification. However, you can customize the
+              message below.
+            </Text>
+            <MessageBlock />
+            <CustomButton text={'Finish'} onPress={onFinishPress} />
+          </>
+        )}
       </View>
     </ScrollView>
   );
 });
 
 const DateOfChangeItem = memo(
-  ({allDay, title, time}: {allDay: boolean; title: string; time: string}) => {
+  ({ allDay, title, time }: { allDay: boolean; title: string; time: string }) => {
     const [timeIsVisible, setTimeIsVisible] = useState(false);
     const [calendarIsVisible, setCalendarIsVisible] = useState(false);
 
@@ -105,7 +128,7 @@ const InteractivePartItem = ({
   );
 };
 
-const SwitchButton = ({onPress}: {onPress: () => void}) => {
+const SwitchButton = ({ onPress }: { onPress: () => void }) => {
   const [isMoved, setIsMoved] = useState(false);
   const [animatedValue, setAnimatedValue] = useState(new Animated.Value(0));
 
@@ -120,7 +143,7 @@ const SwitchButton = ({onPress}: {onPress: () => void}) => {
   };
 
   const animatedStyle = {
-    transform: [{translateX: animatedValue}],
+    transform: [{ translateX: animatedValue }],
   };
 
   return (
@@ -129,8 +152,8 @@ const SwitchButton = ({onPress}: {onPress: () => void}) => {
         style={[
           styles.switchButton,
           isMoved
-            ? {backgroundColor: '#2ECB9C'}
-            : {backgroundColor: 'rgba(165, 175, 196, 0.5)'},
+            ? { backgroundColor: '#2ECB9C' }
+            : { backgroundColor: 'rgba(165, 175, 196, 0.5)' },
         ]}>
         <Animated.View style={animatedStyle}>
           <View style={styles.switchButtonCircle}></View>
@@ -140,12 +163,12 @@ const SwitchButton = ({onPress}: {onPress: () => void}) => {
   );
 };
 
-const DateItem = ({dateValue}: {dateValue: string}) => (
+const DateItem = ({ dateValue }: { dateValue: string }) => (
   <LinearGradient
     style={styles.dateContainer}
     colors={['rgba(154, 128, 186,0.5)', 'rgba(109,123,152,0.5)']}
-    start={{x: 0, y: 0}}
-    end={{x: 1, y: 1}}
+    start={{ x: 0, y: 0 }}
+    end={{ x: 1, y: 1 }}
     angle={222.53}
     locations={[0.4978, 1.1474]}>
     <Text style={styles.dateText}>{dateValue}</Text>

@@ -1,7 +1,7 @@
-import React, {memo} from 'react';
-import {ScrollView, Text, View} from 'react-native';
+import React, { memo } from 'react';
+import { ScrollView, Text, View } from 'react-native';
 
-import {SessionItem} from '../SessionItem';
+import { SessionItem } from '../SessionItem';
 import styles from './styles';
 
 enum LessonType {
@@ -21,7 +21,7 @@ interface SessionItemListProps {
 }
 
 export const SessionItemList: React.FC<SessionItemListProps> = memo(
-  ({data}) => {
+  ({ data }) => {
     const formatDate = (dateString: string, formatStr: string) => {
       const date = new Date(dateString);
       const hours = date.getHours();
@@ -29,7 +29,7 @@ export const SessionItemList: React.FC<SessionItemListProps> = memo(
       const ampm = hours >= 12 ? 'pm' : 'am';
       const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
       const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
-      const hourString = formattedHours.toString().replace(/^0+/, ''); 
+      const hourString = formattedHours.toString().replace(/^0+/, '');
       return `${hourString}:${formattedMinutes} ${ampm}`;
     };
 
@@ -50,7 +50,7 @@ export const SessionItemList: React.FC<SessionItemListProps> = memo(
     });
 
     return (
-      <ScrollView style={styles.container}>
+      <ScrollView >
         <View style={styles.line} />
         {sessionItems.map(item => (
           <SessionItem

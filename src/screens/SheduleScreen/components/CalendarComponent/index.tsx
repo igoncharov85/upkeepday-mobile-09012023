@@ -71,6 +71,7 @@ const CalendarComponent: React.FC<Props> = memo(
             borderRadius: 15,
             borderBottomLeftRadius: 0,
             borderBottomRightRadius: 0,
+            width: '100%',
           }}>
           <Calendar
             style={{

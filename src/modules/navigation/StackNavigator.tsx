@@ -1,22 +1,24 @@
-import React, {memo} from 'react';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {NavigationEnum} from '../../common/constants/navigation';
-import {LoginScreen} from '../../screens/LoginScreen';
-import {RegistrationScreen} from '../../screens/RegistrationScreen';
-import {FinalRegistrationScreen} from '../../screens/RegistrationScreen/FinalRegistrtionScreen';
-import {SendEmailScreen} from '../../screens/ForgotPassScreen/SendEmailScreen';
-import {SetPasswordScreen} from '../../screens/ForgotPassScreen/SetPasswordScreen';
-import {ScheduleScreen} from '../../screens/SheduleScreen';
-import {ScheduleMonthScreen} from '../../screens/SheduleScreen/ScheduleMonthScreen';
-import {ScheduleDayScreen} from '../../screens/SheduleScreen/SheduleDayScreen';
-import {SheduleWeekScreen} from '../../screens/SheduleScreen/SheduleWeekScreen';
-import {CancellationScreen} from '../../screens/CancellationScreen';
-import {CancellationModal} from '../../screens/SheduleScreen/components/CancellationModal';
+import React, { memo } from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigationEnum } from '../../common/constants/navigation';
+import { LoginScreen } from '../../screens/LoginScreen';
+import { RegistrationScreen } from '../../screens/RegistrationScreen';
+import { FinalRegistrationScreen } from '../../screens/RegistrationScreen/FinalRegistrtionScreen';
+import { SendEmailScreen } from '../../screens/ForgotPassScreen/SendEmailScreen';
+import { SetPasswordScreen } from '../../screens/ForgotPassScreen/SetPasswordScreen';
+import { ScheduleScreen } from '../../screens/SheduleScreen';
+import { ScheduleMonthScreen } from '../../screens/SheduleScreen/ScheduleMonthScreen';
+import { ScheduleDayScreen } from '../../screens/SheduleScreen/SheduleDayScreen';
+import { SheduleWeekScreen } from '../../screens/SheduleScreen/SheduleWeekScreen';
+import { CancellationScreen } from '../../screens/CancellationScreen';
+import { CancellationModal } from '../../screens/SheduleScreen/components/CancellationModal';
+import { AddClassScreen } from '../../screens/AddClassScreen';
+import { SelectDateScreen } from '../../screens/SelectDateScreen';
 
 const Stack = createNativeStackNavigator();
 export const StackNavigator = memo(() => {
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name={NavigationEnum.LOGIN} component={ScheduleScreen} />
       <Stack.Screen
         name={NavigationEnum.REGISTRATION}
@@ -60,6 +62,14 @@ export const StackNavigator = memo(() => {
       <Stack.Screen
         name={NavigationEnum.CANCELLATION_SCREEN}
         component={CancellationScreen}
+      />
+      <Stack.Screen
+        name={NavigationEnum.ADD_CLASS_SCREEN}
+        component={AddClassScreen}
+      />
+      <Stack.Screen
+        name={NavigationEnum.SELECT_DATE_SCREEN}
+        component={SelectDateScreen}
       />
     </Stack.Navigator>
   );

@@ -11,7 +11,7 @@ import EyeSvg from '../../../../assets/svg/EyeSvg';
 import EyeSvgOpen from '../../../../assets/svg/EyeSvgOpen';
 import styles from './styles';
 
-interface ICustomInputProps extends TextInputProps {
+export interface ICustomInputProps extends TextInputProps {
   labelText?: string;
   isPassword?: boolean;
   validationErrorText?: string;

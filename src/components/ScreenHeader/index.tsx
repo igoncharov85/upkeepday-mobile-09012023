@@ -22,7 +22,7 @@ export const ScreenHeader: FC<ScreenHeader> = memo(
           </TouchableOpacity>
         )}
 
-        <Text style={styles.headerText}>{text}</Text>
+        <Text style={[styles.headerText,]} >{text}</Text>
       </View>
     );
   },

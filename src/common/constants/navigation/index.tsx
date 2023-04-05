@@ -11,6 +11,9 @@ export enum NavigationEnum {
   //CANCELLATION 
   CANCELLATION_SCREEN = 'navigation/CancellationScreen',
   CANCELLATION_MODAL = 'navigation/CancellationModalWrapper',
+  //ADD CLASS
+  ADD_CLASS_SCREEN = 'navigation/AddClassScreen',
+  SELECT_DATE_SCREEN = 'navigation/SelectDateScreen',
   //TABS
   HOME_SCREEN = 'navigation/HOME_SCREEN',
   STUDENTS_TAB = 'navigation/STUDENTS_TAB',

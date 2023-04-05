@@ -1,29 +1,37 @@
-import React, {FC, memo, useEffect} from 'react';
-import {Text, View} from 'react-native';
-import {INavigationBase} from '../../common/types/component.styles';
-import {CustomButton} from '../../components/UI/CustomButton';
+import React, { FC, memo, useEffect } from 'react';
+import { Text, View } from 'react-native';
+import { INavigationBase } from '../../common/types/component.styles';
+import { CustomButton } from '../../components/UI/CustomButton';
 import NavigationActions from '../../services/navigation-service';
-import {logoutAction} from '../../store/auth/actions';
-import {dispatch} from '../../store/store';
-import {ScheduleDayScreen} from './SheduleDayScreen';
+import { logoutAction } from '../../store/auth/actions';
+import { dispatch } from '../../store/store';
+import { ScheduleDayScreen } from './SheduleDayScreen';
 import styles from './styles';
-import {SheduleHeader} from './components/SheduleHeader';
-import {ScheduleNavigation} from './components/SheduleNavigation';
-import {BottomTab} from '../../components/BottomTab';
-import {SchedulePlus} from './components/SchedulePlus';
-import {SheduleWeekScreen} from './SheduleWeekScreen';
-import {ScheduleMonthScreen} from './ScheduleMonthScreen';
-import {CancellationScreen} from '../CancellationScreen';
+import { SheduleHeader } from './components/SheduleHeader';
+import { ScheduleNavigation } from './components/SheduleNavigation';
+import { BottomTab } from '../../components/BottomTab';
+import { SchedulePlus } from './components/SchedulePlus';
+import { SheduleWeekScreen } from './SheduleWeekScreen';
+import { ScheduleMonthScreen } from './ScheduleMonthScreen';
+import { CancellationScreen } from '../CancellationScreen';
+import { useNavigation } from '@react-navigation/native';
+import { NavigationEnum } from '../../common/constants/navigation';
 
-interface IHomeScreen extends INavigationBase {}
+interface IHomeScreen extends INavigationBase { }
 export const ScheduleScreen: FC<IHomeScreen> = memo(() => {
+  const navigation = useNavigation();
+  const onPlusPress = () => {
+    //@ts-ignore
+    navigation.navigate(NavigationEnum.ADD_CLASS_SCREEN)
+  }
+
   return (
     <View style={styles.container}>
       <SheduleHeader text="Schedule" />
       <ScheduleNavigation />
 
       <BottomTab />
-      <SchedulePlus />
+      <SchedulePlus onButtonPress={onPlusPress} />
     </View>
   );
 });

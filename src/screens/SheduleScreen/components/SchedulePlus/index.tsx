@@ -1,11 +1,13 @@
-import React, {FC, memo, useEffect, useState} from 'react';
-import {Text, View, TouchableOpacity} from 'react-native';
+import React, { FC, memo, useEffect, useState } from 'react';
+import { Text, View, TouchableOpacity } from 'react-native';
 import Plus from '../../../../../assets/svg/schedule/Plus';
-import {AddSessionModal} from '../AddSessionModal';
+import { AddSessionModal } from '../AddSessionModal';
 import styles from './styles';
 
-interface ISchedulePlus {}
-export const SchedulePlus: FC<ISchedulePlus> = memo(({}) => {
+interface ISchedulePlus {
+  onButtonPress: () => void
+}
+export const SchedulePlus: FC<ISchedulePlus> = memo(({ onButtonPress }) => {
   const [visible, setVisible] = useState(false);
   const onChangeVisible = () => {
     setVisible(!visible);
@@ -17,7 +19,7 @@ export const SchedulePlus: FC<ISchedulePlus> = memo(({}) => {
           <Plus />
         </TouchableOpacity>
       </View>
-      <AddSessionModal visible={visible} visibleHandler={onChangeVisible} />
+      <AddSessionModal visible={visible} visibleHandler={onChangeVisible} onPress={onButtonPress} />
     </>
   );
 });

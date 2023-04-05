@@ -1,12 +1,19 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
   container: {
     flex: 1,
     marginHorizontal: 20,
     marginVertical: 8,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    Height: '100%',
+  },
+  part: {
+    flex: 1,
   },
   interactive: {
+    width: '100%',
     marginTop: 8,
     height: 52,
     paddingLeft: 20,
@@ -16,9 +23,6 @@ export default StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 8,
     position: 'relative',
-    // backgroundColor: 'white',
-    // height: 50,
-    // borderRadius: 8,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -68,4 +72,29 @@ export default StyleSheet.create({
     fontSize: 15,
     lineHeight: 18,
   },
+  notification: {
+    fontSize: 15,
+    fontWeight: '600',
+    lineHeight: 18,
+    textAlign: 'center',
+    marginVertical: 12,
+    maxWidth: '80%'
+  },
+  confirm: {
+    height: 38,
+    width: 122,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(175, 156, 201,0.5)',
+    borderRadius: 9,
+    marginTop: 44,
+
+  },
+  confirmText: {
+
+    lineHeight: 19,
+    fontWeight: '500',
+    color: '#000',
+    fontSize: 15
+  }
 });

@@ -13,24 +13,52 @@ import styles from './styles';
 interface ICustomButton extends TouchableOpacityProps {
   text: string;
   loading?: boolean;
+  type?: TypeButton;
+  height?: number;
+  width?: number;
+  style?: {};
+}
+export enum TypeButton {
+  solid,
+  opacity,
 }
 export const CustomButton: FC<ICustomButton> = memo(
-  ({text, disabled, onPress, loading = false, ...props}: ICustomButton) => {
+  ({
+    text,
+    type,
+    disabled,
+    onPress,
+    loading = false,
+    height,
+    width,
+    style,
+    ...props
+  }: ICustomButton) => {
     return (
       <TouchableOpacity
         activeOpacity={
           disabled ? StyleEnum.TOUCHABLE_DISABLE : StyleEnum.TOUCHABLE_OPACITY
         }
-        style={{
-          ...styles.container,
-          opacity: disabled ? StyleEnum.TOUCHABLE_DISABLE : 1,
-        }}
+        style={[
+          styles.container,
+          type == TypeButton.opacity && styles.containerActive,
+          {
+            opacity: disabled ? StyleEnum.TOUCHABLE_DISABLE : 1,
+          },
+          {...style},
+        ]}
         onPress={onPress}
         {...props}>
         {loading ? (
           <ActivityIndicator color={ColorEnum.ACCENT_BC} size={'small'} />
         ) : (
-          <Text style={styles.text}>{text}</Text>
+          <Text
+            style={[
+              styles.text,
+              type == TypeButton.opacity && styles.textActive,
+            ]}>
+            {text}
+          </Text>
         )}
       </TouchableOpacity>
     );

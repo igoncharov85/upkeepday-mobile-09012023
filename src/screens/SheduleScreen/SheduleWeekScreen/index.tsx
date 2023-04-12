@@ -1,33 +1,26 @@
 import React, { FC, memo } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { dataOfMonth as nestedDataOfMonth } from '..'; // Import the correct dataOfMonth from your data source
 import { DaysOfWeek } from './DaysOfWeek';
 import { SheduleTable } from './SheduleTable';
 import styles from './styles';
+import { getStartAndEndOfWeek } from '../../../services/utils/generateDate.util';
+import { getWeekDates } from '../../../services/utils/fullDateToValue.util';
 
-interface ISheduleWeekScreen {}
+interface ISheduleWeekScreen { }
 
-const getStartAndEndOfWeek = (date: Date) => {
-  const startOfWeek = new Date(date);
-  startOfWeek.setDate(date.getDate() - date.getDay());
 
-  const endOfWeek = new Date(startOfWeek);
-  endOfWeek.setDate(startOfWeek.getDate() + 6);
-
-  return { startOfWeek, endOfWeek };
-};
 
 export const SheduleWeekScreen: FC<ISheduleWeekScreen> = memo(() => {
-  const firstEventDate = new Date(nestedDataOfMonth[0][0].StartDateTime);
-  const { startOfWeek, endOfWeek } = getStartAndEndOfWeek(firstEventDate);
-  const flattenedDataOfMonth = nestedDataOfMonth.flat();
+
+  const today = new Date();
+  const weekDates = getWeekDates(today);
+
   return (
     <View style={styles.container}>
       <DaysOfWeek />
       <SheduleTable
-        startOfWeek={startOfWeek}
-        endOfWeek={endOfWeek}
-        dataOfMonth={flattenedDataOfMonth}
+        startOfWeek={weekDates.startDate}
+        endOfWeek={weekDates.endDate}
       />
     </View>
   );

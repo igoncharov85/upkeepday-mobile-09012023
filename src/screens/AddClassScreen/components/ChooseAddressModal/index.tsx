@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, View, ScrollView, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -8,23 +8,41 @@ import { ScreenHeader } from "../../../../components/ScreenHeader";
 import styles from "./styles";
 import { CustomButton } from "../../../../components/UI/CustomButton";
 import { AddNewAddressModal } from "../AddNewAddressModal";
+import { dispatch } from "../../../../store/store";
+import { fetchLocationAction } from "../../../../store/location/actions";
+import { useAppSelector } from "../../../../store/hooks";
+import { updateCurrentClassRequestAction } from "../../../../store/shedule";
 
 interface IChooseAddressModal {
     visible: boolean;
     handleShowModal: () => void;
+    handleClassLocation: (location: string) => void;
 }
 
-const data = ['25 Newport Pkwy, Jersey City, NJ', '20 Marin Blvd, Jersey City, NJ', '20 Marin Blvd, Jersey City, NJ', '20 Marin Blvd, Jersey City, NJ']
-export const ChooseAddressModal: React.FC<IChooseAddressModal> = ({ visible, handleShowModal }) => {
+export const ChooseAddressModal: React.FC<IChooseAddressModal> = ({ visible, handleShowModal, handleClassLocation }) => {
     const [activeIndex, setActiveIndex] = useState(0);
+    const [activeId, setActiveId] = useState('')
     const [modalVisible, setModalVisible] = useState(false)
+    const { locations } = useAppSelector(state => state.location);
 
+
+
+    useEffect(() => {
+        return () => {
+            dispatch(updateCurrentClassRequestAction({ ClassLocationId: +activeId }))
+        };
+    }, []);
+    useEffect(() => {
+        dispatch(fetchLocationAction());
+    }, []);
     const onShowModal = () => {
         setModalVisible(!modalVisible);
     };
     const handlePress = (index: number) => {
         setActiveIndex(index);
-        //something
+        handleClassLocation(locations[index].AddressLine)
+        setActiveId(locations[index].LocationId)
+        handleShowModal()
     };
     return (
         <>
@@ -38,7 +56,7 @@ export const ChooseAddressModal: React.FC<IChooseAddressModal> = ({ visible, han
                 </View>
                 <DecorationLine />
                 <ScrollView style={{ height: 125, }}>
-                    {data.map((title, index) => <AddressItem activeIndex={activeIndex} index={index} key={index} address={title} onTouch={handlePress} />)}
+                    {locations.map((item, index) => item.AddressLine && <AddressItem activeIndex={activeIndex} index={index} key={index} address={item.AddressLine} onTouch={handlePress} />)}
 
                     <NewAddressButton addAddress={onShowModal} />
                 </ScrollView>
@@ -87,7 +105,7 @@ const NewAddressButton = ({ addAddress }: { addAddress: () => void }) => {
 }
 
 const DecorationLine = () => (
-    <View style={{ width: '100%', height: 1, backgroundColor: '#BAC2CB', }} />
+    <View style={styles.decorationLine} />
 )
 
 

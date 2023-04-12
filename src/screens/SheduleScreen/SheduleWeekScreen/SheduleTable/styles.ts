@@ -1,14 +1,13 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
   container: {
     marginTop: 10,
+    marginBottom: 150
   },
   containerItem: {
     height: 64,
     minWidth: '14.28571428571429%',
-    // maxWidth: '14.28571428571429%',
-    // flex: 1,
     borderWidth: 1,
     borderColor: 'rgba(47,48,69,0.06)',
     borderStyle: 'solid',
@@ -40,7 +39,7 @@ export default StyleSheet.create({
     lineHeight: 11,
     color: '#fff',
     marginHorizontal: 4,
-    margingVertical: 2,
+    marginVertical: 2,
   },
   absoluteFill: {
     zIndex: 1,
@@ -52,7 +51,7 @@ export default StyleSheet.create({
   },
 
   mask: {
-    zIndex: 1,
+    zIndex: -1,
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
   },
 });

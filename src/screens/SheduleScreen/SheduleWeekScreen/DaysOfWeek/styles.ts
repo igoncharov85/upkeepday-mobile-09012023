@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
   containerWekk: {
@@ -27,7 +27,6 @@ export default StyleSheet.create({
     lineHeight: 16,
     textAlign: 'center',
     color: '#171930',
-    mixBlendMode: 'normal',
     opacity: 0.6,
   },
   number: {

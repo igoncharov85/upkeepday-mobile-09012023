@@ -1,10 +1,10 @@
-import {parseISO, addMinutes, formatISO} from 'date-fns';
+import { parseISO, addMinutes, formatISO } from 'date-fns';
 
 export const formatDate = (
   dateString: string,
 ): {
   date: string[];
-  time: [string, {hour: number; minute: number; dayPart: string}];
+  time: [string, { hour: number; minute: number; dayPart: string }];
 } => {
   const date = new Date(dateString);
 
@@ -50,6 +50,54 @@ export const calculateEndDate = (
 ): string => {
   const startDate = parseISO(startTime);
   const newDate = addMinutes(startDate, duration);
-  const newDateTimeString = formatISO(newDate, {representation: 'complete'});
+  const newDateTimeString = formatISO(newDate, { representation: 'complete' });
   return newDateTimeString;
+};
+
+type DateInput = {
+  date: string;
+  time: string | null;
+};
+
+export function convertDateTimeToISO({ date, time }: DateInput): string {
+  const monthMapping: Record<string, string> = {
+    Jan: "01",
+    Feb: "02",
+    Mar: "03",
+    Apr: "04",
+    May: "05",
+    Jun: "06",
+    Jul: "07",
+    Aug: "08",
+    Sep: "09",
+    Oct: "10",
+    Nov: "11",
+    Dec: "12",
+  };
+
+  const [month, dayWithComma, year] = date.split(" ");
+  const day = dayWithComma.replace(",", "");
+  let hourNumber, formattedHour, hour, minute, meridiem;
+
+  if (time === null) {
+    hourNumber = 0;
+    formattedHour = "00";
+  } else {
+    [hour, minute, meridiem] = time.split(/[:\s]/);
+    hourNumber = (parseInt(hour, 10) % 12) + (meridiem === "PM" ? 12 : 0);
+    formattedHour = hourNumber.toString().padStart(2, "0");
+  }
+
+  const monthNumber = monthMapping[month];
+  const dayNumber = day.padStart(2, "0");
+
+  return `${year}-${monthNumber}-${dayNumber}T${formattedHour}:${minute || "00"}:00`;
+}
+
+export const getWeekDates = (date: Date) => {
+  date.setHours(0, 0, 0, 0);
+  date.setDate(date.getDate() - date.getDay());
+  const endDate = new Date(date);
+  endDate.setDate(endDate.getDate() + 6);
+  return { startDate: date, endDate: endDate };
 };

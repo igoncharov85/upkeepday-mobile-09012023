@@ -1,7 +1,8 @@
-import React, {FC, memo} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {CancellationModal} from '../../components/CancellationModal';
+import React, { FC, memo } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { CancellationModal } from '../../components/CancellationModal';
 import styles from './styles';
+import { IScheduleItem } from '../../../../common/types/schedule.types';
 enum LessonType {
   Lesson,
   Trial,
@@ -13,14 +14,15 @@ interface SessionItemProps {
   timeStart: string;
   timeContinued: string;
   type: LessonType;
+  data: IScheduleItem
 }
 
 export const SessionItem: FC<SessionItemProps> = memo(
-  ({name, timeContinued, timeStart, type}) => {
+  ({ name, timeContinued, timeStart, type, data }) => {
     const isTrialLesson = type === LessonType.Trial;
 
     return (
-      <CancellationModal>
+      <CancellationModal data={data}>
         <View style={styles.container}>
           <Text style={styles.timeStart}>{timeStart}</Text>
           <View

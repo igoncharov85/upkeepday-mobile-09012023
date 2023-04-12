@@ -27,7 +27,6 @@ function* loginWorker({
         if (data?.token) {
             yield call(AsyncStorageService.setToken, data.token)
             yield put(setIsAuthAction(true))
-            console.log(data.token)
             yield put(pushToastsAction({
                 type: 'info',
                 text1: 'Login successful',

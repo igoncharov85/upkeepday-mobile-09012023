@@ -3,24 +3,19 @@ import { ScrollView, Text, View } from 'react-native';
 
 import { SessionItem } from '../SessionItem';
 import styles from './styles';
+import { IScheduleItem } from '../../../../common/types/schedule.types';
 
 enum LessonType {
   Lesson,
   Trial,
 }
 
-interface Session {
-  Duration: number;
-  StartDateTime: string;
-  className: string;
-  type: string;
+
+interface ISessionItemListProps {
+  data: IScheduleItem[];
 }
 
-interface SessionItemListProps {
-  data: Session[];
-}
-
-export const SessionItemList: React.FC<SessionItemListProps> = memo(
+export const SessionItemList: React.FC<ISessionItemListProps> = memo(
   ({ data }) => {
     const formatDate = (dateString: string, formatStr: string) => {
       const date = new Date(dateString);
@@ -38,31 +33,36 @@ export const SessionItemList: React.FC<SessionItemListProps> = memo(
       const endTime = new Date(startTime.getTime() + item.Duration * 60000);
 
       return {
-        id: index.toString(),
-        name: item.className,
+        id: item.WeekTimeSlotId,
+        name: item.ClassName,
+        //@ts-ignore
         timeStart: formatDate(item.StartDateTime, 'hh:mm a'),
         timeContinued: `${formatDate(
           startTime.toISOString(),
           'hh:mm a',
         )} - ${formatDate(endTime.toISOString(), 'hh:mm a')}`,
-        type: item.type === 'lesson' ? LessonType.Lesson : LessonType.Trial,
+        type: LessonType.Lesson,
       };
     });
 
     return (
-      <ScrollView >
+      <>
+        <ScrollView style={{ marginBottom: 150 }}>
+
+          {sessionItems.map((item, index) => (
+            <SessionItem
+              key={item.id}
+              name={item.name}
+              timeContinued={item.timeContinued}
+              timeStart={item.timeStart}
+              type={item.type}
+              id={item.id}
+              data={data[index]}
+            />
+          ))}
+        </ScrollView>
         <View style={styles.line} />
-        {sessionItems.map(item => (
-          <SessionItem
-            key={item.id}
-            name={item.name}
-            timeContinued={item.timeContinued}
-            timeStart={item.timeStart}
-            type={item.type}
-            id={item.id}
-          />
-        ))}
-      </ScrollView>
+      </>
     );
   },
 );

@@ -1,11 +1,11 @@
-import React, {FC, memo, useEffect, useState} from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import React, { FC, memo, useEffect, useState } from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {ScheduleDayScreen} from '../../SheduleDayScreen';
-import {SheduleWeekScreen} from '../../SheduleWeekScreen';
-import {ScheduleMonthScreen} from '../../ScheduleMonthScreen';
+import { ScheduleDayScreen } from '../../SheduleDayScreen';
+import { SheduleWeekScreen } from '../../SheduleWeekScreen';
 
 import styles from './styles';
+import { ScheduleMonthScreen } from '../../ScheduleMonthScreen';
 
 interface NavigationButtonProps {
   active: boolean;
@@ -14,9 +14,9 @@ interface NavigationButtonProps {
 }
 
 const SCHEDULE_NAVIGATION = [
-  {active: true, name: 'Day', component: ScheduleDayScreen},
-  {active: false, name: 'Week', component: SheduleWeekScreen},
-  {active: false, name: 'Month', component: ScheduleMonthScreen},
+  { active: true, name: 'Day', component: ScheduleDayScreen },
+  { active: false, name: 'Week', component: SheduleWeekScreen },
+  { active: false, name: 'Month', component: ScheduleMonthScreen },
 ];
 
 export const ScheduleNavigation: FC = memo(() => {
@@ -29,8 +29,8 @@ export const ScheduleNavigation: FC = memo(() => {
       <View style={styles.container}>
         <LinearGradient
           colors={['rgba(165, 175, 196, 0.2)', 'rgba(109, 123, 152, 0.2)']}
-          start={{x: 0, y: 0.5}}
-          end={{x: 1, y: 0.5}}
+          start={{ x: 0, y: 0.5 }}
+          end={{ x: 1, y: 0.5 }}
           locations={[0, 1]}
           angle={180}
           style={styles.buttonWrapper}>
@@ -50,13 +50,13 @@ export const ScheduleNavigation: FC = memo(() => {
 });
 
 const NavigationButton: FC<NavigationButtonProps> = memo(
-  ({active, name, onPress}) => (
+  ({ active, name, onPress }) => (
     <TouchableOpacity onPress={onPress} style={styles.button}>
       {active ? (
         <LinearGradient
           colors={['#A5AFC4', '#6D7B98']}
-          start={{x: 0, y: 0}}
-          end={{x: 1, y: 1}}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
           angle={222.53}
           useAngle={true}
           style={styles.buttonLinearGradient}>

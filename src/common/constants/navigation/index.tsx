@@ -14,6 +14,10 @@ export enum NavigationEnum {
   //ADD CLASS
   ADD_CLASS_SCREEN = 'navigation/AddClassScreen',
   SELECT_DATE_SCREEN = 'navigation/SelectDateScreen',
+  DATE_RECURRENCE_SCREEN = 'navigation/DateRecurrenceScreen',
+  DATE_PREVIEW_SCREEN = 'navigation/DatePreviewScreen',
+  ADD_STUDENTS_SCREEN = 'navigation/AddStudentsScreen',
+  PREPAYMENT_CONFIGURATION_SCREEN = 'navigation/PrepaymentConfigurationScreen',
   //TABS
   HOME_SCREEN = 'navigation/HOME_SCREEN',
   STUDENTS_TAB = 'navigation/STUDENTS_TAB',

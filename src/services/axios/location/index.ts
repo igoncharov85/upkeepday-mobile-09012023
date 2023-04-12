@@ -7,7 +7,7 @@ export class LocationService {
     }
 
     static addLocation(data: ILocationRequest) {
-        console.log(data)
+        // console.log(data)
         return $axiosAuth.post('/tutor/locations/', data)
     }
 

@@ -1,5 +1,5 @@
-import {useNavigation} from '@react-navigation/native';
-import React, {memo, useState} from 'react';
+import { useNavigation } from '@react-navigation/native';
+import React, { memo, useState } from 'react';
 import {
   ScrollView,
   Text,
@@ -10,27 +10,22 @@ import {
   StyleSheet,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {NavigationEnum} from '../../../../common/constants/navigation';
-import {INavigationBase} from '../../../../common/types/component.styles';
+import { NavigationEnum } from '../../../../common/constants/navigation';
+import { INavigationBase } from '../../../../common/types/component.styles';
 import styles from './styles';
+import { IScheduleItem } from '../../../../common/types/schedule.types';
 
-interface ModalData {
-  title: string;
-  description: string;
-  // add any other data you want to display in the modal
-}
+
 
 interface ICancellationModalScreen {
   isVisible: boolean;
   closeModal: () => void;
-  modalData: ModalData;
   onCancellationScreenRedirect: () => void;
 }
 
 const CancellationModalConainer = ({
   isVisible,
   closeModal,
-  modalData,
   onCancellationScreenRedirect,
 }: ICancellationModalScreen) => {
   const [animation] = useState(new Animated.Value(0));
@@ -57,19 +52,19 @@ const CancellationModalConainer = ({
     <Modal visible={isVisible} transparent onRequestClose={handleHideModal}>
       <LinearGradient
         colors={['rgba(178, 178, 178, 0.88)', 'rgba(23, 25, 48, 0.898039)']}
-        start={{x: 0.0, y: 1.0}}
-        end={{x: 1.0, y: 0.0}}
+        start={{ x: 0.0, y: 1.0 }}
+        end={{ x: 1.0, y: 0.0 }}
         angle={223.05}
         useAngle={true}
         style={styles.bgModal}
       />
-      <TouchableOpacity style={{flex: 1}} onPress={handleHideModal} />
+      <TouchableOpacity style={{ flex: 1 }} onPress={handleHideModal} />
 
       <Animated.View style={[styles.modal]}>
         <LinearGradient
           colors={['#9A80BA', '#EFF1F5']}
-          start={{x: 0.5, y: 0}}
-          end={{x: 0.5, y: 1}}
+          start={{ x: 0.5, y: 0 }}
+          end={{ x: 0.5, y: 1 }}
           locations={[0, 1]}
           style={styles.bgGradient}>
           <Text
@@ -85,27 +80,28 @@ const CancellationModalConainer = ({
     </Modal>
   );
 };
+interface ICancellationModalWrapper {
 
+}
 interface ICancellationModalWrapper {
   children?: React.ReactNode;
+  data: IScheduleItem;
 }
 
-export const CancellationModal = ({children}: ICancellationModalWrapper) => {
+export const CancellationModal = ({ children, data }: ICancellationModalWrapper) => {
   const navigation = useNavigation();
   const onCancellationScreenRedirect = () => {
     //@ts-ignore
-    navigation.navigate(NavigationEnum.CANCELLATION_SCREEN);
+    navigation.navigate(NavigationEnum.CANCELLATION_SCREEN, {
+      itemData: data
+    });
   };
 
   const [isModalVisible, setIsModalVisible] = useState(false);
-  //@ts-ignore
-  const [modalData, setModalData] = useState<ModalData>({});
+
 
   const handleLongPress = () => {
-    setModalData({
-      title: 'Custom Modal Title',
-      description: 'Custom Modal Description',
-    });
+
     setIsModalVisible(true);
   };
 
@@ -121,7 +117,6 @@ export const CancellationModal = ({children}: ICancellationModalWrapper) => {
       <CancellationModalConainer
         isVisible={isModalVisible}
         closeModal={closeModal}
-        modalData={modalData}
         onCancellationScreenRedirect={onCancellationScreenRedirect}
       />
     </>

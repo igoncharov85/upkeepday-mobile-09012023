@@ -15,5 +15,6 @@ export default StyleSheet.create({
     },
     active: {
         color: '#232326',
-    }
+    },
+    decorationLine: { width: '100%', height: 1, backgroundColor: '#BAC2CB', }
 })

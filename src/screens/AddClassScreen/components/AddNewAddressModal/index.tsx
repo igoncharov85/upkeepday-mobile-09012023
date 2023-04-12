@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, View, ScrollView, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { FormikProps, withFormik } from 'formik';
 
-
+import { formicDefaultProps } from '../../../../common/constants/styles/form.config';
 import { CustomModal } from "../../../../components/UI/CustomModal";
 import { ScreenHeader } from "../../../../components/ScreenHeader";
 import styles from "./styles";
@@ -10,15 +11,93 @@ import { CustomButton } from "../../../../components/UI/CustomButton";
 import { InputForm } from "../InputForm";
 import { CountrySelect } from "../../../../components/UI/CountrySelect";
 import { StateSelect } from "../../../../components/UI/StateSelect";
+import { dispatch } from "../../../../store/store";
+import { addLocationAction } from "../../../../store/location/actions";
+import { AddLocationSchema } from "../../../../common/shemas/addClass.shape";
+import { ILocationRequest } from "../../../../common/types/location";
+import { useAppSelector } from "../../../../store/hooks";
+
 
 interface IAddNewAddressModal {
     visible: boolean;
     handleShowModal: () => void;
 }
-
+const formInitialValues = {
+    name: ' ',
+    url: ' ',
+    locationType: ' ',
+    addressLine: ' ',
+    city: ' ',
+    state: ' ',
+    postalCode: ' ',
+    country: ' '
+};
 
 export const AddNewAddressModal: React.FC<IAddNewAddressModal> = ({ visible, handleShowModal }) => {
+    const renderForm = ({
+        errors,
+        values,
+        handleChange,
+        handleSubmit,
+        isValid,
+    }: FormikProps<typeof formInitialValues>) => {
+        return (
+            <>
+                <InputForm
+                    labelText="Address Line 1"
+                    onChange={handleChange('addressLine')}
+                    value={values.addressLine}
+                    validationErrorText={errors.addressLine}
+                />
+                <View style={styles.rowInput}>
+                    <View style={styles.inputSplitted}>
+                        <Text style={styles.label}>Country</Text>
+                        <CountrySelect
+                            onChange={handleChange('country')}
+                            value={values.country}
+                            placeholder={'Select country'}
+                        />
+                    </View>
+                    <View style={styles.inputSplitted}>
+                        <Text style={styles.label}>State</Text>
+                        <StateSelect
+                            value={values.state}
+                            onChange={handleChange('state')}
+                            placeholder={'Select state'}
+                        />
+                    </View>
+                </View>
+                <InputForm
+                    labelText="Postal Code"
+                    onChange={handleChange('postalCode')}
+                    value={values.postalCode}
+                    validationErrorText={errors.postalCode}
 
+                />
+                <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+                    <CustomButton text={"Save"} onPress={handleSubmit} disabled={isValid} />
+                </View></>
+        );
+    }
+
+    const AddLocationForm = withFormik<any, typeof formInitialValues>({
+        validationSchema: AddLocationSchema,
+
+        handleSubmit: values => {
+            const data: ILocationRequest = {
+                Name: `${values.addressLine}, ${values.country}, ${values.state}`,
+                Url: 'url',
+                LocationType: '1',
+                AddressLine: values.addressLine,
+                City: 'City',
+                State: values.state,
+                PostalCode: values.postalCode,
+                Country: values.country
+            };
+            dispatch(addLocationAction(data))
+        },
+        ...formicDefaultProps,
+    })(renderForm);
     return (
 
         <CustomModal isVisible={visible} closeModal={handleShowModal} height={550} withOverlay={true}>
@@ -29,30 +108,7 @@ export const AddNewAddressModal: React.FC<IAddNewAddressModal> = ({ visible, han
             }}><View>
                     <ScreenHeader text={"Add New Address"} onBackPress={handleShowModal} withBackButton={true} />
                 </View>
-                <InputForm labelText="Address Line 1" />
-                <View style={styles.rowInput}>
-                    <View style={styles.inputSplitted}>
-                        <CountrySelect
-                            label={'Country'}
-                            onChange={() => console.log(1)}
-                            value={'values.country'}
-                            placeholder={'Select country'}
-                        />
-                    </View>
-                    <View style={styles.inputSplitted}>
-                        <StateSelect
-                            label={'State'}
-                            value={'values.state'}
-                            onChange={() => console.log(1)}
-                            placeholder={'Select state'}
-                        />
-                    </View>
-                </View>
-                <InputForm labelText="Postal Code" />
-                <View style={{ flex: 1, justifyContent: 'flex-end' }}>
-
-                    <CustomButton text={"Save"} onPress={handleShowModal} />
-                </View>
+                <AddLocationForm />
             </View>
         </CustomModal>
 
@@ -60,36 +116,5 @@ export const AddNewAddressModal: React.FC<IAddNewAddressModal> = ({ visible, han
 }
 
 
-interface IAddressItem {
-    activeIndex: number;
-    index: number;
-    address: string;
-    onTouch: (index: number) => void
-}
-const AddressItem: React.FC<IAddressItem> = ({ activeIndex, index, address, onTouch }) => {
-    const activeItem = activeIndex === index;
-
-    return (
-        <>
-            <TouchableOpacity style={styles.addressItem} onPress={() => onTouch(index)}>
-                <Text style={[styles.textAddress, activeItem && styles.active]}>{address}</Text>
-            </TouchableOpacity>
-            <DecorationLine />
-        </>
-    )
-}
-
-const NewAddressButton = () => {
-
-    return (
-        <TouchableOpacity style={styles.addressItem}>
-            <Text style={[styles.textAddress]}>Add New Address</Text>
-        </TouchableOpacity>
-    )
-}
-
-const DecorationLine = () => (
-    <View style={{ width: '100%', height: 1, backgroundColor: '#BAC2CB', }} />
-)
 
 

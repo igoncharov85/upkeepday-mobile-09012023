@@ -1,33 +1,18 @@
-import React, {FC, memo, useEffect} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import React, { FC, memo, useEffect } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {CancellationModal} from '../../components/CancellationModal';
+import { CancellationModal } from '../../components/CancellationModal';
 import styles from './styles';
+import { IScheduleItem } from '../../../../common/types/schedule.types';
 
 enum TypeSession {
   lesson,
   trial,
 }
-enum TimeDuration {
-  HalfHour = 0.5,
-  ThreeQuarterHour = 0.75,
-  OneHour = 1,
-  OneAndAHalfHours = 1.5,
-}
-interface ISheduleTableItem {
-  StartDateTime?: string;
-  timeDuration?: TimeDuration;
-  typeSession?: TypeSession | [TypeSession, TypeSession];
-  title?: string | [string, string];
-}
-export const SheduleTableItem: FC<ISheduleTableItem> = memo(
-  ({
-    timeDuration = TimeDuration.OneHour,
-    typeSession = TypeSession.lesson,
-    title = '',
-  }) => {
-    //---- For dual classes ----
-    // const dualModule = Array.isArray(title) && Array.isArray(typeSession);
+
+interface ISheduleTableItem { }
+export const SheduleTableItem: FC<IScheduleItem> = memo(
+  (item) => {
     const colorsTrial = ['#F3AF2C', '#E9600D'];
     const colorsLesson = ['#EAAFC8', '#654EA3'];
 
@@ -40,9 +25,9 @@ export const SheduleTableItem: FC<ISheduleTableItem> = memo(
       }
     };
     return (
-      <CancellationModal>
+      <CancellationModal data={item}>
         <View style={styles.containerItem}>
-          {title ? (
+          {item.ClassName ? (
             <View
               style={{
                 borderRadius: 4,
@@ -50,11 +35,9 @@ export const SheduleTableItem: FC<ISheduleTableItem> = memo(
                 position: 'relative',
               }}>
               <LinearGradient
-                colors={getColors(
-                  Array.isArray(typeSession) ? typeSession[0] : typeSession,
-                )}
-                start={{x: 0.5, y: 0}}
-                end={{x: 0.5, y: 1}}
+                colors={colorsLesson}
+                start={{ x: 0.5, y: 0 }}
+                end={{ x: 0.5, y: 1 }}
                 style={{
                   zIndex: 10,
                   justifyContent: 'center',
@@ -66,75 +49,13 @@ export const SheduleTableItem: FC<ISheduleTableItem> = memo(
                   right: 0,
                   height: `100%`,
                 }}>
-                <Text style={styles.textItem}>{title}</Text>
+                <Text style={styles.textItem}>{item.ClassName}</Text>
               </LinearGradient>
             </View>
           ) : null}
         </View>
       </CancellationModal>
     );
-    //---- For dual classes ----
-    // : (
-    //   <View style={styles.containerItem}>
-    //     {title ? (
-    //       <View
-    //         style={{
-    //           borderRadius: 4,
-    //           flex: 1,
-    //           position: 'relative',
 
-    //           justifyContent: 'center',
-    //           alignItems: 'center',
-    //           zIndex: 10,
-    //         }}>
-    //         <LinearGradient
-    //           colors={getColors(typeSession[0])}
-    //           start={{x: 0.5, y: 0}}
-    //           end={{x: 0.5, y: 1}}
-    //           style={{
-    //             zIndex: 10,
-    //             justifyContent: 'center',
-    //             alignItems: 'center',
-    //             position: 'absolute',
-    //             borderTopLeftRadius: 4,
-    //             borderTopRightRadius: 4,
-    //             top: 0,
-    //             left: 0,
-    //             right: 0,
-    //             height: `${100 * TimeDuration.HalfHour}%`,
-    //           }}>
-    //           <Text style={styles.textItem}>{title[0]}</Text>
-    //         </LinearGradient>
-
-    //         {/* second purt */}
-    //         <LinearGradient
-    //           colors={getColors(typeSession[1])?.reverse()}
-    //           start={{x: 0.5, y: 1}}
-    //           end={{x: 0.5, y: 0}}
-    //           style={{
-    //             zIndex: 10,
-    //             justifyContent: 'center',
-    //             alignItems: 'center',
-    //             position: 'absolute',
-    //             borderBottomLeftRadius: 4,
-    //             borderBottomRightRadius: 4,
-    //             top: '50%',
-    //             left: 0,
-    //             right: 0,
-    //             height: `${100 * TimeDuration.HalfHour}%`,
-    //           }}>
-    //           <Text style={styles.textItem}>{title[1]}</Text>
-    //         </LinearGradient>
-    //         <View
-    //           style={{
-    //             width: '80%',
-    //             backgroundColor: '#fff',
-    //             height: 3,
-    //             borderRadius: 4,
-    //           }}></View>
-    //       </View>
-    //     ) : null}
-    //   </View>
-    // );
   },
 );

@@ -13,7 +13,15 @@ export const InputForm: React.FC<IInputForm> = ({ labelText, style, ...props }) 
     return (
         <View style={styles.container} >
             <Text style={styles.label}>{labelText}</Text>
-            <CustomInput style={style} {...props}/>
+            <CustomInput
+                style={style}
+                //@ts-ignore
+                onChangeText={props?.onChange}
+                value={props?.value}
+                {...props} />
+            {props?.validationErrorText ? (
+                <Text style={{ color: 'red' }}>{props?.validationErrorText}</Text>
+            ) : null}
         </View>
     )
 }

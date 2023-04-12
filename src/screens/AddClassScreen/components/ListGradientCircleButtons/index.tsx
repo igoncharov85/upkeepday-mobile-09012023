@@ -16,7 +16,7 @@ export const ListGradientCircleButtons: React.FC<IListButtons> = ({ buttons, onP
 
     const handlePress = (index: number) => {
         setActiveIndex(index);
-        console.log(activeIndex, index)
+        onPress && onPress(index)
     };
 
     return (
@@ -37,7 +37,6 @@ export const ListGradientCircleButtons: React.FC<IListButtons> = ({ buttons, onP
 
 const CircleButton = ({ index, activeIndex, buttonTitle, handlePress }: { index: number, activeIndex: number, buttonTitle: string, handlePress: (number: number) => void }) => {
     const activeItem = activeIndex === index;
-    console.log(activeItem)
     return (
         <TouchableOpacity
             key={index}

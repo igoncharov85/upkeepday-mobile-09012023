@@ -1,67 +1,81 @@
-import React, {memo, useState} from 'react';
+import React, { memo, useState, useEffect } from 'react';
 import {
-  ScrollView,
-  Text,
-  Modal,
-  TouchableOpacity,
-  View,
-  Animated,
-  StyleSheet,
+	ScrollView,
+	Text,
+	Modal,
+	TouchableOpacity,
+	View,
+	Animated,
+	StyleSheet,
 } from 'react-native';
 
-import {dataOfMonth} from '..';
-import {INavigationBase} from '../../../common/types/component.styles';
-import {ScheduleScroller} from '../components/ScheduleScroller';
-import {SessionItemList} from './SessionList';
+import { INavigationBase } from '../../../common/types/component.styles';
+import { ScheduleScroller } from '../components/ScheduleScroller';
+import { SessionItemList } from './SessionList';
 
 import styles from './styles';
+import { useAppSelector } from '../../../store/hooks';
+import { dispatch } from '../../../store/store';
+import { fetchScheduleByPeriodAction } from '../../../store/shedule/actions';
+import { getToday } from '../../../services/utils/generateDate.util';
 
 enum LessonType {
-  Lesson,
-  Trial,
+	Lesson,
+	Trial,
 }
-
-interface IScheduleDayScreen {}
+function getNextDate(dateString: string, daysToAdd: number): string {
+	const [year, month, day] = dateString.split('-').map(Number);
+	const date = new Date(year, month - 1, day);
+	const nextDate = new Date(date.getTime() + (daysToAdd * 24 * 60 * 60 * 1000));
+	const nextYear = nextDate.getFullYear();
+	const nextMonth = (nextDate.getMonth() + 1).toString().padStart(2, '0');
+	const nextDay = nextDate.getDate().toString().padStart(2, '0');
+	return `${nextYear}-${nextMonth}-${nextDay}`;
+}
+function formatDate(dateString: string): string {
+	const date = new Date(dateString);
+	return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+}
+interface IScheduleDayScreen { }
 
 export const ScheduleDayScreen: React.FC<IScheduleDayScreen> = memo(() => {
-  const [currentIndex, setCurrentIndex] = useState(new Date().getDate() - 1);
-  const [currentDayData, setCurrentDayData] = useState(
-    dataOfMonth[new Date().getDate() - 1],
-  );
-  const [currentDate, setCurrentDate] = useState(new Date());
 
-  const handleNextDay = () => {
-    const newIndex = currentIndex + 1;
-    setCurrentIndex(newIndex);
-    setCurrentDayData(dataOfMonth[newIndex]);
-    setCurrentDate(new Date(currentDate.setDate(currentDate.getDate() + 1)));
-    console.log(`New index: ${newIndex}`);
-  };
+	const { CurrentScheduledEntries } = useAppSelector(state => state.schedule);
 
-  const handlePrevDay = () => {
-    const newIndex = currentIndex - 1;
-    setCurrentIndex(newIndex);
-    setCurrentDayData(dataOfMonth[newIndex]);
-    setCurrentDate(new Date(currentDate.setDate(currentDate.getDate() - 1)));
-    console.log(`New index: ${newIndex}`);
-  };
+	const today = new Date;
+	const [dateString, day] = getToday(today)
 
-  const date = currentDate.toLocaleDateString('default', {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-  });
+	const [currentIndex, setCurrentIndex] = useState(0);
+	const [currentDay, setCurrentDay] = useState(dateString);
 
-  const today = new Date();
-  console.log(today, 'today');
-  return (
-    <View>
-      <ScheduleScroller
-        title={date}
-        onPressLeft={handlePrevDay}
-        onPressRight={handleNextDay}
-      />
-      <SessionItemList data={currentDayData} />
-    </View>
-  );
+	const handleNextDay = () => {
+		const newIndex = currentIndex + 1;
+		setCurrentIndex(newIndex);
+		setCurrentDay(getNextDate(dateString, newIndex));
+	};
+
+	const handlePrevDay = () => {
+		const newIndex = currentIndex - 1;
+		setCurrentIndex(newIndex);
+		setCurrentDay(getNextDate(dateString, newIndex));
+	};
+	useEffect(() => {
+		dispatch(fetchScheduleByPeriodAction({ startDate: currentDay, endDate: currentDay }));
+	}, [currentDay])
+
+
+	return (
+		<View>
+			<ScheduleScroller
+				title={formatDate(currentDay)}
+				onPressLeft={handlePrevDay}
+				onPressRight={handleNextDay}
+			/>
+
+			<SessionItemList
+				//@ts-ignore
+				data={CurrentScheduledEntries}
+			/>
+		</View>
+	);
 });

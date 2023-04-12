@@ -1,105 +1,75 @@
-import React, {FC, memo} from 'react';
-import {StyleSheet, Text, View, StyleProp, ViewStyle} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
-import {SheduleTableItem} from './SheduleTableItem';
+import React, { FC, memo, useEffect } from 'react';
+import { StyleSheet, Text, View, StyleProp, ViewStyle, ScrollView } from 'react-native';
+import { SheduleTableItem } from './SheduleTableItem';
 import styles from './styles';
+import { createWeekStructure, generateTimeData, getToday, isToday } from '../../../../services/utils/generateDate.util';
+import { useAppSelector } from '../../../../store/hooks';
+import { dispatch } from '../../../../store/store';
+import { fetchScheduleByPeriodAction } from '../../../../store/shedule/actions';
 
 interface ISheduleTable {
   startOfWeek: Date;
   endOfWeek: Date;
-  dataOfMonth: Array<{
-    StartDateTime: string;
-    Duration: number;
-    type: string;
-    className: string;
-  }>;
 }
 enum TypeSession {
   lesson,
   trial,
 }
 
-const isToday = (dayIndex: number) => {
-  const currentDate = new Date();
-  const currentDayIndex = currentDate.getDay();
-  return dayIndex === currentDayIndex;
-};
 
-const createWeekStructure = (
-  startOfWeek: Date,
-  endOfWeek: Date,
-  dataOfMonth: Array<any>,
-  timeData: Array<string>,
-) => {
-  const weekStructure = new Array(7)
-    .fill(null)
-    .map(() => new Array(timeData.length).fill(null));
-
-  dataOfMonth.forEach(event => {
-    const eventDate: Date = new Date(event.StartDateTime);
-    if (eventDate >= startOfWeek && eventDate <= endOfWeek) {
-      const dayIndex = eventDate.getDay();
-      const hourIndex = eventDate.getHours() - 8;
-      weekStructure[dayIndex][hourIndex] = event;
-    }
+const findObject = (arr: any[], hour: number, day: number) => {
+  const foundObject = arr.find(obj => {
+    const startDate = new Date(obj.StartDateTime);
+    return startDate.getHours() === hour && startDate.getDate() === day;
   });
-
-  return weekStructure;
+  return foundObject ? { ...foundObject } : null;
 };
 
-const generateTimeData = (startTime: string, endTime: string) => {
-  const startHour = parseInt(startTime.split(':')[0], 10);
-  const endHour = parseInt(endTime.split(':')[0], 10);
-  const timeData = [];
 
-  for (let hour = startHour; hour <= endHour; hour++) {
-    const amPm = hour < 12 ? 'am' : 'pm';
-    const hour12 = hour <= 12 ? hour : hour - 12;
-    timeData.push(`${hour12} ${amPm}`);
-  }
-
-  return timeData;
-};
 
 export const SheduleTable: FC<ISheduleTable> = memo(
-  ({startOfWeek, endOfWeek, dataOfMonth}) => {
-    const timeData = generateTimeData('08:00', '24:00');
+  ({ startOfWeek, endOfWeek }) => {
+    const startTimeOfDay = 8;
+    const startWeekOfDay = getToday(startOfWeek)[1]
+    const timeData = generateTimeData(`0${startTimeOfDay}:00`, '22:00');
     const weekStructure = createWeekStructure(
       startOfWeek,
       endOfWeek,
-      dataOfMonth,
       timeData,
     );
+
+    const { CurrentScheduledEntries } = useAppSelector(state => state.schedule);
+    useEffect(() => {
+      dispatch(fetchScheduleByPeriodAction({ startDate: getToday(startOfWeek)[0], endDate: getToday(endOfWeek)[0] }));
+    }, [])
     return (
       <View style={styles.container}>
         <ScrollView>
-          <Row style={{justifyContent: 'space-between'}}>
+          <Row style={{ justifyContent: 'space-between' }}>
             <Column>
               {timeData.map(item => (
                 <TimeLineItem key={item} time={item} />
               ))}
             </Column>
-            <Row style={{flex: 1}}>
+            <Row style={{ flex: 1 }}>
               {weekStructure?.map((dayEvents, dayIndex) => {
                 return (
                   <Column key={dayIndex}>
                     {dayEvents?.map((event, index) => {
-                      if (event) {
-                        console.log(event.Duration, 'event.Duration');
+
+                      const item = findObject(CurrentScheduledEntries, index + startTimeOfDay, dayIndex + startWeekOfDay)
+                      if (findObject(CurrentScheduledEntries, index + startTimeOfDay, dayIndex + startWeekOfDay)) {
                         return (
                           <SheduleTableItem
-                            key={event.StartDateTime}
-                            timeDuration={event.Duration / 60}
-                            typeSession={
-                              event.type == 'lesson'
-                                ? TypeSession.lesson
-                                : TypeSession.trial
-                            }
-                            title={event.className}
-                          />
+                            key={item.WeekTimeSlotId}
+                            ClassName={item.ClassName}
+                            Duration={item.Duration}
+                            WeekTimeSlotId={item.WeekTimeSlotId}
+                            StartDateTime={item.StartDateTime}
+                            ScheduleEntryId={0} />
                         );
                       }
-                      return <SheduleTableItem key={`${dayIndex}-${index}`} />;
+                      return <SheduleTableItem key={`${dayIndex}-${index}`} WeekTimeSlotId={''} StartDateTime={''} Duration={0} ClassName={''} ScheduleEntryId={0} />;
                     })}
                     {isToday(dayIndex) && (
                       <View style={[styles.absoluteFill, styles.mask]} />
@@ -125,11 +95,11 @@ const Row = ({
   return <View style={[styles.row, style ?? {}]}>{children}</View>;
 };
 
-const Column = ({children}: {children: React.ReactNode}) => {
+const Column = ({ children }: { children: React.ReactNode }) => {
   return <View style={styles.column}>{children}</View>;
 };
 
-const TimeLineItem = ({time}: {time: string}) => {
+const TimeLineItem = ({ time }: { time: string }) => {
   return (
     <View style={styles.timeLineBlock}>
       <Text style={styles.timeLineText}>{time}</Text>

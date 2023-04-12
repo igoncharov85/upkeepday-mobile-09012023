@@ -1,37 +1,38 @@
 // CalendarComponent.tsx
-import React, {memo, useState} from 'react';
-import {View, TouchableOpacity, Text, StyleSheet} from 'react-native';
-import {Calendar, DateData} from 'react-native-calendars';
+import React, { memo, useState } from 'react';
+import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { Calendar, DateData } from 'react-native-calendars';
 import LinearGradient from 'react-native-linear-gradient';
-import dayjs, {Dayjs} from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 
 import ArrowLeft from '../../../../../assets/svg/schedule/ArrowLeft';
 import ArrowRight from '../../../../../assets/svg/schedule/ArrowRight';
 import styles from './styles';
+import { formatDate } from '../../../../services/utils/fullDateToValue.util';
 
 type Props = {
   onMonthChange?: (month: DateData) => void;
-  onDayPress?: (day: DateData) => void;
+  onDayPress: (day: any) => void;
   visible?: boolean;
   date?: string;
 };
 
 const CalendarComponent: React.FC<Props> = memo(
-  ({onMonthChange, onDayPress, visible, date}) => {
+  ({ onMonthChange, onDayPress, visible, date }) => {
     const [selectedDate, setSelectedDate] = useState(date);
     const [currentMonth, setCurrentMonth] = useState<Dayjs>(dayjs());
-    console.log(selectedDate, 'selectedDate');
     const handleMonthChange = (month: DateData) => {
       setCurrentMonth(dayjs(month.dateString));
       onMonthChange && onMonthChange(month);
     };
 
     const handleDayPress = (day: DateData) => {
+      onDayPress(formatDate(day.dateString).date[0]);
       setSelectedDate(day.dateString);
-      onDayPress && onDayPress(day);
+
     };
 
-    const dayComponent = ({date, state}: {date: DateData; state: string}) => {
+    const dayComponent = ({ date, state }: { date: DateData; state: string }) => {
       const isSelected = date.dateString === selectedDate;
       const isDisabled = state === 'disabled';
 
@@ -44,8 +45,8 @@ const CalendarComponent: React.FC<Props> = memo(
                 ? ['#EAAFC8', '#654EA3']
                 : ['transparent', 'transparent']
             }
-            start={{x: 0, y: 0}}
-            end={{x: 0, y: 1}}>
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0, y: 1 }}>
             <Text
               style={[
                 styles.dayText,
@@ -63,8 +64,8 @@ const CalendarComponent: React.FC<Props> = memo(
       <>
         <LinearGradient
           colors={['#FFFFFF', '#EFF1F5']}
-          start={{x: 0.0, y: 0.0}}
-          end={{x: 1.0, y: 1.0}}
+          start={{ x: 0.0, y: 0.0 }}
+          end={{ x: 1.0, y: 1.0 }}
           locations={[0.49, 1]}
           style={{
             marginVertical: 20,
@@ -104,7 +105,7 @@ const CalendarComponent: React.FC<Props> = memo(
   },
 );
 
-const ArrowCalendar = ({children}: {children: React.ReactNode}) => (
+const ArrowCalendar = ({ children }: { children: React.ReactNode }) => (
   <View style={styles.arrow}>{children}</View>
 );
 export default CalendarComponent;

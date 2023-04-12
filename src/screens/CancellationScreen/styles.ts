@@ -7,7 +7,7 @@ export default StyleSheet.create({
     marginVertical: 8,
     alignItems: 'center',
     justifyContent: 'space-between',
-    Height: '100%',
+    height: '100%',
   },
   part: {
     flex: 1,
@@ -87,7 +87,8 @@ export default StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'rgba(175, 156, 201,0.5)',
     borderRadius: 9,
-    marginTop: 44,
+    marginTop: 20,
+    marginBottom: 20,
 
   },
   confirmText: {
@@ -96,5 +97,10 @@ export default StyleSheet.create({
     fontWeight: '500',
     color: '#000',
     fontSize: 15
+  },
+  finishBtn: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    width: '100%'
   }
 });

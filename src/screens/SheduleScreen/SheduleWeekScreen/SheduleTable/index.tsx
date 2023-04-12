@@ -20,7 +20,7 @@ enum TypeSession {
 const findObject = (arr: any[], hour: number, day: number) => {
   const foundObject = arr.find(obj => {
     const startDate = new Date(obj.StartDateTime);
-    return startDate.getHours() === hour && startDate.getDate() === day;
+    return startDate?.getHours() === hour && startDate.getDate() === day;
   });
   return foundObject ? { ...foundObject } : null;
 };

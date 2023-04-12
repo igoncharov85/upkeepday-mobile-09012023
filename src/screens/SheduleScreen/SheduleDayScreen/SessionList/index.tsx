@@ -28,7 +28,7 @@ export const SessionItemList: React.FC<ISessionItemListProps> = memo(
       return `${hourString}:${formattedMinutes} ${ampm}`;
     };
 
-    const sessionItems = data.map((item, index) => {
+    const sessionItems = data?.map((item, index) => {
       const startTime = new Date(item.StartDateTime);
       const endTime = new Date(startTime.getTime() + item.Duration * 60000);
 

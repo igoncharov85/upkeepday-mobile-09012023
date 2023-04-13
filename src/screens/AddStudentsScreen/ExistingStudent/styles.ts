@@ -13,7 +13,8 @@ export default StyleSheet.create({
         fontSize: 12,
         lineHeight: 18,
         paddingHorizontal: 20,
-        marginBottom: 16
+        marginBottom: 16,
+        height: 44
     },
     student: {
         flexDirection: 'row',

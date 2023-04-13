@@ -25,6 +25,7 @@ function* loginWorker({
         );
 
         if (data?.token) {
+            console.log("set token ")
             yield call(AsyncStorageService.setToken, data.token)
             yield put(setIsAuthAction(true))
             yield put(pushToastsAction({
@@ -32,7 +33,7 @@ function* loginWorker({
                 text1: 'Login successful',
                 autoHide: true,
             }))
-            NavigationActions.navigate(NavigationEnum.HOME_SCREEN)
+            yield call(NavigationActions.navigate, NavigationEnum.HOME_SCREEN)
         }
 
     } catch (error: any) {

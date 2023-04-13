@@ -41,7 +41,7 @@ interface IScheduleDayScreen { }
 export const ScheduleDayScreen: React.FC<IScheduleDayScreen> = memo(() => {
 
 	const { CurrentScheduledEntries } = useAppSelector(state => state.schedule);
-
+	console.log(CurrentScheduledEntries, 'CurrentScheduledEntries')
 	const today = new Date;
 	const [dateString, day] = getToday(today)
 
@@ -62,7 +62,6 @@ export const ScheduleDayScreen: React.FC<IScheduleDayScreen> = memo(() => {
 	useEffect(() => {
 		dispatch(fetchScheduleByPeriodAction({ startDate: currentDay, endDate: currentDay }));
 	}, [currentDay])
-
 
 	return (
 		<View>

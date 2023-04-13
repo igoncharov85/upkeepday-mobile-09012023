@@ -20,6 +20,10 @@ export function* fetchSchedulesWorker({
       payload
     );
     console.log("data: ", data)
+    if (data) {
+      //@ts-ignore
+      yield put(setCurrentScheduleEntries(data))
+    }
   } catch (error) {
     yield call(ErrorFilterService.validateError, error)
   } finally {

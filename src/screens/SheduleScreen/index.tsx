@@ -5,7 +5,7 @@ import { CustomButton } from '../../components/UI/CustomButton';
 import NavigationActions from '../../services/navigation-service';
 import { ScheduleDayScreen } from './SheduleDayScreen';
 
-import { logoutAction } from '../../store/auth/actions';
+import { fetchCountriesAction, fetchStatesAction, logoutAction } from '../../store/auth/actions';
 import {
   addLocationAction,
   fetchLocationAction,
@@ -126,7 +126,7 @@ export const ScheduleScreen: FC<IHomeScreen> = memo(({ navigation }) => {
     //     ],
     //   }),
     // );
-    // dispatch(fetchUsersAction())
+    dispatch(fetchUsersAction())
     // dispatch(
     //   generateScheduleAction({
     //     ScheduleType: 'FixedClassesNumber',
@@ -149,7 +149,8 @@ export const ScheduleScreen: FC<IHomeScreen> = memo(({ navigation }) => {
     //   State: 'string',
     //   Url: 'string'
     // }))
-    // dispatch(fetchLocationAction())
+    dispatch(fetchStatesAction('USA'))
+    dispatch(fetchCountriesAction())
   });
   return (
     <View style={styles.container}>

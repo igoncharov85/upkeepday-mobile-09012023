@@ -56,3 +56,9 @@ export const generateTimeData = (startTime: string, endTime: string) => {
 
     return timeData;
 };
+export function addDayAndHoursToDate(dateStr: string, day: number, hour: number): string {
+    const date = new Date(dateStr);
+    date.setDate(date.getDate() + day);
+    date.setHours(date.getHours() + hour);
+    return date.toISOString();
+}

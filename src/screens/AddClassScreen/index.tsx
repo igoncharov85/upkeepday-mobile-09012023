@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -30,7 +30,7 @@ const formInitialValues = {
     locationType: ' ',
     addressLine: ' ',
 };
-export const AddClassScreen: React.FC<IAddClassScreen> = () => {
+export const AddClassScreen: React.FC<IAddClassScreen> = memo(() => {
     const [typeLocation, setTypeLocation] = useState(0);
     const [modalVisible, setModalVisible] = useState(false);
     const [classLocation, setClassLocation] = useState('');
@@ -48,29 +48,15 @@ export const AddClassScreen: React.FC<IAddClassScreen> = () => {
     const handleClassLocation = (location: string) => {
         setClassLocation(location)
     }
-    useEffect(() => {
-        return () => {
 
-        };
-    }, []);
 
-    const switchType = (type: any) => {
-        switch (type) {
-            case TypeLocation.Online:
-                return <InputForm labelText='Online Instructions' multiline={true} style={{ height: 300, textAlignVertical: 'top' }} />;
-            case TypeLocation.InPerson:
-                return <LocationSelect value={classLocation} onChange={handleShowModal} labelText="Class Location" />;
-            default: null
-        }
-    }
-    const renderForm = ({
-        errors,
+
+    const renderForm = memo(({
         values,
         handleChange,
         handleSubmit,
         isValid
     }: FormikProps<typeof formInitialValues>) => {
-        console.log(errors)
         return (
             <>
                 <View>
@@ -79,11 +65,15 @@ export const AddClassScreen: React.FC<IAddClassScreen> = () => {
                         value={values.name}
                         onChange={handleChange('name')}
                     />
-                    <ListButtons buttons={['Online', 'In-person']} label="Class Type" onPress={handleTypeChange} />
-                    {switchType(typeLocation)}
+                    <ListButtons buttons={['Online', 'In-person']} label="Class Type" onPress={handleTypeChange} index={typeLocation} />
+                    {
+                        !typeLocation ?
+                            <InputForm labelText='Online Instructions' multiline={true} style={{ height: 300, textAlignVertical: 'top' }} /> :
+                            <LocationSelect value={classLocation} onChange={handleShowModal} labelText="Class Location" />
+                    }
 
 
-
+                    <ChooseAddressModal visible={modalVisible} handleShowModal={handleShowModal} handleClassLocation={handleClassLocation} />
                 </View>
                 <View style={{ flex: 1, justifyContent: 'flex-end', width: '100%' }} >
                     <CustomButton
@@ -94,7 +84,7 @@ export const AddClassScreen: React.FC<IAddClassScreen> = () => {
                 </View>
             </>
         );
-    }
+    })
 
     const AddLocationForm = withFormik<any, typeof formInitialValues>({
         validationSchema: AddClassSchema,
@@ -111,7 +101,7 @@ export const AddClassScreen: React.FC<IAddClassScreen> = () => {
         <View style={styles.container}>
             <ScreenHeader onBackPress={navigation.goBack} text="Add Class General Data" withBackButton={true} />
             <AddLocationForm />
-            <ChooseAddressModal visible={modalVisible} handleShowModal={handleShowModal} handleClassLocation={handleClassLocation} />
+
         </View>
     )
-}
+})

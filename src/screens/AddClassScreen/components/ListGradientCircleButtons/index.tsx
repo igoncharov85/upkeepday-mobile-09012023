@@ -9,10 +9,11 @@ import LinearGradient from "react-native-linear-gradient";
 interface IListButtons {
     buttons: string[],
     onPress?: (number: number) => void,
-    label?: string
+    label?: string,
+    index?: number,
 }
-export const ListGradientCircleButtons: React.FC<IListButtons> = ({ buttons, onPress, label }) => {
-    const [activeIndex, setActiveIndex] = useState(0);
+export const ListGradientCircleButtons: React.FC<IListButtons> = ({ buttons, onPress, label, index }) => {
+    const [activeIndex, setActiveIndex] = useState(index ? index : 0);
 
     const handlePress = (index: number) => {
         setActiveIndex(index);

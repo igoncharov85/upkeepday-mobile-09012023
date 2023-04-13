@@ -21,10 +21,8 @@ export const AddStudentsScreen: React.FC<IAddStudentsScreen> = () => {
     const [typeAction, setTypeAction] = useState(0);
     const navigation = useNavigation();
     //@ts-ignore
-    const goTextStep = () => navigation.navigate(NavigationEnum.PREPAYMENT_CONFIGURATION_SCREEN);
-    const onAddedLater = () => {
-
-    }
+    const goNextStep = () => navigation.navigate(NavigationEnum.PREPAYMENT_CONFIGURATION_SCREEN);
+    const onGoBack = () => navigation.goBack()
     const handleTypeChange = (type: any) => {
         setTypeAction(type);
     }
@@ -42,8 +40,8 @@ export const AddStudentsScreen: React.FC<IAddStudentsScreen> = () => {
         <View style={{ flex: 1, height: '100%' }}>
             <View style={{ padding: 20, paddingBottom: 0 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <ScreenHeader text={'Add Students'} onBackPress={goTextStep} withBackButton={true} />
-                    <TouchableOpacity activeOpacity={1} style={{ marginLeft: -20, }} onPress={onAddedLater}>
+                    <ScreenHeader text={'Add Students'} onBackPress={() => navigation.goBack()} withBackButton={true} />
+                    <TouchableOpacity activeOpacity={1} style={{ marginLeft: -20, }} >
                         <Text style={{ color: '#171930', fontSize: 14, lineHeight: 19, opacity: 0.4 }}>Add Later</Text>
                     </TouchableOpacity>
 
@@ -57,7 +55,7 @@ export const AddStudentsScreen: React.FC<IAddStudentsScreen> = () => {
                     {switchType(typeAction)}
                 </View>
                 <View style={{ padding: 20, height: 92 }}>
-                    <CustomButton text={'Next Step'} onPress={goTextStep} />
+                    <CustomButton text={'Next Step'} onPress={goNextStep} />
                 </View>
             </View >
         </View>

@@ -102,6 +102,17 @@ export const NewStudent: React.FC<INewStudentProps> = () => {
                 PhoneCountry: phoneCountry,
                 PhoneNumber: phoneNumber
             };
+            console.log([...newUsers, {
+                FirstName: values.FirstName,
+                LastName: values.LastName,
+                Email: values.Email,
+                PhoneCountry: +phoneCountry,
+                PhoneNumber: phoneNumber,
+                StudentId: id + 1,
+                EnrolledClasses: [],
+                Notes: values.Notes
+            }]);
+
             setNewUsers([...newUsers, {
                 FirstName: values.FirstName,
                 LastName: values.LastName,

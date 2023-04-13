@@ -38,8 +38,6 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
     const startDateTime = `${timeIndex + startOfHour}:00`
 
     const onHandleSlot = () => {
-      console.log(7)
-
       onHandleClick({ DayOfWeek: dayOfWeek, StartTime: startDateTime as string, Duration: timeDuration })
       setActive(!active)
     }

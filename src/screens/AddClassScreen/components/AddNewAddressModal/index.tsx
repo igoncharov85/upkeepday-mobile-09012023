@@ -34,6 +34,7 @@ const formInitialValues = {
 };
 
 export const AddNewAddressModal: React.FC<IAddNewAddressModal> = ({ visible, handleShowModal }) => {
+
     const renderForm = ({
         errors,
         values,
@@ -85,15 +86,16 @@ export const AddNewAddressModal: React.FC<IAddNewAddressModal> = ({ visible, han
 
         handleSubmit: values => {
             const data: ILocationRequest = {
-                Name: `${values.addressLine}, ${values.country}, ${values.state}`,
-                Url: 'url',
-                LocationType: '1',
+                Name: `${values.addressLine}, ${values.city}, ${values.country}, ${values.state}`,
+                Url: '',
+                LocationType: '',
                 AddressLine: values.addressLine,
-                City: 'City',
+                City: '',
                 State: values.state,
                 PostalCode: values.postalCode,
                 Country: values.country
             };
+            handleShowModal();
             dispatch(addLocationAction(data))
         },
         ...formicDefaultProps,

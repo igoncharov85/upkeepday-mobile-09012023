@@ -38,10 +38,7 @@ export const ExistingStudent: React.FC<IExistingStudentProps> = () => {
 
     useEffect(() => {
         return () => {
-
             dispatch(updateCurrentClassRequestAction({ ExistingStudents: existingStudents, }))
-            // Выполнить действия при удалении компонента
-            console.log('Компонент удаляется!');
         };
     }, []);
     return (

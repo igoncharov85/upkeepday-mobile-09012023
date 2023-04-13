@@ -43,24 +43,6 @@ function getSectionsCountByDate(entries: any[], date: Date): number {
     return count;
 }
 
-// Пример использования функции
-
-const mockCurrentScheduledEntries = [
-    {
-        WeekTimeSlotId: 'string',
-        StartDateTime: '2023-04-10T17:30:00',
-        Duration: 60,
-        ClassName: 'class 1',
-        ScheduleEntryId: '2345678jhbve',
-    },
-    {
-        WeekTimeSlotId: 'string',
-        StartDateTime: '2023-04-10T17:30:00',
-        Duration: 60,
-        ClassName: 'class 1',
-        ScheduleEntryId: '2345678jhbve',
-    },
-];
 
 
 export const ScheduleCalendar: React.FC<IScheduleCalendarProps> = ({ startingDayOfWeek }) => {

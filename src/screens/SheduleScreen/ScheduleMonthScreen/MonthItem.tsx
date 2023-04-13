@@ -2,13 +2,7 @@ import React, { FC, memo, useEffect } from 'react';
 import { Text, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
-
-
 import styles from './styles';
-
-
-
-
 
 interface IMonthItem {
     sesion?: number;

@@ -2,7 +2,7 @@ import React, { FC, memo, useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import styles from './styles';
-import { IWeekTimeSlot } from '../../../common/types/schedule.types';
+import { IGeneratedScheduleEntries, IWeekTimeSlot } from '../../../common/types/schedule.types';
 import Cancel from '../../../../assets/svg/Cancel';
 
 
@@ -18,39 +18,33 @@ enum TimeDuration {
 }
 interface IWeekTableItem {
 
-  timeDuration?: TimeDuration;
-  typeSession?: TypeSession | [TypeSession, TypeSession];
-  dayOfWeek: number;
+  StartDateTime: string;
   timeIndex: number;
   onLongPress?: () => void;
   editMode: boolean;
-  activeItem?: IWeekTimeSlot;
-  editSlot: (slot: IWeekTimeSlot) => void;
+  activeItem?: IGeneratedScheduleEntries;
+  editSlot: (slot: IGeneratedScheduleEntries) => void;
+  conflict?: boolean
 }
 export const WeekTableItem: FC<IWeekTableItem> = memo(
   ({
-    timeDuration = TimeDuration.OneHour,
-    typeSession = TypeSession.lesson,
-    timeIndex,
-    dayOfWeek,
+    StartDateTime,
     onLongPress,
     activeItem,
     editMode,
-    editSlot
+    editSlot,
+    conflict
 
   }) => {
     const [active, setActive] = useState(!!activeItem ? true : false)
     const colorsTrial = ['#F3AF2C', '#E9600D'];
     const colorsLesson = ['#EAAFC8', '#654EA3'];
-    const startDateTime = `${timeIndex}:00`
 
     const onHandleSlot = () => {
-
+      console.log(StartDateTime);
 
       setActive(!active)
-      editSlot(activeItem || { DayOfWeek: dayOfWeek, StartTime: startDateTime as string, Duration: timeDuration })
-      console.log('onHandleSlot');
-
+      editSlot(activeItem || { WeekTimeSlotId: '', StartDateTime: StartDateTime, Duration: TimeDuration.OneHour })
     }
     const getColors = (typeSession: TypeSession) => {
       switch (typeSession) {
@@ -61,9 +55,10 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
       }
     };
     return (
+      // <TouchableOpacity onLongPress={onLongPress} onPress={() => console.log(StartDateTime)} activeOpacity={editMode ? 0.5 : 1}>
       <TouchableOpacity onLongPress={onLongPress} onPress={() => editMode && onHandleSlot()} activeOpacity={editMode ? 0.5 : 1}>
         <View style={styles.containerItem}>
-          {active ? (
+          {activeItem ? (
             <View
               style={{
                 borderRadius: 4,
@@ -71,9 +66,7 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
                 position: 'relative',
               }}>
               <LinearGradient
-                colors={getColors(
-                  Array.isArray(typeSession) ? typeSession[0] : typeSession,
-                )}
+                colors={colorsLesson}
                 start={{ x: 0.5, y: 0 }}
                 end={{ x: 0.5, y: 1 }}
                 style={{
@@ -90,7 +83,7 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
                 {editMode && (<View style={{ position: 'absolute', top: -5, right: -5 }}>
                   <Cancel />
                 </View>)}
-                <Text style={styles.textItem}>Class</Text>
+                <Text style={[styles.textItem, conflict && { color: 'red' }]}>Class</Text>
               </LinearGradient>
             </View>
           ) : null}

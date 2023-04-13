@@ -5,11 +5,12 @@ import styles from './styles';
 interface IListButtons {
     buttons: string[],
     onPress?: (number: number) => void,
-    label?: string
+    label?: string,
+    index?: number
 }
 
-export const ListButtons: React.FC<IListButtons> = ({ buttons, onPress, label }) => {
-    const [activeIndex, setActiveIndex] = useState(0);
+export const ListButtons: React.FC<IListButtons> = (({ buttons, onPress, label, index }) => {
+    const [activeIndex, setActiveIndex] = useState(index ? index : 0);
 
     const handlePress = (index: number) => {
         setActiveIndex(index);
@@ -19,14 +20,14 @@ export const ListButtons: React.FC<IListButtons> = ({ buttons, onPress, label })
     return (
         <View style={styles.container}>
             <Text style={styles.label}>{label}</Text>
-            <View style={{ flexDirection: 'row',flexWrap: 'wrap' }}>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
                 {buttons.map((buttonTitle, index) => (
                     <ButtonItem key={index} index={index} activeIndex={activeIndex} buttonTitle={buttonTitle} handlePress={handlePress} />
                 ))}
             </View>
         </View>
     );
-};
+});
 
 const ButtonItem = ({ index, activeIndex, buttonTitle, handlePress }: { index: number, activeIndex: number, buttonTitle: string, handlePress: (number: number) => void }) => {
     return (

@@ -11,11 +11,6 @@ interface ISheduleTable {
   startOfWeek: Date;
   endOfWeek: Date;
 }
-enum TypeSession {
-  lesson,
-  trial,
-}
-
 
 const findObject = (arr: any[], hour: number, day: number) => {
   const foundObject = arr.find(obj => {

@@ -40,7 +40,7 @@ export const ChooseAddressModal: React.FC<IChooseAddressModal> = ({ visible, han
     };
     const handlePress = (index: number) => {
         setActiveIndex(index);
-        handleClassLocation(locations[index].AddressLine)
+        handleClassLocation(locations[index].Name)
         setActiveId(locations[index].LocationId)
         handleShowModal()
     };
@@ -56,7 +56,7 @@ export const ChooseAddressModal: React.FC<IChooseAddressModal> = ({ visible, han
                 </View>
                 <DecorationLine />
                 <ScrollView style={{ height: 125, }}>
-                    {locations.map((item, index) => item.AddressLine && <AddressItem activeIndex={activeIndex} index={index} key={index} address={item.AddressLine} onTouch={handlePress} />)}
+                    {locations.map((item, index) => item.AddressLine && <AddressItem activeIndex={activeIndex} index={index} key={index} address={item.Name} onTouch={handlePress} />)}
 
                     <NewAddressButton addAddress={onShowModal} />
                 </ScrollView>

@@ -54,8 +54,8 @@ export const WeekTable: FC<ISheduleTable> = memo(
                 return (
                   <Column key={dayIndex}>
                     {dayEvents?.map((_, index) => {
-                      const uuid = generateUUID()
-                      return <WeekTableItem dayOfWeek={dayIndex} key={uuid} timeIndex={index} onHandleClick={onSlotPress} />;
+
+                      return <WeekTableItem dayOfWeek={dayIndex} timeIndex={index} onHandleClick={onSlotPress} />;
                     })}
 
                   </Column>

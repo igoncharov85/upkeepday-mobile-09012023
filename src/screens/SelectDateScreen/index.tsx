@@ -48,66 +48,29 @@ const formInitialValues = {
 
 
 export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
-    const navigation = useNavigation();
-    const goNextStep = () => {
-        //@ts-ignore
-        navigation.navigate(NavigationEnum.DATE_RECURRENCE_SCREEN);
-    };
-    const [endScheduleType, setEndScheduleType] = useState('');
 
-    const [typeLocation, setTypeLocation] = useState(0);
+    const navigation = useNavigation();
+    const goNextStep = (data: any) => {
+        //@ts-ignore
+        navigation.navigate(NavigationEnum.DATE_RECURRENCE_SCREEN, { data: data });
+    };
     const SelectDateForm = ({
         values,
         handleChange,
         handleSubmit,
+        setFieldValue,
         errors,
         isValid,
     }: FormikProps<typeof formInitialValues>) => {
-
-
-
-
+        const [typeLocation, setTypeLocation] = useState(0);
+        const [numberOf, setNumberOf] = useState(0);
 
         const handleTypeLocation = (index: number) => setTypeLocation(index)
 
-        const handleScheduleType = (scheduleType: string) => setEndScheduleType(scheduleType)
-
         const onFixedPeriodTime = (number: number) => {
-            handleScheduleType(number == 0 ? EndScheduleType.FixedWeekNumber : EndScheduleType.FixedMonthNumber)
+            setNumberOf(number)
+            setFieldValue('endScheduleType', number == 0 ? EndScheduleType.FixedWeekNumber : EndScheduleType.FixedMonthNumber)
         }
-
-
-        const GetChildItem = () => {
-            switch (typeLocation) {
-                case TypeDate.FixedNumberOfClasses:
-                    handleScheduleType(EndScheduleType.FixedClassesNumber);
-                    return <InputForm
-                        labelText='Enter Total Number of Classes'
-                        onChangeText={handleChange('totalClasses')}
-                        value={values.totalClasses}
-                    />;
-                case TypeDate.OnSpecificDate:
-                    handleScheduleType(EndScheduleType.SpecificEndDate);
-                    return <InputForm
-                        labelText='Enter Finish  Date'
-                        onChangeText={handleChange('finishDate')}
-                        value={values.finishDate}
-                    />;
-                case TypeDate.FixedPeriodInTime:
-                    return <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <InputForm
-                            labelText='Number of'
-                            onChangeText={handleChange('numberOf')}
-                            value={values.numberOf}
-                            style={{ width: 180, marginRight: 24 }}
-                        />
-                        <ListGradientCircleButtons onPress={onFixedPeriodTime} buttons={['Weeks', 'Months']} />
-                    </View>
-                default: return <InputForm labelText='Enter Total Number of Classes' />;
-            }
-        }
-
-
         return (
             <View style={styles.container}>
                 <ScreenHeader onBackPress={navigation.goBack} text="Add Class General Data" withBackButton={true} />
@@ -116,9 +79,35 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
                         labelText='Enter Start Date'
                         onChangeText={handleChange('startDate')}
                         value={values.startDate}
+                        placeholder="2023-01-01"
                     />
-                    <ListButtons buttons={[' Fixed number of classes', 'On Specific Date', ' Fixed period in time']} label="Class Type" onPress={handleTypeLocation} />
-                    <GetChildItem />
+
+                    <ListButtons buttons={[' Fixed number of classes', 'On Specific Date', ' Fixed period in time']} label="Class Type" onPress={handleTypeLocation} index={typeLocation} />
+                    {typeLocation == TypeDate.FixedNumberOfClasses &&
+                        <InputForm
+                            labelText='Enter Total Number of Classes'
+                            onChangeText={handleChange('totalClasses')}
+                            value={values.totalClasses}
+                            onChange={() => setFieldValue('endScheduleType', EndScheduleType.FixedClassesNumber)}
+                        />}
+                    {typeLocation == TypeDate.OnSpecificDate &&
+                        <InputForm
+                            labelText='Enter Finish  Date'
+                            onChangeText={handleChange('finishDate')}
+                            value={values.finishDate}
+                            placeholder="2023-01-01"
+                            onChange={() => setFieldValue('endScheduleType', EndScheduleType.SpecificEndDate)}
+                        />}
+                    {typeLocation == TypeDate.FixedPeriodInTime &&
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <InputForm
+                                labelText='Number of'
+                                onChangeText={handleChange('numberOf')}
+                                value={values.numberOf}
+                                style={{ width: 180, marginRight: 24 }}
+                            />
+                            <ListGradientCircleButtons onPress={onFixedPeriodTime} buttons={['Weeks', 'Months']} index={numberOf} />
+                        </View>}
 
 
                 </View>
@@ -138,15 +127,13 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
         handleSubmit: (values,) => {
             dispatch(
                 updateCurrentClassRequestAction({
-                    EndScheduleType: endScheduleType,
+                    EndScheduleType: values.endScheduleType,
                     StartDate: values.startDate,
+                    EndNumber: +values.finishDate
+
                 })
             );
-            console.log({
-                EndScheduleType: endScheduleType,
-                StartDate: values.startDate,
-            })
-            goNextStep()
+            // goNextStep(data:{numberOf:values.numberOf,finishDate:finishDate})
         },
     })(SelectDateForm);
 

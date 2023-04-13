@@ -14,21 +14,19 @@ export function* fetchLocationsWorker({
     type,
 }: IAction<null>): SagaIterator {
     try {
-        console.log("GET LOCATIONS!!!!")
         yield put(setLocationLoading(true));
         const data: AxiosResponse<Array<ILocation>, any> = yield call(
             LocationService.fetchLocations,
         );
 
-        if(data?.data){
-            console.log('locations:', data.data)
+        if (data?.data) {
             yield put(setLocationsAction(data?.data))
         }
-       
+
 
     } catch (error) {
         yield call(ErrorFilterService.validateError, error)
-    }finally {
+    } finally {
         yield put(setLocationLoading(false));
     }
 }
@@ -45,15 +43,15 @@ export function* addLocationWorker({
             payload,
         );
 
-        if(data){
+        if (data) {
             console.log("data add location", data)
             yield put(addLocationsAction(data))
         }
-       
-        
+
+
     } catch (error) {
         yield call(ErrorFilterService.validateError, error)
-    }finally {
+    } finally {
         yield put(setLocationLoading(false));
     }
 }
@@ -69,14 +67,14 @@ export function* fetchLocationByIdWorker({
             payload.Id,
         );
 
-        if(data){
+        if (data) {
             yield put(addLocationsAction(data))
         }
-       
-        
+
+
     } catch (error) {
         yield call(ErrorFilterService.validateError, error)
-    }finally {
+    } finally {
         yield put(setLocationLoading(false));
     }
 }

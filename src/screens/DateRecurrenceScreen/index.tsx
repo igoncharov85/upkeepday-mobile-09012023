@@ -29,10 +29,12 @@ export const DateRecurrenceScreen: React.FC<IDateRecurrenceScreen> = () => {
     const { createCurrentClassRequest } = useAppSelector(state => state.schedule);
     const goNextStep = () => {
         const endDate = addDayAndHoursToDate(weekDates.startDate.toISOString(), numberOf * (endScheduleType == 'FixedMonthNumber' ? 30 : 7), 0) || finishDate && new Date(finishDate);
-        console.log('endDate: ', endDate);
-        console.log('finishDate: ', finishDate && new Date(finishDate));
+        // console.log('endDate: ', endDate);
+        // console.log('finishDate: ', finishDate && new Date(finishDate));
+        console.log(weekDates.startDate.toISOString(), endDate);
+        console.log(calculateNumberOfClasses(weekTimeSlots, weekDates.startDate.toISOString(), endDate));
 
-        const numberClass = calculateNumberOfClasses(weekTimeSlots, weekDates.startDate.toISOString(), endDate)
+        const numberClass = createCurrentClassRequest.EndNumber || calculateNumberOfClasses(weekTimeSlots, weekDates.startDate.toISOString(), endDate)
 
         dispatch(
             updateCurrentClassRequestAction({
@@ -40,9 +42,9 @@ export const DateRecurrenceScreen: React.FC<IDateRecurrenceScreen> = () => {
 
             })
         );
-        console.log(createCurrentClassRequest.EndNumber as number || numberClass as number, 'createCurrentClassRequest.EndNumber');
+        console.log(createCurrentClassRequest.EndNumber, '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@2');
 
-        dispatch(generateScheduleAction({ ScheduleType: createCurrentClassRequest.EndScheduleType as string, StartDate: createCurrentClassRequest.StartDate as string, Number: createCurrentClassRequest.EndNumber as number || numberClass as number, WeekTimeSlots: weekTimeSlots }))
+        dispatch(generateScheduleAction({ ScheduleType: createCurrentClassRequest.EndScheduleType as string, StartDate: createCurrentClassRequest.StartDate as string, Number: numberClass as number, WeekTimeSlots: weekTimeSlots }))
 
         //@ts-ignore
         navigation.navigate(NavigationEnum.DATE_PREVIEW_SCREEN)

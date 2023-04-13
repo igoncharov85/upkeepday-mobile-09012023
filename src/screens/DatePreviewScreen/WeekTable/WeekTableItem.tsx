@@ -20,7 +20,7 @@ interface IWeekTableItem {
 
   StartDateTime: string;
   timeIndex: number;
-  onLongPress?: () => void;
+  onLongPress: () => void;
   editMode: boolean;
   activeItem?: IGeneratedScheduleEntries;
   editSlot: (slot: IGeneratedScheduleEntries) => void;

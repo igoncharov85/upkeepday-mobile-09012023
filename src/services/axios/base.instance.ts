@@ -1,6 +1,8 @@
 import axios from "axios";
 import { BASE_URL } from "../../common/constants/server";
 import { AsyncStorageService } from "../async-storage";
+import { dispatch } from "../../store/store";
+import { logoutAction } from "../../store/auth/actions";
 
 
 export const $axiosBase = axios.create({
@@ -25,7 +27,7 @@ $axiosBase.interceptors.request.use(
 $axiosAuth.interceptors.request.use(
     async (config: any) => {
         const token = await AsyncStorageService.getToken();
-        console.log(`request: ${config.baseURL}${config.url}`);
+        console.log(`request: ${config.baseURL}${config.url} ${token}`);
         config.headers = {
             Accept: "application/json",
             Authorization: `${token}`,

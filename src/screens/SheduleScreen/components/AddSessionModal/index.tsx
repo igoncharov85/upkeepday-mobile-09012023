@@ -20,7 +20,7 @@ export const AddSessionModal: FC<AddSessionModalProps> = memo(
   ({ visible, visibleHandler, onPress }) => {
     const onCreateLesson = () => {
       visibleHandler();
-      onPress();
+      onPress && onPress();
     }
     return visible ? (
 
@@ -43,7 +43,7 @@ export const AddSessionModal: FC<AddSessionModalProps> = memo(
 
 const SessionButton: FC<AddSessionProps> = ({ title, onPress, disabled }) => {
   return (
-    <TouchableOpacity onPress={onPress} disabled={disabled}>
+    <TouchableOpacity onPress={onPress && onPress} disabled={disabled && disabled}>
       <View style={[styles.sessionBlock, disabled ? styles.sessionBlockDisabled : null]}>
         <Text style={[styles.sessionText, , disabled ? styles.sessionTextDisabled : null]}>{title}</Text>
       </View>

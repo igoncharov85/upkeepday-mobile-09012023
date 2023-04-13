@@ -1,17 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { memo, useState } from 'react';
+import React, { useState } from 'react';
 import {
-  ScrollView,
   Text,
   Modal,
   TouchableOpacity,
-  View,
   Animated,
-  StyleSheet,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { NavigationEnum } from '../../../../common/constants/navigation';
-import { INavigationBase } from '../../../../common/types/component.styles';
 import styles from './styles';
 import { IScheduleItem } from '../../../../common/types/schedule.types';
 
@@ -37,9 +33,6 @@ const CancellationModalConainer = ({
     }).start();
   };
 
-  const handleShowModal = () => {
-    handleAnimation(1);
-  };
 
   const handleHideModal = () => {
     handleAnimation(0);
@@ -84,7 +77,7 @@ interface ICancellationModalWrapper {
 
 }
 interface ICancellationModalWrapper {
-  children?: React.ReactNode;
+  children: React.ReactNode;
   data: IScheduleItem;
 }
 

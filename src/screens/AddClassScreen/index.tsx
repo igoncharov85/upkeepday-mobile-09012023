@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useCallback, useState } from "react";
 import { View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -12,8 +12,8 @@ import { ScrollView } from "react-native-gesture-handler";
 import { CustomModal } from "../../components/UI/CustomModal";
 import { ChooseAddressModal } from "./components/ChooseAddressModal";
 import { NavigationEnum } from "../../common/constants/navigation";
-import { FormikProps, withFormik } from "formik";
-import { dispatch } from "../../store/store";
+import { Formik, FormikProps } from "formik";
+import { useDispatch } from "react-redux";
 import { updateCurrentClassRequestAction } from "../../store/shedule";
 import { AddClassSchema } from "../../common/shemas/addClass.shape";
 import { formicDefaultProps } from "../../common/constants/styles/form.config";
@@ -26,82 +26,114 @@ enum TypeLocation {
 }
 
 const formInitialValues = {
-    name: ' ',
-    locationType: ' ',
-    addressLine: ' ',
+    name: " ",
+    locationType: " ",
+    addressLine: " ",
 };
+
 export const AddClassScreen: React.FC<IAddClassScreen> = memo(() => {
-    const [typeLocation, setTypeLocation] = useState(0);
+    const [typeLocation, setTypeLocation] = useState<TypeLocation>(
+        TypeLocation.Online
+    );
     const [modalVisible, setModalVisible] = useState(false);
-    const [classLocation, setClassLocation] = useState('');
+    const [classLocation, setClassLocation] = useState("");
     const navigation = useNavigation();
+    const dispatch = useDispatch();
 
-
-
-    const handleShowModal = () => {
+    const handleShowModal = useCallback(() => {
         setModalVisible(!modalVisible);
-    };
-    const handleTypeChange = (type: any) => {
+    }, [modalVisible]);
+
+    const handleTypeChange = useCallback((type: TypeLocation) => {
         setTypeLocation(type);
-    }
+    }, []);
 
-    const handleClassLocation = (location: string) => {
-        setClassLocation(location)
-    }
+    const handleClassLocation = useCallback((location: string) => {
+        setClassLocation(location);
+    }, []);
 
+    const renderForm = useCallback(
+        ({
+            values,
+            handleChange,
+            handleSubmit,
+            isValid,
+        }: FormikProps<typeof formInitialValues>) => {
+            return (
+                <>
+                    <View>
+                        <InputForm
+                            labelText="Name"
+                            value={values.name}
+                            onChange={handleChange("name")}
+                        />
+                        <ListButtons
+                            buttons={["Online", "In-person"]}
+                            label="Class Type"
+                            onPress={handleTypeChange}
+                            index={typeLocation}
+                        />
+                        {typeLocation === TypeLocation.Online ? (
+                            <InputForm
+                                labelText="Online Instructions"
+                                multiline={true}
+                                style={{ height: 300, textAlignVertical: "top" }}
+                            />
+                        ) : (
+                            <LocationSelect
+                                value={classLocation}
+                                onChange={handleShowModal}
+                                labelText="Class Location"
+                            />
+                        )}
 
-
-    const renderForm = memo(({
-        values,
-        handleChange,
-        handleSubmit,
-        isValid
-    }: FormikProps<typeof formInitialValues>) => {
-        return (
-            <>
-                <View>
-                    <InputForm
-                        labelText='Name'
-                        value={values.name}
-                        onChange={handleChange('name')}
-                    />
-                    <ListButtons buttons={['Online', 'In-person']} label="Class Type" onPress={handleTypeChange} index={typeLocation} />
-                    {
-                        !typeLocation ?
-                            <InputForm labelText='Online Instructions' multiline={true} style={{ height: 300, textAlignVertical: 'top' }} /> :
-                            <LocationSelect value={classLocation} onChange={handleShowModal} labelText="Class Location" />
-                    }
-
-
-                    <ChooseAddressModal visible={modalVisible} handleShowModal={handleShowModal} handleClassLocation={handleClassLocation} />
-                </View>
-                <View style={{ flex: 1, justifyContent: 'flex-end', width: '100%' }} >
-                    <CustomButton
-                        text={"Next Step"}
-                        //@ts-ignore
-                        onPress={handleSubmit}
-                    />
-                </View>
-            </>
-        );
-    })
-
-    const AddLocationForm = withFormik<any, typeof formInitialValues>({
-        validationSchema: AddClassSchema,
-
-        handleSubmit: values => {
-            dispatch(updateCurrentClassRequestAction({ ClassLocationType: typeLocation, ClassName: values.name, }))
-            //@ts-ignore
-            navigation.navigate(NavigationEnum.SELECT_DATE_SCREEN)
+                        <ChooseAddressModal
+                            visible={modalVisible}
+                            handleShowModal={handleShowModal}
+                            handleClassLocation={handleClassLocation}
+                        />
+                    </View>
+                    <View style={{ flex: 1, justifyContent: "flex-end", width: "100%" }}>
+                        <CustomButton
+                            text={"Next Step"}
+                            onPress={handleSubmit}
+                        />
+                    </View>
+                </>
+            );
         },
-        ...formicDefaultProps,
-    })(renderForm);
+        [typeLocation, classLocation, modalVisible, handleShowModal, handleTypeChange, handleClassLocation]
+    );
+
+    const handleSubmit = useCallback(
+        (values: any) => {
+            dispatch(
+                updateCurrentClassRequestAction({
+                    ClassLocationType: typeLocation,
+                    ClassName: values.name,
+                })
+            );
+            //@ts-ignore
+            navigation.navigate(NavigationEnum.SELECT_DATE_SCREEN);
+        },
+        [dispatch, typeLocation, navigation]
+    );
 
     return (
         <View style={styles.container}>
-            <ScreenHeader onBackPress={navigation.goBack} text="Add Class General Data" withBackButton={true} />
-            <AddLocationForm />
-
+            <ScreenHeader
+                onBackPress={navigation.goBack}
+                text="Add Class General Data"
+                withBackButton={true}
+            />
+            <Formik
+                initialValues={formInitialValues}
+                validationSchema={AddClassSchema}
+                onSubmit={handleSubmit}
+                {...formicDefaultProps}
+            >
+                {renderForm}
+            </Formik>
         </View>
-    )
-})
+    );
+});

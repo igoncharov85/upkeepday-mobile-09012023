@@ -33,7 +33,7 @@ function* loginWorker({
                 text1: 'Login successful',
                 autoHide: true,
             }))
-            yield call(NavigationActions.navigate, NavigationEnum.HOME_SCREEN)
+            NavigationActions.navigate(NavigationEnum.HOME_SCREEN)
         }
 
     } catch (error: any) {

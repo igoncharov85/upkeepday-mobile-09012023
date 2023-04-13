@@ -14,9 +14,9 @@ interface NavigationButtonProps {
 }
 
 const SCHEDULE_NAVIGATION = [
-  { active: true, name: 'Day', component: ScheduleDayScreen },
+  { active: false, name: 'Day', component: ScheduleDayScreen },
   { active: false, name: 'Week', component: SheduleWeekScreen },
-  { active: false, name: 'Month', component: ScheduleMonthScreen },
+  { active: true, name: 'Month', component: ScheduleMonthScreen },
 ];
 
 export const ScheduleNavigation: FC = memo(() => {

@@ -31,9 +31,6 @@ export const CustomModal = ({ isVisible, closeModal, children, height, withOverl
     }).start();
   };
 
-  const handleShowModal = () => {
-    handleAnimation(1);
-  };
 
   const handleHideModal = () => {
     handleAnimation(0);
@@ -48,7 +45,7 @@ export const CustomModal = ({ isVisible, closeModal, children, height, withOverl
     <Modal visible={isVisible} transparent onRequestClose={handleHideModal}>
       <TouchableOpacity style={!withOverlay && styles.overlay} onPress={handleHideModal} activeOpacity={1} />
       <Animated.View style={[styles.modal, height ? { height: height } : { height: '50%', }]}>
-        {children}
+        {children && children}
       </Animated.View>
     </Modal>
   );

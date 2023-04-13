@@ -14,6 +14,7 @@ import { updateCurrentClassRequestAction } from "../../store/shedule";
 import { generateScheduleAction } from "../../store/shedule/actions";
 import { useAppSelector } from "../../store/hooks";
 import { calculateNumberOfClasses } from "../../services/utils/calculateNumberOfClasses";
+import { EndScheduleType } from "../SelectDateScreen";
 
 interface IDateRecurrenceScreen { }
 export const DateRecurrenceScreen: React.FC<IDateRecurrenceScreen> = () => {
@@ -24,27 +25,33 @@ export const DateRecurrenceScreen: React.FC<IDateRecurrenceScreen> = () => {
     const today = new Date();
 
     const weekDates = getWeekDates(today);
+    //@ts-ignore
     const { endScheduleType, finishDate, numberOf } = route?.params;
 
     const { createCurrentClassRequest } = useAppSelector(state => state.schedule);
     const goNextStep = () => {
-        const endDate = addDayAndHoursToDate(weekDates.startDate.toISOString(), numberOf * (endScheduleType == 'FixedMonthNumber' ? 30 : 7), 0) || finishDate && new Date(finishDate);
-        // console.log('endDate: ', endDate);
-        // console.log('finishDate: ', finishDate && new Date(finishDate));
-        console.log(weekDates.startDate.toISOString(), endDate);
-        console.log(calculateNumberOfClasses(weekTimeSlots, weekDates.startDate.toISOString(), endDate));
-
+        const endDate = (endScheduleType == EndScheduleType.FixedMonthNumber || endScheduleType == EndScheduleType.FixedWeekNumber) && addDayAndHoursToDate(weekDates.startDate.toISOString(), numberOf * (endScheduleType == 'FixedMonthNumber' ? 30 : 7), 0) || endScheduleType == EndScheduleType.SpecificEndDate && finishDate && new Date(finishDate);
         const numberClass = createCurrentClassRequest.EndNumber || calculateNumberOfClasses(weekTimeSlots, weekDates.startDate.toISOString(), endDate)
-
         dispatch(
             updateCurrentClassRequestAction({
                 EndNumber: numberClass
 
             })
         );
-        console.log(createCurrentClassRequest.EndNumber, '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@2');
-
         dispatch(generateScheduleAction({ ScheduleType: createCurrentClassRequest.EndScheduleType as string, StartDate: createCurrentClassRequest.StartDate as string, Number: numberClass as number, WeekTimeSlots: weekTimeSlots }))
+        // dispatch(generateScheduleAction(
+        //     {
+        //         ScheduleType: 'FixedClassesNumber',
+        //         StartDate: '2023-04-09',
+        //         Number: 10,
+        //         WeekTimeSlots: [
+        //             { DayOfWeek: 1, StartTime: '17:30:00', Duration: 60 },
+        //             { DayOfWeek: 3, StartTime: '18:30:00', Duration: 60 },
+        //             { DayOfWeek: 3, StartTime: '16:00:00', Duration: 60 }
+        //         ]
+        //     }
+
+        // ))
 
         //@ts-ignore
         navigation.navigate(NavigationEnum.DATE_PREVIEW_SCREEN)

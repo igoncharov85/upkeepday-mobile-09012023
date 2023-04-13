@@ -28,7 +28,7 @@ enum TypeDate {
     FixedPeriodInTime = 2,
 }
 
-enum EndScheduleType {
+export enum EndScheduleType {
     FixedClassesNumber = 'FixedClassesNumber',
     SpecificEndDate = 'SpecificEndDate',
     FixedWeekNumber = 'FixedWeekNumber',
@@ -50,10 +50,7 @@ const formInitialValues = {
 export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
 
     const navigation = useNavigation();
-    const goNextStep = (data: any) => {
-        //@ts-ignore
-        navigation.navigate(NavigationEnum.DATE_RECURRENCE_SCREEN, { data: data });
-    };
+
     const SelectDateForm = ({
         values,
         handleChange,
@@ -129,7 +126,7 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
                 updateCurrentClassRequestAction({
                     EndScheduleType: values.endScheduleType,
                     StartDate: values.startDate,
-                    EndNumber: +values.finishDate
+                    EndNumber: +values.totalClasses
 
                 })
             );

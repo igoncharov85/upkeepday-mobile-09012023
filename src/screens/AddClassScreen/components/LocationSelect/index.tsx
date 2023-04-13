@@ -17,7 +17,7 @@ export const LocationSelect: FC<ILocationSelect> = memo(
         return (
 
             <View style={styles.container}>
-                <Text style={styles.label}>{labelText}</Text>
+                <Text style={styles.label}>{labelText && labelText}</Text>
                 <View style={styles.containerInput}>
                     <TouchableOpacity
                         style={styles.valueFieldWrapper}
@@ -27,7 +27,7 @@ export const LocationSelect: FC<ILocationSelect> = memo(
 
                         {!value ? (
                             placeholder && (
-                                <Text style={styles.placeHolderText}>{placeholder}</Text>
+                                <Text style={styles.placeHolderText}>{placeholder && placeholder}</Text>
                             )
                         ) : (
                             <Text style={styles.valueText}>{value}</Text>

@@ -76,11 +76,11 @@ const Row = ({
   children: React.ReactNode;
   style?: StyleProp<ViewStyle>;
 }) => {
-  return <View style={[styles.row, style ?? {}]}>{children}</View>;
+  return <View style={[styles.row, style && style]}>{children}</View>;
 };
 
 const Column = ({ children, style }: { children: React.ReactNode; style?: StyleProp<ViewStyle>; }) => {
-  return <View style={[styles.column, style ?? {}]}>{children}</View>;
+  return <View style={[styles.column, style && style]}>{children}</View>;
 };
 
 const TimeLineItem = ({ time }: { time: string }) => {

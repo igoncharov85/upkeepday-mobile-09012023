@@ -87,7 +87,7 @@ const Row = ({
   children: React.ReactNode;
   style?: StyleProp<ViewStyle>;
 }) => {
-  return <View style={[styles.row, style ?? {}]}>{children}</View>;
+  return <View style={[styles.row, style && style]}>{children}</View>;
 };
 
 const Column = ({ children }: { children: React.ReactNode }) => {

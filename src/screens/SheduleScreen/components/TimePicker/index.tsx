@@ -35,8 +35,10 @@ const TimePicker: React.FC<ITimePicker> = ({ visible, data, onSetTime }) => {
   const onDayPartChange = (dayPartValue: number) =>
 
     setDayPart(dayPartValue == 0 ? 'AM' : 'PM')
+  useEffect(() => {
+    onSetTime(`${hour}:${minute} ${dayPart}`);
 
-  onSetTime(`${hour}:${minute} ${dayPart}`);
+  }, [hour, minute, dayPart])
   return visible ? (
     <LinearGradient
       colors={['rgba(109,123,152,0.17)', 'rgba(109,123,152,0.17)']}

@@ -29,10 +29,10 @@ export const ListGradientCircleButtons: React.FC<IListButtons> = ({ buttons, onP
                 color: 'rgba(109, 123, 152,0.5)',
                 fontSize: 14,
                 lineHeight: 19
-            }}>{label}</Text>
+            }}>{label && label}</Text>
             <View style={{ flexDirection: 'column' }}>
                 {buttons.map((item, index) => (
-                    <CircleButton key={index} index={index} activeIndex={activeIndex} buttonTitle={item} handlePress={handlePress} twoLines={twoLines} />
+                    <CircleButton key={index} index={index} activeIndex={activeIndex} buttonTitle={item} handlePress={handlePress} twoLines={twoLines && twoLines} />
                 ))}
             </View>
         </View>

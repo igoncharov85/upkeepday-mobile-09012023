@@ -24,7 +24,7 @@ export const CountrySelect: FC<ICustomSelect> = memo(
         options={valueToEntries(countries)}
         placeholder={placeholder}
         value={value}
-        label={label}
+        label={label && label}
       />
     );
   },

@@ -1,9 +1,7 @@
 import React, { FC, memo, useEffect } from 'react';
 import { Text, View } from 'react-native';
 import { INavigationBase } from '../../common/types/component.styles';
-import { CustomButton } from '../../components/UI/CustomButton';
 import NavigationActions from '../../services/navigation-service';
-import { ScheduleDayScreen } from './SheduleDayScreen';
 
 import { fetchCountriesAction, fetchStatesAction, logoutAction } from '../../store/auth/actions';
 import {
@@ -16,16 +14,14 @@ import {
 } from '../../store/shedule/actions';
 import { dispatch } from '../../store/store';
 import { fetchUsersAction } from '../../store/user/actions';
-import styles from './styles';
 import { SheduleHeader } from './components/SheduleHeader';
 import { ScheduleNavigation } from './components/SheduleNavigation';
 import { BottomTab } from '../../components/BottomTab';
 import { SchedulePlus } from './components/SchedulePlus';
-import { SheduleWeekScreen } from './SheduleWeekScreen';
-import { ScheduleMonthScreen } from './ScheduleMonthScreen';
-import { CancellationScreen } from '../CancellationScreen';
-import { useNavigation } from '@react-navigation/native';
 import { NavigationEnum } from '../../common/constants/navigation';
+
+
+import styles from './styles';
 
 
 
@@ -127,18 +123,18 @@ export const ScheduleScreen: FC<IHomeScreen> = memo(({ navigation }) => {
     //   }),
     // );
     dispatch(fetchUsersAction())
-    // dispatch(
-    //   generateScheduleAction({
-    //     ScheduleType: 'FixedClassesNumber',
-    //     StartDate: '2023-04-09',
-    //     Number: 10,
-    //     WeekTimeSlots: [
-    //       { DayOfWeek: 1, StartTime: '17:30:00', Duration: 60 },
-    //       { DayOfWeek: 3, StartTime: '18:30:00', Duration: 60 },
-    //       { DayOfWeek: 3, StartTime: '15:47:00', Duration: 60 },
-    //     ],
-    //   }),
-    // );
+    dispatch(
+      generateScheduleAction({
+        ScheduleType: 'FixedClassesNumber',
+        StartDate: '2023-04-09',
+        Number: 10,
+        WeekTimeSlots: [
+          { DayOfWeek: 1, StartTime: '17:30:00', Duration: 60 },
+          { DayOfWeek: 3, StartTime: '18:30:00', Duration: 60 },
+          { DayOfWeek: 3, StartTime: '15:47:00', Duration: 60 },
+        ],
+      }),
+    );
     // dispatch(addLocationAction({
     //   AddressLine: 'string',
     //   City: 'string',

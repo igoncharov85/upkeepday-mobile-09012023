@@ -1,24 +1,24 @@
-import React, {memo} from 'react';
+import React, { memo } from 'react';
 import {
   NavigationContainer,
   useNavigationContainerRef,
 } from '@react-navigation/native';
-import {StackNavigator} from './StackNavigator';
+import { StackNavigator } from './StackNavigator';
 import {
   ActivityIndicator,
   BackHandler,
   Platform,
   StyleSheet,
 } from 'react-native';
-import {ColorEnum} from '../../common/constants/styles/colors.enum';
-import {NavigationEnum} from '../../common/constants/navigation';
-import {Gesture, GestureDetector} from 'react-native-gesture-handler';
-import {useAppSelector} from '../../store/hooks';
-import {setCurrentScreenAction} from '../../store/app';
-import {dispatch} from '../../store/store';
+import { ColorEnum } from '../../common/constants/styles/colors.enum';
+import { NavigationEnum } from '../../common/constants/navigation';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { useAppSelector } from '../../store/hooks';
+import { setCurrentScreenAction } from '../../store/app';
+import { dispatch } from '../../store/store';
 
 export const RootNavigation = memo(() => {
-  const {currentScreen} = useAppSelector(state => state.app);
+  const { currentScreen } = useAppSelector(state => state.app);
   const linking = {
     prefixes: ['classplan://'],
     config: {
@@ -46,9 +46,9 @@ export const RootNavigation = memo(() => {
         : null
       : //@ts-ignore
       navigationRef.current?.canGoBack()
-      ? //@ts-ignore
+        ? //@ts-ignore
         navigationRef.current.goBack()
-      : null;
+        : null;
   };
   const goBackDetector = Gesture.Pan()
     .minDistance(45)

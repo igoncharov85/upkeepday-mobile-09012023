@@ -1,9 +1,7 @@
-// CalendarComponent.tsx
 import React, { memo, useState } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, Text } from 'react-native';
 import { Calendar, DateData } from 'react-native-calendars';
 import LinearGradient from 'react-native-linear-gradient';
-import dayjs, { Dayjs } from 'dayjs';
 
 import ArrowLeft from '../../../../../assets/svg/schedule/ArrowLeft';
 import ArrowRight from '../../../../../assets/svg/schedule/ArrowRight';
@@ -11,20 +9,15 @@ import styles from './styles';
 import { formatDate } from '../../../../services/utils/fullDateToValue.util';
 
 type Props = {
-  onMonthChange?: (month: DateData) => void;
   onDayPress: (day: any) => void;
-  visible?: boolean;
-  date?: string;
+  visible: boolean;
+  date: string;
 };
 
 const CalendarComponent: React.FC<Props> = memo(
-  ({ onMonthChange, onDayPress, visible, date }) => {
+  ({ onDayPress, visible, date }) => {
     const [selectedDate, setSelectedDate] = useState(date);
-    const [currentMonth, setCurrentMonth] = useState<Dayjs>(dayjs());
-    const handleMonthChange = (month: DateData) => {
-      setCurrentMonth(dayjs(month.dateString));
-      onMonthChange && onMonthChange(month);
-    };
+
 
     const handleDayPress = (day: DateData) => {
       onDayPress(formatDate(day.dateString).date[0]);
@@ -95,7 +88,6 @@ const CalendarComponent: React.FC<Props> = memo(
             monthFormat={'MMMM yyyy'}
             firstDay={6}
             current={selectedDate}
-            onMonthChange={handleMonthChange}
             //@ts-ignore
             dayComponent={dayComponent}
           />

@@ -19,7 +19,7 @@ export const ListButtons: React.FC<IListButtons> = (({ buttons, onPress, label, 
 
     return (
         <View style={styles.container}>
-            <Text style={styles.label}>{label}</Text>
+            <Text style={styles.label}>{label && label}</Text>
             <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
                 {buttons.map((buttonTitle, index) => (
                     <ButtonItem key={index} index={index} activeIndex={activeIndex} buttonTitle={buttonTitle} handlePress={handlePress} />

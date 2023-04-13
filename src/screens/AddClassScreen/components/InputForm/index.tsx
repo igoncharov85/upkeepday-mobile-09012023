@@ -12,9 +12,9 @@ interface IInputForm extends ICustomInputProps {
 export const InputForm: React.FC<IInputForm> = ({ labelText, style, ...props }) => {
     return (
         <View style={styles.container} >
-            <Text style={styles.label}>{labelText}</Text>
+            <Text style={styles.label}>{labelText && labelText}</Text>
             <CustomInput
-                style={style}
+                style={style && style}
                 //@ts-ignore
                 onChangeText={props?.onChange}
                 value={props?.value}

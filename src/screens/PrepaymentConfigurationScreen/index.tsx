@@ -38,34 +38,37 @@ export const PrepaymentConfigurationScreen: React.FC<IPrepaymentConfigurationScr
     useEffect(() => {
         return () => {
             dispatch(createScheduleAction({
-                ClassName: 'Music',
-                ClassLocationType: 1,
-                ClassLocationId: 3,
-                StartDate: '2023-01-01',
-                EndScheduleType: 'FixedClassesNumber',
-                EndNumber: 10,
-                MakeupRequired: true,
-                TrackPrepayment: false,
-                ExistingStudents: [
-                    { StudentId: 2 },
-                    { StudentId: 3 }],
+                ClassName: createCurrentClassRequest.ClassName as string,
+                ClassLocationType: createCurrentClassRequest.ClassLocationType as number,
+                ClassLocationId: createCurrentClassRequest.ClassLocationId as number,
+                StartDate: createCurrentClassRequest.StartDate as string,
+                EndScheduleType: createCurrentClassRequest.EndScheduleType as string,
+                EndNumber: createCurrentClassRequest.EndNumber as number,
+                MakeupRequired: !!makeupRequired,
+                TrackPrepayment: !!trackPrepayment,
+                ExistingStudents: createCurrentClassRequest.ExistingStudents as [],
                 NewStudents: [],
-                WeekTimeSlots: [] as IWeekTimeSlot[],
-                ScheduledEntries: [
-                    { Duration: 60, WeekTimeSlotId: 'a99a1aa5-be98-475e-a401-3abcbd51d302', StartDateTime: '2023-01-03T17:30:00' },
-                    { Duration: 60, WeekTimeSlotId: '6d90e553-393f-4c46-9969-90cbdc699ae9', StartDateTime: '2023-01-05T16:00:00' },
-                    { Duration: 60, WeekTimeSlotId: '02ec4f25-36ff-4d9a-af29-fa41fb4f11a6', StartDateTime: '2023-01-05T18:30:00' },
-                    { Duration: 60, WeekTimeSlotId: 'a99a1aa5-be98-475e-a401-3abcbd51d302', StartDateTime: '2023-01-10T17:30:00' },
-                    { Duration: 60, WeekTimeSlotId: '6d90e553-393f-4c46-9969-90cbdc699ae9', StartDateTime: '2023-01-12T16:00:00' },
-                    { Duration: 60, WeekTimeSlotId: '02ec4f25-36ff-4d9a-af29-fa41fb4f11a6', StartDateTime: '2023-01-12T18:30:00' },
-                    { Duration: 60, WeekTimeSlotId: 'a99a1aa5-be98-475e-a401-3abcbd51d302', StartDateTime: '2023-01-17T17:30:00' },
-                    { Duration: 60, WeekTimeSlotId: '6d90e553-393f-4c46-9969-90cbdc699ae9', StartDateTime: '2023-01-19T16:00:00' },
-                    { Duration: 60, WeekTimeSlotId: '02ec4f25-36ff-4d9a-af29-fa41fb4f11a6', StartDateTime: '2023-01-19T18:30:00' },
-                    { Duration: 60, WeekTimeSlotId: 'a99a1aa5-be98-475e-a401-3abcbd51d302', StartDateTime: '2023-01-24T17:30:00' }]
+                WeekTimeSlots: WeekTimeSlots as IWeekTimeSlot[],
+                ScheduledEntries: GeneratedScheduleEntries
             }
             ))
         };
     }, []);
+    console.log({
+        ClassName: createCurrentClassRequest.ClassName as string,
+        ClassLocationType: createCurrentClassRequest.ClassLocationType as number,
+        ClassLocationId: createCurrentClassRequest.ClassLocationId as number,
+        StartDate: createCurrentClassRequest.StartDate as string,
+        EndScheduleType: createCurrentClassRequest.EndScheduleType as string,
+        EndNumber: createCurrentClassRequest.EndNumber as number,
+        MakeupRequired: !!makeupRequired,
+        TrackPrepayment: !!trackPrepayment,
+        ExistingStudents: createCurrentClassRequest.ExistingStudents as [],
+        NewStudents: [],
+        WeekTimeSlots: WeekTimeSlots as IWeekTimeSlot[],
+        ScheduledEntries: GeneratedScheduleEntries
+    });
+
     return (
         <View style={{ height: '100%' }}>
             <View style={{ padding: 20, paddingBottom: 0 }}>

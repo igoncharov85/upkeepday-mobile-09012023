@@ -29,7 +29,7 @@ interface EntryCount {
 }
 
 function getSectionsCountByDate(entries: any[], date: Date): number {
-    const entriesOnDate = entries.filter(entry => {
+    const entriesOnDate = entries?.filter(entry => {
         const entryDate = new Date(entry.StartDateTime);
         return (
             entryDate.getFullYear() === date.getFullYear() &&

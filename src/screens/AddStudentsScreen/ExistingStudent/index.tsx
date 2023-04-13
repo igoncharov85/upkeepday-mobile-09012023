@@ -23,11 +23,11 @@ export const ExistingStudent: React.FC<IExistingStudentProps> = () => {
 
     const onChancheUsers = (id: number) => {
         setExistingStudents(existingStudents => {
-            const index = existingStudents.findIndex(event => event.StudentId === id);
+            const index = existingStudents?.findIndex(event => event.StudentId === id);
             if (index === -1) {
                 return [...existingStudents, { StudentId: id }];
             } else {
-                return existingStudents.filter((_, i) => i !== index);
+                return existingStudents?.filter((_, i) => i !== index);
             }
         });
     };
@@ -55,7 +55,7 @@ export const ExistingStudent: React.FC<IExistingStudentProps> = () => {
                 <View style={styles.container}>
 
                     <View >
-                        {students.filter((user) => user.FirstName?.toLowerCase().includes(searchText?.toLowerCase())).map((user) => (
+                        {students?.filter((user) => user.FirstName?.toLowerCase().includes(searchText?.toLowerCase())).map((user) => (
                             <Student name={user.FirstName} onClick={onChancheUsers} id={user.StudentId} key={user.StudentId} />
                         ))}
                     </View>

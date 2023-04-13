@@ -21,7 +21,7 @@ function findScheduleEntries(
   month: number,
   hour: number
 ): any[] {
-  const filteredEntries = entries.filter((entry) => {
+  const filteredEntries = entries?.filter((entry) => {
     const startDate = new Date(entry.StartDateTime);
     return (
       startDate.getDate() === day &&
@@ -58,7 +58,7 @@ export const WeekTable: FC<ISheduleTable> = memo(
     const onDeleteSlot = (slot: IGeneratedScheduleEntries) => {
       if (editMode) {
         const index = slots.findIndex((event) => event.StartDateTime === slot.StartDateTime && event.Duration === slot.Duration);
-        const newSlots = slots.filter((_, i) => i !== index);
+        const newSlots = slots?.filter((_, i) => i !== index);
         setIsSlotEdit(true);
         setSlots(newSlots);
         setWeekTimeSlotId(slot.WeekTimeSlotId)

@@ -133,7 +133,23 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
 
                 })
             );
-            // goNextStep(data:{numberOf:values.numberOf,finishDate:finishDate})
+            console.log({
+                endScheduleType: values.endScheduleType,
+                finishDate: values.finishDate,
+                numberOf: values.numberOf
+
+            });
+
+            navigation.navigate(
+                //@ts-ignore
+                NavigationEnum.DATE_RECURRENCE_SCREEN,
+                {
+                    endScheduleType: values.endScheduleType,
+                    finishDate: values.finishDate,
+                    numberOf: values.numberOf
+
+                }
+            );
         },
     })(SelectDateForm);
 

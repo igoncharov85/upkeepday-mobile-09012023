@@ -49,8 +49,7 @@ export const PrepaymentConfigurationScreen: React.FC<IPrepaymentConfigurationScr
                 ExistingStudents: [
                     { StudentId: 2 },
                     { StudentId: 3 }],
-                NewStudents: [
-                    { FirstName: 'First1', LastName: 'Last1', Email: 'First1.Last1@gmail.com', PhoneCountry: 1, PhoneNumber: '111-23-2244', Notes: '', StudentId: 4, EnrolledClasses: [] }],
+                NewStudents: [],
                 WeekTimeSlots: [] as IWeekTimeSlot[],
                 ScheduledEntries: [
                     { Duration: 60, WeekTimeSlotId: 'a99a1aa5-be98-475e-a401-3abcbd51d302', StartDateTime: '2023-01-03T17:30:00' },

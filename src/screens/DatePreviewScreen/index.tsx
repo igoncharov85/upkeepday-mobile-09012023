@@ -19,13 +19,6 @@ import { fetchScheduleByPeriodAction } from "../../store/shedule/actions";
 import { findScheduleConflicts } from "../../services/utils/findConflict.util";
 import { updateCurrentClassRequestAction } from "../../store/shedule";
 
-const CurrentScheduledEntries = [
-    {
-        Duration: 60,
-        StartDateTime: "2023-04-13T10:00:00",
-        WeekTimeSlotId: "a0c82387-c95b-4417-8eb2-03f5b493faec"
-    }
-]
 
 
 interface IDatePreviewScreen { }
@@ -37,7 +30,7 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
     const weekDates = getWeekDates(today);
 
     const [startDateWeek, setStartDateWeek] = useState(new Date(weekDates.startDate));
-    // const { CurrentScheduledEntries } = useAppSelector(state => state.schedule);
+    const { CurrentScheduledEntries } = useAppSelector(state => state.schedule);
     const [slots, setSlots] = useState<IGeneratedScheduleEntries[]>([]);
     const [conflict, setConflict] = useState<IGeneratedScheduleEntries[]>(findScheduleConflicts(slots, CurrentScheduledEntries));
 

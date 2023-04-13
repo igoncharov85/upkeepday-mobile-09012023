@@ -22,9 +22,9 @@ interface IWeekTableItem {
   timeIndex: number;
   onLongPress: () => void;
   editMode: boolean;
-  activeItem?: IGeneratedScheduleEntries;
+  activeItem: IGeneratedScheduleEntries;
   editSlot: (slot: IGeneratedScheduleEntries) => void;
-  conflict?: boolean
+  conflict: boolean
 }
 export const WeekTableItem: FC<IWeekTableItem> = memo(
   ({

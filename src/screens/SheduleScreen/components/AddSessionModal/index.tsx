@@ -23,20 +23,21 @@ export const AddSessionModal: FC<AddSessionModalProps> = memo(
       onPress && onPress();
     }
     return visible ? (
-
-      <LinearGradient
-        colors={['rgba(178, 178, 178, 0.88)', 'rgba(23, 25, 48, 0.898039)']}
-        start={{ x: 0.0, y: 1.0 }}
-        end={{ x: 1.0, y: 0.0 }}
-        angle={223.05}
-        useAngle={true}
-        style={styles.container}>
-        <View />
-        <View style={{ width: '100%', alignItems: 'center' }}>
-          <SessionButton title={'Add Trial'} disabled={true} />
-          <SessionButton title={'Add Class'} onPress={onCreateLesson} />
-        </View>
-      </LinearGradient>
+      <TouchableOpacity onPress={visibleHandler} style={{ position: 'absolute', height: '100%', width: '100%' }} activeOpacity={1}>
+        <LinearGradient
+          colors={['rgba(178, 178, 178, 0.88)', 'rgba(23, 25, 48, 0.898039)']}
+          start={{ x: 0.0, y: 1.0 }}
+          end={{ x: 1.0, y: 0.0 }}
+          angle={223.05}
+          useAngle={true}
+          style={styles.container}>
+          <View />
+          <View style={{ width: '100%', alignItems: 'center' }}>
+            <SessionButton title={'Add Trial'} disabled={true} />
+            <SessionButton title={'Add Class'} onPress={onCreateLesson} />
+          </View>
+        </LinearGradient>
+      </TouchableOpacity>
     ) : null;
   },
 );

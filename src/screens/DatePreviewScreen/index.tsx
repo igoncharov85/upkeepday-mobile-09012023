@@ -42,11 +42,9 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
     }
 
     const goToNextWeek = () => {
-        console.log('startDateWeek')
         setStartDateWeek(new Date(addDayAndHoursToDate(startDateWeek.toISOString(), 7, 0)))
     }
     const goToPrevWeek = () => {
-        console.log('startDateWeek')
         setStartDateWeek(new Date(addDayAndHoursToDate(startDateWeek.toISOString(), -7, 0)))
     }
     useEffect(() => {
@@ -55,7 +53,6 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
 
     const onSave = () => {
         dispatch(updateCurrentClassRequestAction({ ScheduledEntries: slots, }))
-        console.log(slots, 'slots');
 
         //@ts-ignore
         navigation.navigate(NavigationEnum.ADD_STUDENTS_SCREEN)

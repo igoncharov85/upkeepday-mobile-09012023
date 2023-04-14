@@ -16,19 +16,19 @@ import { useAppSelector } from "../../store/hooks";
 import { calculateNumberOfClasses } from "../../services/utils/calculateNumberOfClasses";
 import { EndScheduleType } from "../SelectDateScreen";
 
+const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thr', 'Fri', 'Sat'];
+
 interface IDateRecurrenceScreen { }
 export const DateRecurrenceScreen: React.FC<IDateRecurrenceScreen> = () => {
     const [weekTimeSlots, setWeekTimeSlots] = useState<IWeekTimeSlot[]>([]);
     const navigation = useNavigation();
     const route = useRoute();
-    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thr', 'Fri', 'Sat'];
     const today = new Date();
-
     const weekDates = getWeekDates(today);
     //@ts-ignore
     const { endScheduleType, finishDate, numberOf } = route?.params;
-
     const { createCurrentClassRequest } = useAppSelector(state => state.schedule);
+
     const goNextStep = () => {
         const endDate = (endScheduleType == EndScheduleType.FixedMonthNumber || endScheduleType == EndScheduleType.FixedWeekNumber) && addDayAndHoursToDate(weekDates.startDate.toISOString(), numberOf * (endScheduleType == 'FixedMonthNumber' ? 30 : 7), 0) || endScheduleType == EndScheduleType.SpecificEndDate && finishDate && new Date(finishDate);
         const numberClass = createCurrentClassRequest.EndNumber || calculateNumberOfClasses(weekTimeSlots, weekDates.startDate.toISOString(), endDate)
@@ -39,19 +39,6 @@ export const DateRecurrenceScreen: React.FC<IDateRecurrenceScreen> = () => {
             })
         );
         dispatch(generateScheduleAction({ ScheduleType: createCurrentClassRequest.EndScheduleType as string, StartDate: createCurrentClassRequest.StartDate as string, Number: numberClass as number, WeekTimeSlots: weekTimeSlots }))
-        // dispatch(generateScheduleAction(
-        //     {
-        //         ScheduleType: 'FixedClassesNumber',
-        //         StartDate: '2023-04-09',
-        //         Number: 10,
-        //         WeekTimeSlots: [
-        //             { DayOfWeek: 1, StartTime: '17:30:00', Duration: 60 },
-        //             { DayOfWeek: 3, StartTime: '18:30:00', Duration: 60 },
-        //             { DayOfWeek: 3, StartTime: '16:00:00', Duration: 60 }
-        //         ]
-        //     }
-
-        // ))
 
         //@ts-ignore
         navigation.navigate(NavigationEnum.DATE_PREVIEW_SCREEN)

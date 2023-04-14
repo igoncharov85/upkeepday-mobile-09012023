@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useState } from "react";
-import { View } from "react-native";
+import { View, ScrollView, Dimensions, KeyboardAvoidingView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import { LocationSelect } from "./components/LocationSelect";
@@ -8,14 +8,13 @@ import { ListButtons } from "./components/ListButtons";
 import styles from "./styles";
 import { InputForm } from "./components/InputForm";
 import { CustomButton } from "../../components/UI/CustomButton";
-import { ScrollView } from "react-native-gesture-handler";
 import { CustomModal } from "../../components/UI/CustomModal";
 import { ChooseAddressModal } from "./components/ChooseAddressModal";
 import { NavigationEnum } from "../../common/constants/navigation";
 import { Formik, FormikProps } from "formik";
 import { useDispatch } from "react-redux";
 import { updateCurrentClassRequestAction } from "../../store/shedule";
-import { AddClassSchema } from "../../common/shemas/addClass.shape";
+import { AddClassNameSchema, AddClassSchema } from "../../common/shemas/addClass.shape";
 import { formicDefaultProps } from "../../common/constants/styles/form.config";
 
 interface IAddClassScreen { }
@@ -30,7 +29,7 @@ const formInitialValues = {
     locationType: " ",
     addressLine: " ",
 };
-
+const windowHeight = Dimensions.get('window').height;
 export const AddClassScreen: React.FC<IAddClassScreen> = memo(() => {
     const [typeLocation, setTypeLocation] = useState<TypeLocation>(
         TypeLocation.Online
@@ -93,10 +92,11 @@ export const AddClassScreen: React.FC<IAddClassScreen> = memo(() => {
                             handleClassLocation={handleClassLocation}
                         />
                     </View>
-                    <View style={{ flex: 1, justifyContent: "flex-end", width: "100%" }}>
+                    <View style={{ flex: 1, justifyContent: "flex-end", width: "100%", }}>
                         <CustomButton
                             text={"Next Step"}
                             onPress={handleSubmit}
+                            disabled={!isValid}
                         />
                     </View>
                 </>
@@ -120,20 +120,28 @@ export const AddClassScreen: React.FC<IAddClassScreen> = memo(() => {
     );
 
     return (
-        <View style={styles.container}>
-            <ScreenHeader
-                onBackPress={navigation.goBack}
-                text="Add Class General Data"
-                withBackButton={true}
-            />
-            <Formik
-                initialValues={formInitialValues}
-                validationSchema={AddClassSchema}
-                onSubmit={handleSubmit}
-                {...formicDefaultProps}
-            >
-                {renderForm}
-            </Formik>
-        </View>
+        <KeyboardAvoidingView
+            behavior="height"
+
+        // onKeyboardDidShow={() => console.log(4)}
+        >
+            <ScrollView>
+                <View style={[styles.container, { height: windowHeight - 20 }]}>
+                    <ScreenHeader
+                        onBackPress={navigation.goBack}
+                        text="Add Class General Data"
+                        withBackButton={true}
+                    />
+                    <Formik
+                        initialValues={formInitialValues}
+                        validationSchema={AddClassNameSchema}
+                        onSubmit={handleSubmit}
+                        {...formicDefaultProps}
+                    >
+                        {renderForm}
+                    </Formik>
+                </View>
+            </ScrollView>
+        </KeyboardAvoidingView>
     );
 });

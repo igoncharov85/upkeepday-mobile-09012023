@@ -36,10 +36,7 @@ export const CancellationScreen: FC<ICancellationScreen> = memo(() => {
   const [endDate, setEndDate] = useState(endTime)
   const [allDay, setAllDay] = useState(false);
   const [messageVisible, setMessageVisible] = useState(false);
-  console.log(
-    startDate,
-    endDate,
-  )
+
 
 
   const onSetStartTime = (startDate: string) => setStartDate(startDate)

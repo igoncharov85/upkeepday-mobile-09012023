@@ -111,7 +111,7 @@ export const NewStudent: React.FC<INewStudentProps> = () => {
                 StudentId: id + 1,
                 EnrolledClasses: [],
                 Notes: values.Notes
-            }]);
+            }], '$$$$$$$$$$$$$$$$');
 
             setNewUsers([...newUsers, {
                 FirstName: values.FirstName,

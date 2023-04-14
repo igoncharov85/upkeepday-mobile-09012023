@@ -42,6 +42,8 @@ export const AddNewAddressModal: React.FC<IAddNewAddressModal> = ({ visible, han
         handleSubmit,
         isValid,
     }: FormikProps<typeof formInitialValues>) => {
+        console.log(errors);
+
         return (
             <>
                 <InputForm
@@ -76,7 +78,7 @@ export const AddNewAddressModal: React.FC<IAddNewAddressModal> = ({ visible, han
 
                 />
                 <View style={{ flex: 1, justifyContent: 'flex-end' }}>
-                    <CustomButton text={"Save"} onPress={handleSubmit} disabled={isValid} />
+                    <CustomButton text={"Save"} onPress={handleSubmit} disabled={!isValid} />
                 </View></>
         );
     }
@@ -86,7 +88,7 @@ export const AddNewAddressModal: React.FC<IAddNewAddressModal> = ({ visible, han
 
         handleSubmit: values => {
             const data: ILocationRequest = {
-                Name: `${values.addressLine}, ${values.city}, ${values.country}, ${values.state}`,
+                Name: `${values.addressLine}, ${values.country}, ${values.state}`,
                 Url: '',
                 LocationType: '',
                 AddressLine: values.addressLine,

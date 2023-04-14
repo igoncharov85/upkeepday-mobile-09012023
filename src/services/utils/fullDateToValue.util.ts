@@ -1,4 +1,5 @@
 import { parseISO, addMinutes, formatISO } from 'date-fns';
+import moment from "moment";
 
 export const formatDate = (
   dateString: string,
@@ -101,3 +102,11 @@ export const getWeekDates = (date: Date) => {
   endDate.setDate(endDate.getDate() + 6);
   return { startDate: date, endDate: endDate };
 };
+
+export function convertDate(date: string): [string, string] {
+  const parsedDate = moment(date, "MMM D, YYYY");
+  const formattedDate = parsedDate.format("YYYY-MM-DD");
+  const formattedDate2 = parsedDate.format("DD/MM/YYYY");
+
+  return [formattedDate, formattedDate2];
+}

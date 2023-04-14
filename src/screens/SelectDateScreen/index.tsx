@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Dimensions, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FormikProps, withFormik } from "formik";
 import * as Yup from "yup";
@@ -16,6 +16,8 @@ import { dispatch } from "../../store/store";
 import { updateCurrentClassRequestAction } from "../../store/shedule";
 import { number, string } from "yup";
 import { SelectedDateSchema } from "../../common/shemas/addClass.shape";
+import CalendarComponent from "../SheduleScreen/components/CalendarComponent";
+import { convertDate, formatDate } from "../../services/utils/fullDateToValue.util";
 
 
 
@@ -46,6 +48,7 @@ const formInitialValues = {
     numberOf: "",
 };
 
+const windowHeight = Dimensions.get('window').height;
 
 export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
 
@@ -69,15 +72,10 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
             setFieldValue('endScheduleType', number == 0 ? EndScheduleType.FixedWeekNumber : EndScheduleType.FixedMonthNumber)
         }
         return (
-            <View style={styles.container}>
+            <View style={[styles.container, { minHeight: windowHeight - 20, justifyContent: 'flex-start' }]}>
                 <ScreenHeader onBackPress={navigation.goBack} text="Add Class General Data" withBackButton={true} />
-                <View>
-                    <InputForm
-                        labelText='Enter Start Date'
-                        onChangeText={handleChange('startDate')}
-                        value={values.startDate}
-                        placeholder="2023-01-01"
-                    />
+                <View style={{}}>
+                    <InputWithDate labelText={"Enter Start Date"} handleChange={setFieldValue} nameField="startDate" />
 
                     <ListButtons buttons={[' Fixed number of classes', 'On Specific Date', ' Fixed period in time']} label="Class Type" onPress={handleTypeLocation} index={typeLocation} />
                     {typeLocation == TypeDate.FixedNumberOfClasses &&
@@ -88,13 +86,8 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
                             onChange={() => setFieldValue('endScheduleType', EndScheduleType.FixedClassesNumber)}
                         />}
                     {typeLocation == TypeDate.OnSpecificDate &&
-                        <InputForm
-                            labelText='Enter Finish  Date'
-                            onChangeText={handleChange('finishDate')}
-                            value={values.finishDate}
-                            placeholder="2023-01-01"
-                            onChange={() => setFieldValue('endScheduleType', EndScheduleType.SpecificEndDate)}
-                        />}
+                        <InputWithDate labelText={"Enter Finish Date"} handleChange={setFieldValue} nameField="finishDate" />}
+
                     {typeLocation == TypeDate.FixedPeriodInTime &&
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <InputForm
@@ -131,6 +124,7 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
                 })
             );
             console.log({
+                StartDate: values.startDate,
                 endScheduleType: values.endScheduleType,
                 finishDate: values.finishDate,
                 numberOf: values.numberOf
@@ -151,5 +145,40 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
     })(SelectDateForm);
 
 
-    return <FormikSelectDateScreen />;
+    return (
+        <ScrollView>
+            <FormikSelectDateScreen />
+        </ScrollView>
+    );
 });
+
+
+const InputWithDate = ({ labelText, nameField, handleChange }: { labelText: string, nameField: string, handleChange: any }) => {
+    const [date, setDate] = useState('');
+    const [visible, setVisible] = useState(false)
+
+    const handleChangeVisible = () => setVisible(!visible)
+
+    const handleChangeDate = (date: string) => {
+        setDate(convertDate(date)[1])
+        handleChangeVisible()
+        handleChange(nameField, convertDate(date)[0])
+    }
+
+
+    return (
+        <View>
+            <Text style={styles.label}>{labelText && labelText}</Text>
+            <TouchableOpacity onPress={handleChangeVisible} activeOpacity={1}>
+                <View style={styles.interactive}>
+                    <Text>{date}</Text>
+                </View>
+            </TouchableOpacity>
+            <CalendarComponent
+                visible={visible}
+                date={(new Date()).toISOString()}
+                onDayPress={handleChangeDate}
+            />
+        </View>
+    )
+}

@@ -11,6 +11,7 @@ export const SchedulePlus: FC<ISchedulePlus> = memo(({ onButtonPress }) => {
   const [visible, setVisible] = useState(false);
   const onChangeVisible = () => {
     setVisible(!visible);
+
   };
   return (
     <>

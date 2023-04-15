@@ -74,7 +74,7 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
             setFieldValue('endScheduleType', number == 0 ? EndScheduleType.FixedWeekNumber : EndScheduleType.FixedMonthNumber)
         }
         return (
-            <View style={[styles.container, { minHeight: windowHeight, justifyContent: 'flex-start', backgroundColor: 'green' }]}>
+            <View style={[styles.container, { minHeight: windowHeight, justifyContent: 'flex-start'}]}>
                 <ScreenHeader onBackPress={navigation.goBack} text="Add Class General Data" withBackButton={true} />
                 <View>
                     <InputWithDate labelText={"Enter Start Date"} handleChange={setFieldValue} nameField="startDate" />

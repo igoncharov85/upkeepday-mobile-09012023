@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useState } from "react";
-import { View, ScrollView, Dimensions, KeyboardAvoidingView } from "react-native";
+import { View, ScrollView, Dimensions, KeyboardAvoidingView, Platform } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import { LocationSelect } from "./components/LocationSelect";
@@ -29,7 +29,12 @@ const formInitialValues = {
     locationType: " ",
     addressLine: " ",
 };
-const windowHeight = Dimensions.get('window').height;
+let windowHeight: any;
+if (Platform.OS === 'ios') {
+    windowHeight = Dimensions.get('window').height - 80;
+} else {
+    windowHeight = Dimensions.get('window').height - 20;
+}
 export const AddClassScreen: React.FC<IAddClassScreen> = memo(() => {
     const [typeLocation, setTypeLocation] = useState<TypeLocation>(
         TypeLocation.Online

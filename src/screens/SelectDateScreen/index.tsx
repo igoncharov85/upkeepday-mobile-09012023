@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useState } from "react";
-import { Dimensions, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Dimensions, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FormikProps, withFormik } from "formik";
 import * as Yup from "yup";
@@ -9,15 +9,13 @@ import { ScreenHeader } from "../../components/ScreenHeader";
 import { InputForm } from "../AddClassScreen/components/InputForm";
 import { ListButtons } from "../AddClassScreen/components/ListButtons";
 import { CustomButton } from "../../components/UI/CustomButton";
-import LinearGradient from "react-native-linear-gradient";
 import { ListGradientCircleButtons } from "../AddClassScreen/components/ListGradientCircleButtons";
 import { NavigationEnum } from "../../common/constants/navigation";
 import { dispatch } from "../../store/store";
 import { updateCurrentClassRequestAction } from "../../store/shedule";
-import { number, string } from "yup";
 import { SelectedDateSchema } from "../../common/shemas/addClass.shape";
 import CalendarComponent from "../SheduleScreen/components/CalendarComponent";
-import { convertDate, formatDate } from "../../services/utils/fullDateToValue.util";
+import { convertDate } from "../../services/utils/fullDateToValue.util";
 
 
 
@@ -48,8 +46,12 @@ const formInitialValues = {
     numberOf: "",
 };
 
-const windowHeight = Dimensions.get('window').height;
-
+let windowHeight: any;
+if (Platform.OS === 'ios') {
+    windowHeight = Dimensions.get('window').height - 80;
+} else {
+    windowHeight = Dimensions.get('window').height - 20;
+}
 export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
 
     const navigation = useNavigation();
@@ -72,9 +74,9 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
             setFieldValue('endScheduleType', number == 0 ? EndScheduleType.FixedWeekNumber : EndScheduleType.FixedMonthNumber)
         }
         return (
-            <View style={[styles.container, { minHeight: windowHeight - 20, justifyContent: 'flex-start' }]}>
+            <View style={[styles.container, { minHeight: windowHeight, justifyContent: 'flex-start', backgroundColor: 'green' }]}>
                 <ScreenHeader onBackPress={navigation.goBack} text="Add Class General Data" withBackButton={true} />
-                <View style={{}}>
+                <View>
                     <InputWithDate labelText={"Enter Start Date"} handleChange={setFieldValue} nameField="startDate" />
 
                     <ListButtons buttons={[' Fixed number of classes', 'On Specific Date', ' Fixed period in time']} label="Class Type" onPress={handleTypeLocation} index={typeLocation} />
@@ -102,7 +104,7 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
 
                 </View>
 
-                <View style={{ flex: 1, justifyContent: 'flex-end', width: '100%' }} >
+                <View style={{ flex: 1, width: '100%', justifyContent: 'flex-end' }} >
                     <CustomButton text={"Next Step"} onPress={handleSubmit} />
                 </View>
 
@@ -146,7 +148,7 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
 
 
     return (
-        <ScrollView>
+        <ScrollView style={{ height: '100%' }}>
             <FormikSelectDateScreen />
         </ScrollView>
     );

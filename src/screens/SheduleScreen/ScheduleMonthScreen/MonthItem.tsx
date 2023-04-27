@@ -13,11 +13,12 @@ interface IMonthItem {
 
 
 export const MonthItem: FC<IMonthItem> = memo(({ sesion, day, isCurrentMonth }) => {
+    const hasLesson = sesion && isCurrentMonth
     return (
         <View style={styles.itemContainer}>
             <LinearGradient
                 colors={
-                    sesion ? ['#EAAFC8', '#654EA3'] : ['transparent', 'transparent']
+                    hasLesson ? ['#EAAFC8', '#654EA3'] : ['transparent', 'transparent']
                 }
                 start={{ x: 0, y: 0 }}
                 end={{ x: 0, y: 1 }}
@@ -30,12 +31,12 @@ export const MonthItem: FC<IMonthItem> = memo(({ sesion, day, isCurrentMonth }) 
                 <Text
                     style={[
                         styles.monthItemText,
-                        sesion ? styles.monthItemActiveText : null,
+                        hasLesson ? styles.monthItemActiveText : null,
                         !isCurrentMonth && { opacity: 0.5 }
                     ]}>
                     {day}
                 </Text>
-                {sesion ? (
+                {hasLesson ? (
                     <Text style={styles.numberOfClasses}>{`${sesion} Sessions`}</Text>
                 ) : null}
             </LinearGradient>

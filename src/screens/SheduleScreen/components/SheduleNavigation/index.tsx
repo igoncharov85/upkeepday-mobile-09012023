@@ -19,11 +19,16 @@ const SCHEDULE_NAVIGATION = [
   { active: true, name: 'Month', component: ScheduleMonthScreen },
 ];
 
-export const ScheduleNavigation: FC = memo(() => {
+interface IScheduleNavigation {
+  activePage: number
+}
+export const ScheduleNavigation: FC<IScheduleNavigation> = memo(({ activePage }) => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const ActiveScreen = SCHEDULE_NAVIGATION[activeIndex].component;
-
+  useEffect(() => {
+    setActiveIndex(activePage)
+  }, [activePage])
   return (
     <>
       <View style={styles.container}>

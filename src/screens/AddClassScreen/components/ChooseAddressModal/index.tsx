@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { Text, View, ScrollView, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -19,7 +19,7 @@ interface IChooseAddressModal {
     handleClassLocation: (location: string) => void;
 }
 
-export const ChooseAddressModal: React.FC<IChooseAddressModal> = ({ visible, handleShowModal, handleClassLocation }) => {
+export const ChooseAddressModal: React.FC<IChooseAddressModal> = memo(({ visible, handleShowModal, handleClassLocation }) => {
     const [activeIndex, setActiveIndex] = useState(0);
     const [activeId, setActiveId] = useState('')
     const [modalVisible, setModalVisible] = useState(false)
@@ -27,11 +27,17 @@ export const ChooseAddressModal: React.FC<IChooseAddressModal> = ({ visible, han
 
 
 
+
     useEffect(() => {
         return () => {
-            dispatch(updateCurrentClassRequestAction({ ClassLocationId: +activeId }))
+            const currentLocation = locations.find(function (obj) {
+                return obj.LocationId === activeId;
+            })
+            dispatch(updateCurrentClassRequestAction({
+                Location: { ...currentLocation, LocationId: +activeId }
+            }))
         };
-    }, []);
+    });
     useEffect(() => {
         dispatch(fetchLocationAction());
     }, []);
@@ -74,7 +80,7 @@ export const ChooseAddressModal: React.FC<IChooseAddressModal> = ({ visible, han
         </>
     )
 }
-
+)
 
 interface IAddressItem {
     activeIndex: number;

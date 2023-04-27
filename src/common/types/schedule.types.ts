@@ -1,4 +1,3 @@
-import { IUserStudent } from "./user"
 
 export interface IScheduleRequest {
     startDate: string,
@@ -10,28 +9,61 @@ export interface IExistingStudent {
     StudentId: number
 }
 export interface ICreateClassRequest {
-    ClassName: string
-    ClassLocationType: number,
-    ClassLocationId: number,
-    StartDate: string,
-    EndScheduleType: string,
-    EndNumber: number,
-    MakeupRequired: boolean,
-    TrackPrepayment: boolean,
-    ExistingStudents: Array<IExistingStudent>
-    NewStudents: Array<IUserStudent>
-    WeekTimeSlots: Array<IWeekTimeSlot>
-    ScheduledEntries: Array<IGeneratedScheduleEntries>
+    // ClassName: string
+    // ClassLocationType: string,
+    // ClassLocationId: number,
+    // StartDate: string,
+    // EndDate: string,
+    // EndScheduleType: string,
+    // EndNumber: number,
+    // MakeupRequired: boolean,
+    // TrackPrepayment: boolean,
+    // ExistingStudents: Array<IExistingStudent>
+    // NewStudents: Array<IUserStudent>
+    // WeekTimeSlots: Array<IWeekTimeSlot>
+    // ScheduledEntries: Array<IGeneratedScheduleEntries>
+
+    Class: IClass
+    Location: ILocation,
+    Students: Array<IStudents>,
+    Slots: Array<IWeekTimeSlot>,
+    Sessions: Array<IGeneratedScheduleEntries>
+
 }
 
-export interface ICreateClassResponse {
+export interface IClass {
+    Name?: string
+    StartDate?: string,
+    EndDate?: string,
+    EndNumber?: number,
+    EndScheduleType?: string,
+    MakeupRequired?: boolean,
+    TrackPrepayment?: boolean,
 
 }
-
+export interface ILocation {
+    Name?: string
+    Url?: string
+    LocationType?: string,
+    AddressLine?: string,
+    City?: string,
+    State?: string
+    PostalCode?: string
+    Country?: string
+    LocationId?: number
+}
+export interface IStudents {
+    Id?: number,
+    FirstName?: string
+    LastName?: string,
+    Email?: string,
+    Phone?: number,
+    Notes?: string
+}
 export interface IGeneratedScheduleResponse {
-    GeneratedScheduleEntries: Array<IGeneratedScheduleEntries>
-    CurrentScheduledEntries: Array<IGeneratedScheduleEntries>
-    WeekTimeSlots: Array<IWeekTimeSlot>
+    GeneratedSessions: Array<IGeneratedScheduleEntries>
+    CurrentSessions: Array<IGeneratedScheduleEntries>
+    Slots: Array<IWeekTimeSlot>
 }
 
 
@@ -44,11 +76,11 @@ export interface IWeekTimeSlot {
 
 export interface IGeneratedScheduleEntries {
     StartDateTime: string,
-    WeekTimeSlotId: string,
+    SlotUid: string,
     Duration: number
 }
 export interface IScheduleItem {
-    WeekTimeSlotId: string
+    SlotUid: string
     StartDateTime: string | Date
     Duration: number,
     ClassName: string,
@@ -58,8 +90,9 @@ export interface IScheduleItem {
 export interface IGenerateScheduleRequest {
     ScheduleType: string,
     StartDate: string,
+    EndDate: string,
     Number: number,
-    WeekTimeSlots: Array<IWeekTimeSlot>
+    Slots: Array<IWeekTimeSlot>
 }
 
 

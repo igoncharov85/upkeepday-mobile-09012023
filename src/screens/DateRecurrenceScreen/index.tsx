@@ -6,17 +6,19 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { WeekTable } from "./WeekTable";
 import { addDayAndHoursToDate, getStartAndEndOfWeek } from "../../services/utils/generateDate.util";
 import { CustomButton } from "../../components/UI/CustomButton";
-import { getWeekDates } from "../../services/utils/fullDateToValue.util";
+import { formatDate, getWeekDates } from "../../services/utils/fullDateToValue.util";
 import { IWeekTimeSlot } from "../../common/types/schedule.types";
 import { NavigationEnum } from "../../common/constants/navigation";
 import { dispatch } from "../../store/store";
 import { updateCurrentClassRequestAction } from "../../store/shedule";
 import { generateScheduleAction } from "../../store/shedule/actions";
 import { useAppSelector } from "../../store/hooks";
-import { calculateNumberOfClasses } from "../../services/utils/calculateNumberOfClasses";
+import { calculateEndTimeDate, calculateNumberOfClasses } from "../../services/utils/calculateNumberOfClasses";
 import { EndScheduleType } from "../SelectDateScreen";
 
-const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thr', 'Fri', 'Sat'];
+const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+
 
 interface IDateRecurrenceScreen { }
 export const DateRecurrenceScreen: React.FC<IDateRecurrenceScreen> = () => {
@@ -29,16 +31,62 @@ export const DateRecurrenceScreen: React.FC<IDateRecurrenceScreen> = () => {
     const { endScheduleType, finishDate, numberOf } = route?.params;
     const { createCurrentClassRequest } = useAppSelector(state => state.schedule);
 
+
+    const getEndDate = (type: string): any => {
+        switch (type) {
+            case EndScheduleType.FixedMonthNumber:
+                return addDayAndHoursToDate(weekDates.startDate.toISOString(), numberOf * 30, 0)
+            case EndScheduleType.FixedWeekNumber:
+                return addDayAndHoursToDate(weekDates.startDate.toISOString(), numberOf * 7, 0)
+            case EndScheduleType.SpecificEndDate:
+                return new Date(finishDate).toISOString()
+        }
+    }
     const goNextStep = () => {
-        const endDate = (endScheduleType == EndScheduleType.FixedMonthNumber || endScheduleType == EndScheduleType.FixedWeekNumber) && addDayAndHoursToDate(weekDates.startDate.toISOString(), numberOf * (endScheduleType == 'FixedMonthNumber' ? 30 : 7), 0) || endScheduleType == EndScheduleType.SpecificEndDate && finishDate && new Date(finishDate);
-        const numberClass = createCurrentClassRequest.EndNumber || calculateNumberOfClasses(weekTimeSlots, weekDates.startDate.toISOString(), endDate)
+        const numberClass = endScheduleType == EndScheduleType.FixedClassesNumber ? createCurrentClassRequest.Class!.EndNumber : calculateNumberOfClasses(weekTimeSlots, weekDates.startDate.toISOString(), getEndDate(endScheduleType));
+        const endDate = formatDate(endScheduleType == EndScheduleType.FixedClassesNumber ? calculateEndTimeDate(weekTimeSlots, weekDates.startDate.toISOString(), numberClass as number) : getEndDate(endScheduleType)).date[1];
+
         dispatch(
             updateCurrentClassRequestAction({
-                EndNumber: numberClass
-
+                Class: {
+                    EndNumber: numberClass,
+                    EndDate: endDate
+                }
             })
         );
-        dispatch(generateScheduleAction({ ScheduleType: createCurrentClassRequest.EndScheduleType as string, StartDate: createCurrentClassRequest.StartDate as string, Number: numberClass as number, WeekTimeSlots: weekTimeSlots }))
+        dispatch(generateScheduleAction(
+            {
+                ScheduleType: createCurrentClassRequest.Class!.EndScheduleType as string,
+                StartDate: createCurrentClassRequest.Class!.StartDate as string,
+                Number: numberClass as number,
+                EndDate: endDate as string,
+                Slots: weekTimeSlots
+            }
+            // {
+            //     ScheduleType: "FixedClassesNumber",
+            //     StartDate: "2023-04-24",
+            //     Number: 30,
+            //     EndDate: "2023-07-02",
+            //     Slots: [
+            //         {
+            //             DayOfWeek: 1,
+            //             Duration: 60,
+            //             StartTime: "9:00"
+            //         },
+            //         {
+            //             DayOfWeek: 3,
+            //             Duration: 60,
+            //             StartTime: "10:00"
+            //         },
+            //         {
+            //             DayOfWeek: 5,
+            //             Duration: 60,
+            //             StartTime: "9:00"
+            //         }
+            //     ],
+            // }
+
+        ))
 
         //@ts-ignore
         navigation.navigate(NavigationEnum.DATE_PREVIEW_SCREEN)

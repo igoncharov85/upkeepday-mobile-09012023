@@ -9,7 +9,7 @@ import { fetchScheduleByPeriodAction } from '../../../store/shedule/actions';
 import { dispatch } from '../../../store/store';
 import { useAppSelector } from '../../../store/hooks';
 
-const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thr', 'Fri', 'Sat'];
+const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 interface IScheduleCalendarProps {
     startingDayOfWeek: number; // 0 - Sunday, 1 - Monday, etc.
@@ -132,20 +132,17 @@ export const ScheduleCalendar: React.FC<IScheduleCalendarProps> = ({ startingDay
         onPanResponderRelease: (evt, gestureState) => {
             if (gestureState.dy < -50) {
                 setSwipeUpCount(swipeUpCount + 1);
-                console.log('up')
                 handleSwipeLeft();
             } else if (gestureState.dy > 50) {
                 setSwipeDownCount(swipeDownCount + 1);
-                console.log('down')
                 handleSwipeRight();
             }
         },
     });
-    useEffect(() => {
 
-    }, [days])
     return (
         <View style={styles.container} {...panResponder.panHandlers}>
+
             <View style={styles.header}>
                 <Text style={styles.monthYear}>
                     {format(currentMonth, 'LLLL yyyy')}
@@ -165,6 +162,13 @@ export const ScheduleCalendar: React.FC<IScheduleCalendarProps> = ({ startingDay
                     keyExtractor={(item, index) => index.toString()}
                     numColumns={7}
                     showsVerticalScrollIndicator={false}
+                    onScroll={(event) => {
+
+                        const { y, x } = event.nativeEvent.contentOffset;
+                        if (Math.abs(y) > Math.abs(x)) {
+                            event.preventDefault();
+                        }
+                    }}
                 />
             </View>
 

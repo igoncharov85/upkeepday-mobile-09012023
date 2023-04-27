@@ -1,5 +1,5 @@
-import React, { FC, memo, useEffect } from 'react';
-import { Text, View } from 'react-native';
+import React, { FC, memo, useEffect, useState } from 'react';
+import { PanResponder, Text, View } from 'react-native';
 import { INavigationBase } from '../../common/types/component.styles';
 import NavigationActions from '../../services/navigation-service';
 
@@ -27,6 +27,9 @@ import styles from './styles';
 
 interface IHomeScreen extends INavigationBase { }
 export const ScheduleScreen: FC<IHomeScreen> = memo(({ navigation }) => {
+  const [swipeUpCount, setSwipeUpCount] = useState(0);
+  const [swipeDownCount, setSwipeDownCount] = useState(0);
+  const [activePage, setActivePage] = useState(0);
   const onPlusPress = () => {
     //@ts-ignore
     navigation.navigate(NavigationEnum.ADD_CLASS_SCREEN)
@@ -36,122 +39,41 @@ export const ScheduleScreen: FC<IHomeScreen> = memo(({ navigation }) => {
   }, []);
 
 
+  const handleSwipeLeft = () => {
+    setActivePage(activePage != 0 ? activePage - 1 : activePage)
 
-  useEffect(() => {
-    console.log('worked');
-    // dispatch(
-    //   createScheduleAction({
-    //     ClassName: 'Music',
-    //     ClassLocationType: 1,
-    //     ClassLocationId: 3,
-    //     StartDate: '2023-04-07',
-    //     EndScheduleType: 'FixedClassesNumber',
-    //     EndNumber: 10,
-    //     MakeupRequired: true,
-    //     TrackPrepayment: false,
-    //     ExistingStudents: [{ StudentId: 2 }, { StudentId: 3 }],
-    //     NewStudents: [],
-    //     WeekTimeSlots: [
-    //       {
-    //         Duration: 60,
-    //         DayOfWeek: 1,
-    //         StartTime: '17:30:00',
-    //       },
-    //       {
-    //         Duration: 60,
-    //         DayOfWeek: 3,
-    //         StartTime: '18:30:00',
-    //       },
-    //       {
-    //         Duration: 60,
-    //         DayOfWeek: 3,
-    //         StartTime: '16:00:00',
-    //       },
-    //     ],
-    //     ScheduledEntries: [
-    //       {
-    //         Duration: 60,
-    //         WeekTimeSlotId: 'a99a1aa5-be98-475e-a401-3abcbd51d302',
-    //         StartDateTime: '2023-04-03T17:30:00',
-    //       },
-    //       {
-    //         Duration: 60,
-    //         WeekTimeSlotId: '6d90e553-393f-4c46-9969-90cbdc699ae9',
-    //         StartDateTime: '2023-04-05T16:00:00',
-    //       },
-    //       {
-    //         Duration: 60,
-    //         WeekTimeSlotId: '02ec4f25-36ff-4d9a-af29-fa41fb4f11a6',
-    //         StartDateTime: '2023-04-05T18:30:00',
-    //       },
-    //       {
-    //         Duration: 60,
-    //         WeekTimeSlotId: 'a99a1aa5-be98-475e-a401-3abcbd51d302',
-    //         StartDateTime: '2023-04-10T17:30:00',
-    //       },
-    //       {
-    //         Duration: 60,
-    //         WeekTimeSlotId: '6d90e553-393f-4c46-9969-90cbdc699ae9',
-    //         StartDateTime: '2023-04-12T16:00:00',
-    //       },
-    //       {
-    //         Duration: 60,
-    //         WeekTimeSlotId: '02ec4f25-36ff-4d9a-af29-fa41fb4f11a6',
-    //         StartDateTime: '2023-04-12T18:30:00',
-    //       },
-    //       {
-    //         Duration: 60,
-    //         WeekTimeSlotId: 'a99a1aa5-be98-475e-a401-3abcbd51d302',
-    //         StartDateTime: '2023-04-17T17:30:00',
-    //       },
-    //       {
-    //         Duration: 60,
-    //         WeekTimeSlotId: '6d90e553-393f-4c46-9969-90cbdc699ae9',
-    //         StartDateTime: '2023-04-19T16:00:00',
-    //       },
-    //       {
-    //         Duration: 60,
-    //         WeekTimeSlotId: '02ec4f25-36ff-4d9a-af29-fa41fb4f11a6',
-    //         StartDateTime: '2023-04-19T18:30:00',
-    //       },
-    //       {
-    //         Duration: 60,
-    //         WeekTimeSlotId: 'a99a1aa5-be98-475e-a401-3abcbd51d302',
-    //         StartDateTime: '2023-04-24T17:30:00',
-    //       },
-    //     ],
-    //   }),
-    // );
-    dispatch(fetchUsersAction())
-    dispatch(
-      generateScheduleAction({
-        ScheduleType: 'FixedClassesNumber',
-        StartDate: '2023-04-09',
-        Number: 10,
-        WeekTimeSlots: [
-          { DayOfWeek: 1, StartTime: '17:30:00', Duration: 60 },
-          { DayOfWeek: 3, StartTime: '18:30:00', Duration: 60 },
-          { DayOfWeek: 3, StartTime: '15:47:00', Duration: 60 },
-        ],
-      }),
-    );
-    // dispatch(addLocationAction({
-    //   AddressLine: 'string',
-    //   City: 'string',
-    //   Country: 'string',
-    //   LocationType: 'string',
-    //   Name: 'string',
-    //   PostalCode: 'string',
-    //   State: 'string',
-    //   Url: 'string'
-    // }))
-    dispatch(fetchStatesAction('USA'))
-    dispatch(fetchCountriesAction())
+  };
+
+  const handleSwipeRight = () => {
+    setActivePage(activePage != 2 ? activePage + 1 : activePage)
+  };
+  console.log(activePage, 'activePage');
+
+  const panResponder = PanResponder.create({
+    onMoveShouldSetPanResponderCapture: (evt, gestureState) => {
+      return true;
+    },
+    onPanResponderRelease: (evt, gestureState) => {
+      if (gestureState.dx < -50) {
+        setSwipeUpCount(swipeUpCount + 1);
+        handleSwipeRight();
+      } else if (gestureState.dx > 50) {
+        setSwipeDownCount(swipeDownCount + 1);
+        handleSwipeLeft();
+      }
+    },
   });
+
+  // useEffect(() => {
+  //   console.log('worked');
+  //   dispatch(fetchUsersAction())
+  //   dispatch(fetchStatesAction('USA'))
+  //   dispatch(fetchCountriesAction())
+  // });
   return (
-    <View style={styles.container}>
+    <View style={styles.container} {...panResponder.panHandlers}>
       <SheduleHeader text="Schedule" />
-      <ScheduleNavigation />
+      <ScheduleNavigation activePage={activePage} />
 
       <BottomTab />
       <SchedulePlus onButtonPress={onPlusPress} />

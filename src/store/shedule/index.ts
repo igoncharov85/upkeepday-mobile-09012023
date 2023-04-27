@@ -39,7 +39,18 @@ export const scheduleSlice = createSlice({
             state.CurrentScheduledEntries = action.payload
         },
         updateCurrentClassRequestAction: (state, action: PayloadAction<Partial<ICreateClassRequest>>) => {
-            state.createCurrentClassRequest = { ...state.createCurrentClassRequest, ...action.payload }
+            state.createCurrentClassRequest = {
+                ...state.createCurrentClassRequest,
+                ...action.payload,
+                Class: {
+                    ...state.createCurrentClassRequest.Class,
+                    ...(action.payload.Class || {})
+                },
+                Location: {
+                    ...state.createCurrentClassRequest.Location,
+                    ...(action.payload.Location || {})
+                }
+            }
         },
     },
 

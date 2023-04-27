@@ -18,6 +18,7 @@ import { dispatch } from "../../store/store";
 import { fetchScheduleByPeriodAction } from "../../store/shedule/actions";
 import { findScheduleConflicts } from "../../services/utils/findConflict.util";
 import { updateCurrentClassRequestAction } from "../../store/shedule";
+import { ScreenLoading } from "../../components/UI/ScreenLoading";
 
 
 
@@ -30,9 +31,14 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
     const weekDates = getWeekDates(today);
 
     const [startDateWeek, setStartDateWeek] = useState(new Date(weekDates.startDate));
-    const { CurrentScheduledEntries, createCurrentClassRequest, loading } = useAppSelector(state => state.schedule);
+    const [endDateWeek, setEndDateWeek] = useState(new Date(weekDates.endDate));
+    const { CurrentScheduledEntries, createCurrentClassRequest, WeekTimeSlots, GeneratedScheduleEntries, loading } = useAppSelector(state => state.schedule);
+
+
+
     const [slots, setSlots] = useState<IGeneratedScheduleEntries[]>([]);
     const [conflict, setConflict] = useState<IGeneratedScheduleEntries[]>(findScheduleConflicts(slots, CurrentScheduledEntries));
+
 
 
 
@@ -43,25 +49,27 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
 
     const goToNextWeek = () => {
         setStartDateWeek(new Date(addDayAndHoursToDate(startDateWeek.toISOString(), 7, 0)))
+        setEndDateWeek(new Date(addDayAndHoursToDate(endDateWeek.toISOString(), 7, 0)))
+        console.log('next');
+
     }
     const goToPrevWeek = () => {
         setStartDateWeek(new Date(addDayAndHoursToDate(startDateWeek.toISOString(), -7, 0)))
+        setEndDateWeek(new Date(addDayAndHoursToDate(endDateWeek.toISOString(), -7, 0)))
+        console.log('prev');
     }
     useEffect(() => {
-        dispatch(fetchScheduleByPeriodAction({ startDate: startDateWeek.toISOString(), endDate: addDayAndHoursToDate(startDateWeek.toISOString(), 7, 0) }));
-    }, [startDateWeek])
+        dispatch(fetchScheduleByPeriodAction({ startDate: startDateWeek.toISOString(), endDate: endDateWeek.toISOString() }));
+    }, [startDateWeek, endDateWeek])
 
     const onSave = () => {
-        dispatch(updateCurrentClassRequestAction({ ScheduledEntries: slots, }))
+        dispatch(updateCurrentClassRequestAction({ Sessions: slots, Slots: WeekTimeSlots }))
 
         //@ts-ignore
         navigation.navigate(NavigationEnum.ADD_STUDENTS_SCREEN)
     }
-    return loading ? <View style={{ justifyContent: 'center', flex: 1, alignItems: 'center', height: '100%' }}><ActivityIndicator
-        style={StyleSheet.absoluteFill}
-        color={'#9A80BA'}
-        size="large"
-    /></View> : (
+    // return loading ? <ScreenLoading /> :
+    return (
         <View style={{ height: '100%' }}>
             <View style={styles.header}>
                 <ScreenHeader text={"Preview Day and Time"} onBackPress={navigation.goBack} withBackButton={true} />
@@ -71,7 +79,7 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
             </View>
             <View style={{ flex: 1 }}>
                 <ScrollView >
-                    <WeekTable startOfWeek={startDateWeek} endOfWeek={weekDates.endDate} onHandleData={handeScheduleSlots} conflict={conflict} />
+                    <WeekTable startOfWeek={startDateWeek} endOfWeek={endDateWeek} onHandleData={handeScheduleSlots} conflict={conflict} />
                 </ScrollView>
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, paddingTop: 8 }}>
@@ -88,10 +96,10 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
             </View>
             <Text style={{ textAlign: 'center' }}>
                 <Text style={{ fontSize: 17, lineHeight: 34, fontWeight: '700', }}>Scheduled Classes: </Text>
-                <Text style={{ opacity: 0.4 }}>{createCurrentClassRequest.EndNumber}</Text>
+                <Text style={{ opacity: 0.4 }}>{createCurrentClassRequest.Class?.EndNumber || 0}</Text>
             </Text>
             <View style={{ padding: 20, justifyContent: 'flex-end' }}>
-                <CustomButton text={"save"} onPress={onSave} />
+                <CustomButton text={"Save"} onPress={!conflict.length ? onSave : () => { }} disabled={!!conflict.length} />
             </View>
 
         </View>

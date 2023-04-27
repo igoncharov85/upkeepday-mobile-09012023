@@ -26,9 +26,9 @@ export const ListGradientCircleButtons: React.FC<IListButtons> = ({ buttons, onP
     return (
         <View style={{ marginTop: 20, marginHorizontal: 20 }}>
             <Text style={{
-                color: 'rgba(109, 123, 152,0.5)',
+                color: '#171930',
                 fontSize: 14,
-                lineHeight: 19
+                lineHeight: 34
             }}>{label && label}</Text>
             <View style={{ flexDirection: 'column' }}>
                 {buttons.map((item, index) => (

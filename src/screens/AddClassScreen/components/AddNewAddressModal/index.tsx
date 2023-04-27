@@ -42,8 +42,6 @@ export const AddNewAddressModal: React.FC<IAddNewAddressModal> = ({ visible, han
         handleSubmit,
         isValid,
     }: FormikProps<typeof formInitialValues>) => {
-        console.log(errors);
-
         return (
             <>
                 <InputForm
@@ -90,7 +88,7 @@ export const AddNewAddressModal: React.FC<IAddNewAddressModal> = ({ visible, han
             const data: ILocationRequest = {
                 Name: `${values.addressLine}, ${values.country}, ${values.state}`,
                 Url: '',
-                LocationType: '',
+                LocationType: 'Office',
                 AddressLine: values.addressLine,
                 City: '',
                 State: values.state,

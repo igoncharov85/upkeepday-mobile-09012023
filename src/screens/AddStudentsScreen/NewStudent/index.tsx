@@ -30,7 +30,7 @@ function splitPhoneNumber(phoneNumber: string): [string, string] {
 export const NewStudent: React.FC<INewStudentProps> = () => {
     const { students } = useAppSelector(state => state.user);
     const [newUsers, setNewUsers] = useState<Array<IUserStudent>>([]);
-    const [id, setId] = useState(students[students.length - 1].StudentId)
+    const [id, setId] = useState(students[students?.length - 1]?.StudentId || 0)
 
     useEffect(() => {
         return () => {
@@ -102,17 +102,6 @@ export const NewStudent: React.FC<INewStudentProps> = () => {
                 PhoneCountry: phoneCountry,
                 PhoneNumber: phoneNumber
             };
-            console.log([...newUsers, {
-                FirstName: values.FirstName,
-                LastName: values.LastName,
-                Email: values.Email,
-                PhoneCountry: +phoneCountry,
-                PhoneNumber: phoneNumber,
-                StudentId: id + 1,
-                EnrolledClasses: [],
-                Notes: values.Notes
-            }], '$$$$$$$$$$$$$$$$');
-
             setNewUsers([...newUsers, {
                 FirstName: values.FirstName,
                 LastName: values.LastName,

@@ -18,6 +18,7 @@ import { useAppSelector } from '../../../store/hooks';
 import { dispatch } from '../../../store/store';
 import { fetchScheduleByPeriodAction } from '../../../store/shedule/actions';
 import { getToday } from '../../../services/utils/generateDate.util';
+import { ScreenLoading } from '../../../components/UI/ScreenLoading';
 
 enum LessonType {
 	Lesson,
@@ -40,7 +41,7 @@ interface IScheduleDayScreen { }
 
 export const ScheduleDayScreen: React.FC<IScheduleDayScreen> = memo(() => {
 
-	const { CurrentScheduledEntries } = useAppSelector(state => state.schedule);
+	const { CurrentScheduledEntries, loading } = useAppSelector(state => state.schedule);
 	const today = new Date;
 	const [dateString, day] = getToday(today)
 
@@ -62,7 +63,7 @@ export const ScheduleDayScreen: React.FC<IScheduleDayScreen> = memo(() => {
 		dispatch(fetchScheduleByPeriodAction({ startDate: currentDay, endDate: currentDay }));
 	}, [currentDay])
 
-	return (
+	return loading ? <ScreenLoading /> : (
 		<View>
 			<ScheduleScroller
 				title={formatDate(currentDay)}

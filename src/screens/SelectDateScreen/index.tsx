@@ -16,6 +16,7 @@ import { updateCurrentClassRequestAction } from "../../store/shedule";
 import { SelectedDateSchema } from "../../common/shemas/addClass.shape";
 import CalendarComponent from "../SheduleScreen/components/CalendarComponent";
 import { convertDate } from "../../services/utils/fullDateToValue.util";
+import { useAppSelector } from "../../store/hooks";
 
 
 
@@ -25,7 +26,8 @@ import { convertDate } from "../../services/utils/fullDateToValue.util";
 enum TypeDate {
     FixedNumberOfClasses = 0,
     OnSpecificDate = 1,
-    FixedPeriodInTime = 2,
+    FixedWeekNumber = 2,
+    FixedMonthNumber = 3,
 }
 
 export enum EndScheduleType {
@@ -53,9 +55,21 @@ if (Platform.OS === 'ios') {
     windowHeight = Dimensions.get('window').height - 20;
 }
 export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
+    const { createCurrentClassRequest } = useAppSelector(state => state.schedule)
 
     const navigation = useNavigation();
-
+    const getTypeDate = (type: number) => {
+        switch (type) {
+            case 0:
+                return EndScheduleType.FixedClassesNumber
+            case 1:
+                return EndScheduleType.SpecificEndDate
+            case 2:
+                return EndScheduleType.FixedWeekNumber
+            case 3:
+                return EndScheduleType.FixedMonthNumber
+        }
+    }
     const SelectDateForm = ({
         values,
         handleChange,
@@ -70,11 +84,15 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
         const handleTypeLocation = (index: number) => setTypeLocation(index)
 
         const onFixedPeriodTime = (number: number) => {
-            setNumberOf(number)
-            setFieldValue('endScheduleType', number == 0 ? EndScheduleType.FixedWeekNumber : EndScheduleType.FixedMonthNumber)
+            setFieldValue('endScheduleType', getTypeDate(!number ? 2 : 3))
+
         }
+        useEffect(() => {
+            setFieldValue('endScheduleType', getTypeDate(typeLocation))
+        }, [typeLocation])
+
         return (
-            <View style={[styles.container, { minHeight: windowHeight, justifyContent: 'flex-start'}]}>
+            <View style={[styles.container, { minHeight: windowHeight, justifyContent: 'flex-start' }]}>
                 <ScreenHeader onBackPress={navigation.goBack} text="Add Class General Data" withBackButton={true} />
                 <View>
                     <InputWithDate labelText={"Enter Start Date"} handleChange={setFieldValue} nameField="startDate" />
@@ -85,12 +103,11 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
                             labelText='Enter Total Number of Classes'
                             onChangeText={handleChange('totalClasses')}
                             value={values.totalClasses}
-                            onChange={() => setFieldValue('endScheduleType', EndScheduleType.FixedClassesNumber)}
                         />}
                     {typeLocation == TypeDate.OnSpecificDate &&
                         <InputWithDate labelText={"Enter Finish Date"} handleChange={setFieldValue} nameField="finishDate" />}
 
-                    {typeLocation == TypeDate.FixedPeriodInTime &&
+                    {typeLocation == TypeDate.FixedWeekNumber &&
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <InputForm
                                 labelText='Number of'
@@ -119,19 +136,15 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
         handleSubmit: (values,) => {
             dispatch(
                 updateCurrentClassRequestAction({
-                    EndScheduleType: values.endScheduleType,
-                    StartDate: values.startDate,
-                    EndNumber: +values.totalClasses
+                    Class: {
+                        EndScheduleType: values.endScheduleType,
+                        StartDate: values.startDate,
+                        EndDate: values.finishDate,
+                        EndNumber: +values.totalClasses
+                    }
 
                 })
             );
-            console.log({
-                StartDate: values.startDate,
-                endScheduleType: values.endScheduleType,
-                finishDate: values.finishDate,
-                numberOf: values.numberOf
-
-            });
 
             navigation.navigate(
                 //@ts-ignore

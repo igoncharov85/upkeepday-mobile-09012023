@@ -38,7 +38,7 @@ export const ExistingStudent: React.FC<IExistingStudentProps> = () => {
 
     useEffect(() => {
         return () => {
-            dispatch(updateCurrentClassRequestAction({ ExistingStudents: existingStudents, }))
+            dispatch(updateCurrentClassRequestAction({ Students: [], }))
         };
     }, []);
     return (

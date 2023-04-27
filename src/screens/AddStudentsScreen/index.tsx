@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text, View, TouchableOpacity } from 'react-native';
 import { ScreenHeader } from '../../components/ScreenHeader';
 import { useNavigation } from '@react-navigation/native';
 import { NavigationEnum } from '../../common/constants/navigation';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { ListButtons } from '../AddClassScreen/components/ListButtons';
 import { CustomButton } from '../../components/UI/CustomButton';
 import { ExistingStudent } from './ExistingStudent';
@@ -22,11 +21,11 @@ export const AddStudentsScreen: React.FC<IAddStudentsScreen> = () => {
     const navigation = useNavigation();
     //@ts-ignore
     const goNextStep = () => navigation.navigate(NavigationEnum.PREPAYMENT_CONFIGURATION_SCREEN);
-    const onGoBack = () => navigation.goBack()
     const handleTypeChange = (type: any) => {
         setTypeAction(type);
     }
 
+    const goBack = () => navigation.goBack()
     const switchType = (type: any) => {
         switch (type) {
             case TypeAction.ExistingStudent:
@@ -39,15 +38,17 @@ export const AddStudentsScreen: React.FC<IAddStudentsScreen> = () => {
     return (
         <View style={{ flex: 1, height: '100%' }}>
             <View style={{ padding: 20, paddingBottom: 0 }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <ScreenHeader text={'Add Students'} onBackPress={() => navigation.goBack()} withBackButton={true} />
-                    <TouchableOpacity activeOpacity={1} style={{ marginLeft: -20, }} >
-                        <Text style={{ color: '#171930', fontSize: 14, lineHeight: 19, opacity: 0.4 }}>Add Later</Text>
-                    </TouchableOpacity>
+                <View style={{ flexDirection: 'row', alignItems: 'center', zIndex: 1, maxWidth: '50%' }}>
+                    <ScreenHeader text={'Add Students'} onBackPress={goBack} withBackButton={true} />
+
 
                 </View>
+                <TouchableOpacity style={{ position: 'absolute', top: 24, right: 20, zIndex: 1 }} onPress={goNextStep}>
+                    <Text style={{ color: '#171930', fontSize: 14, lineHeight: 19, opacity: 0.4 }}>Add Later</Text>
+                </TouchableOpacity>
+
                 <View style={{ marginTop: -30 }}>
-                    <ListButtons buttons={['Existing student', 'New']} onPress={handleTypeChange} />
+                    <ListButtons buttons={['Existing student', 'New Student']} onPress={handleTypeChange} />
                 </View>
             </View>
             <View style={{ flex: 1 }}>

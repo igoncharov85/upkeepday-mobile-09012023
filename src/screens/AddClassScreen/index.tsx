@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import { View, ScrollView, Dimensions, KeyboardAvoidingView, Platform } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -50,6 +50,8 @@ export const AddClassScreen: React.FC<IAddClassScreen> = memo(() => {
 
     const handleTypeChange = useCallback((type: TypeLocation) => {
         setTypeLocation(type);
+
+
     }, []);
 
     const handleClassLocation = useCallback((location: string) => {
@@ -63,9 +65,10 @@ export const AddClassScreen: React.FC<IAddClassScreen> = memo(() => {
             handleSubmit,
             isValid,
         }: FormikProps<typeof formInitialValues>) => {
+
             return (
                 <>
-                    <View>
+                    <View style={{ marginTop: 12 }}>
                         <InputForm
                             labelText="Name"
                             value={values.name}
@@ -114,10 +117,11 @@ export const AddClassScreen: React.FC<IAddClassScreen> = memo(() => {
         (values: any) => {
             dispatch(
                 updateCurrentClassRequestAction({
-                    ClassLocationType: typeLocation,
-                    ClassName: values.name,
+                    Class: { Name: values.name },
+                    Location: { LocationType: typeLocation ? 'Office' : 'Online' }
                 })
             );
+
             //@ts-ignore
             navigation.navigate(NavigationEnum.SELECT_DATE_SCREEN);
         },
@@ -127,8 +131,6 @@ export const AddClassScreen: React.FC<IAddClassScreen> = memo(() => {
     return (
         <KeyboardAvoidingView
             behavior="height"
-
-        // onKeyboardDidShow={() => console.log(4)}
         >
             <ScrollView>
                 <View style={[styles.container, { height: windowHeight - 20 }]}>

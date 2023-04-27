@@ -22,7 +22,7 @@ export const formatDate = (
       day: '2-digit',
     })
     .split('/');
-  const formattedDate2 = `${year}-${month.padStart(2, '0')}-${day.padStart(
+  const formattedDate2 = `${year}-${month.padStart(2, '0')}-${day?.padStart(
     2,
     '0',
   )}`;

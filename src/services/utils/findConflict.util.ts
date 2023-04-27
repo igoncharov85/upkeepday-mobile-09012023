@@ -1,14 +1,14 @@
 interface ScheduleEntry {
     StartDateTime: string;
-    WeekTimeSlotId: string;
+    SlotUid: string;
     Duration: number;
 }
 
 export function findScheduleConflicts(currentScheduledEntries: ScheduleEntry[], generatedScheduleEntries: ScheduleEntry[]): ScheduleEntry[] {
     const conflicts: ScheduleEntry[] = [];
 
-    generatedScheduleEntries.forEach((generatedEntry) => {
-        currentScheduledEntries.forEach((currentEntry) => {
+    generatedScheduleEntries && generatedScheduleEntries.forEach((generatedEntry) => {
+        currentScheduledEntries && currentScheduledEntries.forEach((currentEntry) => {
             const generatedStart = new Date(generatedEntry.StartDateTime).getTime();
             const generatedEnd = generatedStart + generatedEntry.Duration * 60000;
             const currentStart = new Date(currentEntry.StartDateTime).getTime();

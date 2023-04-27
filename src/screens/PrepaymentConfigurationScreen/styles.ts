@@ -3,9 +3,10 @@ import { StyleSheet } from "react-native";
 export default StyleSheet.create({
     subtitle: {
         fontSize: 14,
-        lineHeight: 34,
+        lineHeight: 19,
         color: '#171930',
-        fontWeight: '600',
-        textAlign: 'center'
+        textAlign: 'center',
+        marginTop: 8,
+        opacity: 0.4
     }
 })

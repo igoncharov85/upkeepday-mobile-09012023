@@ -4,6 +4,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import styles from './styles';
 import { IGeneratedScheduleEntries, IWeekTimeSlot } from '../../../common/types/schedule.types';
 import Cancel from '../../../../assets/svg/Cancel';
+import { useAppSelector } from '../../../store/hooks';
 
 
 enum TypeSession {
@@ -36,15 +37,18 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
     conflict
 
   }) => {
+    console.log(activeItem, 'activeItem');
+
+    const { createCurrentClassRequest } = useAppSelector(state => state.schedule);
     const [active, setActive] = useState(!!activeItem ? true : false)
     const colorsTrial = ['#F3AF2C', '#E9600D'];
     const colorsLesson = ['#EAAFC8', '#654EA3'];
-
+    // if (active) {
+    //   console.log(active);
+    // }
     const onHandleSlot = () => {
-      console.log(StartDateTime);
-
       setActive(!active)
-      editSlot(activeItem || { WeekTimeSlotId: '', StartDateTime: StartDateTime, Duration: TimeDuration.OneHour })
+      editSlot(activeItem || { SlotUid: '', StartDateTime: StartDateTime, Duration: TimeDuration.OneHour })
     }
     const getColors = (typeSession: TypeSession) => {
       switch (typeSession) {
@@ -55,7 +59,6 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
       }
     };
     return (
-      // <TouchableOpacity onLongPress={onLongPress} onPress={() => console.log(StartDateTime)} activeOpacity={editMode ? 0.5 : 1}>
       <TouchableOpacity onLongPress={onLongPress} onPress={() => editMode && onHandleSlot()} activeOpacity={editMode ? 0.5 : 1}>
         <View style={styles.containerItem}>
           {activeItem ? (
@@ -83,7 +86,7 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
                 {editMode && (<View style={{ position: 'absolute', top: -5, right: -5 }}>
                   <Cancel />
                 </View>)}
-                <Text style={[styles.textItem, conflict && { color: 'red' }]}>Class</Text>
+                <Text style={[styles.textItem, conflict && { color: 'red' }]}>{createCurrentClassRequest.Class?.Name}</Text>
               </LinearGradient>
             </View>
           ) : null}

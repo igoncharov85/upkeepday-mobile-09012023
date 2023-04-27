@@ -44,9 +44,9 @@ export function* generateScheduleWorker({
     );
     console.log("data: ", data)
     if (data) {
-      yield put(setTimeSlotsAction(data.WeekTimeSlots))
-      yield put(setGeneratedScheduleEntriesAction(data.GeneratedScheduleEntries))
-      yield put(setCurrentScheduleEntries(data.CurrentScheduledEntries))
+      yield put(setTimeSlotsAction(data.Slots))
+      yield put(setGeneratedScheduleEntriesAction(data.GeneratedSessions))
+      yield put(setCurrentScheduleEntries(data.CurrentSessions))
     }
 
   } catch (error) {

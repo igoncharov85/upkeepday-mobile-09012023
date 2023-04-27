@@ -1,9 +1,9 @@
-import React, {memo} from 'react';
-import {ScrollView, Text, View} from 'react-native';
+import React, { memo } from 'react';
+import { ScrollView, Text, View } from 'react-native';
 
-import {SessionItem} from '../SessionItem';
+import { SessionItem } from '../SessionItem';
 import styles from './styles';
-import {IScheduleItem} from '../../../../common/types/schedule.types';
+import { IScheduleItem } from '../../../../common/types/schedule.types';
 
 enum LessonType {
   Lesson,
@@ -15,7 +15,7 @@ interface ISessionItemListProps {
 }
 
 export const SessionItemList: React.FC<ISessionItemListProps> = memo(
-  ({data}) => {
+  ({ data }) => {
     const formatDate = (dateString: string, formatStr: string) => {
       const date = new Date(dateString);
       const hours = date.getHours();
@@ -32,7 +32,7 @@ export const SessionItemList: React.FC<ISessionItemListProps> = memo(
       const endTime = new Date(startTime.getTime() + item.Duration * 60000);
 
       return {
-        id: item.WeekTimeSlotId,
+        id: item.SlotUid,
         name: item.ClassName,
         //@ts-ignore
         timeStart: formatDate(item.StartDateTime, 'hh:mm a'),
@@ -46,7 +46,7 @@ export const SessionItemList: React.FC<ISessionItemListProps> = memo(
 
     return (
       <>
-        <ScrollView style={{marginBottom: 150}}>
+        <ScrollView style={{ marginBottom: 150 }}>
           {sessionItems?.map((item, index) => (
             <SessionItem
               key={item.id}

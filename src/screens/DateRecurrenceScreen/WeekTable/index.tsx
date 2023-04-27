@@ -34,7 +34,7 @@ export const WeekTable: FC<ISheduleTable> = memo(
 
 
 
-    const timeData = generateTimeData(`0${startOfHour}:00`, '22:00');
+    const timeData = generateTimeData(`0${startOfHour}:00`, '24:00');
     const weekStructure = createWeekStructure(
       startOfWeek,
       endOfWeek,

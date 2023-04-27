@@ -6,6 +6,7 @@ import { createWeekStructure, generateTimeData, getToday, isToday } from '../../
 import { useAppSelector } from '../../../../store/hooks';
 import { dispatch } from '../../../../store/store';
 import { fetchScheduleByPeriodAction } from '../../../../store/shedule/actions';
+import { ScreenLoading } from '../../../../components/UI/ScreenLoading';
 
 interface ISheduleTable {
   startOfWeek: Date;
@@ -26,18 +27,18 @@ export const SheduleTable: FC<ISheduleTable> = memo(
   ({ startOfWeek, endOfWeek }) => {
     const startTimeOfDay = 8;
     const startWeekOfDay = getToday(startOfWeek)[1]
-    const timeData = generateTimeData(`0${startTimeOfDay}:00`, '22:00');
+    const timeData = generateTimeData(`0${startTimeOfDay}:00`, '24:00');
     const weekStructure = createWeekStructure(
       startOfWeek,
       endOfWeek,
       timeData,
     );
 
-    const { CurrentScheduledEntries } = useAppSelector(state => state.schedule);
+    const { CurrentScheduledEntries, loading } = useAppSelector(state => state.schedule);
     useEffect(() => {
       dispatch(fetchScheduleByPeriodAction({ startDate: getToday(startOfWeek)[0], endDate: getToday(endOfWeek)[0] }));
     }, [])
-    return (
+    return loading ? <ScreenLoading /> : (
       <View style={styles.container}>
         <ScrollView>
           <Row style={{ justifyContent: 'space-between' }}>
@@ -56,15 +57,15 @@ export const SheduleTable: FC<ISheduleTable> = memo(
                       if (findObject(CurrentScheduledEntries, index + startTimeOfDay, dayIndex + startWeekOfDay)) {
                         return (
                           <SheduleTableItem
-                            key={item.WeekTimeSlotId}
+                            key={item.SlotUid}
                             ClassName={item.ClassName}
                             Duration={item.Duration}
-                            WeekTimeSlotId={item.WeekTimeSlotId}
+                            SlotUid={item.SlotUid}
                             StartDateTime={item.StartDateTime}
                             ScheduleEntryId={0} />
                         );
                       }
-                      return <SheduleTableItem key={`${dayIndex}-${index}`} WeekTimeSlotId={''} StartDateTime={''} Duration={0} ClassName={''} ScheduleEntryId={0} />;
+                      return <SheduleTableItem key={`${dayIndex}-${index}`} SlotUid={''} StartDateTime={''} Duration={0} ClassName={''} ScheduleEntryId={0} />;
                     })}
                     {isToday(dayIndex) && (
                       <View style={[styles.absoluteFill, styles.mask]} />

@@ -32,6 +32,7 @@ export default StyleSheet.create({
         color: 'black',
     },
     label: {
+        marginTop: 8,
         color: 'rgba(109, 123, 152,0.5)',
         fontSize: 14,
         lineHeight: 19,

@@ -51,11 +51,13 @@ export const generateTimeData = (startTime: string, endTime: string) => {
     for (let hour = startHour; hour <= endHour; hour++) {
         let amPm = hour < 12 ? 'am' : 'pm';
         let hour12 = hour === 0 ? 12 : hour <= 12 ? hour : hour - 12;
-        timeData.push(`${hour12} ${amPm}`);
+        let hourStr = hour === 12 ? 'Noon' : hour === 24 ? '12 am' : `${hour12} ${amPm}`;
+        timeData.push(hourStr);
     }
 
     return timeData;
 };
+
 export function addDayAndHoursToDate(dateStr: string, day: number, hour: number): string {
     const date = new Date(dateStr);
     date.setDate(date.getDate() + day);

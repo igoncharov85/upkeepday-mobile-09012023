@@ -69,10 +69,7 @@ export const StackNavigator = memo(() => {
         name={NavigationEnum.HOME_SCREEN}
         component={ScheduleScreen}
       />
-      <Stack.Screen
-        name={NavigationEnum.CANCELLATION_MODAL}
-        component={CancellationModal}
-      />
+
       <Stack.Screen
         name={NavigationEnum.CANCELLATION_SCREEN}
         component={CancellationScreen}

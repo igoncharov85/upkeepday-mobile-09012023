@@ -25,9 +25,8 @@ const findObject = (arr: any[], hour: number, day: number) => {
 
 export const SheduleTable: FC<ISheduleTable> = memo(
   ({ startOfWeek, endOfWeek }) => {
-    const startTimeOfDay = 8;
     const startWeekOfDay = getToday(startOfWeek)[1]
-    const timeData = generateTimeData(`0${startTimeOfDay}:00`, '24:00');
+    const timeData = generateTimeData(`00:00`, '24:00');
     const weekStructure = createWeekStructure(
       startOfWeek,
       endOfWeek,
@@ -40,7 +39,7 @@ export const SheduleTable: FC<ISheduleTable> = memo(
     }, [])
     return loading ? <ScreenLoading /> : (
       <View style={styles.container}>
-        <ScrollView>
+        <ScrollView contentOffset={{ x: 0, y: 64 * 8 }}>
           <Row style={{ justifyContent: 'space-between' }}>
             <Column>
               {timeData.map(item => (
@@ -53,8 +52,8 @@ export const SheduleTable: FC<ISheduleTable> = memo(
                   <Column key={dayIndex}>
                     {dayEvents?.map((event, index) => {
 
-                      const item = findObject(CurrentScheduledEntries, index + startTimeOfDay, dayIndex + startWeekOfDay)
-                      if (findObject(CurrentScheduledEntries, index + startTimeOfDay, dayIndex + startWeekOfDay)) {
+                      const item = findObject(CurrentScheduledEntries, index, dayIndex + startWeekOfDay)
+                      if (findObject(CurrentScheduledEntries, index, dayIndex + startWeekOfDay)) {
                         return (
                           <SheduleTableItem
                             key={item.SlotUid}

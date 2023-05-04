@@ -56,22 +56,22 @@ if (Platform.OS === 'ios') {
 }
 export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
     const { createCurrentClassRequest } = useAppSelector(state => state.schedule)
-    const [currentSchema, setCurrentSchema] = useState({})
+    // const [currentSchema, setCurrentSchema] = useState({})
 
     const navigation = useNavigation();
     const getTypeDate = (type: number) => {
         switch (type) {
             case 0:
-                setCurrentSchema(SelectedDateForTotalClassesSchema)
+                // setCurrentSchema(SelectedDateForTotalClassesSchema)
                 return EndScheduleType.FixedClassesNumber
             case 1:
-                setCurrentSchema(SelectedDateForFinishDateSchema)
+                // setCurrentSchema(SelectedDateForFinishDateSchema)
                 return EndScheduleType.SpecificEndDate
             case 2:
-                setCurrentSchema(SelectedDateForNumberOfSchema)
+                // setCurrentSchema(SelectedDateForNumberOfSchema)
                 return EndScheduleType.FixedWeekNumber
             case 3:
-                setCurrentSchema(SelectedDateForNumberOfSchema)
+                // setCurrentSchema(SelectedDateForNumberOfSchema)
                 return EndScheduleType.FixedMonthNumber
         }
     }
@@ -142,10 +142,10 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
 
     };
 
-    const validationSchemas = [SelectedDateSchema, currentSchema];
+    // const validationSchemas = [SelectedDateSchema, currentSchema];
     const FormikSelectDateScreen = withFormik<any, typeof formInitialValues>({
         mapPropsToValues: () => formInitialValues,
-        validationSchema: validationSchemas,
+        validationSchema: SelectedDateSchema,
         handleSubmit: (values,) => {
             dispatch(
                 updateCurrentClassRequestAction({

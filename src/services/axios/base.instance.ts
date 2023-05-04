@@ -27,9 +27,11 @@ $axiosBase.interceptors.request.use(
 $axiosAuth.interceptors.request.use(
     async (config: any) => {
         const token = await AsyncStorageService.getToken();
+
         console.log(`request: ${config.baseURL}${config.url} ${token}`);
         config.headers = {
-            Accept: "application/json",
+            accept: "application/json",
+            "Content-Type": "application/json",
             Authorization: `${token}`,
         };
         return config;

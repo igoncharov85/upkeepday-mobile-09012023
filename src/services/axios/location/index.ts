@@ -2,16 +2,16 @@ import { ILocationRequest } from "../../../common/types/location";
 import { $axiosAuth } from "../base.instance";
 
 export class LocationService {
-    static fetchLocations() {
+    static async fetchLocations() {
         return $axiosAuth.get('/tutor/locations/')
     }
 
-    static addLocation(data: ILocationRequest) {
+    static async addLocation(data: ILocationRequest) {
         console.log(data)
         return $axiosAuth.post('/tutor/locations/', data)
     }
 
-    static fetchLocationById(id: string) {
+    static async fetchLocationById(id: string) {
         return $axiosAuth.post(`/tutor/locations/${id}`)
     }
 }

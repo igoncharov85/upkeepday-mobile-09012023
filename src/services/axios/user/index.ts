@@ -2,10 +2,10 @@ import { IUserCreateRequest } from "../../../common/types/user";
 import { $axiosAuth } from "../base.instance";
 
 export class UserService {
-    static fetchAllUsers() {
-        return $axiosAuth.get('/tutor/students')
+    static async fetchAllUsers() {
+        return await $axiosAuth.get('/tutor/students')
     }
-    static createUser(data: IUserCreateRequest) {
-        return $axiosAuth.post('/tutor/students', data)
+    static async createUser(data: IUserCreateRequest) {
+        return await $axiosAuth.post('/tutor/students', data)
     }
 }

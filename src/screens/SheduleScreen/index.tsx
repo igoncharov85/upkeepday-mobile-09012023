@@ -1,9 +1,13 @@
-import React, { FC, memo, useEffect, useState } from 'react';
-import { PanResponder, Text, View } from 'react-native';
-import { INavigationBase } from '../../common/types/component.styles';
+import React, {FC, memo, useEffect, useState} from 'react';
+import {PanResponder, Text, View} from 'react-native';
+import {INavigationBase} from '../../common/types/component.styles';
 import NavigationActions from '../../services/navigation-service';
 
-import { fetchCountriesAction, fetchStatesAction, logoutAction } from '../../store/auth/actions';
+import {
+  fetchCountriesAction,
+  fetchStatesAction,
+  logoutAction,
+} from '../../store/auth/actions';
 import {
   addLocationAction,
   fetchLocationAction,
@@ -12,40 +16,35 @@ import {
   createScheduleAction,
   generateScheduleAction,
 } from '../../store/shedule/actions';
-import { dispatch } from '../../store/store';
-import { fetchUsersAction } from '../../store/user/actions';
-import { SheduleHeader } from './components/SheduleHeader';
-import { ScheduleNavigation } from './components/SheduleNavigation';
-import { BottomTab } from '../../components/BottomTab';
-import { SchedulePlus } from './components/SchedulePlus';
-import { NavigationEnum } from '../../common/constants/navigation';
-
+import {dispatch} from '../../store/store';
+import {fetchUsersAction} from '../../store/user/actions';
+import {SheduleHeader} from './components/SheduleHeader';
+import {ScheduleNavigation} from './components/SheduleNavigation';
+import {BottomTab} from '../../components/BottomTab';
+import {SchedulePlus} from './components/SchedulePlus';
+import {NavigationEnum} from '../../common/constants/navigation';
 
 import styles from './styles';
 
-
-
-interface IHomeScreen extends INavigationBase { }
-export const ScheduleScreen: FC<IHomeScreen> = memo(({ navigation }) => {
+interface IHomeScreen extends INavigationBase {}
+export const ScheduleScreen: FC<IHomeScreen> = memo(({navigation}) => {
   const [swipeUpCount, setSwipeUpCount] = useState(0);
   const [swipeDownCount, setSwipeDownCount] = useState(0);
   const [activePage, setActivePage] = useState(0);
   const onPlusPress = () => {
     //@ts-ignore
-    navigation.navigate(NavigationEnum.ADD_CLASS_SCREEN)
-  }
+    navigation.navigate(NavigationEnum.ADD_CLASS_SCREEN);
+  };
   useEffect(() => {
     NavigationActions.setNavigator(navigation);
   }, []);
 
-
   const handleSwipeLeft = () => {
-    setActivePage(activePage != 0 ? activePage - 1 : activePage)
-
+    setActivePage(activePage != 0 ? activePage - 1 : activePage);
   };
 
   const handleSwipeRight = () => {
-    setActivePage(activePage != 2 ? activePage + 1 : activePage)
+    setActivePage(activePage != 2 ? activePage + 1 : activePage);
   };
   console.log(activePage, 'activePage');
 
@@ -66,10 +65,10 @@ export const ScheduleScreen: FC<IHomeScreen> = memo(({ navigation }) => {
 
   useEffect(() => {
     console.log('worked');
-    dispatch(fetchUsersAction())
-    dispatch(fetchStatesAction('USA'))
-    dispatch(fetchCountriesAction())
-  });
+    dispatch(fetchUsersAction());
+    dispatch(fetchStatesAction('USA'));
+    dispatch(fetchCountriesAction());
+  }, []);
   return (
     <View style={styles.container} {...panResponder.panHandlers}>
       <SheduleHeader text="Schedule" />

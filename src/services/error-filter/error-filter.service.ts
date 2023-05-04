@@ -6,7 +6,7 @@ export class ErrorFilterService {
         if (withPush) {
             dispatch(pushToastsAction({
                 type: 'info',
-                text1: error?.response?.data?.status,
+                text1: error?.response?.data?.status || error?.data?.message,
                 autoHide: true,
             }))
         }

@@ -30,8 +30,10 @@ $axiosAuth.interceptors.request.use(
 
         console.log(`request: ${config.baseURL}${config.url} ${token}`);
         config.headers = {
-            accept: "application/json",
+            ...config.headers,
+            Accept: "*/*",
             "Content-Type": "application/json",
+            Connection: "keep-alive",
             Authorization: `${token}`,
         };
         return config;

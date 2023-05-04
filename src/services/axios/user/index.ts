@@ -1,9 +1,29 @@
 import { IUserCreateRequest } from "../../../common/types/user";
+import { AsyncStorageService } from "../../async-storage";
 import { $axiosAuth } from "../base.instance";
+import axios from 'axios'
 
 export class UserService {
     static async fetchAllUsers() {
-        return await $axiosAuth.get('/tutor/students')
+        try {
+
+            const token = await AsyncStorageService.getToken();
+            let config = {
+                method: 'get',
+                maxBodyLength: Infinity,
+                url: 'https://cpio-dev.trixiron.com/tutor/students/',
+                headers: {
+                    'Authorization': token,
+                },
+            };
+
+            const response = await axios.request(config);
+
+            return response;
+        } catch (err) {
+            console.log('error student', err);
+            return null;
+        }
     }
     static async createUser(data: IUserCreateRequest) {
         return await $axiosAuth.post('/tutor/students', data)

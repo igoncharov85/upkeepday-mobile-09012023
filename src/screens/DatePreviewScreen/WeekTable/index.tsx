@@ -65,7 +65,7 @@ export const WeekTable: FC<ISheduleTable> = memo(
 
         if (JSON.stringify(slots) !== JSON.stringify(newSlots)) {
           console.log(slot, 'delete slot');
-
+          onHandleData(slots)
           setIsSlotEdit(true);
           setSlots(newSlots);
           setSlotUid(slot.SlotUid)

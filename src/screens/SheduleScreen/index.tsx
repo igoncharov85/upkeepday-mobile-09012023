@@ -64,12 +64,12 @@ export const ScheduleScreen: FC<IHomeScreen> = memo(({ navigation }) => {
     },
   });
 
-  // useEffect(() => {
-  //   console.log('worked');
-  //   dispatch(fetchUsersAction())
-  //   dispatch(fetchStatesAction('USA'))
-  //   dispatch(fetchCountriesAction())
-  // });
+  useEffect(() => {
+    console.log('worked');
+    dispatch(fetchUsersAction())
+    dispatch(fetchStatesAction('USA'))
+    dispatch(fetchCountriesAction())
+  });
   return (
     <View style={styles.container} {...panResponder.panHandlers}>
       <SheduleHeader text="Schedule" />

@@ -32,6 +32,7 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
 
     const [startDateWeek, setStartDateWeek] = useState(new Date(weekDates.startDate));
     const [endDateWeek, setEndDateWeek] = useState(new Date(weekDates.endDate));
+    const [screenLoading, setScreenLoading] = useState(false);
     const { CurrentScheduledEntries, createCurrentClassRequest, WeekTimeSlots, GeneratedScheduleEntries, loading } = useAppSelector(state => state.schedule);
 
 
@@ -63,45 +64,59 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
     }, [startDateWeek, endDateWeek])
 
     const onSave = () => {
-        dispatch(updateCurrentClassRequestAction({ Sessions: slots, Slots: WeekTimeSlots }))
+        dispatch(updateCurrentClassRequestAction({
+            Sessions: slots, Slots: WeekTimeSlots, Class: {
+                EndNumber: slots.length,
+            }
+        }))
 
         //@ts-ignore
         navigation.navigate(NavigationEnum.ADD_STUDENTS_SCREEN)
     }
-    // return loading ? <ScreenLoading /> :
-    return (
-        <View style={{ height: '100%' }}>
-            <View style={styles.header}>
-                <ScreenHeader text={"Preview Day and Time"} onBackPress={navigation.goBack} withBackButton={true} />
-            </View>
-            <View style={{ marginHorizontal: 20, marginTop: 12 }}>
-                <DaysOfWeek startOfWeek={startDateWeek} />
-            </View>
-            <View style={{ flex: 1 }}>
-                <ScrollView >
-                    <WeekTable startOfWeek={startDateWeek} endOfWeek={endDateWeek} onHandleData={handeScheduleSlots} conflict={conflict} />
-                </ScrollView>
-            </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, paddingTop: 8 }}>
-                <View >
-                    <CustomButton text={"<"} onPress={goToPrevWeek} style={{ height: 24, width: 40, }} />
-                </View>
-                {conflict.length > 0 && <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Conflict />
-                    <Text style={{ marginLeft: 4, fontSize: 12, lineHeight: 19, color: '#F4380E' }}>You have a conflict. Please check each week</Text>
-                </View>}
-                <View >
-                    <CustomButton text={">"} onPress={goToNextWeek} style={{ height: 24, width: 40, }} />
-                </View>
-            </View>
-            <Text style={{ textAlign: 'center' }}>
-                <Text style={{ fontSize: 17, lineHeight: 34, fontWeight: '700', }}>Scheduled Classes: </Text>
-                <Text style={{ opacity: 0.4 }}>{createCurrentClassRequest.Class?.EndNumber || 0}</Text>
-            </Text>
-            <View style={{ padding: 20, justifyContent: 'flex-end' }}>
-                <CustomButton text={"Save"} onPress={!conflict.length ? onSave : () => { }} disabled={!!conflict.length} />
-            </View>
 
+    useEffect(() => {
+        return () => {
+            setScreenLoading(false)
+        };
+    }, []);
+
+    useEffect(() => {
+        if (!loading) {
+            setScreenLoading(true)
+            console.log('pppppp');
+        }
+    }, [loading])
+    console.log(!(conflict.length < 1 && conflict.length > 0), 'can save');
+
+    return !screenLoading ? <ScreenLoading /> : (<View style={{ height: '100%' }}>
+        <View style={styles.header}>
+            <ScreenHeader text={"Preview Day and Time"} onBackPress={navigation.goBack} withBackButton={true} />
         </View>
-    )
+        <View style={{ marginHorizontal: 20, marginTop: 12 }}>
+            <DaysOfWeek startOfWeek={startDateWeek} />
+        </View>
+        <View style={{ flex: 1 }}>
+            <WeekTable startOfWeek={startDateWeek} endOfWeek={endDateWeek} onHandleData={handeScheduleSlots} conflict={conflict} />
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, paddingTop: 8 }}>
+            <View >
+                <CustomButton text={"<"} onPress={goToPrevWeek} style={{ height: 24, width: 40, }} />
+            </View>
+            {conflict.length > 0 && <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Conflict />
+                <Text style={{ marginLeft: 4, fontSize: 12, lineHeight: 19, color: '#F4380E' }}>You have a conflict. Please check each week</Text>
+            </View>}
+            <View >
+                <CustomButton text={">"} onPress={goToNextWeek} style={{ height: 24, width: 40, }} />
+            </View>
+        </View>
+        <Text style={{ textAlign: 'center' }}>
+            <Text style={{ fontSize: 17, lineHeight: 34, fontWeight: '700', }}>Scheduled Classes: </Text>
+            <Text style={{ opacity: 0.4 }}>{slots.length || 0}</Text>
+        </Text>
+        <View style={{ padding: 20, justifyContent: 'flex-end' }}>
+            <CustomButton text={"Save"} onPress={!conflict.length ? onSave : () => { }} disabled={!(conflict.length < 1)} />
+        </View>
+
+    </View>)
 }

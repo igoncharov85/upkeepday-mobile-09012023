@@ -43,6 +43,7 @@ export const ChooseAddressModal: React.FC<IChooseAddressModal> = memo(({ visible
     }, []);
     const onShowModal = () => {
         setModalVisible(!modalVisible);
+        handleShowModal()
     };
     const handlePress = (index: number) => {
         setActiveIndex(index);

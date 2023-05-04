@@ -1,5 +1,16 @@
 import * as Yup from 'yup'
 import { RegexEnum } from '../constants/validation/regex.enum';
+function compareDates(date1: string, date2: string) {
+    var a = new Date(date1);
+    var b = new Date(date2);
+
+    if (a.getTime() < b.getTime()) {
+        return true
+    }
+    else {
+        return false;
+    }
+}
 export const AddClassNameSchema = Yup.object().shape({
     name: Yup.string()
         .min(3, "Name should be at least 3 characters")
@@ -13,11 +24,22 @@ export const AddLocationSchema = Yup.object().shape({
     country: Yup.string().required(),
 })
 export const SelectedDateSchema = Yup.object().shape({
-    startDate: Yup.string().required("Start date is required"),
-    totalClasses: Yup.string(),
+    startDate: Yup.string().required(''),
+    totalClasses: Yup.number().min(1, "Number of totalClasses should be greater than 0"),
     finishDate: Yup.string(),
-    numberOf: Yup.string(),
+    numberOf: Yup.number()
+        .min(1, "Number of numberOf should be greater than 0"),
 })
+export const SelectedDateForNumberOfSchema = Yup.object().shape({
+    numberOf: Yup.number().required(),
+})
+export const SelectedDateForFinishDateSchema = Yup.object().shape({
+    finishDate: Yup.string().required(),
+})
+export const SelectedDateForTotalClassesSchema = Yup.object().shape({
+    totalClasses: Yup.number().required(),
+})
+
 export const AddClassSchema = Yup.object().shape({
     Name: Yup.string(),
     Url: Yup.string(),

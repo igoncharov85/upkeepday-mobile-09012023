@@ -11,6 +11,7 @@ import { ColorEnum } from '../../../common/constants/styles/colors.enum';
 import { dispatch } from '../../../store/store';
 import { updateCurrentClassRequestAction } from '../../../store/shedule';
 import { ScreenLoading } from '../../../components/UI/ScreenLoading';
+import { boolean } from 'yup';
 
 
 
@@ -52,48 +53,60 @@ export const WeekTable: FC<ISheduleTable> = memo(
 
 
 
-    const onChangeEditMode = () => {
-      setEditMode(true);
+    const onChangeEditMode = (value: boolean) => {
+      setEditMode(value);
+      setSlotUid('')
     }
 
     const onDeleteSlot = (slot: IGeneratedScheduleEntries) => {
       if (editMode) {
-        const index = slots.findIndex((event) => event.StartDateTime === slot.StartDateTime && event.Duration === slot.Duration);
+        const index = slots.findIndex((event) => event.SlotUid === slot.SlotUid);
         const newSlots = slots?.filter((_, i) => i !== index);
-        setIsSlotEdit(true);
-        setSlots(newSlots);
-        setSlotUid(slot.SlotUid)
+
+        if (JSON.stringify(slots) !== JSON.stringify(newSlots)) {
+          console.log(slot, 'delete slot');
+
+          setIsSlotEdit(true);
+          setSlots(newSlots);
+          setSlotUid(slot.SlotUid)
+
+        }
       }
 
     }
 
     const onMoveSlot = (slot: IGeneratedScheduleEntries) => {
-      if (editMode) {
+      console.log({ Duration: slot.Duration, StartDateTime: slot.StartDateTime, SlotUid: SlotUid });
+
+      if (editMode && isSlotEdit && SlotUid) {
         setSlots([...slots, { Duration: slot.Duration, StartDateTime: slot.StartDateTime, SlotUid: SlotUid }]);
         onHandleData(slots)
         setIsSlotEdit(false)
         setEditMode(false);
-
+        setSlotUid('')
       }
 
 
     }
     useEffect(() => {
       onHandleData(slots)
+      console.log(slots, 'slots');
+
     }, [slots])
-    const timeData = generateTimeData(`0${startOfHour}:00`, '24:00');
+    const timeData = generateTimeData(`00:00`, '24:00');
 
     const weekStructure = createWeekStructure(
       startOfWeek,
       endOfWeek,
       timeData,
     );
+    if (!loading) {
+      console.log('loading comlited');
 
+    }
     const date = (new Date(startOfWeek));
-    const currentDate = new Date(addDayAndHoursToDate(date.toISOString(), 2, 0))
-    findScheduleEntries(slots as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, 2 + 8)
-    return loading ? <ScreenLoading /> : (<View style={styles.container}>
-      <ScrollView >
+    return (<View style={styles.container}>
+      <ScrollView contentOffset={{ x: 0, y: 64 * 8 }}>
         <Row style={{ justifyContent: 'space-between' }}>
           <Column style={{ width: 56 }}>
             {timeData.map(item => (
@@ -107,20 +120,21 @@ export const WeekTable: FC<ISheduleTable> = memo(
                 <Column key={dayIndex}>
                   {dayEvents?.map((_, index) => {
                     const currentDate = new Date(addDayAndHoursToDate(date.toISOString(), dayIndex, 0))
-                    const activeItem = findScheduleEntries(slots as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index + 8)
-                    const conflictItem = findScheduleEntries(conflict as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index + 8)
+                    const activeItem = findScheduleEntries(slots as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
+                    const conflictItem = findScheduleEntries(conflict as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
 
                     // console.log(currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index + 8);
 
                     return <WeekTableItem
                       key={`${dayIndex}-${index}`}
-                      timeIndex={index + 8}
-                      StartDateTime={addDayAndHoursToDate(date.toISOString(), dayIndex, index + 8)}
+                      timeIndex={index}
+                      StartDateTime={addDayAndHoursToDate(date.toISOString(), dayIndex, index)}
                       activeItem={activeItem && activeItem[0]}
                       conflict={!!conflictItem[0]}
                       onLongPress={onChangeEditMode}
                       editMode={editMode}
-                      editSlot={isSlotEdit ? onMoveSlot : onDeleteSlot}
+                      onDeleteSlot={onDeleteSlot}
+                      onMoveSlot={onMoveSlot}
                     />;
                   })}
 

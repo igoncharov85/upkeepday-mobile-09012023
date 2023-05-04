@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useState } from "react";
+import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 import { View, ScrollView, Dimensions, KeyboardAvoidingView, Platform } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -25,9 +25,9 @@ enum TypeLocation {
 }
 
 const formInitialValues = {
-    name: " ",
-    locationType: " ",
-    addressLine: " ",
+    name: "",
+    locationType: "",
+    addressLine: "",
 };
 let windowHeight: any;
 if (Platform.OS === 'ios') {
@@ -65,11 +65,18 @@ export const AddClassScreen: React.FC<IAddClassScreen> = memo(() => {
             handleSubmit,
             isValid,
         }: FormikProps<typeof formInitialValues>) => {
-
+            const [touch, setTouch] = useState(false);
+            const [valid, setValid] = useState(false);
+            useEffect(() => {
+                if (touch) {
+                    setValid(isValid)
+                }
+            }, [isValid]);
             return (
                 <>
                     <View style={{ marginTop: 12 }}>
                         <InputForm
+                            onTouchStart={() => setTouch(true)}
                             labelText="Name"
                             value={values.name}
                             onChange={handleChange("name")}
@@ -104,7 +111,7 @@ export const AddClassScreen: React.FC<IAddClassScreen> = memo(() => {
                         <CustomButton
                             text={"Next Step"}
                             onPress={handleSubmit}
-                            disabled={!isValid}
+                            disabled={!valid}
                         />
                     </View>
                 </>
@@ -140,6 +147,7 @@ export const AddClassScreen: React.FC<IAddClassScreen> = memo(() => {
                         withBackButton={true}
                     />
                     <Formik
+                        enableReinitialize={true}
                         initialValues={formInitialValues}
                         validationSchema={AddClassNameSchema}
                         onSubmit={handleSubmit}

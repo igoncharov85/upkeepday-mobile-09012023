@@ -13,7 +13,7 @@ import { ListGradientCircleButtons } from "../AddClassScreen/components/ListGrad
 import { NavigationEnum } from "../../common/constants/navigation";
 import { dispatch } from "../../store/store";
 import { updateCurrentClassRequestAction } from "../../store/shedule";
-import { SelectedDateSchema } from "../../common/shemas/addClass.shape";
+import { SelectedDateForFinishDateSchema, SelectedDateForNumberOfSchema, SelectedDateForTotalClassesSchema, SelectedDateSchema } from "../../common/shemas/addClass.shape";
 import CalendarComponent from "../SheduleScreen/components/CalendarComponent";
 import { convertDate } from "../../services/utils/fullDateToValue.util";
 import { useAppSelector } from "../../store/hooks";
@@ -56,17 +56,22 @@ if (Platform.OS === 'ios') {
 }
 export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
     const { createCurrentClassRequest } = useAppSelector(state => state.schedule)
+    const [currentSchema, setCurrentSchema] = useState({})
 
     const navigation = useNavigation();
     const getTypeDate = (type: number) => {
         switch (type) {
             case 0:
+                setCurrentSchema(SelectedDateForTotalClassesSchema)
                 return EndScheduleType.FixedClassesNumber
             case 1:
+                setCurrentSchema(SelectedDateForFinishDateSchema)
                 return EndScheduleType.SpecificEndDate
             case 2:
+                setCurrentSchema(SelectedDateForNumberOfSchema)
                 return EndScheduleType.FixedWeekNumber
             case 3:
+                setCurrentSchema(SelectedDateForNumberOfSchema)
                 return EndScheduleType.FixedMonthNumber
         }
     }
@@ -79,9 +84,13 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
         isValid,
     }: FormikProps<typeof formInitialValues>) => {
         const [typeLocation, setTypeLocation] = useState(0);
-        const [numberOf, setNumberOf] = useState(0);
 
-        const handleTypeLocation = (index: number) => setTypeLocation(index)
+        const handleTypeLocation = (index: number) => {
+            setFieldValue('totalClasses', '')
+            setFieldValue('finishDate', '')
+            setFieldValue('numberOf', '')
+            setTypeLocation(index)
+        }
 
         const onFixedPeriodTime = (number: number) => {
             setFieldValue('endScheduleType', getTypeDate(!number ? 2 : 3))
@@ -90,6 +99,7 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
         useEffect(() => {
             setFieldValue('endScheduleType', getTypeDate(typeLocation))
         }, [typeLocation])
+        console.log(errors, 'error');
 
         return (
             <View style={[styles.container, { minHeight: windowHeight, justifyContent: 'flex-start' }]}>
@@ -100,6 +110,7 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
                     <ListButtons buttons={[' Fixed number of classes', 'On Specific Date', ' Fixed period in time']} label="Class Type" onPress={handleTypeLocation} index={typeLocation} />
                     {typeLocation == TypeDate.FixedNumberOfClasses &&
                         <InputForm
+                            keyboardType="numeric"
                             labelText='Enter Total Number of Classes'
                             onChangeText={handleChange('totalClasses')}
                             value={values.totalClasses}
@@ -110,19 +121,20 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
                     {typeLocation == TypeDate.FixedWeekNumber &&
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <InputForm
+                                keyboardType="numeric"
                                 labelText='Number of'
                                 onChangeText={handleChange('numberOf')}
                                 value={values.numberOf}
                                 style={{ width: 180, marginRight: 24 }}
                             />
-                            <ListGradientCircleButtons onPress={onFixedPeriodTime} buttons={['Weeks', 'Months']} index={numberOf} />
+                            <ListGradientCircleButtons onPress={onFixedPeriodTime} buttons={['Weeks', 'Months']} />
                         </View>}
 
 
                 </View>
 
                 <View style={{ flex: 1, width: '100%', justifyContent: 'flex-end' }} >
-                    <CustomButton text={"Next Step"} onPress={handleSubmit} />
+                    <CustomButton text={"Next Step"} onPress={handleSubmit} disabled={!isValid} />
                 </View>
 
             </View>
@@ -130,9 +142,10 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
 
     };
 
+    const validationSchemas = [SelectedDateSchema, currentSchema];
     const FormikSelectDateScreen = withFormik<any, typeof formInitialValues>({
         mapPropsToValues: () => formInitialValues,
-        validationSchema: SelectedDateSchema,
+        validationSchema: validationSchemas,
         handleSubmit: (values,) => {
             dispatch(
                 updateCurrentClassRequestAction({

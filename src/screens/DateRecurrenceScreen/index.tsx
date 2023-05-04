@@ -10,11 +10,12 @@ import { formatDate, getWeekDates } from "../../services/utils/fullDateToValue.u
 import { IWeekTimeSlot } from "../../common/types/schedule.types";
 import { NavigationEnum } from "../../common/constants/navigation";
 import { dispatch } from "../../store/store";
-import { updateCurrentClassRequestAction } from "../../store/shedule";
+import { setScheduleLoading, updateCurrentClassRequestAction } from "../../store/shedule";
 import { generateScheduleAction } from "../../store/shedule/actions";
 import { useAppSelector } from "../../store/hooks";
 import { calculateEndTimeDate, calculateNumberOfClasses } from "../../services/utils/calculateNumberOfClasses";
 import { EndScheduleType } from "../SelectDateScreen";
+import { call } from "redux-saga/effects";
 
 const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
@@ -42,7 +43,8 @@ export const DateRecurrenceScreen: React.FC<IDateRecurrenceScreen> = () => {
                 return new Date(finishDate).toISOString()
         }
     }
-    const goNextStep = () => {
+
+    const goNextStep = async () => {
         const numberClass = endScheduleType == EndScheduleType.FixedClassesNumber ? createCurrentClassRequest.Class!.EndNumber : calculateNumberOfClasses(weekTimeSlots, weekDates.startDate.toISOString(), getEndDate(endScheduleType));
         const endDate = formatDate(endScheduleType == EndScheduleType.FixedClassesNumber ? calculateEndTimeDate(weekTimeSlots, weekDates.startDate.toISOString(), numberClass as number) : getEndDate(endScheduleType)).date[1];
 
@@ -62,29 +64,6 @@ export const DateRecurrenceScreen: React.FC<IDateRecurrenceScreen> = () => {
                 EndDate: endDate as string,
                 Slots: weekTimeSlots
             }
-            // {
-            //     ScheduleType: "FixedClassesNumber",
-            //     StartDate: "2023-04-24",
-            //     Number: 30,
-            //     EndDate: "2023-07-02",
-            //     Slots: [
-            //         {
-            //             DayOfWeek: 1,
-            //             Duration: 60,
-            //             StartTime: "9:00"
-            //         },
-            //         {
-            //             DayOfWeek: 3,
-            //             Duration: 60,
-            //             StartTime: "10:00"
-            //         },
-            //         {
-            //             DayOfWeek: 5,
-            //             Duration: 60,
-            //             StartTime: "9:00"
-            //         }
-            //     ],
-            // }
 
         ))
 
@@ -112,9 +91,7 @@ export const DateRecurrenceScreen: React.FC<IDateRecurrenceScreen> = () => {
                 ))}
             </View>
             <View style={{ flex: 1 }}>
-                <ScrollView>
-                    <WeekTable startOfWeek={weekDates.startDate} endOfWeek={weekDates.endDate} onHandleData={setDataForWeek} />
-                </ScrollView>
+                <WeekTable startOfWeek={weekDates.startDate} endOfWeek={weekDates.endDate} onHandleData={setDataForWeek} />
             </View>
             <View style={{ padding: 20, justifyContent: 'flex-end' }}>
                 <CustomButton text={"Next Step"} disabled={!weekTimeSlots.length} onPress={goNextStep} />

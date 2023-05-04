@@ -42,8 +42,10 @@ export function* generateScheduleWorker({
       ScheduleService.generateScheduleEntry,
       payload
     );
-    console.log("data: ", data)
+    // console.log("data: ", data)
     if (data) {
+      console.log('new data');
+
       yield put(setTimeSlotsAction(data.Slots))
       yield put(setGeneratedScheduleEntriesAction(data.GeneratedSessions))
       yield put(setCurrentScheduleEntries(data.CurrentSessions))

@@ -1,4 +1,4 @@
-import React, { FC, memo, useState } from 'react';
+import React, { FC, memo, useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View, StyleProp, ViewStyle } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { WeekTableItem } from './WeekTableItem';
@@ -18,7 +18,7 @@ export const startOfHour = 8;
 export const WeekTable: FC<ISheduleTable> = memo(
   ({ startOfWeek, endOfWeek, onHandleData }) => {
     const [slots, setSlots] = useState<IWeekTimeSlot[]>([]);
-
+    const scrollViewRef = useRef<ScrollView>(null);
     const onSlotPress = (slot: IWeekTimeSlot) => {
       const index = slots.findIndex((event) => event.DayOfWeek === slot.DayOfWeek && event.StartTime === slot.StartTime && event.Duration === slot.Duration);
       if (index === -1) {
@@ -34,15 +34,19 @@ export const WeekTable: FC<ISheduleTable> = memo(
 
 
 
-    const timeData = generateTimeData(`0${startOfHour}:00`, '24:00');
+    const timeData = generateTimeData(`00:00`, '24:00');
     const weekStructure = createWeekStructure(
       startOfWeek,
       endOfWeek,
       timeData,
     );
+    useEffect(() => {
+
+      scrollViewRef.current?.scrollTo({ x: 0, y: 64 * 8, animated: true });
+    }, []);
     return (
       <View style={styles.container}>
-        <ScrollView >
+        <ScrollView ref={scrollViewRef}>
           <Row style={{ justifyContent: 'space-between' }}>
             <Column style={{ width: 56 }}>
               {timeData.map(item => (

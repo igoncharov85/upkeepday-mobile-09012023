@@ -18,37 +18,62 @@ enum TimeDuration {
   OneAndAHalfHours = 90,
 }
 interface IWeekTableItem {
-
   StartDateTime: string;
   timeIndex: number;
-  onLongPress: () => void;
+  onLongPress: (value: boolean) => void;
   editMode: boolean;
   activeItem: IGeneratedScheduleEntries;
-  editSlot: (slot: IGeneratedScheduleEntries) => void;
-  conflict: boolean
+  onMoveSlot: (slot: IGeneratedScheduleEntries) => void;
+  conflict: boolean;
+  onDeleteSlot: (slot: IGeneratedScheduleEntries) => void;
 }
+
 export const WeekTableItem: FC<IWeekTableItem> = memo(
   ({
     StartDateTime,
     onLongPress,
     activeItem,
     editMode,
-    editSlot,
-    conflict
+    conflict,
+    onMoveSlot,
+    onDeleteSlot
 
   }) => {
-    console.log(activeItem, 'activeItem');
 
     const { createCurrentClassRequest } = useAppSelector(state => state.schedule);
     const [active, setActive] = useState(!!activeItem ? true : false)
+    const [isMoving, setIsMoving] = useState(false);
     const colorsTrial = ['#F3AF2C', '#E9600D'];
     const colorsLesson = ['#EAAFC8', '#654EA3'];
     // if (active) {
     //   console.log(active);
     // }
     const onHandleSlot = () => {
-      setActive(!active)
-      editSlot(activeItem || { SlotUid: '', StartDateTime: StartDateTime, Duration: TimeDuration.OneHour })
+      // console.log(active ? 'delete' : 'move');
+      console.log(isMoving, 'isMoving');
+      setIsMoving(true)
+
+      // !active && 
+      if (active) {
+        onDeleteSlot(activeItem)
+        console.log(activeItem.SlotUid, 'SlotUid');
+
+        setActive(false)
+        console.log('delete');
+
+      } else if (!!!activeItem) {
+        onMoveSlot({ SlotUid: '', StartDateTime: StartDateTime, Duration: TimeDuration.OneHour })
+        setActive(true)
+        onLongPress(false)
+        console.log('move');
+
+      }
+      // editSlot(activeItem || { SlotUid: '', StartDateTime: StartDateTime, Duration: TimeDuration.OneHour })
+    }
+
+    const deleteSlot = () => {
+      onDeleteSlot(activeItem)
+      onLongPress(false)
     }
     const getColors = (typeSession: TypeSession) => {
       switch (typeSession) {
@@ -59,7 +84,7 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
       }
     };
     return (
-      <TouchableOpacity onLongPress={onLongPress} onPress={() => editMode && onHandleSlot()} activeOpacity={editMode ? 0.5 : 1}>
+      <TouchableOpacity onLongPress={() => onLongPress(true)} onPress={() => editMode && onHandleSlot()} activeOpacity={editMode ? 0.5 : 1} >
         <View style={styles.containerItem}>
           {activeItem ? (
             <View
@@ -83,9 +108,9 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
                   right: 0,
                   height: `100%`,
                 }}>
-                {editMode && (<View style={{ position: 'absolute', top: -5, right: -5 }}>
+                {editMode && (<TouchableOpacity style={{ position: 'absolute', top: -5, right: -5 }} onPress={deleteSlot}>
                   <Cancel />
-                </View>)}
+                </TouchableOpacity>)}
                 <Text style={[styles.textItem, conflict && { color: 'red' }]}>{createCurrentClassRequest.Class?.Name}</Text>
               </LinearGradient>
             </View>

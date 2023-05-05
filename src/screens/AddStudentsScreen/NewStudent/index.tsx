@@ -34,7 +34,7 @@ export const NewStudent: React.FC<INewStudentProps> = () => {
 
     useEffect(() => {
         return () => {
-            dispatch(updateCurrentClassRequestAction({ NewStudents: newUsers, }))
+            dispatch(updateCurrentClassRequestAction({ Students: newUsers, }))
         };
     }, []);
 
@@ -99,8 +99,8 @@ export const NewStudent: React.FC<INewStudentProps> = () => {
                 FirstName: values.FirstName,
                 LastName: values.LastName,
                 Email: values.Email,
-                PhoneCountry: phoneCountry,
-                PhoneNumber: phoneNumber
+                Phones: values.Phone,
+                Notes: values.Notes
             };
             setNewUsers([...newUsers, {
                 FirstName: values.FirstName,

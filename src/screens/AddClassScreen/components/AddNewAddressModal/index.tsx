@@ -102,7 +102,7 @@ export const AddNewAddressModal: React.FC<IAddNewAddressModal> = ({ visible, han
     })(renderForm);
     return (
 
-        <CustomModal isVisible={visible} closeModal={handleShowModal} height={550} withOverlay={true}>
+        <CustomModal isVisible={visible} closeModal={handleShowModal} height={550} >
             <View style={{
                 paddingHorizontal: 20,
                 paddingVertical: 20,

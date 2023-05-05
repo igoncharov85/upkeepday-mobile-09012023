@@ -14,12 +14,13 @@ interface ISheduleTable {
   endOfWeek: Date;
   onHandleData: (data: IWeekTimeSlot[]) => void;
 }
-export const startOfHour = 8;
 export const WeekTable: FC<ISheduleTable> = memo(
   ({ startOfWeek, endOfWeek, onHandleData }) => {
     const [slots, setSlots] = useState<IWeekTimeSlot[]>([]);
     const scrollViewRef = useRef<ScrollView>(null);
     const onSlotPress = (slot: IWeekTimeSlot) => {
+      console.log(slot, 'slit');
+
       const index = slots.findIndex((event) => event.DayOfWeek === slot.DayOfWeek && event.StartTime === slot.StartTime && event.Duration === slot.Duration);
       if (index === -1) {
         setSlots([...slots, slot]);
@@ -35,6 +36,8 @@ export const WeekTable: FC<ISheduleTable> = memo(
 
 
     const timeData = generateTimeData(`00:00`, '24:00');
+
+
     const weekStructure = createWeekStructure(
       startOfWeek,
       endOfWeek,
@@ -49,8 +52,8 @@ export const WeekTable: FC<ISheduleTable> = memo(
         <ScrollView ref={scrollViewRef}>
           <Row style={{ justifyContent: 'space-between' }}>
             <Column style={{ width: 56 }}>
-              {timeData.map(item => (
-                <TimeLineItem key={item} time={item} />
+              {timeData.map((item, index) => (
+                <TimeLineItem key={index} time={item} />
               ))}
             </Column>
             <Row style={{ flex: 1, paddingRight: 20, paddingBottom: 20 }}>

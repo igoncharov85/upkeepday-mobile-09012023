@@ -5,6 +5,7 @@ import styles from './styles';
 import { IGeneratedScheduleEntries, IWeekTimeSlot } from '../../../common/types/schedule.types';
 import Cancel from '../../../../assets/svg/Cancel';
 import { useAppSelector } from '../../../store/hooks';
+import { addDayAndHoursToDate } from '../../../services/utils/generateDate.util';
 
 
 enum TypeSession {
@@ -26,6 +27,8 @@ interface IWeekTableItem {
   onMoveSlot: (slot: IGeneratedScheduleEntries) => void;
   conflict: boolean;
   onDeleteSlot: (slot: IGeneratedScheduleEntries) => void;
+  dayIndex: number;
+  startOfWeek: Date;
 }
 
 export const WeekTableItem: FC<IWeekTableItem> = memo(
@@ -36,55 +39,56 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
     editMode,
     conflict,
     onMoveSlot,
-    onDeleteSlot
+    onDeleteSlot,
+    dayIndex,
+    timeIndex,
+    startOfWeek
 
   }) => {
 
     const { createCurrentClassRequest } = useAppSelector(state => state.schedule);
-    const [active, setActive] = useState(!!activeItem ? true : false)
+    const [active, setActive] = useState(!!activeItem)
     const [isMoving, setIsMoving] = useState(false);
     const colorsTrial = ['#F3AF2C', '#E9600D'];
     const colorsLesson = ['#EAAFC8', '#654EA3'];
-    // if (active) {
-    //   console.log(active);
-    // }
+
     const onHandleSlot = () => {
-      // console.log(active ? 'delete' : 'move');
-      console.log(isMoving, 'isMoving');
-      setIsMoving(true)
+      console.log(!!activeItem, '!!activeItem');
 
-      // !active && 
-      if (active) {
+      if (active && !!activeItem) {
         onDeleteSlot(activeItem)
-        console.log(activeItem.SlotUid, 'SlotUid');
-
         setActive(false)
         console.log('delete');
 
-      } else if (!!!activeItem) {
-        onMoveSlot({ SlotUid: '', StartDateTime: StartDateTime, Duration: TimeDuration.OneHour })
+      } else {
+        onMoveSlot({ SlotUid: '', StartDateTime: addDayAndHoursToDate(startOfWeek.toISOString(), dayIndex, timeIndex), Duration: TimeDuration.OneHour })
         setActive(true)
-        onLongPress(false)
-        console.log('move');
-
       }
-      // editSlot(activeItem || { SlotUid: '', StartDateTime: StartDateTime, Duration: TimeDuration.OneHour })
     }
 
     const deleteSlot = () => {
       onDeleteSlot(activeItem)
       onLongPress(false)
     }
-    const getColors = (typeSession: TypeSession) => {
-      switch (typeSession) {
-        case TypeSession.lesson:
-          return colorsLesson;
-        case TypeSession.trial:
-          return colorsTrial;
+    const getItemInfo = () => {
+      if (activeItem?.SlotUid) {
+        console.log(StartDateTime, 'StartDateTime');
+        console.log(activeItem.StartDateTime, 'activeItem StartDateTime');
+        console.log(activeItem.SlotUid, 'activeItem SlotUid');
+      } else {
+        console.log(StartDateTime, 'StartDateTime');
+        console.log(dayIndex, 'dayIndex');
+        console.log(timeIndex, 'timeIndex');
+        console.log(addDayAndHoursToDate(startOfWeek.toISOString(), dayIndex, timeIndex + 3));
+
+
+
+
       }
-    };
+
+    }
     return (
-      <TouchableOpacity onLongPress={() => onLongPress(true)} onPress={() => editMode && onHandleSlot()} activeOpacity={editMode ? 0.5 : 1} >
+      <TouchableOpacity onPressIn={getItemInfo} onLongPress={() => onLongPress(true)} onPress={() => editMode && onHandleSlot()} activeOpacity={editMode ? 0.5 : 1} >
         <View style={styles.containerItem}>
           {activeItem ? (
             <View
@@ -108,7 +112,7 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
                   right: 0,
                   height: `100%`,
                 }}>
-                {editMode && (<TouchableOpacity style={{ position: 'absolute', top: -5, right: -5 }} onPress={deleteSlot}>
+                {editMode && (<TouchableOpacity style={{ position: 'absolute', top: 0, right: 0 }} onPress={deleteSlot}>
                   <Cancel />
                 </TouchableOpacity>)}
                 <Text style={[styles.textItem, conflict && { color: 'red' }]}>{createCurrentClassRequest.Class?.Name}</Text>

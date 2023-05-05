@@ -83,10 +83,8 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
     useEffect(() => {
         if (!loading) {
             setScreenLoading(true)
-            console.log('pppppp');
         }
     }, [loading])
-    console.log(!(conflict.length < 1 && conflict.length > 0), 'can save');
 
     return !screenLoading ? <ScreenLoading /> : (<View style={{ height: '100%' }}>
         <View style={styles.header}>

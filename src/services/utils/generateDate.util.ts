@@ -35,7 +35,7 @@ export const createWeekStructure = (
         const eventDate: Date = new Date(event.StartDateTime);
         if (eventDate >= startOfWeek && eventDate <= endOfWeek) {
             const dayIndex = eventDate.getDay();
-            const hourIndex = eventDate.getHours() - 8;
+            const hourIndex = eventDate.getHours();
             weekStructure[dayIndex][hourIndex] = event;
         }
     });

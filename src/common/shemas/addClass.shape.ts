@@ -63,6 +63,6 @@ export const NewStudentSchema = Yup.object().shape({
         .email()
         .required(),
     Phone: Yup.string()
-        .matches(RegexEnum.PHONE)
+        .matches(RegexEnum.PHONE, "Phone number is not valid")
         .required(),
 });

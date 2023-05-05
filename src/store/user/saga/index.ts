@@ -19,6 +19,8 @@ export function* fetchUserWorker(payload: IAction<null>): SagaIterator {
             yield put(setStudentAction(data))
         }
     } catch (error) {
+        console.log('error', error);
+
         ErrorFilterService.validateError(error)
     }
 }

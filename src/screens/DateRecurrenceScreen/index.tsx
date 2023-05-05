@@ -67,6 +67,8 @@ export const DateRecurrenceScreen: React.FC<IDateRecurrenceScreen> = () => {
 
         ))
 
+        console.log(weekTimeSlots, '$$$$');
+
         //@ts-ignore
         navigation.navigate(NavigationEnum.DATE_PREVIEW_SCREEN)
     }

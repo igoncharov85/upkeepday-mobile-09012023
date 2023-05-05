@@ -42,8 +42,8 @@ export const SheduleTable: FC<ISheduleTable> = memo(
         <ScrollView contentOffset={{ x: 0, y: 64 * 8 }}>
           <Row style={{ justifyContent: 'space-between' }}>
             <Column>
-              {timeData.map(item => (
-                <TimeLineItem key={item} time={item} />
+              {timeData.map((item, index) => (
+                <TimeLineItem key={index} time={item} />
               ))}
             </Column>
             <Row style={{ flex: 1 }}>
@@ -56,7 +56,7 @@ export const SheduleTable: FC<ISheduleTable> = memo(
                       if (findObject(CurrentScheduledEntries, index, dayIndex + startWeekOfDay)) {
                         return (
                           <SheduleTableItem
-                            key={item.SlotUid}
+                            key={index}
                             ClassName={item.ClassName}
                             Duration={item.Duration}
                             SlotUid={item.SlotUid}
@@ -64,7 +64,7 @@ export const SheduleTable: FC<ISheduleTable> = memo(
                             ScheduleEntryId={0} />
                         );
                       }
-                      return <SheduleTableItem key={`${dayIndex}-${index}`} SlotUid={''} StartDateTime={''} Duration={0} ClassName={''} ScheduleEntryId={0} />;
+                      return <SheduleTableItem key={index} SlotUid={''} StartDateTime={''} Duration={0} ClassName={''} ScheduleEntryId={0} />;
                     })}
                     {isToday(dayIndex) && (
                       <View style={[styles.absoluteFill, styles.mask]} />

@@ -3,7 +3,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import styles from './styles';
 import { IWeekTimeSlot } from '../../../common/types/schedule.types';
-import { startOfHour } from '.';
+
 
 enum TypeSession {
   lesson,
@@ -35,7 +35,7 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
     const [active, setActive] = useState(false)
     const colorsTrial = ['#F3AF2C', '#E9600D'];
     const colorsLesson = ['#EAAFC8', '#654EA3'];
-    const startDateTime = `${timeIndex + startOfHour}:00`
+    const startDateTime = `${timeIndex}:00`
 
     const onHandleSlot = () => {
       onHandleClick({ DayOfWeek: dayOfWeek, StartTime: startDateTime as string, Duration: timeDuration })

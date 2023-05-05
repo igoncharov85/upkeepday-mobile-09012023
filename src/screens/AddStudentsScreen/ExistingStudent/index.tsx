@@ -33,6 +33,8 @@ export const ExistingStudent: React.FC<IExistingStudentProps> = () => {
     };
     useEffect(() => {
         dispatch(fetchUsersAction())
+        console.log(students);
+
     }, [])
 
 

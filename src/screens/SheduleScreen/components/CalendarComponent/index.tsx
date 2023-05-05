@@ -69,7 +69,7 @@ const CalendarComponent: React.FC<Props> = memo(
           }}>
           <Calendar
             style={{
-              backgroundColor: 'none',
+              backgroundColor: 'none'
             }}
             theme={{
               calendarBackground: 'none',
@@ -86,7 +86,7 @@ const CalendarComponent: React.FC<Props> = memo(
               )
             }
             monthFormat={'MMMM yyyy'}
-            firstDay={6}
+            firstDay={0}
             current={selectedDate}
             //@ts-ignore
             dayComponent={dayComponent}

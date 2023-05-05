@@ -33,6 +33,8 @@ function findScheduleEntries(
   });
   return filteredEntries;
 }
+
+
 interface ISheduleTable {
   startOfWeek: Date;
   endOfWeek: Date;
@@ -49,7 +51,8 @@ export const WeekTable: FC<ISheduleTable> = memo(
     const [editMode, setEditMode] = useState(false);
     const [isSlotEdit, setIsSlotEdit] = useState(false);
     const [SlotUid, setSlotUid] = useState('');
-    const [slots, setSlots] = useState<IGeneratedScheduleEntries[]>(GeneratedScheduleEntries as []);
+    const [slots, setSlots] = useState<IGeneratedScheduleEntries[]>(GeneratedScheduleEntries as [] || []);
+
 
 
 
@@ -60,15 +63,15 @@ export const WeekTable: FC<ISheduleTable> = memo(
 
     const onDeleteSlot = (slot: IGeneratedScheduleEntries) => {
       if (editMode) {
-        const index = slots.findIndex((event) => event.SlotUid === slot.SlotUid);
-        const newSlots = slots?.filter((_, i) => i !== index);
+        const index = slots.findIndex((event) => event?.StartDateTime === slot?.StartDateTime);
+        const newSlots = slots.filter((_, i) => i !== index);
 
         if (JSON.stringify(slots) !== JSON.stringify(newSlots)) {
-          console.log(slot, 'delete slot');
-          onHandleData(slots)
-          setIsSlotEdit(true);
-          setSlots(newSlots);
           setSlotUid(slot.SlotUid)
+          setSlots(newSlots);
+          setIsSlotEdit(true);
+          onHandleData(slots)
+          console.log(slot, 'delete slot');
 
         }
       }
@@ -76,21 +79,21 @@ export const WeekTable: FC<ISheduleTable> = memo(
     }
 
     const onMoveSlot = (slot: IGeneratedScheduleEntries) => {
-      console.log({ Duration: slot.Duration, StartDateTime: slot.StartDateTime, SlotUid: SlotUid });
-
-      if (editMode && isSlotEdit && SlotUid) {
+      // console.log(SlotUid, 'SlotUid');
+      if (SlotUid && isSlotEdit) {
         setSlots([...slots, { Duration: slot.Duration, StartDateTime: slot.StartDateTime, SlotUid: SlotUid }]);
-        onHandleData(slots)
+        console.log({ Duration: slot.Duration, StartDateTime: slot.StartDateTime, SlotUid: SlotUid }, 'slot');
+
+        setSlotUid('')
         setIsSlotEdit(false)
         setEditMode(false);
-        setSlotUid('')
+        onHandleData(slots)
       }
 
 
     }
     useEffect(() => {
       onHandleData(slots)
-      console.log(slots, 'slots');
 
     }, [slots])
     const timeData = generateTimeData(`00:00`, '24:00');
@@ -109,8 +112,8 @@ export const WeekTable: FC<ISheduleTable> = memo(
       <ScrollView contentOffset={{ x: 0, y: 64 * 8 }}>
         <Row style={{ justifyContent: 'space-between' }}>
           <Column style={{ width: 56 }}>
-            {timeData.map(item => (
-              <TimeLineItem key={item} time={item} />
+            {timeData.map((item, index) => (
+              <TimeLineItem key={index} time={item} />
             ))}
           </Column>
           <Row style={{ flex: 1, paddingRight: 20, paddingBottom: 20 }}>
@@ -120,14 +123,15 @@ export const WeekTable: FC<ISheduleTable> = memo(
                 <Column key={dayIndex}>
                   {dayEvents?.map((_, index) => {
                     const currentDate = new Date(addDayAndHoursToDate(date.toISOString(), dayIndex, 0))
-                    const activeItem = findScheduleEntries(slots as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
-                    const conflictItem = findScheduleEntries(conflict as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
 
-                    // console.log(currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index + 8);
-
+                    const activeItem = findScheduleEntries(slots as [], currentDate.getUTCDate() + 1, currentDate.getUTCMonth() + 1, index)
+                    const conflictItem = findScheduleEntries(conflict as [], currentDate.getUTCDate() + 1, currentDate.getUTCMonth() + 1, index)
+                    activeItem[0] && console.log(activeItem, 'activeItem');
                     return <WeekTableItem
                       key={`${dayIndex}-${index}`}
                       timeIndex={index}
+                      dayIndex={dayIndex}
+                      startOfWeek={startOfWeek}
                       StartDateTime={addDayAndHoursToDate(date.toISOString(), dayIndex, index)}
                       activeItem={activeItem && activeItem[0]}
                       conflict={!!conflictItem[0]}

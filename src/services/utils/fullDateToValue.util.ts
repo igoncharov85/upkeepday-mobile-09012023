@@ -103,10 +103,12 @@ export const getWeekDates = (date: Date) => {
   return { startDate: date, endDate: endDate };
 };
 
-export function convertDate(date: string): [string, string] {
+export function convertDate(date: string): [string, string, string] {
   const parsedDate = moment(date, "MMM D, YYYY");
   const formattedDate = parsedDate.format("YYYY-MM-DD");
   const formattedDate2 = parsedDate.format("DD/MM/YYYY");
+  const formattedDate3 = date.trim() ? parsedDate.format("MM/DD/YYYY") : "";
+  console.log(formattedDate3, 'formattedDate3', parsedDate);
 
-  return [formattedDate, formattedDate2];
+  return [formattedDate, formattedDate2, formattedDate3];
 }

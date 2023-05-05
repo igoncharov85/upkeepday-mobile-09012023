@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useEffect, useRef, useState } from "react";
 import { Dimensions, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FormikProps, withFormik } from "formik";
@@ -17,6 +17,7 @@ import { SelectedDateForFinishDateSchema, SelectedDateForNumberOfSchema, Selecte
 import CalendarComponent from "../SheduleScreen/components/CalendarComponent";
 import { convertDate } from "../../services/utils/fullDateToValue.util";
 import { useAppSelector } from "../../store/hooks";
+import moment from "moment";
 
 
 
@@ -39,14 +40,7 @@ export enum EndScheduleType {
 
 interface ISelectDateScreen { }
 
-const formInitialValues = {
-    typeLocation: 0,
-    endScheduleType: "",
-    startDate: "",
-    totalClasses: "",
-    finishDate: "",
-    numberOf: "",
-};
+
 
 let windowHeight: any;
 if (Platform.OS === 'ios') {
@@ -56,25 +50,35 @@ if (Platform.OS === 'ios') {
 }
 export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
     const { createCurrentClassRequest } = useAppSelector(state => state.schedule)
-    // const [currentSchema, setCurrentSchema] = useState({})
-
+    const formInitialValues = {
+        typeLocation: 0,
+        endScheduleType: "",
+        startDate: createCurrentClassRequest.Class?.StartDate ? createCurrentClassRequest.Class?.StartDate : "",
+        totalClasses: "",
+        finishDate: "",
+        numberOf: "",
+    };
     const navigation = useNavigation();
+    const typeRef = useRef<string>('');
+
     const getTypeDate = (type: number) => {
         switch (type) {
             case 0:
-                // setCurrentSchema(SelectedDateForTotalClassesSchema)
-                return EndScheduleType.FixedClassesNumber
+                typeRef.current = EndScheduleType.FixedClassesNumber;
+                return EndScheduleType.FixedClassesNumber;
             case 1:
-                // setCurrentSchema(SelectedDateForFinishDateSchema)
-                return EndScheduleType.SpecificEndDate
+                typeRef.current = EndScheduleType.SpecificEndDate;
+                return EndScheduleType.SpecificEndDate;
             case 2:
-                // setCurrentSchema(SelectedDateForNumberOfSchema)
-                return EndScheduleType.FixedWeekNumber
+                typeRef.current = EndScheduleType.FixedWeekNumber;
+                return EndScheduleType.FixedWeekNumber;
             case 3:
-                // setCurrentSchema(SelectedDateForNumberOfSchema)
-                return EndScheduleType.FixedMonthNumber
+                typeRef.current = EndScheduleType.FixedMonthNumber;
+                return EndScheduleType.FixedMonthNumber;
         }
     }
+
+
     const SelectDateForm = ({
         values,
         handleChange,
@@ -99,13 +103,13 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
         useEffect(() => {
             setFieldValue('endScheduleType', getTypeDate(typeLocation))
         }, [typeLocation])
-        console.log(errors, 'error');
+        console.log(errors, 'errors');
 
         return (
             <View style={[styles.container, { minHeight: windowHeight, justifyContent: 'flex-start' }]}>
                 <ScreenHeader onBackPress={navigation.goBack} text="Add Class General Data" withBackButton={true} />
                 <View>
-                    <InputWithDate labelText={"Enter Start Date"} handleChange={setFieldValue} nameField="startDate" />
+                    <InputWithDate labelText={"Enter Start Date"} handleChange={setFieldValue} nameField="startDate" dateValue={createCurrentClassRequest.Class?.StartDate} />
 
                     <ListButtons buttons={[' Fixed number of classes', 'On Specific Date', ' Fixed period in time']} label="Class Type" onPress={handleTypeLocation} index={typeLocation} />
                     {typeLocation == TypeDate.FixedNumberOfClasses &&
@@ -113,10 +117,10 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
                             keyboardType="numeric"
                             labelText='Enter Total Number of Classes'
                             onChangeText={handleChange('totalClasses')}
-                            value={values.totalClasses}
+                            value={values.totalClasses as string}
                         />}
                     {typeLocation == TypeDate.OnSpecificDate &&
-                        <InputWithDate labelText={"Enter Finish Date"} handleChange={setFieldValue} nameField="finishDate" />}
+                        <InputWithDate labelText={"Enter Finish Date"} handleChange={setFieldValue} nameField="finishDate" dateValue={createCurrentClassRequest.Class?.EndDate} />}
 
                     {typeLocation == TypeDate.FixedWeekNumber &&
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -142,10 +146,19 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
 
     };
 
-    // const validationSchemas = [SelectedDateSchema, currentSchema];
     const FormikSelectDateScreen = withFormik<any, typeof formInitialValues>({
-        mapPropsToValues: () => formInitialValues,
-        validationSchema: SelectedDateSchema,
+        mapPropsToValues: () => {
+            return formInitialValues
+        },
+        validationSchema: () => {
+
+            return Yup.object().shape({
+                startDate: Yup.string().required(''),
+                totalClasses: typeRef.current == EndScheduleType.FixedClassesNumber ? Yup.number().min(1, "Number of totalClasses should be greater than 0").required('') : Yup.number().min(1, "Number of totalClasses should be greater than 0"),
+                finishDate: typeRef.current == EndScheduleType.SpecificEndDate ? Yup.string().required('') : Yup.string(),
+                numberOf: typeRef.current == EndScheduleType.FixedWeekNumber || typeRef.current == EndScheduleType.FixedMonthNumber ? Yup.number().min(1, "Number of totalClasses should be greater than 0").required('') : Yup.number().min(1, "Number of totalClasses should be greater than 0"),
+            })
+        },
         handleSubmit: (values,) => {
             dispatch(
                 updateCurrentClassRequestAction({
@@ -153,7 +166,7 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
                         EndScheduleType: values.endScheduleType,
                         StartDate: values.startDate,
                         EndDate: values.finishDate,
-                        EndNumber: +values.totalClasses
+                        EndNumber: +values.totalClasses as number,
                     }
 
                 })
@@ -181,25 +194,34 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
 });
 
 
-const InputWithDate = ({ labelText, nameField, handleChange }: { labelText: string, nameField: string, handleChange: any }) => {
-    const [date, setDate] = useState('');
+const InputWithDate = ({ labelText, nameField, handleChange, dateValue }: { labelText: string, nameField: string, handleChange: any, dateValue?: any }) => {
+    const formatDate = (dateString: string) => new Date(dateString);
+    console.log('dateValue', dateValue,);
+    const [date, setDate] = useState(dateValue ? convertDate(moment(dateValue, "YYYY-MM-DD").format("MMM D, YYYY"))[1] : '');
     const [visible, setVisible] = useState(false)
 
     const handleChangeVisible = () => setVisible(!visible)
 
     const handleChangeDate = (date: string) => {
+        console.log(date, 'date');
+
         setDate(convertDate(date)[1])
         handleChangeVisible()
         handleChange(nameField, convertDate(date)[0])
     }
-
+    function convertDateFormat(dateString: string) {
+        const dateArr = dateString.split('/');
+        [dateArr[0], dateArr[1]] = [dateArr[1], dateArr[0]];
+        const newDateString = dateArr.join('/');
+        return newDateString;
+    }
 
     return (
         <View>
             <Text style={styles.label}>{labelText && labelText}</Text>
             <TouchableOpacity onPress={handleChangeVisible} activeOpacity={1}>
                 <View style={styles.interactive}>
-                    <Text>{date}</Text>
+                    <Text>{convertDateFormat(date)}</Text>
                 </View>
             </TouchableOpacity>
             <CalendarComponent

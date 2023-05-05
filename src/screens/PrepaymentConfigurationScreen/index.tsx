@@ -29,7 +29,7 @@ export const PrepaymentConfigurationScreen: React.FC<IPrepaymentConfigurationScr
                     MakeupRequired: !makeupRequired as boolean,
                     TrackPrepayment: !trackPrepayment as boolean
                 },
-                Location: createCurrentClassRequest.Location as ILocation,
+                Location: { ...createCurrentClassRequest.Location as ILocation, Url: createCurrentClassRequest.Location?.Url as string || '' },
                 Students: [],
                 Slots: createCurrentClassRequest.Slots as IWeekTimeSlot[],
                 Sessions: createCurrentClassRequest.Sessions as IGeneratedScheduleEntries[]

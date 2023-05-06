@@ -53,7 +53,7 @@ export const WeekTable: FC<ISheduleTable> = memo(
     const [SlotUid, setSlotUid] = useState('');
     const [slots, setSlots] = useState<IGeneratedScheduleEntries[]>(GeneratedScheduleEntries as [] || []);
 
-
+    console.log(GeneratedScheduleEntries, 'GeneratedScheduleEntries');
 
 
     const onChangeEditMode = (value: boolean) => {
@@ -103,10 +103,6 @@ export const WeekTable: FC<ISheduleTable> = memo(
       endOfWeek,
       timeData,
     );
-    if (!loading) {
-      console.log('loading comlited');
-
-    }
     const date = (new Date(startOfWeek));
     return (<View style={styles.container}>
       <ScrollView contentOffset={{ x: 0, y: 64 * 8 }}>
@@ -124,8 +120,8 @@ export const WeekTable: FC<ISheduleTable> = memo(
                   {dayEvents?.map((_, index) => {
                     const currentDate = new Date(addDayAndHoursToDate(date.toISOString(), dayIndex, 0))
 
-                    const activeItem = findScheduleEntries(slots as [], currentDate.getUTCDate() + 1, currentDate.getUTCMonth() + 1, index)
-                    const conflictItem = findScheduleEntries(conflict as [], currentDate.getUTCDate() + 1, currentDate.getUTCMonth() + 1, index)
+                    const activeItem = findScheduleEntries(slots as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
+                    const conflictItem = findScheduleEntries(conflict as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
                     activeItem[0] && console.log(activeItem, 'activeItem');
                     return <WeekTableItem
                       key={`${dayIndex}-${index}`}

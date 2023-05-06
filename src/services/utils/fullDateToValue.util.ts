@@ -108,7 +108,6 @@ export function convertDate(date: string): [string, string, string] {
   const formattedDate = parsedDate.format("YYYY-MM-DD");
   const formattedDate2 = parsedDate.format("DD/MM/YYYY");
   const formattedDate3 = date.trim() ? parsedDate.format("MM/DD/YYYY") : "";
-  console.log(formattedDate3, 'formattedDate3', parsedDate);
 
   return [formattedDate, formattedDate2, formattedDate3];
 }

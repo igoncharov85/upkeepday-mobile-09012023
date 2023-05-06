@@ -10,6 +10,7 @@ import { dispatch } from '../../store/store';
 import { createScheduleAction } from '../../store/shedule/actions';
 import { useAppSelector } from '../../store/hooks';
 import { IGeneratedScheduleEntries, ILocation, IWeekTimeSlot } from '../../common/types/schedule.types';
+import { updateCurrentClassRequestAction } from '../../store/shedule';
 
 
 interface IPrepaymentConfigurationScreen { }
@@ -35,6 +36,36 @@ export const PrepaymentConfigurationScreen: React.FC<IPrepaymentConfigurationScr
                 Sessions: createCurrentClassRequest.Sessions as IGeneratedScheduleEntries[]
             }
         ))
+        console.log({
+            Class: {
+                ...createCurrentClassRequest.Class,
+                MakeupRequired: !makeupRequired as boolean,
+                TrackPrepayment: !trackPrepayment as boolean
+            },
+            Location: { ...createCurrentClassRequest.Location as ILocation, Url: createCurrentClassRequest.Location?.Url as string || '' },
+            Students: [],
+            Slots: createCurrentClassRequest.Slots as IWeekTimeSlot[],
+            Sessions: createCurrentClassRequest.Sessions as IGeneratedScheduleEntries[]
+        }, '\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n');
+
+        dispatch(
+            updateCurrentClassRequestAction({
+                Class: {
+                    Name: '',
+                    StartDate: '',
+                    EndDate: '',
+                    EndNumber: 0,
+                    EndScheduleType: '',
+                    MakeupRequired: false,
+                    TrackPrepayment: false,
+
+                },
+                Location: {},
+                Students: [],
+                Slots: [],
+                Sessions: [],
+            })
+        );
         //@ts-ignore
         navigation.navigate(NavigationEnum.HOME_SCREEN)
     };

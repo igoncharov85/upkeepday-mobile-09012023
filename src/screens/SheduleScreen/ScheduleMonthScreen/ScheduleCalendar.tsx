@@ -114,12 +114,15 @@ export const ScheduleCalendar: React.FC<IScheduleCalendarProps> = ({ startingDay
     const handleSwipeLeft = () => {
         const nextMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1);
         setCurrentMonth(nextMonth);
+        console.log('left')
         flatListRef.current?.scrollToOffset({ animated: true, offset: 0 });
     };
 
     const handleSwipeRight = () => {
         const nextMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1);
         setCurrentMonth(nextMonth);
+
+        console.log('right')
         flatListRef.current?.scrollToOffset({ animated: true, offset: 0 });
     };
     const [swipeUpCount, setSwipeUpCount] = useState(0);

@@ -50,13 +50,16 @@ if (Platform.OS === 'ios') {
 }
 export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
     const { createCurrentClassRequest } = useAppSelector(state => state.schedule)
+    const [numberOf, setNumberOf] = useState(0);
+    const [totalClasses, setTotalClasses] = useState(0);
+    const [finishDate, setFinishDate] = useState(createCurrentClassRequest.Class?.EndDate ? createCurrentClassRequest.Class?.EndDate : '');
     const formInitialValues = {
         typeLocation: 0,
         endScheduleType: "",
         startDate: createCurrentClassRequest.Class?.StartDate ? createCurrentClassRequest.Class?.StartDate : "",
-        totalClasses: "",
-        finishDate: "",
-        numberOf: "",
+        totalClasses: totalClasses,
+        finishDate: finishDate,
+        numberOf: numberOf,
     };
     const navigation = useNavigation();
     const typeRef = useRef<string>('');
@@ -90,9 +93,6 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
         const [typeLocation, setTypeLocation] = useState(0);
 
         const handleTypeLocation = (index: number) => {
-            setFieldValue('totalClasses', '')
-            setFieldValue('finishDate', '')
-            setFieldValue('numberOf', '')
             setTypeLocation(index)
         }
 
@@ -117,10 +117,10 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
                             keyboardType="numeric"
                             labelText='Enter Total Number of Classes'
                             onChangeText={handleChange('totalClasses')}
-                            value={values.totalClasses as string}
+                            value={values.totalClasses.toString() || totalClasses.toString()}
                         />}
                     {typeLocation == TypeDate.OnSpecificDate &&
-                        <InputWithDate labelText={"Enter Finish Date"} handleChange={setFieldValue} nameField="finishDate" dateValue={createCurrentClassRequest.Class?.EndDate} />}
+                        <InputWithDate labelText={"Enter Finish Date"} handleChange={setFieldValue} nameField="finishDate" dateValue={finishDate} />}
 
                     {typeLocation == TypeDate.FixedWeekNumber &&
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -128,7 +128,7 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
                                 keyboardType="numeric"
                                 labelText='Number of'
                                 onChangeText={handleChange('numberOf')}
-                                value={values.numberOf}
+                                value={values.numberOf.toString() || numberOf.toString()}
                                 style={{ width: 180, marginRight: 24 }}
                             />
                             <ListGradientCircleButtons onPress={onFixedPeriodTime} buttons={['Weeks', 'Months']} />
@@ -152,11 +152,18 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
         },
         validationSchema: () => {
 
+            console.log(typeRef.current, '\n\n\n\n\n\n\n\n\n\n', typeRef.current == EndScheduleType.FixedWeekNumber || typeRef.current == EndScheduleType.FixedMonthNumber, 'typeRef.current\n\n\n\n\n\n\n\n\n\n');
             return Yup.object().shape({
                 startDate: Yup.string().required(''),
-                totalClasses: typeRef.current == EndScheduleType.FixedClassesNumber ? Yup.number().min(1, "Number of totalClasses should be greater than 0").required('') : Yup.number().min(1, "Number of totalClasses should be greater than 0"),
-                finishDate: typeRef.current == EndScheduleType.SpecificEndDate ? Yup.string().required('') : Yup.string(),
-                numberOf: typeRef.current == EndScheduleType.FixedWeekNumber || typeRef.current == EndScheduleType.FixedMonthNumber ? Yup.number().min(1, "Number of totalClasses should be greater than 0").required('') : Yup.number().min(1, "Number of totalClasses should be greater than 0"),
+                totalClasses: typeRef.current == EndScheduleType.FixedClassesNumber ? Yup.number().min(1, "Number of totalClasses should be greater than 0").required('') : Yup.number(),
+                finishDate: typeRef.current == EndScheduleType.SpecificEndDate ? Yup.string().test('endDate', 'Finish date should be greater than start date', function (value: any) {
+                    const { startDate }: any = this.parent;
+                    console.log(new Date(value) > new Date(startDate), 'startDate');
+
+                    return new Date(value) > new Date(startDate);
+                }).required('55555')
+                    : Yup.string(),
+                numberOf: typeRef.current == EndScheduleType.FixedWeekNumber || typeRef.current == EndScheduleType.FixedMonthNumber ? Yup.number().min(1, "NumberOf ").required('') : Yup.number(),
             })
         },
         handleSubmit: (values,) => {
@@ -171,7 +178,9 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
 
                 })
             );
-
+            setNumberOf(+values.numberOf as number)
+            setTotalClasses(+values.totalClasses as number)
+            setFinishDate(values.finishDate)
             navigation.navigate(
                 //@ts-ignore
                 NavigationEnum.DATE_RECURRENCE_SCREEN,
@@ -195,16 +204,13 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
 
 
 const InputWithDate = ({ labelText, nameField, handleChange, dateValue }: { labelText: string, nameField: string, handleChange: any, dateValue?: any }) => {
-    const formatDate = (dateString: string) => new Date(dateString);
-    console.log('dateValue', dateValue,);
+
     const [date, setDate] = useState(dateValue ? convertDate(moment(dateValue, "YYYY-MM-DD").format("MMM D, YYYY"))[1] : '');
     const [visible, setVisible] = useState(false)
 
     const handleChangeVisible = () => setVisible(!visible)
 
     const handleChangeDate = (date: string) => {
-        console.log(date, 'date');
-
         setDate(convertDate(date)[1])
         handleChangeVisible()
         handleChange(nameField, convertDate(date)[0])
@@ -212,7 +218,9 @@ const InputWithDate = ({ labelText, nameField, handleChange, dateValue }: { labe
     function convertDateFormat(dateString: string) {
         const dateArr = dateString.split('/');
         [dateArr[0], dateArr[1]] = [dateArr[1], dateArr[0]];
-        const newDateString = dateArr.join('/');
+
+        const newDateString = dateArr[0] ? dateArr.join('/') : '';
+
         return newDateString;
     }
 

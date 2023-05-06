@@ -99,7 +99,8 @@ export const NewStudent: React.FC<INewStudentProps> = () => {
                 FirstName: values.FirstName,
                 LastName: values.LastName,
                 Email: values.Email,
-                Phones: values.Phone,
+                PhoneCountry: phoneCountry,
+                PhoneNumber: phoneNumber,
                 Notes: values.Notes
             };
             setNewUsers([...newUsers, {

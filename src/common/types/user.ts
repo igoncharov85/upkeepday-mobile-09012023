@@ -21,7 +21,7 @@ export interface IUserCreateRequest {
     FirstName: string,
     LastName: string,
     Email: string,
-    Phones: string,
+    PhoneCountry: string,
+    PhoneNumber: string,
     Notes: string
 }
-

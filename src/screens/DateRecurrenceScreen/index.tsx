@@ -67,7 +67,13 @@ export const DateRecurrenceScreen: React.FC<IDateRecurrenceScreen> = () => {
 
         ))
 
-        console.log(weekTimeSlots, '$$$$');
+        console.log({
+            ScheduleType: createCurrentClassRequest.Class!.EndScheduleType as string,
+            StartDate: createCurrentClassRequest.Class!.StartDate as string,
+            Number: numberClass as number,
+            EndDate: endDate as string,
+            Slots: weekTimeSlots
+        }, '$$$$\n\n\n\n\n\n\n\n\n\n');
 
         //@ts-ignore
         navigation.navigate(NavigationEnum.DATE_PREVIEW_SCREEN)

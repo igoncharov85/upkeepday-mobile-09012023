@@ -117,7 +117,7 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
                             keyboardType="numeric"
                             labelText='Enter Total Number of Classes'
                             onChangeText={handleChange('totalClasses')}
-                            value={values.totalClasses.toString() || totalClasses.toString()}
+                            value={values.totalClasses.toString()}
                         />}
                     {typeLocation == TypeDate.OnSpecificDate &&
                         <InputWithDate labelText={"Enter Finish Date"} handleChange={setFieldValue} nameField="finishDate" dateValue={finishDate} />}
@@ -128,7 +128,7 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
                                 keyboardType="numeric"
                                 labelText='Number of'
                                 onChangeText={handleChange('numberOf')}
-                                value={values.numberOf.toString() || numberOf.toString()}
+                                value={values.numberOf.toString()}
                                 style={{ width: 180, marginRight: 24 }}
                             />
                             <ListGradientCircleButtons onPress={onFixedPeriodTime} buttons={['Weeks', 'Months']} />

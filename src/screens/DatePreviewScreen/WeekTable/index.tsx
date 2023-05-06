@@ -51,7 +51,7 @@ export const WeekTable: FC<ISheduleTable> = memo(
     const [editMode, setEditMode] = useState(false);
     const [isSlotEdit, setIsSlotEdit] = useState(false);
     const [SlotUid, setSlotUid] = useState('');
-    const [slots, setSlots] = useState<IGeneratedScheduleEntries[]>(GeneratedScheduleEntries as [] || []);
+    const [slots, setSlots] = useState<IGeneratedScheduleEntries[]>(GeneratedScheduleEntries as []);
 
     console.log(GeneratedScheduleEntries, 'GeneratedScheduleEntries');
 
@@ -104,7 +104,7 @@ export const WeekTable: FC<ISheduleTable> = memo(
       timeData,
     );
     const date = (new Date(startOfWeek));
-    return (<View style={styles.container}>
+    return GeneratedScheduleEntries.length > 0 && !loading ? (<View style={styles.container}>
       <ScrollView contentOffset={{ x: 0, y: 64 * 8 }}>
         <Row style={{ justifyContent: 'space-between' }}>
           <Column style={{ width: 56 }}>
@@ -146,7 +146,11 @@ export const WeekTable: FC<ISheduleTable> = memo(
       </ScrollView>
     </View>
 
-    );
+    ) : <ActivityIndicator
+      style={StyleSheet.absoluteFill}
+      color={'#9A80BA'}
+      size="large"
+    />;
   },
 );
 

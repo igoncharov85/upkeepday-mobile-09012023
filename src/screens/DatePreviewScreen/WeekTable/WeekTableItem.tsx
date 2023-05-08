@@ -71,7 +71,7 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
       onLongPress(false)
     }
     const getItemInfo = () => {
-      if (activeItem?.SlotUid) {
+    /*  if (activeItem?.SlotUid) {
         console.log(StartDateTime, 'StartDateTime');
         console.log(activeItem.StartDateTime, 'activeItem StartDateTime');
         console.log(activeItem.SlotUid, 'activeItem SlotUid');
@@ -84,7 +84,7 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
 
 
 
-      }
+      }*/
 
     }
     return (

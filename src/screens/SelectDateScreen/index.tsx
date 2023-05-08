@@ -52,6 +52,7 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
     const { createCurrentClassRequest } = useAppSelector(state => state.schedule)
     const [numberOf, setNumberOf] = useState(0);
     const [totalClasses, setTotalClasses] = useState(0);
+    const [type,setType] = useState(0)
     const [finishDate, setFinishDate] = useState(createCurrentClassRequest.Class?.EndDate ? createCurrentClassRequest.Class?.EndDate : '');
     const formInitialValues = {
         typeLocation: 0,
@@ -63,20 +64,39 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
     };
     const navigation = useNavigation();
     const typeRef = useRef<string>('');
-
+    const resetData = ()=>{
+        setNumberOf(0)
+        setTotalClasses(0)
+        setFinishDate('')
+    }
     const getTypeDate = (type: number) => {
         switch (type) {
             case 0:
                 typeRef.current = EndScheduleType.FixedClassesNumber;
+                
+        setNumberOf(0)
+        setFinishDate('')
+        setType(0)
                 return EndScheduleType.FixedClassesNumber;
             case 1:
                 typeRef.current = EndScheduleType.SpecificEndDate;
+                setNumberOf(0)
+        setTotalClasses(0)
+        setType(1)
                 return EndScheduleType.SpecificEndDate;
             case 2:
                 typeRef.current = EndScheduleType.FixedWeekNumber;
+                
+        setTotalClasses(0)
+        setFinishDate('')
+        setType(2)
                 return EndScheduleType.FixedWeekNumber;
             case 3:
                 typeRef.current = EndScheduleType.FixedMonthNumber;
+                
+        setTotalClasses(0)
+        setFinishDate('')
+        setType(2)
                 return EndScheduleType.FixedMonthNumber;
         }
     }
@@ -90,7 +110,7 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
         errors,
         isValid,
     }: FormikProps<typeof formInitialValues>) => {
-        const [typeLocation, setTypeLocation] = useState(0);
+        const [typeLocation, setTypeLocation] = useState(type);
 
         const handleTypeLocation = (index: number) => {
             setTypeLocation(index)
@@ -103,7 +123,6 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
         useEffect(() => {
             setFieldValue('endScheduleType', getTypeDate(typeLocation))
         }, [typeLocation])
-        console.log(errors, 'errors');
 
         return (
             <View style={[styles.container, { minHeight: windowHeight, justifyContent: 'flex-start' }]}>
@@ -152,14 +171,11 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
         },
         validationSchema: () => {
 
-            console.log(typeRef.current, '\n\n\n\n\n\n\n\n\n\n', typeRef.current == EndScheduleType.FixedWeekNumber || typeRef.current == EndScheduleType.FixedMonthNumber, 'typeRef.current\n\n\n\n\n\n\n\n\n\n');
             return Yup.object().shape({
                 startDate: Yup.string().required(''),
                 totalClasses: typeRef.current == EndScheduleType.FixedClassesNumber ? Yup.number().min(1, "Number of totalClasses should be greater than 0").required('') : Yup.number(),
                 finishDate: typeRef.current == EndScheduleType.SpecificEndDate ? Yup.string().test('endDate', 'Finish date should be greater than start date', function (value: any) {
                     const { startDate }: any = this.parent;
-                    console.log(new Date(value) > new Date(startDate), 'startDate');
-
                     return new Date(value) > new Date(startDate);
                 }).required('55555')
                     : Yup.string(),
@@ -178,6 +194,8 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
 
                 })
             );
+            
+            
             setNumberOf(+values.numberOf as number)
             setTotalClasses(+values.totalClasses as number)
             setFinishDate(values.finishDate)

@@ -71,20 +71,20 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
       onLongPress(false)
     }
     const getItemInfo = () => {
-    /*  if (activeItem?.SlotUid) {
-        console.log(StartDateTime, 'StartDateTime');
-        console.log(activeItem.StartDateTime, 'activeItem StartDateTime');
-        console.log(activeItem.SlotUid, 'activeItem SlotUid');
-      } else {
-        console.log(StartDateTime, 'StartDateTime');
-        console.log(dayIndex, 'dayIndex');
-        console.log(timeIndex, 'timeIndex');
-        console.log(addDayAndHoursToDate(startOfWeek.toISOString(), dayIndex, timeIndex + 3));
-
-
-
-
-      }*/
+      /*  if (activeItem?.SlotUid) {
+          console.log(StartDateTime, 'StartDateTime');
+          console.log(activeItem.StartDateTime, 'activeItem StartDateTime');
+          console.log(activeItem.SlotUid, 'activeItem SlotUid');
+        } else {
+          console.log(StartDateTime, 'StartDateTime');
+          console.log(dayIndex, 'dayIndex');
+          console.log(timeIndex, 'timeIndex');
+          console.log(addDayAndHoursToDate(startOfWeek.toISOString(), dayIndex, timeIndex + 3));
+  
+  
+  
+  
+        }*/
 
     }
     return (

@@ -49,7 +49,7 @@ export const WeekTable: FC<ISheduleTable> = memo(
     }, []);
     return (
       <View style={styles.container}>
-        <ScrollView  contentOffset={{ x: 0, y: 64 * 8 }}>
+        <ScrollView contentOffset={{ x: 0, y: 64 * 8 }}>
           <Row style={{ justifyContent: 'space-between' }}>
             <Column style={{ width: 56 }}>
               {timeData.map((item, index) => (

@@ -74,18 +74,18 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
         navigation.navigate(NavigationEnum.ADD_STUDENTS_SCREEN)
     }
 
-   
+
 
     useEffect(() => {
-        if (GeneratedScheduleEntries.length>0) {
-            
-      const now = new Date();
+        if (GeneratedScheduleEntries.length > 0) {
+
+            const now = new Date();
             setScreenLoading(true)
-        }else {
+        } else {
             console.log(GeneratedScheduleEntries);
-            
+
         }
-    }, [GeneratedScheduleEntries,loading])
+    }, [GeneratedScheduleEntries, loading])
 
     return !screenLoading ? <ScreenLoading /> : (<View style={{ height: '100%' }}>
         <View style={styles.header}>

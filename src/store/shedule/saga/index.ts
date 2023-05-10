@@ -37,15 +37,17 @@ export function* generateScheduleWorker({
   type,
 }: IAction<IGenerateScheduleRequest>): SagaIterator {
   try {
+    yield put(setGeneratedScheduleEntriesAction([]))
     yield put(setScheduleLoading(true));
     const { data }: AxiosResponse<IGeneratedScheduleResponse, any> = yield call(
       ScheduleService.generateScheduleEntry,
       payload
     );
-    // console.log("data: ", data)
+    
     if (data) {
-      console.log('new data');
-
+      const now = new Date();
+      console.log('new data',data);
+      console.log("data time: ", now,'\n\n\n\n\n\n\n\n\n\n\n\n------------------------------------------------------------------')
       yield put(setTimeSlotsAction(data.Slots))
       yield put(setGeneratedScheduleEntriesAction(data.GeneratedSessions))
       yield put(setCurrentScheduleEntries(data.CurrentSessions))

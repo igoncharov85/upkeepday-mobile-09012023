@@ -17,13 +17,19 @@ type Props = {
 const CalendarComponent: React.FC<Props> = memo(
   ({ onDayPress, visible, date }) => {
     const [selectedDate, setSelectedDate] = useState(date);
-
+    console.log('selectedDate', selectedDate);
 
     const handleDayPress = (day: DateData) => {
-      onDayPress(formatDate(day.dateString).date[0]);
-      setSelectedDate(day.dateString);
+      const dateWithNoonTime = new Date(day.dateString);
+      dateWithNoonTime.setHours(12, 0, 0, 0);
 
+      const utcDate = dateWithNoonTime.toISOString();
+
+      onDayPress(formatDate(utcDate).date[0]);
+      setSelectedDate(utcDate);
     };
+
+
 
     const dayComponent = ({ date, state }: { date: DateData; state: string }) => {
       const isSelected = date.dateString === selectedDate;

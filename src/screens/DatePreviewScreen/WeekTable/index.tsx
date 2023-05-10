@@ -53,7 +53,6 @@ export const WeekTable: FC<ISheduleTable> = memo(
     const [SlotUid, setSlotUid] = useState('');
     const [slots, setSlots] = useState<IGeneratedScheduleEntries[]>(GeneratedScheduleEntries as []);
 
-    console.log(GeneratedScheduleEntries, 'GeneratedScheduleEntries');
 
 
     const onChangeEditMode = (value: boolean) => {
@@ -79,10 +78,8 @@ export const WeekTable: FC<ISheduleTable> = memo(
     }
 
     const onMoveSlot = (slot: IGeneratedScheduleEntries) => {
-      // console.log(SlotUid, 'SlotUid');
       if (SlotUid && isSlotEdit) {
         setSlots([...slots, { Duration: slot.Duration, StartDateTime: slot.StartDateTime, SlotUid: SlotUid }]);
-        console.log({ Duration: slot.Duration, StartDateTime: slot.StartDateTime, SlotUid: SlotUid }, 'slot');
 
         setSlotUid('')
         setIsSlotEdit(false)

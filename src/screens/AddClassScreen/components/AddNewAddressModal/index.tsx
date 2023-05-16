@@ -16,6 +16,7 @@ import { addLocationAction } from "../../../../store/location/actions";
 import { AddLocationSchema } from "../../../../common/shemas/addClass.shape";
 import { ILocationRequest } from "../../../../common/types/location";
 import { useAppSelector } from "../../../../store/hooks";
+import { updateCurrentClassRequestAction } from "../../../../store/shedule";
 
 
 interface IAddNewAddressModal {
@@ -75,6 +76,13 @@ export const AddNewAddressModal: React.FC<IAddNewAddressModal> = ({ visible, han
                     validationErrorText={errors.postalCode}
 
                 />
+                <InputForm
+                    labelText="City"
+                    onChange={handleChange('city')}
+                    value={values.city}
+                    validationErrorText={errors.city}
+
+                />
                 <View style={{ flex: 1, justifyContent: 'flex-end' }}>
                     <CustomButton text={"Save"} onPress={handleSubmit} disabled={!isValid} />
                 </View></>
@@ -87,16 +95,19 @@ export const AddNewAddressModal: React.FC<IAddNewAddressModal> = ({ visible, han
         handleSubmit: values => {
             const data: ILocationRequest = {
                 Name: `${values.addressLine}, ${values.country}, ${values.state}`,
-                Url: '',
                 LocationType: 'Office',
                 AddressLine: values.addressLine,
-                City: '',
+                City: values.city,
                 State: values.state,
                 PostalCode: values.postalCode,
                 Country: values.country
             };
             handleShowModal();
+
             dispatch(addLocationAction(data))
+            updateCurrentClassRequestAction({
+                Location: data
+            })
         },
         ...formicDefaultProps,
     })(renderForm);

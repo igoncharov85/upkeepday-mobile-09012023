@@ -1,14 +1,18 @@
 import { parseISO, addMinutes, formatISO } from 'date-fns';
 import moment from "moment";
 
-export const formatDate = (dateString: string) => {
+export const formatDate = (
+  dateString: string,
+): {
+  date: string[];
+  time: [string, { hour: number; minute: number; dayPart: string }];
+} => {
   const date = new Date(dateString);
 
   const formattedDate = date.toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
-    timeZone: 'UTC',
   });
 
   const [month, day, year] = date
@@ -16,7 +20,6 @@ export const formatDate = (dateString: string) => {
       year: 'numeric',
       month: '2-digit',
       day: '2-digit',
-      timeZone: 'UTC',
     })
     .split('/');
   const formattedDate2 = `${year}-${month.padStart(2, '0')}-${day?.padStart(
@@ -28,10 +31,7 @@ export const formatDate = (dateString: string) => {
     hour: 'numeric',
     minute: 'numeric',
     hour12: true,
-    timeZone: 'UTC',
   });
-  console.log(formattedTime, 'formattedTime');
-
   const timeObj = formattedTime.split(/:| /);
   const formattedTime2 = {
     hour: parseInt(timeObj[0]),

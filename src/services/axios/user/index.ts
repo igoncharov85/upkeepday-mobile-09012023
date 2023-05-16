@@ -1,3 +1,4 @@
+import { BASE_URL } from "../../../common/constants/server";
 import { IUserCreateRequest } from "../../../common/types/user";
 import { AsyncStorageService } from "../../async-storage";
 import { $axiosAuth } from "../base.instance";
@@ -11,7 +12,7 @@ export class UserService {
             let config = {
                 method: 'get',
                 maxBodyLength: Infinity,
-                url: 'https://cpio-dev.trixiron.com/tutor/students/',
+                url: `${BASE_URL}/tutor/students/`,
                 headers: {
                     'Authorization': token,
                 },

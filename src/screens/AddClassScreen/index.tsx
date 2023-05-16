@@ -28,6 +28,7 @@ const formInitialValues = {
     name: "",
     locationType: "",
     addressLine: "",
+    url: "",
 };
 let windowHeight: any;
 if (Platform.OS === 'ios') {
@@ -91,6 +92,8 @@ export const AddClassScreen: React.FC<IAddClassScreen> = memo(() => {
                             <InputForm
                                 labelText="Online Instructions"
                                 multiline={true}
+                                value={values.url}
+                                onChange={handleChange("url")}
                                 style={{ height: 300, textAlignVertical: "top" }}
                             />
                         ) : (
@@ -125,7 +128,7 @@ export const AddClassScreen: React.FC<IAddClassScreen> = memo(() => {
             dispatch(
                 updateCurrentClassRequestAction({
                     Class: { Name: values.name },
-                    Location: { LocationType: typeLocation ? 'Office' : 'Online' }
+                    Location: { LocationType: typeLocation ? 'Office' : 'Online', Url: typeLocation ? '' : values.url }
                 })
             );
 

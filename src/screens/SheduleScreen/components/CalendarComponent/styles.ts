@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
   arrow: {
@@ -33,5 +33,12 @@ export default StyleSheet.create({
   },
   disabledText: {
     color: '#ccc',
+  },
+  todayGradient: {
+    backgroundColor: 'transparent',
+    borderRadius: 15,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: '#FFA500',
   },
 });

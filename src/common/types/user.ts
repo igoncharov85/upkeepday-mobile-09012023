@@ -10,9 +10,9 @@ export interface IUserStudent {
     FirstName: string
     LastName: string,
     Email: string,
-    PhoneCountry: | number,
+    PhoneCountry: string | number,
     PhoneNumber: string,
-    StudentId: number,
+    StudentId?: number,
     EnrolledClasses: Array<IEnrolledClass>
     Notes?: string
 }

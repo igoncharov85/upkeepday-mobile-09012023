@@ -37,7 +37,7 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
 
 
 
-    const [slots, setSlots] = useState<IGeneratedScheduleEntries[]>(GeneratedScheduleEntries);
+    const [slots, setSlots] = useState<IGeneratedScheduleEntries[]>([]);
     const [conflict, setConflict] = useState<IGeneratedScheduleEntries[]>(findScheduleConflicts(slots, CurrentScheduledEntries));
 
 
@@ -74,6 +74,12 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
         navigation.navigate(NavigationEnum.ADD_STUDENTS_SCREEN)
     }
 
+    useEffect(() => {
+        return () => {
+            setScreenLoading(false)
+        };
+    }, []);
+
 
 
     useEffect(() => {
@@ -81,10 +87,8 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
 
             const now = new Date();
             setScreenLoading(true)
-        } else {
-            console.log(GeneratedScheduleEntries);
-
         }
+
     }, [GeneratedScheduleEntries, loading])
 
     return !screenLoading ? <ScreenLoading /> : (<View style={{ height: '100%' }}>

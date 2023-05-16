@@ -2,6 +2,7 @@ import React, { memo, useState } from 'react';
 import { View, TouchableOpacity, Text } from 'react-native';
 import { Calendar, DateData } from 'react-native-calendars';
 import LinearGradient from 'react-native-linear-gradient';
+import moment from 'moment'; // Импортируем библиотеку moment для работы с датами
 
 import ArrowLeft from '../../../../../assets/svg/schedule/ArrowLeft';
 import ArrowRight from '../../../../../assets/svg/schedule/ArrowRight';
@@ -17,32 +18,27 @@ type Props = {
 const CalendarComponent: React.FC<Props> = memo(
   ({ onDayPress, visible, date }) => {
     const [selectedDate, setSelectedDate] = useState(date);
-    console.log('selectedDate', selectedDate);
 
     const handleDayPress = (day: DateData) => {
-      const dateWithNoonTime = new Date(day.dateString);
-      dateWithNoonTime.setHours(12, 0, 0, 0);
-
-      const utcDate = dateWithNoonTime.toISOString();
-
-      onDayPress(formatDate(utcDate).date[0]);
-      setSelectedDate(utcDate);
+      onDayPress(formatDate(day.dateString).date[0]);
+      setSelectedDate(day.dateString);
     };
-
-
 
     const dayComponent = ({ date, state }: { date: DateData; state: string }) => {
       const isSelected = date.dateString === selectedDate;
       const isDisabled = state === 'disabled';
+      const isToday = moment().isSame(date.dateString, 'day'); // Проверяем, является ли день сегодняшним
 
       return (
         <TouchableOpacity onPress={() => !isDisabled && handleDayPress(date)}>
           <LinearGradient
-            style={styles.dayContainer}
+            style={[
+              styles.dayContainer,// Применяем оранжевый цвет, если день сегодняшний
+            ]}
             colors={
               isSelected
                 ? ['#EAAFC8', '#654EA3']
-                : ['transparent', 'transparent']
+                : isToday ? ['#FFA500', '#FF6347'] : ['transparent', 'transparent']
             }
             start={{ x: 0, y: 0 }}
             end={{ x: 0, y: 1 }}>
@@ -51,6 +47,7 @@ const CalendarComponent: React.FC<Props> = memo(
                 styles.dayText,
                 isDisabled && styles.disabledText,
                 isSelected && styles.dayTextSelected,
+                isToday && { color: '#FFFFFF' }, // Применяем белый цвет текста, если день сегодняшний
               ]}>
               {date.day}
             </Text>
@@ -87,6 +84,7 @@ const CalendarComponent: React.FC<Props> = memo(
                 </ArrowCalendar>
               ) : (
                 <ArrowCalendar>
+
                   <ArrowRight />
                 </ArrowCalendar>
               )
@@ -102,7 +100,6 @@ const CalendarComponent: React.FC<Props> = memo(
     ) : null;
   },
 );
-
 const ArrowCalendar = ({ children }: { children: React.ReactNode }) => (
   <View style={styles.arrow}>{children}</View>
 );

@@ -70,25 +70,9 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
       onDeleteSlot(activeItem)
       onLongPress(false)
     }
-    const getItemInfo = () => {
-      /*  if (activeItem?.SlotUid) {
-          console.log(StartDateTime, 'StartDateTime');
-          console.log(activeItem.StartDateTime, 'activeItem StartDateTime');
-          console.log(activeItem.SlotUid, 'activeItem SlotUid');
-        } else {
-          console.log(StartDateTime, 'StartDateTime');
-          console.log(dayIndex, 'dayIndex');
-          console.log(timeIndex, 'timeIndex');
-          console.log(addDayAndHoursToDate(startOfWeek.toISOString(), dayIndex, timeIndex + 3));
-  
-  
-  
-  
-        }*/
 
-    }
     return (
-      <TouchableOpacity onPressIn={getItemInfo} onLongPress={() => onLongPress(true)} onPress={() => editMode && onHandleSlot()} activeOpacity={editMode ? 0.5 : 1} >
+      <TouchableOpacity onLongPress={() => onLongPress(true)} onPress={() => editMode && onHandleSlot()} activeOpacity={editMode ? 0.5 : 1} >
         <View style={styles.containerItem}>
           {activeItem ? (
             <View

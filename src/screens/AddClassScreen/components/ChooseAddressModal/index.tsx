@@ -38,9 +38,9 @@ export const ChooseAddressModal: React.FC<IChooseAddressModal> = memo(({ visible
             }))
         };
     });
-    useEffect(() => {
-        dispatch(fetchLocationAction());
-    }, []);
+    // useEffect(() => {
+    //     dispatch(fetchLocationAction());
+    // }, []);
     const onShowModal = () => {
         setModalVisible(!modalVisible);
         handleShowModal()

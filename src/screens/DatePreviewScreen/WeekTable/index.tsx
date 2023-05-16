@@ -66,11 +66,12 @@ export const WeekTable: FC<ISheduleTable> = memo(
         const newSlots = slots.filter((_, i) => i !== index);
 
         if (JSON.stringify(slots) !== JSON.stringify(newSlots)) {
+          console.log(slot);
+
           setSlotUid(slot.SlotUid)
           setSlots(newSlots);
           setIsSlotEdit(true);
           onHandleData(slots)
-          console.log(slot, 'delete slot');
 
         }
       }
@@ -79,8 +80,9 @@ export const WeekTable: FC<ISheduleTable> = memo(
 
     const onMoveSlot = (slot: IGeneratedScheduleEntries) => {
       if (SlotUid && isSlotEdit) {
+        console.log(slot, 'slot');
+
         setSlots([...slots, { Duration: slot.Duration, StartDateTime: slot.StartDateTime, SlotUid: SlotUid }]);
-        console.log({ Duration: slot.Duration, StartDateTime: slot.StartDateTime, SlotUid: SlotUid }, 'slot');
 
         setSlotUid('')
         setIsSlotEdit(false)
@@ -118,9 +120,8 @@ export const WeekTable: FC<ISheduleTable> = memo(
                   {dayEvents?.map((_, index) => {
                     const currentDate = new Date(addDayAndHoursToDate(date.toISOString(), dayIndex, 0))
 
-                    const activeItem = findScheduleEntries(slots as [], currentDate.getUTCDate() + 1, currentDate.getUTCMonth() + 1, index)
-                    const conflictItem = findScheduleEntries(conflict as [], currentDate.getUTCDate() + 1, currentDate.getUTCMonth() + 1, index)
-                    activeItem[0] && console.log(activeItem, 'activeItem');
+                    const activeItem = findScheduleEntries(slots as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
+                    const conflictItem = findScheduleEntries(conflict as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
                     return <WeekTableItem
                       key={`${dayIndex}-${index}`}
                       timeIndex={index}

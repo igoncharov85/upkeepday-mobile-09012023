@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 import styles from './styles';
 
@@ -17,6 +17,11 @@ export const ListButtons: React.FC<IListButtons> = (({ buttons, onPress, label, 
         onPress && onPress(index);
     };
 
+    useEffect(() => {
+        setActiveIndex(index ? index : 0);
+        console.log(index);
+
+    }, [index]);
     return (
         <View style={styles.container}>
             <Text style={styles.label}>{label && label}</Text>
@@ -28,7 +33,6 @@ export const ListButtons: React.FC<IListButtons> = (({ buttons, onPress, label, 
         </View>
     );
 });
-
 const ButtonItem = ({ index, activeIndex, buttonTitle, handlePress }: { index: number, activeIndex: number, buttonTitle: string, handlePress: (number: number) => void }) => {
     return (
         <TouchableOpacity

@@ -33,25 +33,18 @@ export const DateRecurrenceScreen: React.FC<IDateRecurrenceScreen> = () => {
     const { createCurrentClassRequest } = useAppSelector(state => state.schedule);
 
 
-    const getEndDate = (type: string): any => {
-        switch (type) {
-            case EndScheduleType.FixedMonthNumber:
-                return addDayAndHoursToDate(weekDates.startDate.toISOString(), numberOf * 30, 0)
-            case EndScheduleType.FixedWeekNumber:
-                return addDayAndHoursToDate(weekDates.startDate.toISOString(), numberOf * 7, 0)
-            case EndScheduleType.SpecificEndDate:
-                return new Date(finishDate).toISOString()
-        }
-    }
+
+    const getNumber = endScheduleType === EndScheduleType.FixedClassesNumber ? createCurrentClassRequest.Class?.EndNumber : numberOf
+
 
     const goNextStep = async () => {
-        const numberClass = endScheduleType == EndScheduleType.FixedClassesNumber ? createCurrentClassRequest.Class!.EndNumber : calculateNumberOfClasses(weekTimeSlots, weekDates.startDate.toISOString(), getEndDate(endScheduleType));
-        const endDate = formatDate(endScheduleType == EndScheduleType.FixedClassesNumber ? calculateEndTimeDate(weekTimeSlots, weekDates.startDate.toISOString(), numberClass as number) : getEndDate(endScheduleType)).date[1];
+        const numberClass = createCurrentClassRequest.Class?.EndNumber;
+        const endDate = finishDate;
 
         dispatch(
             updateCurrentClassRequestAction({
                 Class: {
-                    EndNumber: numberClass,
+                    EndNumber: getNumber,
                     EndDate: endDate
                 }
             })
@@ -60,13 +53,22 @@ export const DateRecurrenceScreen: React.FC<IDateRecurrenceScreen> = () => {
             {
                 ScheduleType: createCurrentClassRequest.Class!.EndScheduleType as string,
                 StartDate: createCurrentClassRequest.Class!.StartDate as string,
-                Number: numberClass as number,
-                EndDate: endDate as string,
+                Number: getNumber,
+                EndDate: endDate as string || '',
                 Slots: weekTimeSlots
             }
 
         ))
+        console.log({
+            ScheduleType: createCurrentClassRequest.Class!.EndScheduleType as string,
+            StartDate: createCurrentClassRequest.Class!.StartDate as string,
+            Number: getNumber,
+            EndDate: endDate as string || '',
+            Slots: weekTimeSlots
+        }
+        );
 
+        console.log(getNumber, createCurrentClassRequest.Class!.EndScheduleType, '$$$$\n\n\n\n\n\n\n\n\n\n');
 
         //@ts-ignore
         navigation.navigate(NavigationEnum.DATE_PREVIEW_SCREEN)

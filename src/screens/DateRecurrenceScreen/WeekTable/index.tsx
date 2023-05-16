@@ -20,7 +20,6 @@ export const WeekTable: FC<ISheduleTable> = memo(
     const scrollViewRef = useRef<ScrollView>(null);
     const onSlotPress = (slot: IWeekTimeSlot) => {
 
-
       const index = slots.findIndex((event) => event.DayOfWeek === slot.DayOfWeek && event.StartTime === slot.StartTime && event.Duration === slot.Duration);
       if (index === -1) {
         setSlots([...slots, slot]);
@@ -49,7 +48,7 @@ export const WeekTable: FC<ISheduleTable> = memo(
     }, []);
     return (
       <View style={styles.container}>
-        <ScrollView contentOffset={{ x: 0, y: 64 * 8 }}>
+        <ScrollView ref={scrollViewRef}>
           <Row style={{ justifyContent: 'space-between' }}>
             <Column style={{ width: 56 }}>
               {timeData.map((item, index) => (

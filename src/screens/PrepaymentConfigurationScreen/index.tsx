@@ -36,6 +36,8 @@ export const PrepaymentConfigurationScreen: React.FC<IPrepaymentConfigurationScr
                 Sessions: createCurrentClassRequest.Sessions as IGeneratedScheduleEntries[]
             }
         ))
+
+
         console.log({
             Class: {
                 ...createCurrentClassRequest.Class,
@@ -46,26 +48,7 @@ export const PrepaymentConfigurationScreen: React.FC<IPrepaymentConfigurationScr
             Students: [],
             Slots: createCurrentClassRequest.Slots as IWeekTimeSlot[],
             Sessions: createCurrentClassRequest.Sessions as IGeneratedScheduleEntries[]
-        }, '\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n');
-
-        dispatch(
-            updateCurrentClassRequestAction({
-                Class: {
-                    Name: '',
-                    StartDate: '',
-                    EndDate: '',
-                    EndNumber: 0,
-                    EndScheduleType: '',
-                    MakeupRequired: false,
-                    TrackPrepayment: false,
-
-                },
-                Location: {},
-                Students: [],
-                Slots: [],
-                Sessions: [],
-            })
-        );
+        }, '/n/n/')
         //@ts-ignore
         navigation.navigate(NavigationEnum.HOME_SCREEN)
     };

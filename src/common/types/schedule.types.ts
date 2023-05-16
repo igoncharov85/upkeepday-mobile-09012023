@@ -6,7 +6,12 @@ export interface IScheduleRequest {
 
 
 export interface IExistingStudent {
-    StudentId: number
+    Id?: number,
+    FirstName?: string
+    LastName?: string,
+    Email?: string,
+    Phone?: string,
+    Notes?: string
 }
 export interface ICreateClassRequest {
     // ClassName: string

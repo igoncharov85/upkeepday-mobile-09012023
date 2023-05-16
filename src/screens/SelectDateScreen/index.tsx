@@ -52,9 +52,10 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
     const { createCurrentClassRequest } = useAppSelector(state => state.schedule)
     const [numberOf, setNumberOf] = useState(0);
     const [totalClasses, setTotalClasses] = useState(0);
-    const [type, setType] = useState(0)
-    const [finishDate, setFinishDate] = useState('');
-    const [startDate, setStartDate] = useState('');
+    const [glovalTypeLocation, setGlovalTypeLocation] = useState(0);
+
+    const [startDate, setStartDate] = useState(createCurrentClassRequest.Class?.StartDate ? createCurrentClassRequest.Class?.StartDate : '');
+    const [finishDate, setFinishDate] = useState(createCurrentClassRequest.Class?.EndDate ? createCurrentClassRequest.Class?.EndDate : '');
     const formInitialValues = {
         typeLocation: 0,
         endScheduleType: "",
@@ -64,38 +65,33 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
         numberOf: numberOf,
     };
     const navigation = useNavigation();
-    const typeRef = useRef<string>('');
 
+    const typeRef = useRef<string>('');
+    const typeNumberRef = useRef<number>(0);
+    console.log(typeNumberRef.current, 'typeRef.current')
     const getTypeDate = (type: number) => {
+
         switch (type) {
             case 0:
                 typeRef.current = EndScheduleType.FixedClassesNumber;
-
-                setNumberOf(0)
-                setFinishDate('')
-                setType(0)
+                typeNumberRef.current = 0;
                 return EndScheduleType.FixedClassesNumber;
             case 1:
                 typeRef.current = EndScheduleType.SpecificEndDate;
-                setNumberOf(0)
-                setTotalClasses(0)
-                setType(1)
+                typeNumberRef.current = 1;
                 return EndScheduleType.SpecificEndDate;
             case 2:
                 typeRef.current = EndScheduleType.FixedWeekNumber;
-
-                setTotalClasses(0)
-                setFinishDate('')
-                setType(2)
+                typeNumberRef.current = 2;
                 return EndScheduleType.FixedWeekNumber;
             case 3:
                 typeRef.current = EndScheduleType.FixedMonthNumber;
 
-                setTotalClasses(0)
-                setFinishDate('')
-                setType(2)
+                typeNumberRef.current = 2;
                 return EndScheduleType.FixedMonthNumber;
         }
+
+        console.log(typeNumberRef.current, 'typeRef.current')
     }
 
 
@@ -107,19 +103,16 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
         errors,
         isValid,
     }: FormikProps<typeof formInitialValues>) => {
-        const [typeLocation, setTypeLocation] = useState(type);
 
+        const [typeLocation, setTypeLocation] = useState(typeNumberRef.current);
         const handleTypeLocation = (index: number) => {
             setTypeLocation(index)
+            setFieldValue('typeLocation', index)
         }
 
         const onFixedPeriodTime = (number: number) => {
             setFieldValue('endScheduleType', getTypeDate(!number ? 2 : 3))
 
-        }
-        const handleStartTime = (name: any, date: any) => {
-            setFieldValue(name, date)
-            setStartDate(date)
         }
         useEffect(() => {
             setFieldValue('endScheduleType', getTypeDate(typeLocation))
@@ -129,9 +122,9 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
             <View style={[styles.container, { minHeight: windowHeight, justifyContent: 'flex-start' }]}>
                 <ScreenHeader onBackPress={navigation.goBack} text="Add Class General Data" withBackButton={true} />
                 <View>
-                    <InputWithDate labelText={"Enter Start Date"} handleChange={handleStartTime} nameField="startDate" dateValue={startDate} />
+                    <InputWithDate labelText={"Enter Start Date"} handleChange={setFieldValue} nameField="startDate" dateValue={startDate} />
 
-                    <ListButtons buttons={[' Fixed number of classes', 'On Specific Date', ' Fixed period in time']} label="Class Type" onPress={handleTypeLocation} index={typeLocation} />
+                    <ListButtons buttons={[' Fixed number of classes', 'On Specific Date', ' Fixed period in time']} label="Class Type" onPress={handleTypeLocation} index={typeNumberRef.current} />
                     {typeLocation == TypeDate.FixedNumberOfClasses &&
                         <InputForm
                             keyboardType="numeric"
@@ -177,6 +170,8 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
                 totalClasses: typeRef.current == EndScheduleType.FixedClassesNumber ? Yup.number().min(1, "Number of totalClasses should be greater than 0").required('') : Yup.number(),
                 finishDate: typeRef.current == EndScheduleType.SpecificEndDate ? Yup.string().test('endDate', 'Finish date should be greater than start date', function (value: any) {
                     const { startDate }: any = this.parent;
+
+
                     return new Date(value) > new Date(startDate);
                 }).required('55555')
                     : Yup.string(),
@@ -187,7 +182,7 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
             dispatch(
                 updateCurrentClassRequestAction({
                     Class: {
-                        EndScheduleType: values.endScheduleType,
+                        EndScheduleType: typeRef.current,
                         StartDate: values.startDate,
                         EndDate: values.finishDate,
                         EndNumber: +values.totalClasses as number,
@@ -195,8 +190,6 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
 
                 })
             );
-
-
             setNumberOf(+values.numberOf as number)
             setTotalClasses(+values.totalClasses as number)
             setFinishDate(values.finishDate)
@@ -205,9 +198,9 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
                 //@ts-ignore
                 NavigationEnum.DATE_RECURRENCE_SCREEN,
                 {
-                    endScheduleType: values.endScheduleType,
+                    endScheduleType: typeRef.current,
                     finishDate: values.finishDate,
-                    numberOf: values.numberOf
+                    numberOf: +values.numberOf
 
                 }
             );
@@ -254,7 +247,7 @@ const InputWithDate = ({ labelText, nameField, handleChange, dateValue }: { labe
             </TouchableOpacity>
             <CalendarComponent
                 visible={visible}
-                date={(new Date()).toISOString()}
+                date={dateValue}
                 onDayPress={handleChangeDate}
             />
         </View>

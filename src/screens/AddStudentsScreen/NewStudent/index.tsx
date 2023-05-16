@@ -10,9 +10,12 @@ import { NewStudentSchema } from '../../../common/shemas/addClass.shape';
 import { formicDefaultProps } from '../../../common/constants/styles/form.config';
 import { useAppSelector } from '../../../store/hooks';
 import { updateCurrentClassRequestAction } from '../../../store/shedule';
+import { CustomButton } from '../../../components/UI/CustomButton';
+import { IExistingStudent } from '../../../common/types/schedule.types';
 
 interface INewStudentProps {
-
+    handleTypeChange: () => void
+    onAddNewStudent: (student: IExistingStudent) => void
 }
 
 const formInitialValues = {
@@ -27,16 +30,18 @@ function splitPhoneNumber(phoneNumber: string): [string, string] {
     const phoneNumberWithoutCode = phoneNumber?.slice(4);
     return [countryCode, phoneNumberWithoutCode];
 }
-export const NewStudent: React.FC<INewStudentProps> = () => {
+export const NewStudent: React.FC<INewStudentProps> = ({ handleTypeChange, onAddNewStudent }) => {
     const { students } = useAppSelector(state => state.user);
-    const [newUsers, setNewUsers] = useState<Array<IUserStudent>>([]);
+    const [newUser, setNewUser] = useState<IExistingStudent>();
     const [id, setId] = useState(students[students?.length - 1]?.StudentId || 0)
 
+    const onSave = (handleSubmit: any) => {
+        handleSubmit();
+        handleTypeChange()
+    }
     useEffect(() => {
-        return () => {
-            dispatch(updateCurrentClassRequestAction({ Students: newUsers, }))
-        };
-    }, []);
+        onAddNewStudent(newUser || {});
+    }, [newUser]);
 
     const renderForm = ({
         touched,
@@ -86,6 +91,11 @@ export const NewStudent: React.FC<INewStudentProps> = () => {
                 <TouchableOpacity onPress={handleSubmit}>
                     <Text style={styles.addMore}>Add One More</Text>
                 </TouchableOpacity>
+                <View style={{ paddingVertical: 20, height: 92, flex: 1, justifyContent: 'flex-end' }}>
+                    <CustomButton text={'Save'} onPress={() => onSave(handleSubmit)} />
+                </View>
+
+
             </>
         )
     }
@@ -94,26 +104,16 @@ export const NewStudent: React.FC<INewStudentProps> = () => {
 
         handleSubmit: (values, { resetForm, }) => {
             setId(id + 1);
+            console.log('values', values);
+
             const [phoneCountry, phoneNumber] = splitPhoneNumber(values.Phone)
-            const data: IUserCreateRequest = {
+            setNewUser({
                 FirstName: values.FirstName,
                 LastName: values.LastName,
                 Email: values.Email,
-                PhoneCountry: phoneCountry,
-                PhoneNumber: phoneNumber,
-                Notes: values.Notes
-            };
-            setNewUsers([...newUsers, {
-                FirstName: values.FirstName,
-                LastName: values.LastName,
-                Email: values.Email,
-                PhoneCountry: +phoneCountry,
-                PhoneNumber: phoneNumber,
-                StudentId: id + 1,
-                EnrolledClasses: [],
-                Notes: values.Notes
-            }])
-            dispatch(createUserAction(data));
+                Phone: values.Phone,
+                Notes: values.Notes || '',
+            })
             resetForm();
 
 

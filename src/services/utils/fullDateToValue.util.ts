@@ -9,11 +9,13 @@ export const formatDate = (
 } => {
   const date = new Date(dateString);
   console.log(date, 'break point 1');
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
   const formattedDate = date.toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
+    timeZone: 'UTC',
   });
   console.log(formattedDate, 'break point 2');
 
@@ -22,6 +24,7 @@ export const formatDate = (
       year: 'numeric',
       month: '2-digit',
       day: '2-digit',
+      timeZone: 'UTC',
     })
     .split('/');
   const formattedDate2 = `${year}-${month.padStart(2, '0')}-${day?.padStart(
@@ -33,6 +36,7 @@ export const formatDate = (
     hour: 'numeric',
     minute: 'numeric',
     hour12: true,
+    timeZone: 'UTC',
   });
   const timeObj = formattedTime.split(/:| /);
   const formattedTime2 = {

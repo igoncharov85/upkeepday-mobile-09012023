@@ -8,12 +8,14 @@ export const formatDate = (
   time: [string, { hour: number; minute: number; dayPart: string }];
 } => {
   const date = new Date(dateString);
+  console.log(date, 'break point 1');
 
   const formattedDate = date.toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
   });
+  console.log(formattedDate, 'break point 2');
 
   const [month, day, year] = date
     .toLocaleDateString('en-US', {

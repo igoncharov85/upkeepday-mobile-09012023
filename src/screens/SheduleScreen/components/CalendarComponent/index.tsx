@@ -20,6 +20,7 @@ const CalendarComponent: React.FC<Props> = memo(
     const [selectedDate, setSelectedDate] = useState(date);
 
     const handleDayPress = (day: DateData) => {
+      console.log(day, 'first date press');
       console.log(formatDate(day.dateString).date[0], 'day');
 
       onDayPress(formatDate(day.dateString).date[0]);

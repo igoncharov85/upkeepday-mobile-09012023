@@ -25,7 +25,7 @@ export const ExistingStudent: React.FC<IExistingStudentProps> = ({ students, onC
     // const [existingStudents, setExistingStudents] = useState<Array<IExistingStudent>>([])
     const [searchText, setSearchText] = useState('');
     const goNextStep = () => {
-        dispatch(updateCurrentClassRequestAction({ Students: [], }))
+
         //@ts-ignore
         navigation.navigate(NavigationEnum.PREPAYMENT_CONFIGURATION_SCREEN)
     };
@@ -70,7 +70,7 @@ interface Student {
     onClick: (user: IExistingStudent) => void,
 }
 const Student: React.FC<Student> = ({ name, user, onClick }) => {
-    const [selected, setSelected] = useState(false)
+    const [selected, setSelected] = useState(user.Id ? false : true)
 
     const onSelectUser = () => {
         onClick(user)

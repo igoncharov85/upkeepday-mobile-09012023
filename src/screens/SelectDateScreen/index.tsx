@@ -227,6 +227,8 @@ const InputWithDate = ({ labelText, nameField, handleChange, dateValue }: { labe
         setDate(convertDate(date)[1])
         handleChangeVisible()
         handleChange(nameField, convertDate(date)[0])
+        console.log(convertDate(date)[0], convertDate(date)[1]);
+
     }
     function convertDateFormat(dateString: string) {
         const dateArr = dateString.split('/');

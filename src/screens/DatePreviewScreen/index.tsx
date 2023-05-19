@@ -42,7 +42,6 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
 
 
 
-
     const handeScheduleSlots = (slots: IGeneratedScheduleEntries[]) => {
         setSlots(slots)
         setConflict(findScheduleConflicts(slots, CurrentScheduledEntries))
@@ -59,9 +58,9 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
         setEndDateWeek(new Date(addDayAndHoursToDate(endDateWeek.toISOString(), -7, 0)))
         console.log('prev');
     }
-    useEffect(() => {
-        dispatch(fetchScheduleByPeriodAction({ startDate: startDateWeek.toISOString(), endDate: endDateWeek.toISOString() }));
-    }, [startDateWeek, endDateWeek])
+    // useEffect(() => {
+    //     dispatch(fetchScheduleByPeriodAction({ startDate: startDateWeek.toISOString(), endDate: endDateWeek.toISOString() }));
+    // }, [startDateWeek, endDateWeek])
 
     const onSave = () => {
         dispatch(updateCurrentClassRequestAction({

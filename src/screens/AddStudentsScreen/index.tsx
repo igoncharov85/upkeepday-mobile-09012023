@@ -66,6 +66,7 @@ export const AddStudentsScreen: React.FC<IAddStudentsScreen> = () => {
 
     const handleAddNewStudent = (students: IExistingStudent) => {
         setNewStudents([...newStudents, students]);
+        setSelectedStudents([...selectedStudents, students])
     }
     useEffect(() => {
         setExistingStudent([...students, ...newStudents]);

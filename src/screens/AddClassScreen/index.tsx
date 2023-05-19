@@ -128,7 +128,7 @@ export const AddClassScreen: React.FC<IAddClassScreen> = memo(() => {
             dispatch(
                 updateCurrentClassRequestAction({
                     Class: { Name: values.name },
-                    Location: { LocationType: typeLocation ? 'Office' : 'Online', Url: typeLocation ? '' : values.url }
+                    Location: { LocationType: typeLocation == TypeLocation.InPerson ? 'Office' : 'Online', Url: typeLocation == TypeLocation.InPerson ? '' : values.url }
                 })
             );
 

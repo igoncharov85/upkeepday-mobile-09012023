@@ -14,8 +14,8 @@ import { CustomButton } from '../../../components/UI/CustomButton';
 import { IExistingStudent } from '../../../common/types/schedule.types';
 
 interface INewStudentProps {
-    handleTypeChange: () => void
-    onAddNewStudent: (student: IExistingStudent) => void
+    handleTypeChange: () => void;
+    onAddNewStudent: (student: IExistingStudent) => void;
 }
 
 const formInitialValues = {
@@ -25,20 +25,13 @@ const formInitialValues = {
     Phone: '',
     Notes: ''
 };
-function splitPhoneNumber(phoneNumber: string): [string, string] {
-    const countryCode = phoneNumber?.slice(0, 4);
-    const phoneNumberWithoutCode = phoneNumber?.slice(4);
-    return [countryCode, phoneNumberWithoutCode];
-}
+
+
+
 export const NewStudent: React.FC<INewStudentProps> = ({ handleTypeChange, onAddNewStudent }) => {
     const { students } = useAppSelector(state => state.user);
     const [newUser, setNewUser] = useState<IExistingStudent>();
-    const [id, setId] = useState(students[students?.length - 1]?.StudentId || 0)
 
-    const onSave = (handleSubmit: any) => {
-        handleSubmit();
-        handleTypeChange()
-    }
     useEffect(() => {
         onAddNewStudent(newUser || {});
     }, [newUser]);
@@ -47,9 +40,17 @@ export const NewStudent: React.FC<INewStudentProps> = ({ handleTypeChange, onAdd
         touched,
         errors,
         values,
+        isValid,
         handleChange,
         handleSubmit,
     }: FormikProps<typeof formInitialValues>) => {
+
+        const handleSave = () => {
+            handleSubmit(); // Вызываем handleSubmit из Formik
+            setTimeout(() => {
+                handleTypeChange(); // Вызываем функцию handleTypeChange после 2 секунд
+            }, 1000);
+        };
 
         return (
             <>
@@ -88,43 +89,39 @@ export const NewStudent: React.FC<INewStudentProps> = ({ handleTypeChange, onAdd
                     value={values.Notes}
                 />
                 <InputForm labelText='Attachments' />
-                <TouchableOpacity onPress={handleSubmit}>
+                <TouchableOpacity onPress={handleSubmit} disabled={!isValid}>
                     <Text style={styles.addMore}>Add One More</Text>
                 </TouchableOpacity>
                 <View style={{ paddingVertical: 20, height: 92, flex: 1, justifyContent: 'flex-end' }}>
-                    <CustomButton text={'Save'} onPress={() => onSave(handleSubmit)} />
+                    <CustomButton text={'Save'} onPress={handleSave} disabled={!isValid} />
                 </View>
-
-
             </>
-        )
-    }
+        );
+    };
+
     const NewStudentForm = withFormik<any, typeof formInitialValues>({
         validationSchema: NewStudentSchema,
 
-        handleSubmit: (values, { resetForm, }) => {
-            setId(id + 1);
+        handleSubmit: (values, { resetForm }) => {
             console.log('values', values);
 
-            const [phoneCountry, phoneNumber] = splitPhoneNumber(values.Phone)
             setNewUser({
                 FirstName: values.FirstName,
                 LastName: values.LastName,
                 Email: values.Email,
                 Phone: values.Phone,
                 Notes: values.Notes || '',
-            })
+            });
             resetForm();
-
-
         },
         ...formicDefaultProps,
     })(renderForm);
+
     return (
         <ScrollView>
             <View style={styles.container}>
                 <NewStudentForm />
             </View>
         </ScrollView>
-    )
-}
+    );
+};

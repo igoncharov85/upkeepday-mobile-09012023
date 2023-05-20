@@ -51,6 +51,20 @@ export const AddNewAddressModal: React.FC<IAddNewAddressModal> = ({ visible, han
                     value={values.addressLine}
                     validationErrorText={errors.addressLine}
                 />
+                <InputForm
+                    labelText="City"
+                    onChange={handleChange('city')}
+                    value={values.city}
+                    validationErrorText={errors.city}
+
+                />
+                <InputForm
+                    labelText="Postal Code"
+                    onChange={handleChange('postalCode')}
+                    value={values.postalCode}
+                    validationErrorText={errors.postalCode}
+
+                />
                 <View style={styles.rowInput}>
                     <View style={styles.inputSplitted}>
                         <Text style={styles.label}>Country</Text>
@@ -69,20 +83,6 @@ export const AddNewAddressModal: React.FC<IAddNewAddressModal> = ({ visible, han
                         />
                     </View>
                 </View>
-                <InputForm
-                    labelText="Postal Code"
-                    onChange={handleChange('postalCode')}
-                    value={values.postalCode}
-                    validationErrorText={errors.postalCode}
-
-                />
-                <InputForm
-                    labelText="City"
-                    onChange={handleChange('city')}
-                    value={values.city}
-                    validationErrorText={errors.city}
-
-                />
                 <View style={{ flex: 1, justifyContent: 'flex-end' }}>
                     <CustomButton text={"Save"} onPress={handleSubmit} disabled={!isValid} />
                 </View></>

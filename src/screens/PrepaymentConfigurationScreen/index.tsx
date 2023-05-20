@@ -9,7 +9,7 @@ import { ListGradientCircleButtons } from './ListGradientCircleButtons';
 import { dispatch } from '../../store/store';
 import { createScheduleAction } from '../../store/shedule/actions';
 import { useAppSelector } from '../../store/hooks';
-import { IGeneratedScheduleEntries, ILocation, IWeekTimeSlot } from '../../common/types/schedule.types';
+import { IGeneratedScheduleEntries, ILocation, IStudents, IWeekTimeSlot } from '../../common/types/schedule.types';
 import { updateCurrentClassRequestAction } from '../../store/shedule';
 
 
@@ -31,7 +31,7 @@ export const PrepaymentConfigurationScreen: React.FC<IPrepaymentConfigurationScr
                     TrackPrepayment: !trackPrepayment as boolean
                 },
                 Location: { ...createCurrentClassRequest.Location as ILocation, Url: createCurrentClassRequest.Location?.Url as string || '' },
-                Students: [],
+                Students: createCurrentClassRequest.Students as IStudents[],
                 Slots: createCurrentClassRequest.Slots as IWeekTimeSlot[],
                 Sessions: createCurrentClassRequest.Sessions as IGeneratedScheduleEntries[]
             }

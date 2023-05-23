@@ -26,7 +26,11 @@ export const PrepaymentConfigurationScreen: React.FC<IPrepaymentConfigurationScr
         dispatch(createScheduleAction(
             {
                 Class: {
-                    ...createCurrentClassRequest.Class,
+                    Name: createCurrentClassRequest.Class?.Name,
+                    StartDate: createCurrentClassRequest.Class?.StartDate,
+                    EndDate: createCurrentClassRequest.Class?.EndScheduleType == 'SpecificEndDate' ? createCurrentClassRequest.Class?.EndDate : undefined,
+                    EndNumber: createCurrentClassRequest.Class?.EndScheduleType != 'SpecificEndDate' ? createCurrentClassRequest.Class?.EndNumber : undefined,
+                    EndScheduleType: createCurrentClassRequest.Class?.EndScheduleType,
                     MakeupRequired: !makeupRequired as boolean,
                     TrackPrepayment: !trackPrepayment as boolean
                 },
@@ -38,17 +42,8 @@ export const PrepaymentConfigurationScreen: React.FC<IPrepaymentConfigurationScr
         ))
 
 
-        console.log({
-            Class: {
-                ...createCurrentClassRequest.Class,
-                MakeupRequired: !makeupRequired as boolean,
-                TrackPrepayment: !trackPrepayment as boolean
-            },
-            Location: { ...createCurrentClassRequest.Location as ILocation, Url: createCurrentClassRequest.Location?.Url as string || '' },
-            Students: [],
-            Slots: createCurrentClassRequest.Slots as IWeekTimeSlot[],
-            Sessions: createCurrentClassRequest.Sessions as IGeneratedScheduleEntries[]
-        }, '/n/n/')
+        console.log(createCurrentClassRequest.Students);
+
         //@ts-ignore
         navigation.navigate(NavigationEnum.HOME_SCREEN)
     };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import { Text, View, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 
 import { dispatch } from '../../../store/store';
@@ -7,19 +7,19 @@ import { useAppSelector } from '../../../store/hooks';
 import SearchIcon from '../../../../assets/svg/SearchIcon';
 import styles from './styles';
 import SelectedUser from '../../../../assets/svg/SelectedUser';
-import { updateCurrentClassRequestAction } from '../../../store/shedule';
 import { IExistingStudent } from '../../../common/types/schedule.types';
 import { CustomButton } from '../../../components/UI/CustomButton';
 import { useNavigation } from '@react-navigation/native';
 import { NavigationEnum } from '../../../common/constants/navigation';
 
 interface IExistingStudentProps {
-    students: IExistingStudent[]
+    students: IExistingStudent[],
+    selectedUsers: any[],
     onChancheUsers: (student: IExistingStudent) => void
 }
 
 
-export const ExistingStudent: React.FC<IExistingStudentProps> = ({ students, onChancheUsers }) => {
+export const ExistingStudent: React.FC<IExistingStudentProps> = ({ students, onChancheUsers, selectedUsers }) => {
 
     const navigation = useNavigation();
     // const [existingStudents, setExistingStudents] = useState<Array<IExistingStudent>>([])
@@ -30,9 +30,6 @@ export const ExistingStudent: React.FC<IExistingStudentProps> = ({ students, onC
         navigation.navigate(NavigationEnum.PREPAYMENT_CONFIGURATION_SCREEN)
     };
 
-    useEffect(() => {
-        dispatch(fetchUsersAction())
-    }, [])
 
 
     return (
@@ -49,9 +46,17 @@ export const ExistingStudent: React.FC<IExistingStudentProps> = ({ students, onC
                 <View style={styles.container}>
 
                     <View >
-                        {students?.filter((user) => user.FirstName?.toLowerCase().includes(searchText?.toLowerCase())).map((user) => (
-                            <Student name={user.FirstName} onClick={onChancheUsers} user={user} key={user?.Email || user.Id} />
-                        ))}
+                        {students?.filter((user) => user.FirstName?.toLowerCase().includes(searchText?.toLowerCase())).map((user) => {
+                            //@ts-ignore
+                            let active = selectedUsers.some((selectedUser) => (user?.EnrolledClasses ? selectedUser?.id === user?.StudentId : selectedUser?.Email === user?.Email));
+
+                            console.log(active, 'active');
+
+                            return (
+                                //@ts-ignore
+                                <Student name={user.FirstName} onClick={onChancheUsers} user={user} key={user?.Email || user.Id} selectedUser={active} />
+                            )
+                        })}
                     </View>
                 </View >
             </ScrollView>
@@ -68,9 +73,11 @@ interface Student {
     name?: string,
     user: IExistingStudent,
     onClick: (user: IExistingStudent) => void,
+    selectedUser: boolean
 }
-const Student: React.FC<Student> = ({ name, user, onClick }) => {
-    const [selected, setSelected] = useState(user.Id ? false : true)
+const Student: React.FC<Student> = ({ name, user, onClick, selectedUser }) => {
+    //@ts-ignore
+    const [selected, setSelected] = useState(selectedUser)
 
     const onSelectUser = () => {
         onClick(user)

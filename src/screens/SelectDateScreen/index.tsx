@@ -68,7 +68,6 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
 
     const typeRef = useRef<string>('');
     const typeNumberRef = useRef<number>(0);
-    console.log(typeNumberRef.current, 'typeRef.current')
     const getTypeDate = (type: number) => {
 
         switch (type) {
@@ -91,7 +90,6 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
                 return EndScheduleType.FixedMonthNumber;
         }
 
-        console.log(typeNumberRef.current, 'typeRef.current')
     }
 
 
@@ -227,7 +225,6 @@ const InputWithDate = ({ labelText, nameField, handleChange, dateValue }: { labe
         setDate(convertDate(date)[1])
         handleChangeVisible()
         handleChange(nameField, convertDate(date)[0])
-        console.log(convertDate(date)[0], convertDate(date)[1]);
 
     }
     function convertDateFormat(dateString: string) {

@@ -46,7 +46,7 @@ export const NewStudent: React.FC<INewStudentProps> = ({ handleTypeChange, onAdd
     }: FormikProps<typeof formInitialValues>) => {
 
         const handleSave = () => {
-            handleSubmit(); // Вызываем handleSubmit из Formik
+            handleSubmit();
             setTimeout(() => {
                 handleTypeChange(); // Вызываем функцию handleTypeChange после 2 секунд
             }, 1000);

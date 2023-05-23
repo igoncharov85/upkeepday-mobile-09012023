@@ -21,12 +21,18 @@ enum TypeAction {
     ExistingStudent = 0,
     NewStudent = 1,
 }
+
+function removeEmptyObjects(array: any[]) {
+    return array.filter(obj => Object.keys(obj).length !== 0);
+}
+
 export const AddStudentsScreen: React.FC<IAddStudentsScreen> = () => {
 
     const { students } = useAppSelector(state => state.user)
     const [typeAction, setTypeAction] = useState(0);
     const navigation = useNavigation();
-    const [selectedStudents, setSelectedStudents] = useState<Array<IExistingStudent | any>>([]);
+    const { createCurrentClassRequest } = useAppSelector(state => state.schedule);
+    const [selectedStudents, setSelectedStudents] = useState<Array<IExistingStudent | any>>(createCurrentClassRequest.Students || []);
     const [existingStudent, setExistingStudent] = useState<Array<any>>(students || []);
     const [newStudents, setNewStudents] = useState<Array<IExistingStudent>>([]);
     //@ts-ignore
@@ -38,23 +44,28 @@ export const AddStudentsScreen: React.FC<IAddStudentsScreen> = () => {
         setTypeAction(TypeAction.ExistingStudent);
     }
     const handleChancheUsers = (student: IExistingStudent) => {
+        //@ts-ignore
+
 
         setSelectedStudents(existingStudents => {
-            // return [...existingStudents, student];
 
-            const index = existingStudents?.findIndex(event => event.Phone ? (event.Phone === student?.Phone) : (event.Id === student?.Id));
-            if (!student?.Phone) {
-                const index = existingStudents?.findIndex(event => event.Id === student?.Id);
+
+            //@ts-ignore
+            if (student?.StudentId) {
                 //@ts-ignore
-
+                let index = existingStudents?.findIndex(event => event.id === student?.StudentId);
+                //@ts-ignore
                 const id = student?.StudentId;
                 if (index === -1) {
                     return [...existingStudents, { id }];
                 } else {
-                    return existingStudents?.filter((_, i) => i !== index);
+                    console.log('else');
+                    return existingStudents?.filter(event => event.id !== id);
                 }
 
+
             } else {
+                const index = existingStudents?.findIndex(event => event.Phone === student?.Phone);
                 if (index === -1) {
                     return [...existingStudents, student];
                 } else {
@@ -74,8 +85,10 @@ export const AddStudentsScreen: React.FC<IAddStudentsScreen> = () => {
 
     useEffect(() => {
         dispatch(updateCurrentClassRequestAction({
-            Students: selectedStudents || []
+            Students: removeEmptyObjects(selectedStudents) || []
         }));
+        console.log(selectedStudents, 'selectedStudents');
+
     }, [selectedStudents, newStudents]);
 
     const goBack = () => navigation.goBack()
@@ -99,7 +112,7 @@ export const AddStudentsScreen: React.FC<IAddStudentsScreen> = () => {
             <View style={{ flex: 1 }}>
                 <View style={{ flex: 1 }}>
                     {typeAction === TypeAction.ExistingStudent ?
-                        <ExistingStudent students={existingStudent} onChancheUsers={handleChancheUsers} /> :
+                        <ExistingStudent students={existingStudent} onChancheUsers={handleChancheUsers} selectedUsers={selectedStudents} /> :
                         <NewStudent handleTypeChange={setThisScreen} onAddNewStudent={handleAddNewStudent} />
                     }
                 </View>

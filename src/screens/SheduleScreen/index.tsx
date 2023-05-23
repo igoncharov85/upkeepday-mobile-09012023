@@ -10,7 +10,6 @@ import {
 } from '../../store/auth/actions';
 import {
   addLocationAction,
-  fetchLocationAction,
 } from '../../store/location/actions';
 import {
   createScheduleAction,
@@ -18,6 +17,7 @@ import {
 } from '../../store/shedule/actions';
 import { dispatch } from '../../store/store';
 import { fetchUsersAction } from '../../store/user/actions';
+import { fetchLocationAction } from '../../store/location/actions';
 import { SheduleHeader } from './components/SheduleHeader';
 import { ScheduleNavigation } from './components/SheduleNavigation';
 import { BottomTab } from '../../components/BottomTab';
@@ -68,6 +68,7 @@ export const ScheduleScreen: FC<IHomeScreen> = memo(({ navigation }) => {
     dispatch(fetchUsersAction());
     dispatch(fetchStatesAction('USA'));
     dispatch(fetchCountriesAction());
+    dispatch(fetchLocationAction());
   }, []);
   return (
     // <View style={styles.container} {...panResponder.panHandlers}>
@@ -80,3 +81,4 @@ export const ScheduleScreen: FC<IHomeScreen> = memo(({ navigation }) => {
     </View >
   );
 });
+

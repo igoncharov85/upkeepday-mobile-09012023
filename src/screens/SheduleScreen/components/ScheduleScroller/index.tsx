@@ -15,11 +15,11 @@ export const ScheduleScroller: FC<IScheduleScroller> = memo(
     return (
       <View style={styles.wrapper}>
         <View style={styles.container}>
-          <TouchableOpacity onPress={onPressLeft}>
+          <TouchableOpacity onPress={onPressLeft} style={{ padding: 4 }}>
             <ArrowLeft />
           </TouchableOpacity>
           <Text style={styles.title}>{title}</Text>
-          <TouchableOpacity onPress={onPressRight}>
+          <TouchableOpacity onPress={onPressRight} style={{ padding: 4 }}>
             <ArrowRight />
           </TouchableOpacity>
         </View>

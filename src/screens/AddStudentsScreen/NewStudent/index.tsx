@@ -47,9 +47,11 @@ export const NewStudent: React.FC<INewStudentProps> = ({ handleTypeChange, onAdd
 
         const handleSave = () => {
             handleSubmit();
-            setTimeout(() => {
-                handleTypeChange(); // Вызываем функцию handleTypeChange после 2 секунд
-            }, 1000);
+            if (isValid) {
+                setTimeout(() => {
+                    handleTypeChange(); // Вызываем функцию handleTypeChange после 2 секунд
+                }, 1000);
+            }
         };
 
         return (

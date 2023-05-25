@@ -8,6 +8,7 @@ import { MonthItem } from './MonthItem';
 import { fetchScheduleByPeriodAction } from '../../../store/shedule/actions';
 import { dispatch } from '../../../store/store';
 import { useAppSelector } from '../../../store/hooks';
+import { ScreenLoading } from '../../../components/UI/ScreenLoading';
 
 const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
@@ -48,7 +49,7 @@ function getSectionsCountByDate(entries: any[], date: Date): number {
 export const ScheduleCalendar: React.FC<IScheduleCalendarProps> = ({ startingDayOfWeek }) => {
     const [days, setDays] = useState<Day[]>([]);
 
-    const { CurrentScheduledEntries } = useAppSelector(state => state.schedule);
+    const { CurrentScheduledEntries, loading } = useAppSelector(state => state.schedule);
     const [date, setDate] = useState('');
     const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
 
@@ -143,7 +144,7 @@ export const ScheduleCalendar: React.FC<IScheduleCalendarProps> = ({ startingDay
         },
     });
 
-    return (
+    return loading ? <ScreenLoading /> : (
         <View style={styles.container} {...panResponder.panHandlers}>
 
             <View style={styles.header}>

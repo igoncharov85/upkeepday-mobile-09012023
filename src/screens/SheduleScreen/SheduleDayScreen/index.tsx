@@ -35,7 +35,10 @@ function getNextDate(dateString: string, daysToAdd: number): string {
 }
 function formatDate(dateString: string): string {
 	const date = new Date(dateString);
-	return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+	return date.toLocaleDateString('en-US', {
+		month: 'long', day: 'numeric', year: 'numeric',
+		timeZone: 'UTC',
+	});
 }
 interface IScheduleDayScreen { }
 
@@ -62,7 +65,9 @@ export const ScheduleDayScreen: React.FC<IScheduleDayScreen> = memo(() => {
 	useEffect(() => {
 		dispatch(fetchScheduleByPeriodAction({ startDate: currentDay, endDate: currentDay }));
 	}, [currentDay])
-
+	useEffect(() => {
+		dispatch(fetchScheduleByPeriodAction({ startDate: currentDay, endDate: currentDay }));
+	}, []);
 	return loading ? <ScreenLoading /> : (
 		<View>
 			<ScheduleScroller

@@ -2,15 +2,14 @@ import React, { FC, memo, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { DaysOfWeekItem } from './DaysOfWeekItem';
 import styles from './styles';
-interface IDaysOfWeek { }
+interface IDaysOfWeek {
+  startOfWeek: Date;
+  endOfWeek: Date;
+}
 
-export const DaysOfWeek: FC<IDaysOfWeek> = memo(() => {
+export const DaysOfWeek: FC<IDaysOfWeek> = memo(({ startOfWeek, endOfWeek }) => {
   const today = new Date();
   const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  const startOfWeek = new Date(today.setDate(today.getDate() - today.getDay()));
-  const endOfWeek = new Date(
-    today.setDate(today.getDate() - today.getDay() + 6),
-  );
   const daysWeek = [];
 
   for (let i = 0; i < 7; i++) {

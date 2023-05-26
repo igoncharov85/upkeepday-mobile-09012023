@@ -20,7 +20,13 @@ const findObject = (arr: any[], hour: number, day: number) => {
   });
   return foundObject ? { ...foundObject } : null;
 };
+function isTodayInWeekRange(start: Date, end: Date): boolean {
+  const today = new Date();
 
+  start.setHours(0, 0, 0, 0);
+  end.setHours(23, 59, 59, 999);
+  return today >= start && today <= end;
+}
 
 
 export const SheduleTable: FC<ISheduleTable> = memo(
@@ -35,8 +41,8 @@ export const SheduleTable: FC<ISheduleTable> = memo(
 
     const { CurrentScheduledEntries, loading } = useAppSelector(state => state.schedule);
     useEffect(() => {
-      dispatch(fetchScheduleByPeriodAction({ startDate: getToday(startOfWeek)[0], endDate: getToday(endOfWeek)[0] }));
-    }, [])
+      dispatch(fetchScheduleByPeriodAction({ startDate: startOfWeek.toISOString(), endDate: endOfWeek.toISOString() }));
+    }, [startOfWeek])
     return loading ? <ScreenLoading /> : (
       <View style={styles.container}>
         <ScrollView contentOffset={{ x: 0, y: 64 * 8 }}>
@@ -66,7 +72,7 @@ export const SheduleTable: FC<ISheduleTable> = memo(
                       }
                       return <SheduleTableItem key={index} SlotUid={''} StartDateTime={''} Duration={0} ClassName={''} ScheduleEntryId={0} />;
                     })}
-                    {isToday(dayIndex) && (
+                    {isToday(dayIndex) && isTodayInWeekRange(startOfWeek, endOfWeek) && (
                       <View style={[styles.absoluteFill, styles.mask]} />
                     )}
                   </Column>

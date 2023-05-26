@@ -32,10 +32,12 @@ interface EntryCount {
 function getSectionsCountByDate(entries: any[], date: Date): number {
     const entriesOnDate = entries?.filter(entry => {
         const entryDate = new Date(entry.StartDateTime);
+        const entryDateGMT = new Date(entryDate.getTime() + entryDate.getTimezoneOffset() * 60000);
+        const dateGMT = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
         return (
-            entryDate.getFullYear() === date.getFullYear() &&
-            entryDate.getMonth() === date.getMonth() &&
-            entryDate.getDate() === date.getDate()
+            entryDateGMT.getFullYear() === dateGMT.getFullYear() &&
+            entryDateGMT.getMonth() === dateGMT.getMonth() &&
+            entryDateGMT.getDate() === dateGMT.getDate()
         );
     });
 
@@ -43,8 +45,6 @@ function getSectionsCountByDate(entries: any[], date: Date): number {
 
     return count;
 }
-
-
 
 export const ScheduleCalendar: React.FC<IScheduleCalendarProps> = ({ startingDayOfWeek }) => {
     const [days, setDays] = useState<Day[]>([]);
@@ -107,7 +107,7 @@ export const ScheduleCalendar: React.FC<IScheduleCalendarProps> = ({ startingDay
         const today = new Date(`${date}-${item.dayOfMonth}`)
         const sesions = getSectionsCountByDate(CurrentScheduledEntries, today)
         const { isCurrentMonth, dayOfMonth } = item;
-        return <MonthItem day={`${dayOfMonth}`} isCurrentMonth={isCurrentMonth} sesion={sesions} />
+        return <MonthItem day={`${dayOfMonth}`} isCurrentMonth={isCurrentMonth} sesion={sesions} item={item} />
     };
 
 
@@ -115,15 +115,12 @@ export const ScheduleCalendar: React.FC<IScheduleCalendarProps> = ({ startingDay
     const handleSwipeLeft = () => {
         const nextMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1);
         setCurrentMonth(nextMonth);
-        console.log('left')
         flatListRef.current?.scrollToOffset({ animated: true, offset: 0 });
     };
 
     const handleSwipeRight = () => {
         const nextMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1);
         setCurrentMonth(nextMonth);
-
-        console.log('right')
         flatListRef.current?.scrollToOffset({ animated: true, offset: 0 });
     };
     const [swipeUpCount, setSwipeUpCount] = useState(0);

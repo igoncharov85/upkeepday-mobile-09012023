@@ -14,10 +14,9 @@ interface IMonthItem {
 
 
 export const MonthItem: FC<IMonthItem> = memo(({ sesion, day, isCurrentMonth, item }) => {
-    const hasLesson = sesion && isCurrentMonth
+    const hasLesson = sesion
     return (
-        <TouchableOpacity onPress={() => console.log(item, 'item info')} style={styles.itemContainer}>
-            {/* <View > */}
+        <View style={styles.itemContainer} >
             <LinearGradient
                 colors={
                     hasLesson ? ['#EAAFC8', '#654EA3'] : ['transparent', 'transparent']
@@ -42,8 +41,7 @@ export const MonthItem: FC<IMonthItem> = memo(({ sesion, day, isCurrentMonth, it
                     <Text style={styles.numberOfClasses}>{`${sesion} Sessions`}</Text>
                 ) : null}
             </LinearGradient>
-            {/* </View> */}
-        </TouchableOpacity>
+        </View>
     );
 });
 

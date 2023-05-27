@@ -12,7 +12,9 @@ interface ISheduleTable {
   startOfWeek: Date;
   endOfWeek: Date;
 }
-
+function getDaysInMonth(month: number, year: number) {
+  return new Date(year, month, 0).getDate();
+}
 const findObject = (arr: any[], hour: number, day: number) => {
   const foundObject = arr?.find(obj => {
     const startDate = new Date(obj.StartDateTime);
@@ -57,9 +59,15 @@ export const SheduleTable: FC<ISheduleTable> = memo(
                 return (
                   <Column key={dayIndex}>
                     {dayEvents?.map((event, index) => {
+                      let dayNumber: any = dayIndex + startWeekOfDay;
+                      if (startOfWeek.getMonth() !== endOfWeek.getMonth()) {
+                        if (dayIndex + startWeekOfDay > getDaysInMonth(startOfWeek.getMonth() + 1, endOfWeek.getFullYear())) {
+                          dayNumber = dayIndex + startWeekOfDay - getDaysInMonth(startOfWeek.getMonth() + 1, endOfWeek.getFullYear())
+                        }
+                      }
+                      const item = findObject(CurrentScheduledEntries, index, dayNumber)
 
-                      const item = findObject(CurrentScheduledEntries, index, dayIndex + startWeekOfDay)
-                      if (findObject(CurrentScheduledEntries, index, dayIndex + startWeekOfDay)) {
+                      if (findObject(CurrentScheduledEntries, index, dayNumber)) {
                         return (
                           <SheduleTableItem
                             key={index}

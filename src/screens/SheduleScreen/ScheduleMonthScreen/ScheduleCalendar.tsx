@@ -9,6 +9,7 @@ import { fetchScheduleByPeriodAction } from '../../../store/shedule/actions';
 import { dispatch } from '../../../store/store';
 import { useAppSelector } from '../../../store/hooks';
 import { ScreenLoading } from '../../../components/UI/ScreenLoading';
+import { el } from 'date-fns/locale';
 
 const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
@@ -52,6 +53,7 @@ export const ScheduleCalendar: React.FC<IScheduleCalendarProps> = ({ startingDay
     const { CurrentScheduledEntries, loading } = useAppSelector(state => state.schedule);
     const [date, setDate] = useState('');
     const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
+    console.log(CurrentScheduledEntries, '\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n------------------CurrentScheduledEntries------------------');
 
     const flatListRef = useRef<FlatList>(null);
 
@@ -96,16 +98,32 @@ export const ScheduleCalendar: React.FC<IScheduleCalendarProps> = ({ startingDay
             nextMonthDay++;
             i++;
         }
+        console.log(days, 'days');
 
         setDays(days);
-        setDate(`${year}-${month + 1}`)
-        dispatch(fetchScheduleByPeriodAction({ startDate: `${year}-${month + 1}-1`, endDate: `${year}-${month + 1}-${daysInMonth}` }));
+        setDate(`${year}-${month + 1}`);
+        if (days[0].isCurrentMonth) {
+            dispatch(fetchScheduleByPeriodAction({ startDate: `${year}-${month + 1}-1`, endDate: `${year}-${month + 2}-${days[days.length - 1].dayOfMonth}` }));
+        } else {
+            dispatch(fetchScheduleByPeriodAction({ startDate: `${year}-${month}-${days[0].dayOfMonth}`, endDate: `${year}-${month + 2}-${days[days.length - 1].dayOfMonth}` }));
+        }
 
     };
 
     const renderItem = ({ item }: { item: Day }) => {
-        const today = new Date(`${date}-${item.dayOfMonth}`)
-        const sesions = getSectionsCountByDate(CurrentScheduledEntries, today)
+        console.log(date, 'date');
+        let today, sesions;
+        if (!item.isCurrentMonth && item.dayOfMonth > 15) {
+            const parts = date.split('-');
+            today = new Date(`${parts[0]}-${parseInt(parts[1]) - 1}-${item.dayOfMonth}`)
+
+        } else if (!item.isCurrentMonth && item.dayOfMonth < 15) {
+            const parts = date.split('-');
+            today = new Date(`${parts[0]}-${parseInt(parts[1]) + 1}-${item.dayOfMonth}`)
+        } else {
+            today = new Date(`${date}-${item.dayOfMonth}`)
+        }
+        sesions = getSectionsCountByDate(CurrentScheduledEntries, today)
         const { isCurrentMonth, dayOfMonth } = item;
         return <MonthItem day={`${dayOfMonth}`} isCurrentMonth={isCurrentMonth} sesion={sesions} item={item} />
     };

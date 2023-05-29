@@ -17,18 +17,14 @@ export const SheduleWeekScreen: FC<ISheduleWeekScreen> = memo(() => {
   const [startDateWeek, setStartDateWeek] = useState(new Date(weekDates.startDate));
   const [endDateWeek, setEndDateWeek] = useState(new Date(weekDates.endDate));
 
-  const panResponder = PanResponder.create({
-    onMoveShouldSetPanResponderCapture: (evt, gestureState) => {
-      return true;
-    },
-    onPanResponderRelease: (evt, gestureState) => {
-      if (gestureState.dx < -50) {
-        goToNextWeek()
-      } else if (gestureState.dx > 50) {
-        goToPrevWeek()
-      }
-    },
-  });
+
+  const onPanResponderRelease = (evt: any, gestureState: { dx: number; }) => {
+    if (gestureState.dx < -50) {
+      goToNextWeek()
+    } else if (gestureState.dx > 50) {
+      goToPrevWeek()
+    }
+  }
   const goToNextWeek = () => {
     setStartDateWeek(new Date(addDayAndHoursToDate(startDateWeek.toISOString(), 7, 0)))
     setEndDateWeek(new Date(addDayAndHoursToDate(endDateWeek.toISOString(), 7, 0)))
@@ -41,11 +37,13 @@ export const SheduleWeekScreen: FC<ISheduleWeekScreen> = memo(() => {
     console.log('prev');
   }
   return (
-    <View style={styles.container} {...panResponder.panHandlers}>
+    <View style={styles.container} >
       <DaysOfWeek startOfWeek={startDateWeek} endOfWeek={endDateWeek} />
       <SheduleTable
         startOfWeek={startDateWeek}
         endOfWeek={endDateWeek}
+        goToNextWeek={goToNextWeek}
+        goToPrevWeek={goToPrevWeek}
       />
     </View>
   );

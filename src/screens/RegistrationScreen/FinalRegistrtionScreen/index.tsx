@@ -1,29 +1,28 @@
-import {FormikProps, withFormik} from 'formik';
-import React, {FC, memo} from 'react';
-import {KeyboardAvoidingView, Platform, View} from 'react-native';
+import { FormikProps, withFormik } from 'formik';
+import React, { FC, memo } from 'react';
+import { KeyboardAvoidingView, Platform, View } from 'react-native';
 import { keyboardSettings } from '../../../common/constants/styles/keyboard';
-import {PasswordConfirmShape} from '../../../common/shemas/auth.shape';
-import {IConfirmPassword} from '../../../common/types/auth.types';
-import {INavigationBase} from '../../../common/types/component.styles';
-import {ScreenHeader} from '../../../components/ScreenHeader';
-import {CustomButton} from '../../../components/UI/CustomButton';
-import {CustomInput} from '../../../components/UI/CustomInput';
-import {confirmRegistrationPasswordAction} from '../../../store/auth/actions';
-import {useAppSelector} from '../../../store/hooks';
-import {dispatch} from '../../../store/store';
+import { PasswordConfirmShape } from '../../../common/shemas/auth.shape';
+import { IConfirmPassword } from '../../../common/types/auth.types';
+import { INavigationBase } from '../../../common/types/component.styles';
+import { ScreenHeader } from '../../../components/ScreenHeader';
+import { CustomButton } from '../../../components/UI/CustomButton';
+import { CustomInput } from '../../../components/UI/CustomInput';
+import { confirmRegistrationPasswordAction } from '../../../store/auth/actions';
+import { useAppSelector } from '../../../store/hooks';
+import { dispatch } from '../../../store/store';
 import styles from './styles';
 
 const formInitialValues = {
   passwordConfirmation: '',
   password: '',
 };
-interface IFinalScreen extends INavigationBase {}
+interface IFinalScreen extends INavigationBase { }
 export const FinalRegistrationScreen: FC<IFinalScreen> = memo(
-  ({navigation, route}) => {
-    const {loading} = useAppSelector(state => state.auth);
-    const {registrationForm} = useAppSelector(state => state.cache);
+  ({ navigation, route }) => {
+    const { loading } = useAppSelector(state => state.auth);
+    const { registrationForm } = useAppSelector(state => state.cache);
     const uuidToken = route?.params?.uuid;
-    console.log('uuidToken!!!!', uuidToken);
     const renderForm = ({
       touched,
       errors,
@@ -96,7 +95,7 @@ export const FinalRegistrationScreen: FC<IFinalScreen> = memo(
     })(renderForm);
     return (
       <KeyboardAvoidingView
-        style={{flex: 1}}
+        style={{ flex: 1 }}
         {...keyboardSettings}>
         <View style={styles.container}>
           <ScreenHeader text={'Finish Registration'} />

@@ -105,8 +105,6 @@ export const NewStudent: React.FC<INewStudentProps> = ({ handleTypeChange, onAdd
         validationSchema: NewStudentSchema,
 
         handleSubmit: (values, { resetForm }) => {
-            console.log('values', values);
-
             setNewUser({
                 FirstName: values.FirstName,
                 LastName: values.LastName,

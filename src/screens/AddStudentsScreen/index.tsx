@@ -59,7 +59,6 @@ export const AddStudentsScreen: React.FC<IAddStudentsScreen> = () => {
                 if (index === -1) {
                     return [...existingStudents, { id }];
                 } else {
-                    console.log('else');
                     return existingStudents?.filter(event => event.id !== id);
                 }
 
@@ -87,7 +86,6 @@ export const AddStudentsScreen: React.FC<IAddStudentsScreen> = () => {
         dispatch(updateCurrentClassRequestAction({
             Students: removeEmptyObjects(selectedStudents) || []
         }));
-        console.log(selectedStudents, 'selectedStudents');
 
     }, [selectedStudents, newStudents]);
 

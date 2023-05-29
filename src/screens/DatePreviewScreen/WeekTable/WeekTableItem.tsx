@@ -53,13 +53,9 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
     const colorsLesson = ['#EAAFC8', '#654EA3'];
 
     const onHandleSlot = () => {
-      console.log(!!activeItem, '!!activeItem');
-
       if (active && !!activeItem) {
         onDeleteSlot(activeItem)
         setActive(false)
-        console.log('delete');
-
       } else {
         onMoveSlot({ SlotUid: '', StartDateTime: addDayAndHoursToDate(startOfWeek.toISOString(), dayIndex, timeIndex), Duration: TimeDuration.OneHour })
         setActive(true)

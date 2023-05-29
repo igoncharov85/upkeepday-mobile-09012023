@@ -31,7 +31,9 @@ export const ExistingStudent: React.FC<IExistingStudentProps> = ({ students, onC
     };
 
 
-
+    useEffect(() => {
+        dispatch(fetchUsersAction());
+    }, []);
     return (
         <View style={{}}>
             <View style={{ flexDirection: 'row', position: 'relative', marginTop: 26, marginHorizontal: 20 }}>
@@ -49,8 +51,6 @@ export const ExistingStudent: React.FC<IExistingStudentProps> = ({ students, onC
                         {students?.filter((user) => user.FirstName?.toLowerCase().includes(searchText?.toLowerCase())).map((user) => {
                             //@ts-ignore
                             let active = selectedUsers.some((selectedUser) => (user?.EnrolledClasses ? selectedUser?.id === user?.StudentId : selectedUser?.Email === user?.Email));
-
-                            console.log(active, 'active');
 
                             return (
                                 //@ts-ignore

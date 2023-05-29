@@ -66,8 +66,6 @@ export const WeekTable: FC<ISheduleTable> = memo(
         const newSlots = slots.filter((_, i) => i !== index);
 
         if (JSON.stringify(slots) !== JSON.stringify(newSlots)) {
-          console.log(slot);
-
           setSlotUid(slot.SlotUid)
           setSlots(newSlots);
           setIsSlotEdit(true);
@@ -80,8 +78,6 @@ export const WeekTable: FC<ISheduleTable> = memo(
 
     const onMoveSlot = (slot: IGeneratedScheduleEntries) => {
       if (SlotUid && isSlotEdit) {
-        console.log(slot, 'slot');
-
         setSlots([...slots, { Duration: slot.Duration, StartDateTime: slot.StartDateTime, SlotUid: SlotUid }]);
 
         setSlotUid('')

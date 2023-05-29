@@ -53,14 +53,15 @@ export const ScheduleCalendar: React.FC<IScheduleCalendarProps> = ({ startingDay
     const { CurrentScheduledEntries, loading } = useAppSelector(state => state.schedule);
     const [date, setDate] = useState('');
     const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
-    console.log(CurrentScheduledEntries, '\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n------------------CurrentScheduledEntries------------------');
 
     const flatListRef = useRef<FlatList>(null);
 
     useEffect(() => {
         generateDays();
     }, [currentMonth]);
-
+    useEffect(() => {
+        generateDays();
+    }, []);
     const generateDays = () => {
         const year = currentMonth.getFullYear();
         const month = currentMonth.getMonth();
@@ -98,7 +99,6 @@ export const ScheduleCalendar: React.FC<IScheduleCalendarProps> = ({ startingDay
             nextMonthDay++;
             i++;
         }
-        console.log(days, 'days');
 
         setDays(days);
         setDate(`${year}-${month + 1}`);
@@ -111,7 +111,6 @@ export const ScheduleCalendar: React.FC<IScheduleCalendarProps> = ({ startingDay
     };
 
     const renderItem = ({ item }: { item: Day }) => {
-        console.log(date, 'date');
         let today, sesions;
         if (!item.isCurrentMonth && item.dayOfMonth > 15) {
             const parts = date.split('-');

@@ -9,7 +9,6 @@ import styles from "./styles";
 import { CustomButton } from "../../../../components/UI/CustomButton";
 import { AddNewAddressModal } from "../AddNewAddressModal";
 import { dispatch } from "../../../../store/store";
-import { fetchLocationAction } from "../../../../store/location/actions";
 import { useAppSelector } from "../../../../store/hooks";
 import { updateCurrentClassRequestAction } from "../../../../store/shedule";
 
@@ -38,9 +37,7 @@ export const ChooseAddressModal: React.FC<IChooseAddressModal> = memo(({ visible
             }))
         };
     });
-    // useEffect(() => {
-    //     dispatch(fetchLocationAction());
-    // }, []);
+
     const onShowModal = () => {
         setModalVisible(!modalVisible);
         handleShowModal()

@@ -42,8 +42,6 @@ export const PrepaymentConfigurationScreen: React.FC<IPrepaymentConfigurationScr
         ))
 
 
-        console.log(createCurrentClassRequest.Students);
-
         //@ts-ignore
         navigation.navigate(NavigationEnum.HOME_SCREEN)
     };

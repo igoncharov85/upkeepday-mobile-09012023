@@ -16,6 +16,8 @@ import { useDispatch } from "react-redux";
 import { updateCurrentClassRequestAction } from "../../store/shedule";
 import { AddClassNameSchema, AddClassSchema } from "../../common/shemas/addClass.shape";
 import { formicDefaultProps } from "../../common/constants/styles/form.config";
+import { fetchUsersAction } from "../../store/user/actions";
+import { fetchLocationAction } from "../../store/location/actions";
 
 interface IAddClassScreen { }
 
@@ -137,7 +139,11 @@ export const AddClassScreen: React.FC<IAddClassScreen> = memo(() => {
         },
         [dispatch, typeLocation, navigation]
     );
-
+    useEffect(() => {
+        console.log('worked');
+        dispatch(fetchUsersAction());
+        dispatch(fetchLocationAction());
+    }, []);
     return (
         <KeyboardAvoidingView
             behavior="height"

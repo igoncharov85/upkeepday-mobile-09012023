@@ -10,11 +10,11 @@ import { UserContactsEnum } from "../constants";
 
 export function* fetchUserWorker(payload: IAction<null>): SagaIterator {
     try {
-        console.log('fetchUserWorker!!!!')
+        console.log('fetchUserWorker')
         const { data }: AxiosResponse<Array<IUserStudent>, any> = yield call(
             UserService.fetchAllUsers,
         );
-        console.log('student data!!!!', data)
+        console.log('student data', data)
         if (data) {
             yield put(setStudentAction(data))
         }

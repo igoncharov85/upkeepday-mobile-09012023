@@ -46,7 +46,6 @@ export const ScheduleScreen: FC<IHomeScreen> = memo(({ navigation }) => {
   const handleSwipeRight = () => {
     setActivePage(activePage != 2 ? activePage + 1 : activePage);
   };
-  console.log(activePage, 'activePage');
 
   const panResponder = PanResponder.create({
     onMoveShouldSetPanResponderCapture: (evt, gestureState) => {
@@ -64,11 +63,10 @@ export const ScheduleScreen: FC<IHomeScreen> = memo(({ navigation }) => {
   });
 
   useEffect(() => {
-    console.log('worked');
     dispatch(fetchUsersAction());
+    dispatch(fetchLocationAction());
     dispatch(fetchStatesAction('USA'));
     dispatch(fetchCountriesAction());
-    dispatch(fetchLocationAction());
   }, []);
   return (
     // <View style={styles.container} {...panResponder.panHandlers}>

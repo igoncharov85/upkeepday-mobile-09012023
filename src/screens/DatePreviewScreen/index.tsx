@@ -50,13 +50,11 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
     const goToNextWeek = () => {
         setStartDateWeek(new Date(addDayAndHoursToDate(startDateWeek.toISOString(), 7, 0)))
         setEndDateWeek(new Date(addDayAndHoursToDate(endDateWeek.toISOString(), 7, 0)))
-        console.log('next');
 
     }
     const goToPrevWeek = () => {
         setStartDateWeek(new Date(addDayAndHoursToDate(startDateWeek.toISOString(), -7, 0)))
         setEndDateWeek(new Date(addDayAndHoursToDate(endDateWeek.toISOString(), -7, 0)))
-        console.log('prev');
     }
     // useEffect(() => {
     //     dispatch(fetchScheduleByPeriodAction({ startDate: startDateWeek.toISOString(), endDate: endDateWeek.toISOString() }));

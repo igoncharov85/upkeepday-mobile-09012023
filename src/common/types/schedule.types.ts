@@ -3,6 +3,14 @@ export interface IScheduleRequest {
     startDate: string,
     endDate: string
 }
+export interface IDeleteScheduleRequest {
+    startDate: string,
+    endDate: string,
+    data: {
+        AllDay: boolean,
+        Message: string
+    }
+}
 
 
 export interface IExistingStudent {

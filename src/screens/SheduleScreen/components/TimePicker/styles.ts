@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
   container: {
@@ -19,6 +19,7 @@ export default StyleSheet.create({
     width: '100%',
     height: 50,
     justifyContent: 'center',
+    paddingHorizontal: 16,
   },
   itemText: {
     fontSize: 27,

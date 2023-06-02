@@ -36,7 +36,7 @@ export const CancellationScreen: FC<ICancellationScreen> = memo(() => {
   const [endDate, setEndDate] = useState(endTime)
   const [allDay, setAllDay] = useState(false);
   const [messageVisible, setMessageVisible] = useState(false);
-
+  const [buttonDisabled, setButtonDisabled] = useState(false);
 
 
   const onSetStartTime = (startDate: string) => setStartDate(startDate)
@@ -52,7 +52,7 @@ export const CancellationScreen: FC<ICancellationScreen> = memo(() => {
     navigation.goBack()
   }
   const toggleAllDay = () => setAllDay(!allDay);
-
+  const toggleButtonDisabled = () => setButtonDisabled(true);
 
   return (
     <ScrollView
@@ -83,9 +83,9 @@ export const CancellationScreen: FC<ICancellationScreen> = memo(() => {
               CP will send automatic notification. However, you can customize the
               message below.
             </Text>
-            <MessageBlock />
+            <MessageBlock toggleButtonDisabled={toggleButtonDisabled} />
             <View style={styles.finishBtn}>
-              <CustomButton text={'Finish'} onPress={handleSubmit} />
+              <CustomButton text={'Finish'} onPress={handleSubmit} disabled={!buttonDisabled} />
             </View>
           </>
         )}
@@ -105,8 +105,6 @@ const DateOfChangeItem =
     const [currentDate, setCurrentDate] = useState(formatDate(time).date[0])
     const [calendarIsVisible, setCalendarIsVisible] = useState(false);
 
-    ;
-
     const onTimePress = () => {
       setTimeIsVisible(!timeIsVisible);
       setCalendarIsVisible(false);
@@ -122,6 +120,7 @@ const DateOfChangeItem =
     }
     const onSetDate = (time: string) => {
       setCurrentDate(time)
+      onCalendarPress()
 
     }
     useEffect(() => {

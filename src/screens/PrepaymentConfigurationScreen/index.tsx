@@ -34,13 +34,16 @@ export const PrepaymentConfigurationScreen: React.FC<IPrepaymentConfigurationScr
                     MakeupRequired: !makeupRequired as boolean,
                     TrackPrepayment: !trackPrepayment as boolean
                 },
-                Location: { ...createCurrentClassRequest.Location as ILocation, Url: createCurrentClassRequest.Location?.Url as string || '' },
+                Location: {
+                    ...createCurrentClassRequest.Location as ILocation,
+
+                    Url: createCurrentClassRequest.Location?.Url as string || ''
+                },
                 Students: createCurrentClassRequest.Students as IStudents[],
                 Slots: createCurrentClassRequest.Slots as IWeekTimeSlot[],
                 Sessions: createCurrentClassRequest.Sessions as IGeneratedScheduleEntries[]
             }
         ))
-
 
         //@ts-ignore
         navigation.navigate(NavigationEnum.HOME_SCREEN)

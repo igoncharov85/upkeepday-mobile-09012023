@@ -35,6 +35,7 @@ export const formatDate = (
     hour12: true,
     timeZone: 'UTC',
   });
+
   const timeObj = formattedTime.split(/:| /);
   const formattedTime2 = {
     hour: parseInt(timeObj[0]),

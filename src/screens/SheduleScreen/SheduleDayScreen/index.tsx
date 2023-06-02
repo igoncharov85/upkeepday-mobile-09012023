@@ -1,15 +1,8 @@
 import React, { memo, useState, useEffect } from 'react';
 import {
-	ScrollView,
-	Text,
-	Modal,
-	TouchableOpacity,
-	View,
-	Animated,
-	StyleSheet,
+	View
 } from 'react-native';
 
-import { INavigationBase } from '../../../common/types/component.styles';
 import { ScheduleScroller } from '../components/ScheduleScroller';
 import { SessionItemList } from './SessionList';
 
@@ -19,11 +12,9 @@ import { dispatch } from '../../../store/store';
 import { fetchScheduleByPeriodAction } from '../../../store/shedule/actions';
 import { getToday } from '../../../services/utils/generateDate.util';
 import { ScreenLoading } from '../../../components/UI/ScreenLoading';
+import { IGeneratedScheduleEntries } from '../../../common/types/schedule.types';
 
-enum LessonType {
-	Lesson,
-	Trial,
-}
+
 function getNextDate(dateString: string, daysToAdd: number): string {
 	const [year, month, day] = dateString.split('-').map(Number);
 	const date = new Date(year, month - 1, day);
@@ -40,6 +31,14 @@ function formatDate(dateString: string): string {
 		timeZone: 'UTC',
 	});
 }
+function sortAndFilterArrayByStartDateTime(arr: IGeneratedScheduleEntries[]): IGeneratedScheduleEntries[] {
+	return arr?.length > 0 ? arr?.sort((a, b) => {
+		const timeA = new Date(a.StartDateTime).getTime();
+		const timeB = new Date(b.StartDateTime).getTime();
+		return timeA - timeB;
+	}) : [];
+}
+
 interface IScheduleDayScreen { }
 
 export const ScheduleDayScreen: React.FC<IScheduleDayScreen> = memo(() => {
@@ -78,7 +77,7 @@ export const ScheduleDayScreen: React.FC<IScheduleDayScreen> = memo(() => {
 
 			<SessionItemList
 				//@ts-ignore
-				data={CurrentScheduledEntries}
+				data={sortAndFilterArrayByStartDateTime(CurrentScheduledEntries)}
 			/>
 		</View>
 	);

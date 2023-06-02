@@ -30,13 +30,13 @@ const TimePicker: React.FC<ITimePicker> = ({ visible, data, onSetTime }) => {
     setHour(hourValue + 1)
 
   const onMinuteChange = (minuteValue: number) =>
-    setMinute(minuteValue + 1)
+    setMinute(minuteValue)
 
   const onDayPartChange = (dayPartValue: number) =>
 
     setDayPart(dayPartValue == 0 ? 'AM' : 'PM')
   useEffect(() => {
-    onSetTime(`${hour}:${minute} ${dayPart}`);
+    onSetTime(`${hour}:${minute > 9 ? minute : `0${minute}`} ${dayPart}`);
 
   }, [hour, minute, dayPart])
   return visible ? (
@@ -54,11 +54,11 @@ const TimePicker: React.FC<ITimePicker> = ({ visible, data, onSetTime }) => {
         marginVertical: 20,
       }}>
       <TimeLineLeft />
-      <ItemPicker items={[...Array(12)].map((_, i) => i + 1)} activeIndex={data.hour} onChange={onHourChange} />
+      <ItemPicker items={[...Array(12)].map((_, i) => i + 1)} activeIndex={hour} onChange={onHourChange} />
 
-      <ItemPicker items={[...Array(60)].map((_, i) => i + 1)} activeIndex={data.minute} onChange={onMinuteChange} />
+      <ItemPicker items={[...Array(60)].map((_, i) => i > 9 ? i : `0${i}`)} activeIndex={minute + 1} onChange={onMinuteChange} />
 
-      <ItemPicker items={['AM', 'PM']} activeIndex={data.dayPart == 'AM' ? 1 : 2} onChange={onDayPartChange} />
+      <ItemPicker items={['AM', 'PM']} activeIndex={dayPart == 'AM' ? 1 : 2} onChange={onDayPartChange} />
       <TimeLineRight />
     </LinearGradient>
   ) : null;

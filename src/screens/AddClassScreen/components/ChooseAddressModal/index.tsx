@@ -32,11 +32,11 @@ export const ChooseAddressModal: React.FC<IChooseAddressModal> = memo(({ visible
             const currentLocation = locations.find(function (obj) {
                 return obj.LocationId === activeId;
             })
-            dispatch(updateCurrentClassRequestAction({
-                Location: { ...currentLocation, LocationId: +activeId }
+            currentLocation?.LocationId && dispatch(updateCurrentClassRequestAction({
+                Location: { LocationId: +currentLocation?.LocationId }
             }))
         };
-    });
+    }, [activeId]);
 
     const onShowModal = () => {
         setModalVisible(!modalVisible);

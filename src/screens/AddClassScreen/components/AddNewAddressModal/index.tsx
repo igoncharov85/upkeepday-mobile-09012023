@@ -105,9 +105,6 @@ export const AddNewAddressModal: React.FC<IAddNewAddressModal> = ({ visible, han
             handleShowModal();
 
             dispatch(addLocationAction(data))
-            updateCurrentClassRequestAction({
-                Location: data
-            })
         },
         ...formicDefaultProps,
     })(renderForm);

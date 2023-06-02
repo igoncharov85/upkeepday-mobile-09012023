@@ -15,7 +15,6 @@ export function* fetchSchedulesWorker({
 }: IAction<IScheduleRequest>): SagaIterator {
   try {
     yield put(setScheduleLoading(true));
-    yield put(setCurrentScheduleEntries([]))
     const { data }: AxiosResponse<Array<IScheduleItem>, any> = yield call(
       ScheduleService.fetchSchedule,
       payload
@@ -94,7 +93,9 @@ export function* createSchedule({
     yield call(ErrorFilterService.validateError, error)
   }
   finally {
+
     yield put(setScheduleLoading(false));
+
   }
 }
 

@@ -7,10 +7,11 @@ import { CustomButton } from '../../components/UI/CustomButton';
 import styles from './styles';
 import { ListGradientCircleButtons } from './ListGradientCircleButtons';
 import { dispatch } from '../../store/store';
-import { createScheduleAction } from '../../store/shedule/actions';
+import { createScheduleAction, fetchScheduleByPeriodAction } from '../../store/shedule/actions';
 import { useAppSelector } from '../../store/hooks';
 import { IGeneratedScheduleEntries, ILocation, IStudents, IWeekTimeSlot } from '../../common/types/schedule.types';
 import { updateCurrentClassRequestAction } from '../../store/shedule';
+import { getToday } from '../../services/utils/generateDate.util';
 
 
 interface IPrepaymentConfigurationScreen { }
@@ -35,16 +36,18 @@ export const PrepaymentConfigurationScreen: React.FC<IPrepaymentConfigurationScr
                     TrackPrepayment: !trackPrepayment as boolean
                 },
                 Location: {
-                    ...createCurrentClassRequest.Location as ILocation,
-
-                    Url: createCurrentClassRequest.Location?.Url as string || ''
+                    LocationId: createCurrentClassRequest.Location?.LocationId
                 },
                 Students: createCurrentClassRequest.Students as IStudents[],
                 Slots: createCurrentClassRequest.Slots as IWeekTimeSlot[],
                 Sessions: createCurrentClassRequest.Sessions as IGeneratedScheduleEntries[]
             }
         ))
+        console.log(createCurrentClassRequest.Location?.LocationId, 'createCurrentClassRequest.Location?.LocationId');
 
+        const today = new Date;
+        const [dateString] = getToday(today)
+        dispatch(fetchScheduleByPeriodAction({ startDate: dateString, endDate: dateString }));
         //@ts-ignore
         navigation.navigate(NavigationEnum.HOME_SCREEN)
     };

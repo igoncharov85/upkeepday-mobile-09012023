@@ -31,24 +31,34 @@ function formatDate(dateString: string): string {
 		timeZone: 'UTC',
 	});
 }
-function sortAndFilterArrayByStartDateTime(arr: IGeneratedScheduleEntries[]): IGeneratedScheduleEntries[] {
-	return arr?.length > 0 ? arr?.sort((a, b) => {
-		const timeA = new Date(a.StartDateTime).getTime();
-		const timeB = new Date(b.StartDateTime).getTime();
-		return timeA - timeB;
-	}) : [];
-}
 
+const getSessionsOnDate = (sessions: IGeneratedScheduleEntries[], date: string): IGeneratedScheduleEntries[] => {
+	// Преобразуем дату в объект Date и убираем информацию о времени
+	const inputDate = new Date(date);
+	inputDate.setHours(0, 0, 0, 0);
+	console.log(sessions, inputDate);
+
+	return sessions.filter(session => {
+		// Преобразуем StartDateTime в объект Date и убираем информацию о времени
+		const sessionDate = new Date(session.StartDateTime);
+		sessionDate.setHours(0, 0, 0, 0);
+
+		// Сравниваем даты
+		return inputDate.getTime() === sessionDate.getTime();
+	});
+}
 interface IScheduleDayScreen { }
 
 export const ScheduleDayScreen: React.FC<IScheduleDayScreen> = memo(() => {
 
 	const { CurrentScheduledEntries, loading } = useAppSelector(state => state.schedule);
+	const [localLoading, setLocalLoading] = useState(true);
 	const today = new Date;
 	const [dateString, day] = getToday(today)
 
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [currentDay, setCurrentDay] = useState(dateString);
+	console.log(currentDay);
 
 	const handleNextDay = () => {
 		const newIndex = currentIndex + 1;
@@ -66,8 +76,11 @@ export const ScheduleDayScreen: React.FC<IScheduleDayScreen> = memo(() => {
 	}, [currentDay])
 	useEffect(() => {
 		dispatch(fetchScheduleByPeriodAction({ startDate: currentDay, endDate: currentDay }));
+		setTimeout(() => {
+			setLocalLoading(false);
+		}, 2000);
 	}, []);
-	return loading ? <ScreenLoading /> : (
+	return loading && localLoading ? <ScreenLoading /> : (
 		<View>
 			<ScheduleScroller
 				title={formatDate(currentDay)}
@@ -77,7 +90,7 @@ export const ScheduleDayScreen: React.FC<IScheduleDayScreen> = memo(() => {
 
 			<SessionItemList
 				//@ts-ignore
-				data={sortAndFilterArrayByStartDateTime(CurrentScheduledEntries)}
+				data={getSessionsOnDate(CurrentScheduledEntries, currentDay)}
 			/>
 		</View>
 	);

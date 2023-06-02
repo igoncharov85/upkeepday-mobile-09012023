@@ -22,19 +22,6 @@ export interface IExistingStudent {
     Notes?: string
 }
 export interface ICreateClassRequest {
-    // ClassName: string
-    // ClassLocationType: string,
-    // ClassLocationId: number,
-    // StartDate: string,
-    // EndDate: string,
-    // EndScheduleType: string,
-    // EndNumber: number,
-    // MakeupRequired: boolean,
-    // TrackPrepayment: boolean,
-    // ExistingStudents: Array<IExistingStudent>
-    // NewStudents: Array<IUserStudent>
-    // WeekTimeSlots: Array<IWeekTimeSlot>
-    // ScheduledEntries: Array<IGeneratedScheduleEntries>
 
     Class: IClass
     Location: ILocation,

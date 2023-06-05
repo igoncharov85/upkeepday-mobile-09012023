@@ -1,20 +1,12 @@
 import React, { FC, memo, useEffect, useState } from 'react';
-import { PanResponder, Text, View } from 'react-native';
+import { View } from 'react-native';
 import { INavigationBase } from '../../common/types/component.styles';
 import NavigationActions from '../../services/navigation-service';
 
 import {
   fetchCountriesAction,
   fetchStatesAction,
-  logoutAction,
 } from '../../store/auth/actions';
-import {
-  addLocationAction,
-} from '../../store/location/actions';
-import {
-  createScheduleAction,
-  generateScheduleAction,
-} from '../../store/shedule/actions';
 import { dispatch } from '../../store/store';
 import { fetchUsersAction } from '../../store/user/actions';
 import { fetchLocationAction } from '../../store/location/actions';
@@ -25,42 +17,22 @@ import { SchedulePlus } from './components/SchedulePlus';
 import { NavigationEnum } from '../../common/constants/navigation';
 
 import styles from './styles';
+import { useRoute } from '@react-navigation/native';
 
 interface IHomeScreen extends INavigationBase { }
 export const ScheduleScreen: FC<IHomeScreen> = memo(({ navigation }) => {
-  const [swipeUpCount, setSwipeUpCount] = useState(0);
-  const [swipeDownCount, setSwipeDownCount] = useState(0);
-  const [activePage, setActivePage] = useState(0);
+  const route = useRoute();
   const onPlusPress = () => {
     //@ts-ignore
     navigation.navigate(NavigationEnum.ADD_CLASS_SCREEN);
   };
+  const key = route.params;
+  useEffect(() => {
+    console.log('key', key);
+  }, [key]);
   useEffect(() => {
     NavigationActions.setNavigator(navigation);
   }, []);
-
-  const handleSwipeLeft = () => {
-    setActivePage(activePage != 0 ? activePage - 1 : activePage);
-  };
-
-  const handleSwipeRight = () => {
-    setActivePage(activePage != 2 ? activePage + 1 : activePage);
-  };
-
-  const panResponder = PanResponder.create({
-    onMoveShouldSetPanResponderCapture: (evt, gestureState) => {
-      return true;
-    },
-    onPanResponderRelease: (evt, gestureState) => {
-      if (gestureState.dx < -50) {
-        setSwipeUpCount(swipeUpCount + 1);
-        handleSwipeRight();
-      } else if (gestureState.dx > 50) {
-        setSwipeDownCount(swipeDownCount + 1);
-        handleSwipeLeft();
-      }
-    },
-  });
 
   useEffect(() => {
     dispatch(fetchUsersAction());
@@ -69,10 +41,9 @@ export const ScheduleScreen: FC<IHomeScreen> = memo(({ navigation }) => {
     dispatch(fetchCountriesAction());
   }, []);
   return (
-    // <View style={styles.container} {...panResponder.panHandlers}>
     <View style={styles.container}>
       <SheduleHeader text="Schedule" />
-      <ScheduleNavigation activePage={activePage} />
+      <ScheduleNavigation />
 
       <BottomTab />
       <SchedulePlus onButtonPress={onPlusPress} />

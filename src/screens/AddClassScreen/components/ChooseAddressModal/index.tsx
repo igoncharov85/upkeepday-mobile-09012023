@@ -1,7 +1,5 @@
 import React, { memo, useEffect, useState } from "react";
 import { Text, View, ScrollView, TouchableOpacity } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-
 
 import { CustomModal } from "../../../../components/UI/CustomModal";
 import { ScreenHeader } from "../../../../components/ScreenHeader";
@@ -24,16 +22,10 @@ export const ChooseAddressModal: React.FC<IChooseAddressModal> = memo(({ visible
     const [modalVisible, setModalVisible] = useState(false)
     const { locations } = useAppSelector(state => state.location);
 
-
-
-
     useEffect(() => {
         return () => {
-            const currentLocation = locations.find(function (obj) {
-                return obj.LocationId === activeId;
-            })
-            currentLocation?.LocationId && dispatch(updateCurrentClassRequestAction({
-                Location: { LocationId: +currentLocation?.LocationId }
+            activeId && dispatch(updateCurrentClassRequestAction({
+                Location: { LocationId: +activeId }
             }))
         };
     }, [activeId]);

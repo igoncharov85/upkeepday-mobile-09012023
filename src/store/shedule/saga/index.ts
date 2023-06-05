@@ -44,7 +44,6 @@ export function* generateScheduleWorker({
       payload
     );
     if (data) {
-      const now = new Date();
       yield put(setTimeSlotsAction(data.Slots))
       yield put(setGeneratedScheduleEntriesAction(data.GeneratedSessions))
       yield put(setCurrentScheduleEntries(data.CurrentSessions))

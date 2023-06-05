@@ -20,15 +20,13 @@ const SCHEDULE_NAVIGATION = [
 ];
 
 interface IScheduleNavigation {
-  activePage: number
+
 }
-export const ScheduleNavigation: FC<IScheduleNavigation> = memo(({ activePage }) => {
+export const ScheduleNavigation: FC<IScheduleNavigation> = memo(() => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const ActiveScreen = SCHEDULE_NAVIGATION[activeIndex].component;
-  useEffect(() => {
-    setActiveIndex(activePage)
-  }, [activePage])
+
   return (
     <>
       <View style={styles.container}>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Text, View } from 'react-native';
 import { ScreenHeader } from '../../components/ScreenHeader';
 import { useNavigation } from '@react-navigation/native';
@@ -7,18 +7,15 @@ import { CustomButton } from '../../components/UI/CustomButton';
 import styles from './styles';
 import { ListGradientCircleButtons } from './ListGradientCircleButtons';
 import { dispatch } from '../../store/store';
-import { createScheduleAction, fetchScheduleByPeriodAction } from '../../store/shedule/actions';
+import { createScheduleAction } from '../../store/shedule/actions';
 import { useAppSelector } from '../../store/hooks';
-import { IGeneratedScheduleEntries, ILocation, IStudents, IWeekTimeSlot } from '../../common/types/schedule.types';
-import { updateCurrentClassRequestAction } from '../../store/shedule';
-import { getToday } from '../../services/utils/generateDate.util';
+import { IGeneratedScheduleEntries, IStudents, IWeekTimeSlot } from '../../common/types/schedule.types';
 
 
 interface IPrepaymentConfigurationScreen { }
 
 export const PrepaymentConfigurationScreen: React.FC<IPrepaymentConfigurationScreen> = () => {
     const { createCurrentClassRequest } = useAppSelector(state => state.schedule)
-    const { GeneratedScheduleEntries, WeekTimeSlots, loading } = useAppSelector(state => state.schedule);
     const [makeupRequired, setMakeupRequired] = useState(0)
     const [trackPrepayment, setTrackPrepayment] = useState(0)
     const navigation = useNavigation();
@@ -43,13 +40,8 @@ export const PrepaymentConfigurationScreen: React.FC<IPrepaymentConfigurationScr
                 Sessions: createCurrentClassRequest.Sessions as IGeneratedScheduleEntries[]
             }
         ))
-        console.log(createCurrentClassRequest.Location?.LocationId, 'createCurrentClassRequest.Location?.LocationId');
-
-        const today = new Date;
-        const [dateString] = getToday(today)
-        dispatch(fetchScheduleByPeriodAction({ startDate: dateString, endDate: dateString }));
         //@ts-ignore
-        navigation.navigate(NavigationEnum.HOME_SCREEN)
+        navigation.navigate(NavigationEnum.HOME_SCREEN, { key: Date.now() })
     };
 
 
@@ -59,14 +51,6 @@ export const PrepaymentConfigurationScreen: React.FC<IPrepaymentConfigurationScr
     const HandleTrackPrepayment = (agreement: number) => {
         setTrackPrepayment(agreement);
     }
-
-
-    useEffect(() => {
-        return () => {
-
-        };
-    }, []);
-
 
     return (
         <View style={{ height: '100%' }}>

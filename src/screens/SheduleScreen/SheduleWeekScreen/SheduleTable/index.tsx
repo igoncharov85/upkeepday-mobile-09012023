@@ -60,8 +60,8 @@ export const SheduleTable: FC<ISheduleTable> = memo(
       dispatch(fetchScheduleByPeriodAction({ startDate: startOfWeek.toISOString(), endDate: endOfWeek.toISOString() }));
     }, [startOfWeek])
     return loading ? <ScreenLoading /> : (
-      <View style={styles.container} {...panResponder.panHandlers}>
-        <ScrollView contentOffset={{ x: 0, y: 64 * 8 }}>
+      <View style={styles.container} >
+        <ScrollView contentOffset={{ x: 0, y: 64 * 8 }} {...panResponder.panHandlers}>
           <Row style={{ justifyContent: 'space-between' }}>
             <Column>
               {timeData.map((item, index) => (

@@ -35,13 +35,13 @@ function formatDate(dateString: string): string {
 const getSessionsOnDate = (sessions: IGeneratedScheduleEntries[], date: string): IGeneratedScheduleEntries[] => {
 	// Преобразуем дату в объект Date и убираем информацию о времени
 	const inputDate = new Date(date);
-	inputDate.setHours(0, 0, 0, 0);
+	inputDate.setHours(12, 0, 0, 0);
 	console.log(sessions, inputDate);
 
 	return sessions.filter(session => {
 		// Преобразуем StartDateTime в объект Date и убираем информацию о времени
 		const sessionDate = new Date(session.StartDateTime);
-		sessionDate.setHours(0, 0, 0, 0);
+		sessionDate.setHours(12, 0, 0, 0);
 
 		// Сравниваем даты
 		return inputDate.getTime() === sessionDate.getTime();
@@ -50,9 +50,7 @@ const getSessionsOnDate = (sessions: IGeneratedScheduleEntries[], date: string):
 interface IScheduleDayScreen { }
 
 export const ScheduleDayScreen: React.FC<IScheduleDayScreen> = memo(() => {
-
 	const { CurrentScheduledEntries, loading } = useAppSelector(state => state.schedule);
-	const [localLoading, setLocalLoading] = useState(true);
 	const today = new Date;
 	const [dateString, day] = getToday(today)
 
@@ -74,13 +72,7 @@ export const ScheduleDayScreen: React.FC<IScheduleDayScreen> = memo(() => {
 	useEffect(() => {
 		dispatch(fetchScheduleByPeriodAction({ startDate: currentDay, endDate: currentDay }));
 	}, [currentDay])
-	useEffect(() => {
-		dispatch(fetchScheduleByPeriodAction({ startDate: currentDay, endDate: currentDay }));
-		setTimeout(() => {
-			setLocalLoading(false);
-		}, 2000);
-	}, []);
-	return loading && localLoading ? <ScreenLoading /> : (
+	return loading ? <ScreenLoading /> : (
 		<View>
 			<ScheduleScroller
 				title={formatDate(currentDay)}

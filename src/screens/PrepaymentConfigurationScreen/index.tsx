@@ -44,6 +44,8 @@ export const PrepaymentConfigurationScreen: React.FC<IPrepaymentConfigurationScr
                 Sessions: createCurrentClassRequest.Sessions as IGeneratedScheduleEntries[]
             }
         ))
+        console.log(location, 'location');
+
         //@ts-ignore
         navigation.navigate(NavigationEnum.HOME_SCREEN, { key: Date.now() })
     };

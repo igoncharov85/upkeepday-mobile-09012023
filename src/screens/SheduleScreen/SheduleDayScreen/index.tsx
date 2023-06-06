@@ -34,17 +34,13 @@ function formatDate(dateString: string): string {
 }
 
 const getSessionsOnDate = (sessions: IGeneratedScheduleEntries[], date: string): IGeneratedScheduleEntries[] => {
-	// Преобразуем дату в объект Date и убираем информацию о времени
+
 	const inputDate = new Date(date);
-	inputDate.setHours(12, 0, 0, 0);
-	console.log(sessions, inputDate);
-
+	inputDate.setUTCHours(12, 0, 0, 0);
 	return sessions.filter(session => {
-		// Преобразуем StartDateTime в объект Date и убираем информацию о времени
 		const sessionDate = new Date(session.StartDateTime);
-		sessionDate.setHours(12, 0, 0, 0);
+		sessionDate.setUTCHours(12, 0, 0, 0);
 
-		// Сравниваем даты
 		return inputDate.getTime() === sessionDate.getTime();
 	});
 }
@@ -57,7 +53,6 @@ export const ScheduleDayScreen: React.FC<IScheduleDayScreen> = memo(() => {
 	const [dateString, day] = getToday(today)
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [currentDay, setCurrentDay] = useState(dateString);
-	console.log(currentDay);
 
 	const handleNextDay = () => {
 		const newIndex = currentIndex + 1;

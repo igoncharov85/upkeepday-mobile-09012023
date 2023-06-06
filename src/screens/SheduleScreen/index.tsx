@@ -31,8 +31,6 @@ export const ScheduleScreen: FC<IHomeScreen> = memo(({ navigation }) => {
   };
   useEffect(() => {
     setKey(key)
-    console.log('key', key);
-
   }, [isFocused]);
   useEffect(() => {
     NavigationActions.setNavigator(navigation);

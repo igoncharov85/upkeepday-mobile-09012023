@@ -23,13 +23,12 @@ export const ChooseAddressModal: React.FC<IChooseAddressModal> = memo(({ visible
     const { locations } = useAppSelector(state => state.location);
 
     useEffect(() => {
-        console.log(activeId);
+        console.log(activeId, 'activeId');
 
-        return () => {
-            activeId && dispatch(updateCurrentClassRequestAction({
-                Location: { LocationId: +activeId }
-            }))
-        };
+        activeId && dispatch(updateCurrentClassRequestAction({
+            Location: { LocationId: +activeId }
+        }))
+
     }, [activeId]);
 
     const onShowModal = () => {

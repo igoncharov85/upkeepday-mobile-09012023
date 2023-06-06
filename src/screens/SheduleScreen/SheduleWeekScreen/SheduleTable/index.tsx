@@ -1,4 +1,4 @@
-import React, { FC, memo, useEffect } from 'react';
+import React, { FC, memo, useEffect, useRef } from 'react';
 import { StyleSheet, Text, View, StyleProp, ViewStyle, ScrollView, PanResponder } from 'react-native';
 import { SheduleTableItem } from './SheduleTableItem';
 import styles from './styles';
@@ -7,12 +7,11 @@ import { useAppSelector } from '../../../../store/hooks';
 import { dispatch } from '../../../../store/store';
 import { fetchScheduleByPeriodAction } from '../../../../store/shedule/actions';
 import { ScreenLoading } from '../../../../components/UI/ScreenLoading';
+import { useIsFocused } from '@react-navigation/native';
 
 interface ISheduleTable {
   startOfWeek: Date;
   endOfWeek: Date;
-  goToNextWeek: () => void;
-  goToPrevWeek: () => void;
 }
 function getDaysInMonth(month: number, year: number) {
   return new Date(year, month, 0).getDate();
@@ -34,35 +33,27 @@ function isTodayInWeekRange(start: Date, end: Date): boolean {
 
 
 export const SheduleTable: FC<ISheduleTable> = memo(
-  ({ startOfWeek, endOfWeek, goToPrevWeek, goToNextWeek }) => {
-    const startWeekOfDay = getToday(startOfWeek)[1]
-    const timeData = generateTimeData(`00:00`, '24:00');
-    const weekStructure = createWeekStructure(
-      startOfWeek,
-      endOfWeek,
-      timeData,
-    );
-    const panResponder = PanResponder.create({
-      onMoveShouldSetPanResponderCapture: (evt, gestureState) => {
-        return true;
-      },
-      onPanResponderRelease: (evt, gestureState) => {
-        if (gestureState.dx < -50) {
-          goToNextWeek()
-        } else if (gestureState.dx > 50) {
-          goToPrevWeek()
-        }
-      },
-    });
+  ({ startOfWeek, endOfWeek }) => {
+
+    const isFocused = useIsFocused();
+    const startWeekOfDay = getToday(startOfWeek)[1];
+    const timeData = generateTimeData('00:00', '24:00');
+    const weekStructure = createWeekStructure(startOfWeek, endOfWeek, timeData);
+
+
+
 
     const { CurrentScheduledEntries, loading } = useAppSelector(state => state.schedule);
     useEffect(() => {
       dispatch(fetchScheduleByPeriodAction({ startDate: startOfWeek.toISOString(), endDate: endOfWeek.toISOString() }));
     }, [startOfWeek])
+    useEffect(() => {
+      dispatch(fetchScheduleByPeriodAction({ startDate: startOfWeek.toISOString(), endDate: endOfWeek.toISOString() }));
+    }, [isFocused]);
     return loading ? <ScreenLoading /> : (
       <View style={styles.container} >
-        <ScrollView contentOffset={{ x: 0, y: 64 * 8 }} {...panResponder.panHandlers}>
-          <Row style={{ justifyContent: 'space-between' }}>
+        <ScrollView contentOffset={{ x: 0, y: 64 * 8 }} >
+          <Row style={{ justifyContent: 'space-between' }} >
             <Column>
               {timeData.map((item, index) => (
                 <TimeLineItem key={index} time={item} />

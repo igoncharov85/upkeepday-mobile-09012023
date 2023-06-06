@@ -1,6 +1,7 @@
 import React, { FC, memo, useEffect, useState } from 'react';
-import { StyleSheet, Text, View, StyleProp, ViewStyle, ActivityIndicator } from 'react-native';
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import { StyleSheet, Text, View, StyleProp, ViewStyle, ActivityIndicator, ScrollView, TouchableOpacity } from 'react-native';
+
+
 import { WeekTableItem } from './WeekTableItem';
 import styles from './styles';
 import { addDayAndHoursToDate, createWeekStructure, generateTimeData, isToday } from '../../../services/utils/generateDate.util';

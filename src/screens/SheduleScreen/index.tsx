@@ -17,19 +17,23 @@ import { SchedulePlus } from './components/SchedulePlus';
 import { NavigationEnum } from '../../common/constants/navigation';
 
 import styles from './styles';
-import { useRoute } from '@react-navigation/native';
+import { useIsFocused, useRoute } from '@react-navigation/native';
 
 interface IHomeScreen extends INavigationBase { }
 export const ScheduleScreen: FC<IHomeScreen> = memo(({ navigation }) => {
+  const [key, setKey] = useState(0);
+  console.error = (error) => { };
   const route = useRoute();
+  const isFocused = useIsFocused();
   const onPlusPress = () => {
     //@ts-ignore
     navigation.navigate(NavigationEnum.ADD_CLASS_SCREEN);
   };
-  const key = route.params;
   useEffect(() => {
+    setKey(key)
     console.log('key', key);
-  }, [key]);
+
+  }, [isFocused]);
   useEffect(() => {
     NavigationActions.setNavigator(navigation);
   }, []);

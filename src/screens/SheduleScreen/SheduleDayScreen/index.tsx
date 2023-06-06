@@ -13,6 +13,7 @@ import { fetchScheduleByPeriodAction } from '../../../store/shedule/actions';
 import { getToday } from '../../../services/utils/generateDate.util';
 import { ScreenLoading } from '../../../components/UI/ScreenLoading';
 import { IGeneratedScheduleEntries } from '../../../common/types/schedule.types';
+import { useIsFocused } from '@react-navigation/native';
 
 
 function getNextDate(dateString: string, daysToAdd: number): string {
@@ -51,9 +52,9 @@ interface IScheduleDayScreen { }
 
 export const ScheduleDayScreen: React.FC<IScheduleDayScreen> = memo(() => {
 	const { CurrentScheduledEntries, loading } = useAppSelector(state => state.schedule);
+	const isFocused = useIsFocused();
 	const today = new Date;
 	const [dateString, day] = getToday(today)
-
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [currentDay, setCurrentDay] = useState(dateString);
 	console.log(currentDay);
@@ -63,7 +64,6 @@ export const ScheduleDayScreen: React.FC<IScheduleDayScreen> = memo(() => {
 		setCurrentIndex(newIndex);
 		setCurrentDay(getNextDate(dateString, newIndex));
 	};
-
 	const handlePrevDay = () => {
 		const newIndex = currentIndex - 1;
 		setCurrentIndex(newIndex);
@@ -72,6 +72,9 @@ export const ScheduleDayScreen: React.FC<IScheduleDayScreen> = memo(() => {
 	useEffect(() => {
 		dispatch(fetchScheduleByPeriodAction({ startDate: currentDay, endDate: currentDay }));
 	}, [currentDay])
+	useEffect(() => {
+		dispatch(fetchScheduleByPeriodAction({ startDate: currentDay, endDate: currentDay }));
+	}, [isFocused]);
 	return loading ? <ScreenLoading /> : (
 		<View>
 			<ScheduleScroller

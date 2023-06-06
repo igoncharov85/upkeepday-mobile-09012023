@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
   container: {
@@ -23,7 +23,7 @@ export default StyleSheet.create({
     justifyContent: 'center'
   },
   item: {
-    
+
     position: 'relative',
     backgroundColor: '#ffffff',
     height: 69,
@@ -54,7 +54,7 @@ export default StyleSheet.create({
     backgroundColor: '#9A80BA',
   },
   timeStart: {
-    
+
     paddingRight: 14,
     fontSize: 12,
     lineHeight: 18,

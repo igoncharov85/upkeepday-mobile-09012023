@@ -1,6 +1,5 @@
 import React, { FC, memo, useEffect, useRef, useState } from 'react';
-import { StyleSheet, Text, View, StyleProp, ViewStyle } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { StyleSheet, Text, View, StyleProp, ViewStyle, ScrollView } from 'react-native';
 import { WeekTableItem } from './WeekTableItem';
 import styles from './styles';
 import { createWeekStructure, generateTimeData, isToday } from '../../../services/utils/generateDate.util';

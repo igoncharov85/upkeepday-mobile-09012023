@@ -1,8 +1,7 @@
-import React, {FC, memo, useState} from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
+import React, { FC, memo, useState } from 'react';
+import { Text, TouchableOpacity, View, ScrollView } from 'react-native';
 import SelectArrowIcon from '../../../../assets/svg/SelectArrowIcon';
-import {StyleEnum} from '../../../common/constants/styles/styles.enum';
+import { StyleEnum } from '../../../common/constants/styles/styles.enum';
 import styles from './styles';
 
 export interface IOption {
@@ -17,7 +16,7 @@ interface ICustomSelect {
   label?: string;
 }
 export const CustomSelect: FC<ICustomSelect> = memo(
-  ({onChange, options, placeholder, value, label}) => {
+  ({ onChange, options, placeholder, value, label }) => {
     const [isOpen, setIsOpen] = useState<boolean>();
     const onChangeHandle = (key: string) => {
       setIsOpen(!isOpen);
@@ -52,7 +51,7 @@ export const CustomSelect: FC<ICustomSelect> = memo(
             <View
               style={{
                 ...styles.iconWrapper,
-                transform: isOpen ? [{rotate: '180deg'}] : [],
+                transform: isOpen ? [{ rotate: '180deg' }] : [],
               }}>
               <SelectArrowIcon />
             </View>

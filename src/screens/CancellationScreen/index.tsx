@@ -1,7 +1,6 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
 import React, { FC, memo, useEffect, useRef, useState } from 'react';
-import { Text, View, TouchableOpacity, Button, Animated } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { Text, View, TouchableOpacity, Button, Animated, ScrollView } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { ScreenHeader } from '../../components/ScreenHeader';
 import { CustomInput } from '../../components/UI/CustomInput';

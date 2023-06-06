@@ -10,6 +10,7 @@ import { dispatch } from '../../../store/store';
 import { useAppSelector } from '../../../store/hooks';
 import { ScreenLoading } from '../../../components/UI/ScreenLoading';
 import { el } from 'date-fns/locale';
+import { useIsFocused } from '@react-navigation/native';
 
 const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
@@ -50,6 +51,7 @@ function getSectionsCountByDate(entries: any[], date: Date): number {
 export const ScheduleCalendar: React.FC<IScheduleCalendarProps> = ({ startingDayOfWeek }) => {
     const [days, setDays] = useState<Day[]>([]);
 
+    const isFocused = useIsFocused();
     const { CurrentScheduledEntries, loading } = useAppSelector(state => state.schedule);
     const [date, setDate] = useState('');
     const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
@@ -157,7 +159,9 @@ export const ScheduleCalendar: React.FC<IScheduleCalendarProps> = ({ startingDay
             }
         },
     });
-
+    useEffect(() => {
+        generateDays();
+    }, [isFocused]);
     return loading ? <ScreenLoading /> : (
         <View style={styles.container} {...panResponder.panHandlers}>
 

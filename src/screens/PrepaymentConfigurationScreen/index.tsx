@@ -20,6 +20,12 @@ export const PrepaymentConfigurationScreen: React.FC<IPrepaymentConfigurationScr
     const [trackPrepayment, setTrackPrepayment] = useState(0)
     const navigation = useNavigation();
 
+    const location = createCurrentClassRequest.Location?.LocationType === "Online" ? {
+        LocationType: createCurrentClassRequest.Location?.LocationType,
+        Url: createCurrentClassRequest.Location?.Url
+    } : {
+        LocationId: createCurrentClassRequest.Location?.LocationId,
+    }
     const goTextStep = () => {
         dispatch(createScheduleAction(
             {
@@ -32,9 +38,7 @@ export const PrepaymentConfigurationScreen: React.FC<IPrepaymentConfigurationScr
                     MakeupRequired: !makeupRequired as boolean,
                     TrackPrepayment: !trackPrepayment as boolean
                 },
-                Location: {
-                    LocationId: createCurrentClassRequest.Location?.LocationId
-                },
+                Location: location,
                 Students: createCurrentClassRequest.Students as IStudents[],
                 Slots: createCurrentClassRequest.Slots as IWeekTimeSlot[],
                 Sessions: createCurrentClassRequest.Sessions as IGeneratedScheduleEntries[]

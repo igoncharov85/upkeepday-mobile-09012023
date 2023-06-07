@@ -1,4 +1,5 @@
 import { ICreateClassRequest, IGenerateScheduleRequest, IScheduleRequest } from "../../../common/types/schedule.types";
+import { convertToUTC } from "../../utils/convertToUTC";
 import { $axiosAuth } from '../base.instance'
 export class ScheduleService {
     static async fetchSchedule({ endDate, startDate }: IScheduleRequest) {
@@ -11,6 +12,6 @@ export class ScheduleService {
         return $axiosAuth.post(`/schedule/generate_schedule_entry`, data)
     }
     static async createClass(data: ICreateClassRequest) {
-        return $axiosAuth.post(`/tutor/classes/`, data)
+        return $axiosAuth.post(`/tutor/classes/`, convertToUTC(data))
     }
 }

@@ -7,6 +7,7 @@ import { ICreateClassRequest, IGeneratedScheduleResponse, IGenerateScheduleReque
 import { ScheduleService } from "../../../services/axios/schedule";
 import { ErrorFilterService } from "../../../services/error-filter/error-filter.service";
 import { ScheduleConstantsEnum } from "../constants";
+import { convertUTCToLocal } from "../../../services/utils/convertToUTC"
 
 //TODO
 export function* fetchSchedulesWorker({
@@ -22,7 +23,7 @@ export function* fetchSchedulesWorker({
     console.log("data: ", data)
     if (data) {
       //@ts-ignore
-      yield put(setCurrentScheduleEntries(data))
+      yield put(setCurrentScheduleEntries(convertUTCToLocal(data)))
     }
   } catch (error) {
     yield call(ErrorFilterService.validateError, error)

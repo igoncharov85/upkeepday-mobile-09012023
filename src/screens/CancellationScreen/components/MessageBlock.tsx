@@ -5,14 +5,19 @@ import styles from './styles';
 import { CustomButton, TypeButton } from '../../../components/UI/CustomButton';
 import { CustomInput } from '../../../components/UI/CustomInput';
 
-interface IMessageBlock { toggleButtonDisabled: () => void }
-export const MessageBlock: FC<IMessageBlock> = memo(({ toggleButtonDisabled }) => {
+interface IMessageBlock { toggleButtonDisabled: () => void, onChangeMessage: (text: string) => void }
+export const MessageBlock: FC<IMessageBlock> = memo(({ toggleButtonDisabled, onChangeMessage }) => {
   const [message, setMessage] = useState('');
   const [isDisabled, setIsDisabled] = useState(false);
-  const onChangeMessage = (text: string) => {
+  const onChangeMessages = (text: string) => {
     setMessage(text);
   };
   const onHandlePress = () => {
+    toggleButtonDisabled()
+    onChangeMessage(message)
+    setIsDisabled(true)
+  }
+  const onHandleSkip = () => {
     toggleButtonDisabled()
     setIsDisabled(true)
   }
@@ -24,15 +29,14 @@ export const MessageBlock: FC<IMessageBlock> = memo(({ toggleButtonDisabled }) =
         multiline={true}
         numberOfLines={4}
         style={styles.input}
-        disabled={isDisabled}
-        editable={!isDisabled}
+        onChangeText={(text) => onChangeMessages(text)}
       />
       <View style={styles.btnContainer}>
         <CustomButton
           type={TypeButton.opacity}
           text={'Skip'}
           style={{ flex: 1, marginRight: 16 }}
-          onPress={onHandlePress}
+          onPress={onHandleSkip}
         />
         <CustomButton text={'Add'} style={{ flex: 1 }} onPress={onHandlePress} />
       </View>

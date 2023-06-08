@@ -33,7 +33,6 @@ export const formatDate = (
     hour: 'numeric',
     minute: 'numeric',
     hour12: true,
-    timeZone: 'UTC',
   });
 
   const timeObj = formattedTime.split(/:| /);

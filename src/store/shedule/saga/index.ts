@@ -3,11 +3,11 @@ import { SagaIterator } from "redux-saga";
 import { call, put, takeEvery } from "redux-saga/effects";
 import { setCurrentScheduleEntries, setGeneratedScheduleEntriesAction, setScheduleLoading, setTimeSlotsAction } from "..";
 import { IAction } from "../../../common/types/common.types";
-import { ICreateClassRequest, IGeneratedScheduleResponse, IGenerateScheduleRequest, IScheduleItem, IScheduleRequest } from "../../../common/types/schedule.types";
+import { ICreateClassRequest, IDeleteScheduleRequest, IGeneratedScheduleResponse, IGenerateScheduleRequest, IScheduleItem, IScheduleRequest } from "../../../common/types/schedule.types";
 import { ScheduleService } from "../../../services/axios/schedule";
 import { ErrorFilterService } from "../../../services/error-filter/error-filter.service";
 import { ScheduleConstantsEnum } from "../constants";
-import { convertUTCToLocal } from "../../../services/utils/convertToUTC"
+import { convertToLocaleTime } from "../../../services/utils/convertToUTC"
 
 //TODO
 export function* fetchSchedulesWorker({
@@ -23,7 +23,7 @@ export function* fetchSchedulesWorker({
     console.log("data: ", data)
     if (data) {
       //@ts-ignore
-      yield put(setCurrentScheduleEntries(convertUTCToLocal(data)))
+      yield put(setCurrentScheduleEntries(convertToLocaleTime(data)))
     }
   } catch (error) {
     yield call(ErrorFilterService.validateError, error)
@@ -61,7 +61,7 @@ export function* generateScheduleWorker({
 export function* deleteScheduleByPeriodWorker({
   payload,
   type,
-}: IAction<IScheduleRequest>): SagaIterator {
+}: IAction<IDeleteScheduleRequest>): SagaIterator {
   try {
     yield put(setScheduleLoading(true));
     const { data }: AxiosResponse<Array<IGeneratedScheduleResponse>, any> = yield call(

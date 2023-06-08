@@ -22,8 +22,7 @@ import { useIsFocused, useRoute } from '@react-navigation/native';
 interface IHomeScreen extends INavigationBase { }
 export const ScheduleScreen: FC<IHomeScreen> = memo(({ navigation }) => {
   const [key, setKey] = useState(0);
-  console.error = (error) => { };
-  const route = useRoute();
+
   const isFocused = useIsFocused();
   const onPlusPress = () => {
     //@ts-ignore

@@ -10,7 +10,7 @@ import styles from './styles';
 import { useAppSelector } from '../../../store/hooks';
 import { dispatch } from '../../../store/store';
 import { fetchScheduleByPeriodAction } from '../../../store/shedule/actions';
-import { getToday } from '../../../services/utils/generateDate.util';
+import { addDayAndHoursToDate, getToday } from '../../../services/utils/generateDate.util';
 import { ScreenLoading } from '../../../components/UI/ScreenLoading';
 import { IGeneratedScheduleEntries } from '../../../common/types/schedule.types';
 import { useIsFocused } from '@react-navigation/native';
@@ -33,16 +33,20 @@ function formatDate(dateString: string): string {
 	});
 }
 
-const getSessionsOnDate = (sessions: IGeneratedScheduleEntries[], date: string): IGeneratedScheduleEntries[] => {
+function sortArrayByDateTime(arr: any[]): any[] {
+	if (!arr || arr.length === 0) {
+		return [];
+	}
 
-	const inputDate = new Date(date);
-	inputDate.setUTCHours(12, 0, 0, 0);
-	return sessions.filter(session => {
-		const sessionDate = new Date(session.StartDateTime);
-		sessionDate.setUTCHours(12, 0, 0, 0);
+	const sortedArray = [...arr]; // Создание нового массива с копией элементов
 
-		return inputDate.getTime() === sessionDate.getTime();
+	sortedArray.sort((a, b) => {
+		const dateA = new Date(a.StartDateTime);
+		const dateB = new Date(b.StartDateTime);
+		return dateA.getTime() - dateB.getTime();
 	});
+
+	return sortedArray;
 }
 interface IScheduleDayScreen { }
 
@@ -65,10 +69,11 @@ export const ScheduleDayScreen: React.FC<IScheduleDayScreen> = memo(() => {
 		setCurrentDay(getNextDate(dateString, newIndex));
 	};
 	useEffect(() => {
-		dispatch(fetchScheduleByPeriodAction({ startDate: currentDay, endDate: currentDay }));
+		let localCurrentDay = new Date(currentDay);
+		dispatch(fetchScheduleByPeriodAction({ startDate: localCurrentDay.toISOString(), endDate: addDayAndHoursToDate(currentDay, 1, 0) }));
 	}, [currentDay])
 	useEffect(() => {
-		dispatch(fetchScheduleByPeriodAction({ startDate: currentDay, endDate: currentDay }));
+		dispatch(fetchScheduleByPeriodAction({ startDate: currentDay, endDate: addDayAndHoursToDate(currentDay, 1, 0) }));
 	}, [isFocused]);
 	return loading ? <ScreenLoading /> : (
 		<View>
@@ -80,7 +85,7 @@ export const ScheduleDayScreen: React.FC<IScheduleDayScreen> = memo(() => {
 
 			<SessionItemList
 				//@ts-ignore
-				data={getSessionsOnDate(CurrentScheduledEntries, currentDay)}
+				data={sortArrayByDateTime(CurrentScheduledEntries)}
 			/>
 		</View>
 	);

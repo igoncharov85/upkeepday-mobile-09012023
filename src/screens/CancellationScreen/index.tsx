@@ -33,26 +33,43 @@ export const CancellationScreen: FC<ICancellationScreen> = memo(() => {
 
   const [startDate, setStartDate] = useState(startTime);
   const [endDate, setEndDate] = useState(endTime)
-  const [allDay, setAllDay] = useState(false);
+  const [allDay, setAllDay] = useState(!itemData.StartDateTime);
   const [messageVisible, setMessageVisible] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(false);
+  const [message, setMessage] = useState('')
 
 
-  const onSetStartTime = (startDate: string) => setStartDate(startDate)
-
+  const onSetStartTime = (startDate: string) => {
+    setStartDate(startDate)
+    if (startDate > endDate) {
+      setEndDate(startDate)
+    }
+  }
+  const onChangeMessage = (text: string) => {
+    setMessage(text);
+  }
   const onSetEndTime = (endDate: string) => setEndDate(endDate)
 
 
   const onConfirmPress = () => setMessageVisible(true)
 
   const handleSubmit = () => {
-    // If you transfer the data in the format "2023-04-12" then everything is okay 
-    dispatch(deleteScheduleByPeriodAction({ startDate: startDate, endDate: endDate }));
+    //@ts-ignore
+    dispatch(deleteScheduleByPeriodAction({ startDate: startDate, endDate: endDate, AllDay: allDay, Message: message }));
     navigation.goBack()
   }
   const toggleAllDay = () => setAllDay(!allDay);
   const toggleButtonDisabled = () => setButtonDisabled(true);
+  useEffect(() => {
+    const startTime = itemData.StartDateTime ? itemData.StartDateTime as string : new Date().toISOString();
+    const endTime = calculateEndDate(startTime, duration);
 
+    setStartDate(startTime);
+    setEndDate(endTime);
+  }, []);
+  useEffect(() => {
+
+  }, [startDate, endDate, allDay]);
   return (
     <ScrollView
       contentContainerStyle={{
@@ -67,10 +84,10 @@ export const CancellationScreen: FC<ICancellationScreen> = memo(() => {
         />
 
         <InteractivePartItem title={'All Day'}>
-          <SwitchButton onPress={toggleAllDay} />
+          <SwitchButton onPress={toggleAllDay} active={allDay} />
         </InteractivePartItem>
-        <DateOfChangeItem allDay={allDay} title={'Start'} time={startTime} setResultData={onSetStartTime} />
-        <DateOfChangeItem allDay={allDay} title={'End'} time={endTime} setResultData={onSetEndTime} />
+        <DateOfChangeItem allDay={allDay} title={'Start'} time={startDate} setResultData={onSetStartTime} />
+        <DateOfChangeItem allDay={allDay} title={'End'} time={endDate} setResultData={onSetEndTime} />
 
         <TouchableOpacity style={styles.confirm} onPress={onConfirmPress}>
           <Text style={styles.confirmText}>Confirm</Text>
@@ -82,7 +99,7 @@ export const CancellationScreen: FC<ICancellationScreen> = memo(() => {
               CP will send automatic notification. However, you can customize the
               message below.
             </Text>
-            <MessageBlock toggleButtonDisabled={toggleButtonDisabled} />
+            <MessageBlock toggleButtonDisabled={toggleButtonDisabled} onChangeMessage={onChangeMessage} />
             <View style={styles.finishBtn}>
               <CustomButton text={'Finish'} onPress={handleSubmit} disabled={!buttonDisabled} />
             </View>
@@ -97,7 +114,7 @@ export const CancellationScreen: FC<ICancellationScreen> = memo(() => {
 
 
 const DateOfChangeItem =
-  memo(({ allDay, title, time, setResultData }: { allDay: boolean; title: string; time: string, setResultData: (data: string) => void }) => {
+  ({ allDay, title, time, setResultData }: { allDay: boolean; title: string; time: string, setResultData: (data: string) => void }) => {
     const [timeIsVisible, setTimeIsVisible] = useState(false);
 
     const [currentTime, setCurrentTime] = useState(formatDate(time).time[0])
@@ -122,9 +139,22 @@ const DateOfChangeItem =
       onCalendarPress()
 
     }
+
     useEffect(() => {
       setResultData(convertDateTimeToISO({ date: currentDate, time: allDay ? null : currentTime }))
+      console.log(currentDate, currentTime);
+
     }, [currentDate, currentTime])
+    if (title === 'End') {
+      useEffect(() => {
+
+        console.log('df');
+        setCurrentTime(formatDate(time).time[0])
+        setCurrentDate(formatDate(time).date[0])
+
+
+      }, [time])
+    }
     return (
       <>
         <InteractivePartItem title={title}>
@@ -148,7 +178,7 @@ const DateOfChangeItem =
           onSetTime={onSetTime} />
       </>
     );
-  });
+  };
 
 const InteractivePartItem = ({
   title,
@@ -165,7 +195,7 @@ const InteractivePartItem = ({
   );
 };
 
-const SwitchButton = ({ onPress }: { onPress: () => void }) => {
+const SwitchButton = ({ onPress, active }: { onPress: () => void; active: boolean }) => {
   const [isMoved, setIsMoved] = useState(false);
   const [animatedValue, setAnimatedValue] = useState(new Animated.Value(0));
 
@@ -178,11 +208,20 @@ const SwitchButton = ({ onPress }: { onPress: () => void }) => {
       useNativeDriver: false,
     }).start();
   };
-
   const animatedStyle = {
     transform: [{ translateX: animatedValue }],
   };
+  useEffect(() => {
+    if (active) {
+      setIsMoved(!isMoved);
+      Animated.timing(animatedValue, {
+        toValue: isMoved ? 0 : 32,
+        duration: 500,
+        useNativeDriver: false,
+      }).start();
+    }
 
+  }, []);
   return (
     <TouchableOpacity onPress={handlePress}>
       <View

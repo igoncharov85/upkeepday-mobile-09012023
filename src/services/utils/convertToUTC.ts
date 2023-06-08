@@ -26,5 +26,5 @@ export function convertToLocaleTime(data: any[]): any[] {
     });
 }
 export function convertLocalToUTC(localTime: string): string {
-    return moment(moment(localTime).format('YYYY-MM-DD')).utc().format('YYYY-MM-DDTHH:mm:ss');
+    return moment(moment(localTime).add(1, 'day').format('YYYY-MM-DD')).utc().format('YYYY-MM-DDTHH:mm:ss');
 }

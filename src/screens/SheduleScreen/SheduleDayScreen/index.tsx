@@ -38,8 +38,7 @@ function sortArrayByDateTime(arr: any[]): any[] {
 		return [];
 	}
 
-	const sortedArray = [...arr]; // Создание нового массива с копией элементов
-
+	const sortedArray = [...arr];
 	sortedArray.sort((a, b) => {
 		const dateA = new Date(a.StartDateTime);
 		const dateB = new Date(b.StartDateTime);
@@ -73,7 +72,8 @@ export const ScheduleDayScreen: React.FC<IScheduleDayScreen> = memo(() => {
 		dispatch(fetchScheduleByPeriodAction({ startDate: localCurrentDay.toISOString(), endDate: addDayAndHoursToDate(currentDay, 1, 0) }));
 	}, [currentDay])
 	useEffect(() => {
-		dispatch(fetchScheduleByPeriodAction({ startDate: currentDay, endDate: addDayAndHoursToDate(currentDay, 1, 0) }));
+		let localCurrentDay = new Date(currentDay);
+		dispatch(fetchScheduleByPeriodAction({ startDate: localCurrentDay.toISOString(), endDate: addDayAndHoursToDate(currentDay, 1, 0) }));
 	}, [isFocused]);
 	return loading ? <ScreenLoading /> : (
 		<View>

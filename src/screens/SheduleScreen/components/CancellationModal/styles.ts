@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
   modal: {
@@ -27,7 +27,6 @@ export default StyleSheet.create({
     shadowRadius: 6,
     paddingVertical: 20,
     justifyContent: 'space-around',
-    // marginBottom: 24,
   },
   bgModal: {
     position: 'absolute',
@@ -39,7 +38,6 @@ export default StyleSheet.create({
     width: '100%',
   },
   cancelScheduled: {
-    fontFamily: 'Urbanist',
     fontStyle: 'normal',
     fontWeight: '400',
     fontSize: 20,
@@ -55,11 +53,10 @@ export default StyleSheet.create({
     textShadowRadius: 4,
   },
   cancelBtn: {
-    fontFamily: 'Urbanist',
     fontStyle: 'normal',
     fontWeight: '400',
     fontSize: 20,
-    lineHeight: 23, // В React Native вычисляется как fontSize + число
+    lineHeight: 23,
     textAlign: 'center',
     letterSpacing: -0.3,
     color: '#FFFFFF',

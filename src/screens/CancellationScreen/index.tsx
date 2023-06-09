@@ -124,15 +124,14 @@ const DateOfChangeItem =
 
     useEffect(() => {
       setResultData(convertDateTimeToISO({ date: currentDate, time: allDay ? null : currentTime }))
-
-
     }, [currentDate, currentTime])
-    if (title === 'End') {
-      useEffect(() => {
-        setCurrentTime(formatDate(time).time[0])
-        setCurrentDate(formatDate(time).date[0])
-      }, [time])
-    }
+
+
+    useEffect(() => {
+      setCurrentTime(formatDate(time).time[0])
+      setCurrentDate(formatDate(time).date[0])
+    }, [])
+
     return (
       <>
         <InteractivePartItem title={title}>

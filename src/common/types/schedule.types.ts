@@ -6,8 +6,7 @@ export interface IScheduleRequest {
 export interface IDeleteScheduleRequest {
     startDate: string,
     endDate: string,
-    AllDay: boolean,
-    Message: string
+    AllDay: boolean
 }
 
 

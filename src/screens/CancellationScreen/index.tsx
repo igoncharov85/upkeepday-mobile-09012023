@@ -19,15 +19,16 @@ import { dispatch } from '../../store/store';
 import { deleteScheduleByPeriodAction } from '../../store/shedule/actions';
 
 interface RouteParams {
-  itemData: IScheduleItem;
+  itemData: any;
 }
 interface ICancellationScreen { }
 export const CancellationScreen: FC<ICancellationScreen> = memo(() => {
   const navigation = useNavigation();
   const route = useRoute();
   const { itemData } = route.params as RouteParams;
+  console.log('itemData', itemData);
 
-  const startTime = itemData.StartDateTime ? itemData.StartDateTime as string : new Date().toISOString();
+  const startTime = itemData.StartDateTime ? itemData.StartDateTime as string : new Date(itemData?.currentDate).toISOString();
   const duration = itemData.Duration;
   const endTime = calculateEndDate(startTime, duration);
 
@@ -55,13 +56,13 @@ export const CancellationScreen: FC<ICancellationScreen> = memo(() => {
 
   const handleSubmit = () => {
     //@ts-ignore
-    dispatch(deleteScheduleByPeriodAction({ startDate: startDate, endDate: endDate, AllDay: allDay, Message: message }));
+    dispatch(deleteScheduleByPeriodAction({ startDate: startDate, endDate: endDate, AllDay: allDay }));
     navigation.goBack()
   }
   const toggleAllDay = () => setAllDay(!allDay);
   const toggleButtonDisabled = () => setButtonDisabled(true);
   useEffect(() => {
-    const startTime = itemData.StartDateTime ? itemData.StartDateTime as string : new Date().toISOString();
+    const startTime = itemData.StartDateTime ? itemData.StartDateTime as string : new Date(itemData?.currentDate).toISOString();
     const endTime = calculateEndDate(startTime, duration);
 
     setStartDate(startTime);
@@ -71,42 +72,23 @@ export const CancellationScreen: FC<ICancellationScreen> = memo(() => {
 
   }, [startDate, endDate, allDay]);
   return (
-    <ScrollView
-      contentContainerStyle={{
-        justifyContent: 'space-between',
-        paddingVertical: 20,
-      }}>
-      <View style={styles.container}>
-        <ScreenHeader
-          text={'Cancellation'}
-          withBackButton={true}
-          onBackPress={() => navigation.goBack()}
-        />
+    <View style={styles.container}>
+      <ScreenHeader
+        text={'Cancellation'}
+        withBackButton={true}
+        onBackPress={() => navigation.goBack()}
+      />
 
-        <InteractivePartItem title={'All Day'}>
-          <SwitchButton onPress={toggleAllDay} active={allDay} />
-        </InteractivePartItem>
-        <DateOfChangeItem allDay={allDay} title={'Start'} time={startDate} setResultData={onSetStartTime} />
-        <DateOfChangeItem allDay={allDay} title={'End'} time={endDate} setResultData={onSetEndTime} />
+      <InteractivePartItem title={'All Day'}>
+        <SwitchButton onPress={toggleAllDay} active={allDay} />
+      </InteractivePartItem>
+      <DateOfChangeItem allDay={allDay} title={'Start'} time={startDate} setResultData={onSetStartTime} />
+      <DateOfChangeItem allDay={allDay} title={'End'} time={endDate} setResultData={onSetEndTime} />
 
-        <TouchableOpacity style={styles.confirm} onPress={onConfirmPress}>
-          <Text style={styles.confirmText}>Confirm</Text>
-        </TouchableOpacity>
-        {messageVisible && (
-          <>
-            <View style={{ flex: 1 }} />
-            <Text style={styles.notification}>
-              CP will send automatic notification. However, you can customize the
-              message below.
-            </Text>
-            <MessageBlock toggleButtonDisabled={toggleButtonDisabled} onChangeMessage={onChangeMessage} />
-            <View style={styles.finishBtn}>
-              <CustomButton text={'Finish'} onPress={handleSubmit} disabled={!buttonDisabled} />
-            </View>
-          </>
-        )}
+      <View style={styles.finishBtn}>
+        <CustomButton text={'Finish'} onPress={handleSubmit} />
       </View>
-    </ScrollView>
+    </View>
   );
 });
 
@@ -142,17 +124,13 @@ const DateOfChangeItem =
 
     useEffect(() => {
       setResultData(convertDateTimeToISO({ date: currentDate, time: allDay ? null : currentTime }))
-      console.log(currentDate, currentTime);
+
 
     }, [currentDate, currentTime])
     if (title === 'End') {
       useEffect(() => {
-
-        console.log('df');
         setCurrentTime(formatDate(time).time[0])
         setCurrentDate(formatDate(time).date[0])
-
-
       }, [time])
     }
     return (

@@ -1,5 +1,5 @@
 import React, { FC, memo, useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { CancellationModal } from '../../components/CancellationModal';
 import styles from './styles';
@@ -10,8 +10,10 @@ enum TypeSession {
   trial,
 }
 
-interface ISheduleTableItem { }
-export const SheduleTableItem: FC<IScheduleItem> = memo(
+interface ISheduleTableItem extends IScheduleItem {
+  currentDate: Date;
+}
+export const SheduleTableItem: FC<ISheduleTableItem> = memo(
   (item) => {
     const colorsTrial = ['#F3AF2C', '#E9600D'];
     const colorsLesson = ['#EAAFC8', '#654EA3'];

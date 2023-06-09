@@ -8,6 +8,7 @@ import { dispatch } from '../../../../store/store';
 import { fetchScheduleByPeriodAction } from '../../../../store/shedule/actions';
 import { ScreenLoading } from '../../../../components/UI/ScreenLoading';
 import { useIsFocused } from '@react-navigation/native';
+import moment from 'moment';
 
 interface ISheduleTable {
   startOfWeek: Date;
@@ -45,10 +46,10 @@ export const SheduleTable: FC<ISheduleTable> = memo(
 
     const { CurrentScheduledEntries, loading } = useAppSelector(state => state.schedule);
     useEffect(() => {
-      dispatch(fetchScheduleByPeriodAction({ startDate: startOfWeek.toISOString(), endDate: endOfWeek.toISOString() }));
+      dispatch(fetchScheduleByPeriodAction({ startDate: moment(startOfWeek).add(-1, 'days').toISOString(), endDate: endOfWeek.toISOString() }));
     }, [startOfWeek])
     useEffect(() => {
-      dispatch(fetchScheduleByPeriodAction({ startDate: startOfWeek.toISOString(), endDate: endOfWeek.toISOString() }));
+      dispatch(fetchScheduleByPeriodAction({ startDate: moment(startOfWeek).add(-1, 'days').toISOString(), endDate: endOfWeek.toISOString() }));
     }, [isFocused]);
     return loading ? <ScreenLoading /> : (
       <View style={styles.container} >
@@ -61,6 +62,7 @@ export const SheduleTable: FC<ISheduleTable> = memo(
             </Column>
             <Row style={{ flex: 1 }}>
               {weekStructure?.map((dayEvents, dayIndex) => {
+                const currentDate = new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startWeekOfDay + dayIndex);
                 return (
                   <Column key={dayIndex}>
                     {dayEvents?.map((event, index) => {
@@ -80,10 +82,12 @@ export const SheduleTable: FC<ISheduleTable> = memo(
                             Duration={item.Duration}
                             SlotUid={item.SlotUid}
                             StartDateTime={item.StartDateTime}
-                            ScheduleEntryId={0} />
+                            ScheduleEntryId={0}
+                            currentDate={currentDate}
+                          />
                         );
                       }
-                      return <SheduleTableItem key={index} SlotUid={''} StartDateTime={''} Duration={0} ClassName={''} ScheduleEntryId={0} />;
+                      return <SheduleTableItem key={index} SlotUid={''} StartDateTime={''} Duration={0} ClassName={''} ScheduleEntryId={0} currentDate={currentDate} />;
                     })}
                     {isToday(dayIndex) && isTodayInWeekRange(startOfWeek, endOfWeek) && (
                       <View style={[styles.absoluteFill, styles.mask]} />

@@ -1,3 +1,4 @@
+import moment from "moment";
 import { ICreateClassRequest, IDeleteScheduleRequest, IGenerateScheduleRequest, IScheduleRequest } from "../../../common/types/schedule.types";
 import { convertLocalToUTC, convertToUTC } from "../../utils/convertToUTC";
 import { $axiosAuth } from '../base.instance'
@@ -11,13 +12,13 @@ export class ScheduleService {
 
         return $axiosAuth.get(`/tutor/schedules/${utcStartDate}/${utcEndDate}`);
     }
-    static async deleteSchedules({ endDate, startDate, AllDay, Message }: IDeleteScheduleRequest) {
-        const utcStartDate = convertLocalToUTC(startDate);
-        const utcEndDate = convertLocalToUTC(endDate);
+    static async deleteSchedules({ endDate, startDate, AllDay }: IDeleteScheduleRequest) {
+        const utcStartDate = moment(startDate).utc().format('YYYY-MM-DDTHH:mm:ss');
+        const utcEndDate = moment(endDate).utc().format('YYYY-MM-DDTHH:mm:ss');
+
         return $axiosAuth.delete(`/tutor/schedules/${utcStartDate}/${utcEndDate}`, {
             data: {
-                AllDay,
-                Message
+                AllDay
             }
         });
     }

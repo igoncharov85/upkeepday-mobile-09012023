@@ -32,20 +32,14 @@ interface EntryCount {
 }
 
 function getSectionsCountByDate(entries: any[], date: Date): number {
+    const dateString = date.toISOString().substring(0, 10);
+
     const entriesOnDate = entries?.filter(entry => {
-        const entryDate = new Date(entry.StartDateTime);
-        const entryDateGMT = new Date(entryDate.getTime() + entryDate.getTimezoneOffset() * 60000);
-        const dateGMT = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
-        return (
-            entryDateGMT.getFullYear() === dateGMT.getFullYear() &&
-            entryDateGMT.getMonth() === dateGMT.getMonth() &&
-            entryDateGMT.getDate() === dateGMT.getDate()
-        );
+        const entryDateString = entry.StartDateTime.substring(0, 10);
+        return entryDateString === dateString;
     });
 
-    const count = entriesOnDate.length;
-
-    return count;
+    return entriesOnDate.length;
 }
 
 export const ScheduleCalendar: React.FC<IScheduleCalendarProps> = ({ startingDayOfWeek }) => {
@@ -162,6 +156,7 @@ export const ScheduleCalendar: React.FC<IScheduleCalendarProps> = ({ startingDay
     useEffect(() => {
         generateDays();
     }, [isFocused]);
+
     return loading ? <ScreenLoading /> : (
         <View style={styles.container} {...panResponder.panHandlers}>
 

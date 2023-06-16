@@ -10,10 +10,7 @@ import {
 import { dispatch } from '../../store/store';
 import { fetchUsersAction } from '../../store/user/actions';
 import { fetchLocationAction } from '../../store/location/actions';
-import { SheduleHeader } from './components/SheduleHeader';
 import { ScheduleNavigation } from './components/SheduleNavigation';
-import { BottomTab } from '../../components/BottomTab';
-import { SchedulePlus } from './components/SchedulePlus';
 import { NavigationEnum } from '../../common/constants/navigation';
 
 import styles from './styles';
@@ -43,11 +40,7 @@ export const ScheduleScreen: FC<IHomeScreen> = memo(({ navigation }) => {
   }, []);
   return (
     <View style={styles.container}>
-      <SheduleHeader text="Schedule" />
       <ScheduleNavigation />
-
-      <BottomTab />
-      <SchedulePlus onButtonPress={onPlusPress} />
     </View >
   );
 });

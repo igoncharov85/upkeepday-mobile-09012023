@@ -23,7 +23,7 @@ export const AddSessionModal: FC<AddSessionModalProps> = memo(
       onPress && onPress();
     }
     return visible ? (
-      <TouchableOpacity onPress={visibleHandler} style={{ position: 'absolute', height: '100%', width: '100%' }} activeOpacity={1}>
+      <TouchableOpacity onPress={visibleHandler} style={{ position: 'absolute', height: '100%', width: '100%', zIndex: 100 }} activeOpacity={1}>
         <LinearGradient
           colors={['rgba(178, 178, 178, 0.88)', 'rgba(23, 25, 48, 0.898039)']}
           start={{ x: 0.0, y: 1.0 }}

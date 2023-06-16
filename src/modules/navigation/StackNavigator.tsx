@@ -7,20 +7,20 @@ import { RegistrationScreen } from '../../screens/RegistrationScreen';
 import { FinalRegistrationScreen } from '../../screens/RegistrationScreen/FinalRegistrtionScreen';
 import { SendEmailScreen } from '../../screens/ForgotPassScreen/SendEmailScreen';
 import { SetPasswordScreen } from '../../screens/ForgotPassScreen/SetPasswordScreen';
-import { ScheduleScreen } from '../../screens/SheduleScreen';
 import { ScheduleMonthScreen } from '../../screens/SheduleScreen/ScheduleMonthScreen';
 import { ScheduleDayScreen } from '../../screens/SheduleScreen/SheduleDayScreen';
 import { SheduleWeekScreen } from '../../screens/SheduleScreen/SheduleWeekScreen';
 import { CancellationScreen } from '../../screens/CancellationScreen';
-import { CancellationModal } from '../../screens/SheduleScreen/components/CancellationModal';
 import { AddClassScreen } from '../../screens/AddClassScreen';
 import { SelectDateScreen } from '../../screens/SelectDateScreen';
-import { AsyncStorageService } from '../../services/async-storage';
 import { useAppSelector } from '../../store/hooks';
 import { DateRecurrenceScreen } from '../../screens/DateRecurrenceScreen';
 import { DatePreviewScreen } from '../../screens/DatePreviewScreen';
 import { AddStudentsScreen } from '../../screens/AddStudentsScreen';
 import { PrepaymentConfigurationScreen } from '../../screens/PrepaymentConfigurationScreen';
+import { TabNavigator } from './TabNavigator';
+import { ClassesScreen } from '../../screens/ClassesScreen';
+import { EditClassScreen } from '../../screens/EditClassScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -67,7 +67,7 @@ export const StackNavigator = memo(() => {
 
       <Stack.Screen
         name={NavigationEnum.HOME_SCREEN}
-        component={ScheduleScreen}
+        component={TabNavigator}
       />
 
       <Stack.Screen
@@ -97,6 +97,14 @@ export const StackNavigator = memo(() => {
       <Stack.Screen
         name={NavigationEnum.PREPAYMENT_CONFIGURATION_SCREEN}
         component={PrepaymentConfigurationScreen}
+      />
+      <Stack.Screen
+        name={NavigationEnum.CLASS_SCREEN}
+        component={ClassesScreen}
+      />
+      <Stack.Screen
+        name={NavigationEnum.EDIT_CLASS_SCREEN}
+        component={EditClassScreen}
       />
     </Stack.Navigator>
   );

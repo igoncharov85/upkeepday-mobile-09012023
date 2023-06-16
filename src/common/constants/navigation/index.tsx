@@ -24,4 +24,7 @@ export enum NavigationEnum {
   SCHEDULE_TAB = 'navigation/SCHEDULE_TAB',
   TO_DO_TAB = 'navigation/TO_DO_TAB',
   CLASSES_TAB = 'navigation/CLASSES_TAB',
+  //CLASSES
+  CLASS_SCREEN = 'navigation/CLASS_SCREEN',
+  EDIT_CLASS_SCREEN = 'navigation/EDIT_CLASS_SCREEN',
 }

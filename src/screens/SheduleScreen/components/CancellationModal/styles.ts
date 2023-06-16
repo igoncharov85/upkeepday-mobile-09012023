@@ -5,7 +5,7 @@ export default StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: '100%',
-    height: 116,
+    height: 164,
     backgroundColor: 'white',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,

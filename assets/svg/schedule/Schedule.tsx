@@ -1,17 +1,17 @@
 import * as React from 'react';
-import Svg, {Path} from 'react-native-svg';
+import Svg, { Path } from 'react-native-svg';
 
-function BackIcon(props: any) {
+function Schedule(props: any) {
   return (
     <Svg width="21" height="21" viewBox="0 0 21 21" fill="none">
       <Path
         fill-rule="evenodd"
         clip-rule="evenodd"
+        fill={props.color}
         d="M17.4719 2.2004H16.7731V1.32687C16.7731 0.940932 16.4602 0.628052 16.0742 0.628052C15.6883 0.628052 15.3754 0.940922 15.3754 1.32687V2.2004H4.89175V1.32687C4.89175 0.940932 4.57888 0.628052 4.19292 0.628052C3.80697 0.628052 3.49411 0.940922 3.49411 1.32687V2.2004H2.7953C1.25149 2.2004 0 3.45189 0 4.99568V17.9266C0 19.4704 1.2515 20.7219 2.7953 20.7219H17.4733C19.0171 20.7219 20.2686 19.4704 20.2686 17.9266L20.2685 4.99568C20.2685 3.45136 19.0162 2.19965 17.4719 2.2004H17.4719ZM18.5201 17.5772C18.5201 18.3491 17.8944 18.9748 17.1225 18.9748H3.14334C2.37144 18.9748 1.7457 18.3491 1.7457 17.5772V6.39468H18.5201L18.5201 17.5772Z"
-        fill="#171930"
       />
     </Svg>
   );
 }
 
-export default BackIcon;
+export default Schedule;

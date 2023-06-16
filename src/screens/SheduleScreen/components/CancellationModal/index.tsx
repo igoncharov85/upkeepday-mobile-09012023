@@ -10,6 +10,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { NavigationEnum } from '../../../../common/constants/navigation';
 import styles from './styles';
 import { IScheduleItem } from '../../../../common/types/schedule.types';
+import { StudentCheckInModal } from '../StudentCheckInModal';
 
 
 
@@ -25,6 +26,7 @@ const CancellationModalConainer = ({
   onCancellationScreenRedirect,
 }: ICancellationModalScreen) => {
   const [animation] = useState(new Animated.Value(0));
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const handleAnimation = (toValue: number) => {
     Animated.timing(animation, {
       toValue,
@@ -33,7 +35,9 @@ const CancellationModalConainer = ({
     }).start();
   };
 
-
+  const onStudentCheckIn = () => {
+    setIsModalVisible(!isModalVisible);
+  }
   const handleHideModal = () => {
     handleAnimation(0);
     setTimeout(() => {
@@ -42,35 +46,44 @@ const CancellationModalConainer = ({
   };
 
   return (
-    <Modal visible={isVisible} transparent onRequestClose={handleHideModal}>
-      <LinearGradient
-        colors={['rgba(178, 178, 178, 0.88)', 'rgba(23, 25, 48, 0.898039)']}
-        start={{ x: 0.0, y: 1.0 }}
-        end={{ x: 1.0, y: 0.0 }}
-        angle={223.05}
-        useAngle={true}
-        style={styles.bgModal}
-      />
-      <TouchableOpacity style={{ flex: 1 }} onPress={handleHideModal} />
-
-      <Animated.View style={[styles.modal]}>
+    <>
+      <Modal visible={isVisible} transparent onRequestClose={handleHideModal}>
         <LinearGradient
-          colors={['#9A80BA', '#EFF1F5']}
-          start={{ x: 0.5, y: 0 }}
-          end={{ x: 0.5, y: 1 }}
-          locations={[0, 1]}
-          style={styles.bgGradient}>
-          <Text
-            onPress={onCancellationScreenRedirect}
-            style={styles.cancelScheduled}>
-            Cancel Scheduled Class
-          </Text>
-          <TouchableOpacity onPress={handleHideModal}>
-            <Text style={styles.cancelBtn}>Cancel</Text>
-          </TouchableOpacity>
-        </LinearGradient>
-      </Animated.View>
-    </Modal>
+          colors={['rgba(178, 178, 178, 0.88)', 'rgba(23, 25, 48, 0.898039)']}
+          start={{ x: 0.0, y: 1.0 }}
+          end={{ x: 1.0, y: 0.0 }}
+          angle={223.05}
+          useAngle={true}
+          style={styles.bgModal}
+        />
+        <TouchableOpacity style={{ flex: 1 }} onPress={handleHideModal} />
+
+        <Animated.View style={[styles.modal]}>
+          <LinearGradient
+            colors={['#9A80BA', '#EFF1F5']}
+            start={{ x: 0.5, y: 0 }}
+            end={{ x: 0.5, y: 1 }}
+            locations={[0, 1]}
+            style={styles.bgGradient}>
+
+            <Text
+              onPress={onCancellationScreenRedirect}
+              style={styles.cancelScheduled}>
+              Cancel Scheduled Class
+            </Text>
+            <Text
+              onPress={onStudentCheckIn}
+              style={styles.cancelScheduled}>
+              Student Check-in
+            </Text>
+            <TouchableOpacity onPress={handleHideModal}>
+              <Text style={styles.cancelBtn}>Cancel</Text>
+            </TouchableOpacity>
+          </LinearGradient>
+        </Animated.View>
+        <StudentCheckInModal visible={isModalVisible} visibleHandler={onStudentCheckIn} onPress={() => null} />
+      </Modal>
+    </>
   );
 };
 interface ICancellationModalWrapper {

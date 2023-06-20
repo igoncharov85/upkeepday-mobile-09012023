@@ -43,7 +43,7 @@ const ClassesItem: React.FC = () => {
                         style={styles.linkItem}
                         onPress={
                             //@ts-ignore
-                            () => navigation.navigate(NavigationEnum.DATE_PREVIEW_SCREEN)
+                            () => navigation.navigate(NavigationEnum.CLASSES_PREVIEW_SCREEN)
                         }
                     >
                         <DocumentIcon />

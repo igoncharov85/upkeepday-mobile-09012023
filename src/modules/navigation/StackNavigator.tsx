@@ -21,6 +21,7 @@ import { PrepaymentConfigurationScreen } from '../../screens/PrepaymentConfigura
 import { TabNavigator } from './TabNavigator';
 import { ClassesScreen } from '../../screens/ClassesScreen';
 import { EditClassScreen } from '../../screens/EditClassScreen';
+import ClassesPreviewScreen from '../../screens/ClassesScreen/screens/ClassesPreviewScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -105,6 +106,10 @@ export const StackNavigator = memo(() => {
       <Stack.Screen
         name={NavigationEnum.EDIT_CLASS_SCREEN}
         component={EditClassScreen}
+      />
+      <Stack.Screen
+        name={NavigationEnum.CLASSES_PREVIEW_SCREEN}
+        component={ClassesPreviewScreen}
       />
     </Stack.Navigator>
   );

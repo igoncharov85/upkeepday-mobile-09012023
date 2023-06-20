@@ -27,4 +27,5 @@ export enum NavigationEnum {
   //CLASSES
   CLASS_SCREEN = 'navigation/CLASS_SCREEN',
   EDIT_CLASS_SCREEN = 'navigation/EDIT_CLASS_SCREEN',
+  CLASSES_PREVIEW_SCREEN = 'navigation/CLASSES_PREVIEW_SCREEN',
 }

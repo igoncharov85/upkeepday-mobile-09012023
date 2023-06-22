@@ -55,11 +55,11 @@ export const AddStudentsScreen: React.FC<IAddStudentsScreen> = () => {
                 //@ts-ignore
                 let index = existingStudents?.findIndex(event => event.id === student?.StudentId);
                 //@ts-ignore
-                const id = student?.StudentId;
+                const StudentId = student?.StudentId;
                 if (index === -1) {
-                    return [...existingStudents, { id }];
+                    return [...existingStudents, { StudentId }];
                 } else {
-                    return existingStudents?.filter(event => event.id !== id);
+                    return existingStudents?.filter(event => event.id !== StudentId);
                 }
 
 

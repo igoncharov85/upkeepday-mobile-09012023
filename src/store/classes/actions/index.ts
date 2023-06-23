@@ -1,8 +1,11 @@
 import { createAction } from "@reduxjs/toolkit";
-import { IIdRequest, ILocationRequest } from "../../../common/types/location";
-import { LocationConstantsEnum } from "../constants";
+import { ClassesConstantsEnum } from "../constants";
+import { IClassesUpdateSession, IClassesUpdateStatus, TClassesId, TClassesStatus } from "../../../common/types/classes.types";
 
-//USE for  заполняет “Class Location”
-export const fetchLocationAction = createAction<undefined>(LocationConstantsEnum.FETCH_LOCATIONS)
-export const addLocationAction = createAction<ILocationRequest>(LocationConstantsEnum.ADD_LOCATION)
-export const fetchLOcationById = createAction<IIdRequest>(LocationConstantsEnum.GET_LOCATION_BY_ID)
+
+export const fetchClassesAction = createAction<TClassesStatus>(ClassesConstantsEnum.FETCH_CLASEES)
+export const fetchClassesByIdAction = createAction<TClassesId>(ClassesConstantsEnum.FETCH_CLASEES_BY_ID)
+export const deleteClassesAction = createAction<TClassesId>(ClassesConstantsEnum.DELETE_CLASEES)
+export const updatedStatusClassesAction = createAction<IClassesUpdateStatus>(ClassesConstantsEnum.UPDATE_STATUS_CLASEES)
+export const updatedSessionClassesAction = createAction<IClassesUpdateSession>(ClassesConstantsEnum.UPDATE_CLASEES_SESSION)
+export const deleteSessionClassesAction = createAction<TClassesId>(ClassesConstantsEnum.DELETE_CLASEES_SESSION)

@@ -3,6 +3,9 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 import styles from './styles';
+import { dispatch } from '../../../../store/store';
+import { fetchClassesAction } from '../../../../store/classes/actions';
+import { EClassesStatus } from '../../../../common/types/classes.types';
 
 interface NavigationButtonProps {
     active: boolean;
@@ -21,7 +24,10 @@ interface IClassesNavigation {
 export const ClassesNavigation: FC<IClassesNavigation> = memo(() => {
     const [activeIndex, setActiveIndex] = useState(0);
 
-    // const ActiveScreen = SCHEDULE_NAVIGATION[activeIndex].component;
+
+    useEffect(() => {
+        dispatch(fetchClassesAction(activeIndex ? EClassesStatus.archived : EClassesStatus.scheduled))
+    }, [activeIndex],);
 
     return (
         <>

@@ -19,8 +19,6 @@ export const ListButtons: React.FC<IListButtons> = (({ buttons, onPress, label, 
 
     useEffect(() => {
         setActiveIndex(index ? index : 0);
-        console.log(index);
-
     }, [index]);
     return (
         <View style={styles.container}>

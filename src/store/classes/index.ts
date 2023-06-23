@@ -1,36 +1,41 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import { ILocation } from '../../common/types/location';
+import { IClassesResponse, ISession } from '../../common/types/classes.types';
 
-export interface ILocationState {
+export interface IClassesState {
     loading: boolean;
-    //USE for locations
-    locations: Array<ILocation>
+    //USE for classes
+    classes: Array<IClassesResponse>;
+    currentSession: Array<ISession>;
 }
 
-const initialState: ILocationState = {
+const initialState: IClassesState = {
     loading: false,
-    locations: []
+    classes: [],
+    currentSession: [],
 }
 
-export const locationService = createSlice({
-    name: 'locations',
+export const classesService = createSlice({
+    name: 'classes',
     initialState,
     reducers: {
-        setLocationLoading: (state, action: PayloadAction<boolean>) => {
+        setClassesLoading: (state, action: PayloadAction<boolean>) => {
             state.loading = action.payload
         },
-        setLocationsAction: (state, action: PayloadAction<Array<ILocation>>) => {
-            state.locations = action.payload
+        setClassesAction: (state, action: PayloadAction<Array<IClassesResponse>>) => {
+            state.classes = action.payload
         },
-        addLocationsAction: (state, action: PayloadAction<ILocation>) => {
-            state.locations = [action.payload, ...state.locations]
+        setSessinAction: (state, action: PayloadAction<Array<ISession>>) => {
+            state.currentSession = action.payload
+        },
+        addClassesAction: (state, action: PayloadAction<IClassesResponse>) => {
+            state.classes = [action.payload, ...state.classes]
         },
     },
 
 })
 
 // Action creators are generated for each case reducer function
-export const { setLocationLoading, setLocationsAction, addLocationsAction } = locationService.actions
+export const { setClassesLoading, setClassesAction, setSessinAction, addClassesAction } = classesService.actions
 
-export default locationService.reducer
+export default classesService.reducer

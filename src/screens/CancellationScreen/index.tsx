@@ -26,8 +26,6 @@ export const CancellationScreen: FC<ICancellationScreen> = memo(() => {
   const navigation = useNavigation();
   const route = useRoute();
   const { itemData } = route.params as RouteParams;
-  console.log('itemData', itemData);
-
   const startTime = itemData.StartDateTime ? itemData.StartDateTime as string : new Date(itemData?.currentDate).toISOString();
   const duration = itemData.Duration;
   const endTime = calculateEndDate(startTime, duration);

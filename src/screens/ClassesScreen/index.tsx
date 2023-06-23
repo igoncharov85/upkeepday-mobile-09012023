@@ -1,27 +1,30 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { Text, View, TouchableOpacity, ScrollView } from 'react-native';
-import { NavigationEnum } from '../../common/constants/navigation';
+import { View, ScrollView } from 'react-native';
 import { ClassesNavigation } from './components/ClassesNavigation';
 import ClassesItem from './components/ClassesItem';
 import styles from './styles';
+import { useAppSelector } from '../../store/hooks';
 
 
 export const ClassesScreen = () => {
-    const navigation = useNavigation();
+    const { classes } = useAppSelector(state => state.classes);
+
     return (
-        <View>
+        <View style={{ flex: 1 }}>
             <ClassesNavigation />
             <ScrollView>
                 <View style={styles.container}>
-                    <ClassesItem />
-                    <ClassesItem />
-                    <ClassesItem />
-                    <ClassesItem />
-                    <ClassesItem />
+                    {
+                        classes.map((item, index) => (
+
+                            <ClassesItem item={item} key={index} />
+                        ))
+                    }
 
                 </View>
             </ScrollView>
+
         </View>
     )
 }

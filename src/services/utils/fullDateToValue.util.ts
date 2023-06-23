@@ -47,7 +47,9 @@ export const formatDate = (
     time: [formattedTime, formattedTime2],
   };
 };
-
+export const formatDateForPeriod = (time: string) => {
+  return convertDate(moment(time, "YYYY-MM-DD").format("MMM D, YYYY"))[2]
+}
 export const calculateEndDate = (
   startTime: string,
   duration: number,

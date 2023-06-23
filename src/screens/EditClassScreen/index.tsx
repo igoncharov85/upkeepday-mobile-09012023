@@ -1,15 +1,20 @@
-import React from 'react';
-import { useNavigation } from '@react-navigation/native';
+import React, { useEffect } from 'react';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { View, TouchableOpacity, Text } from 'react-native';
 
 import { ScreenHeader } from '../../components/ScreenHeader';
 import styles from './styles';
 import ArrowRight from '../../../assets/svg/schedule/ArrowRight';
 import { NavigationEnum } from '../../common/constants/navigation';
+import { dispatch } from '../../store/store';
+import { updatedStatusClassesAction } from '../../store/classes/actions';
 
 
 export const EditClassScreen = () => {
     const navigation = useNavigation();
+    const route = useRoute();
+    const { item }: any = route.params;
+
     return (
         <View style={styles.container}>
             <ScreenHeader
@@ -18,26 +23,34 @@ export const EditClassScreen = () => {
                 onBackPress={() => navigation.goBack()}
             />
             <View style={styles.buttonWrapper}>
-
-                <ClassesEditButton title={'Update Finish Date (Extend) '} navigationName={NavigationEnum.ADD_CLASS_SCREEN} />
-                <ClassesEditButton title={'Update Students'} navigationName={NavigationEnum.DATE_RECURRENCE_SCREEN} />
-                <ClassesEditButton title={'Rollover Class'} navigationName={NavigationEnum.ADD_STUDENTS_SCREEN} />
-                <ClassesEditButton title={'Delete Class Permanently'} navigationName={NavigationEnum.ADD_CLASS_SCREEN} />
-
+                <ClassesEditButton title={'Update Classes'} navigationName={'NavigationEnum.ADD_CLASS_SCREEN'} />
+                <ClassesEditButton title={'Update Finish Date (Extend)'} navigationName={'NavigationEnum.ADD_CLASS_SCREEN'} />
+                <ClassesEditButton title={'Update Students'} navigationName={'NavigationEnum.DATE_RECURRENCE_SCREEN'} />
+                <ClassesEditButton title={'Rollover Class'} navigationName={'NavigationEnum.All_CLASSES_SCREEN'} />
+                <ClassesEditButton title={'Archive Class'} navigationName={NavigationEnum.RESULT_CLASS_MODAL} data={
+                    {
+                        item: item,
+                        actionBtn: () => dispatch(updatedStatusClassesAction({ id: item.ClassId, Status: 'Archived' })),
+                        nameAction: 'Archive',
+                    }
+                } />
             </View>
         </View>
     )
 };
 
-const ClassesEditButton = ({ title, navigationName }:
+const ClassesEditButton = ({ title, navigationName, data }:
     {
         title: string;
         navigationName: string;
+        data?: any;
     }
 ) => {
     const navigation = useNavigation();
-    //ts-ignore
-    const onPress = () => navigation.navigate(navigationName);
+    const onPress = () => {
+        //@ts-ignore
+        navigation.navigate(navigationName, data ? data : null)
+    };
     return (
         <TouchableOpacity onPress={onPress} style={styles.block}>
             <View style={{

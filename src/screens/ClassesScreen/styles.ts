@@ -6,6 +6,6 @@ export default StyleSheet.create({
 
     container: {
         marginHorizontal: 20,
-        marginBottom: 40
+        marginVertical: 20,
     }
 })

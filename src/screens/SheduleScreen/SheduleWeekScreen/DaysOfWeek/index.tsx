@@ -28,7 +28,6 @@ export const DaysOfWeek: FC<IDaysOfWeek> = memo(({ startOfWeek, endOfWeek, goToP
       return true;
     },
     onPanResponderRelease: (evt, gestureState) => {
-      console.log('er');
 
       if (gestureState.dx < -50) {
         goToNextWeek();

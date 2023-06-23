@@ -140,7 +140,6 @@ export const AddClassScreen: React.FC<IAddClassScreen> = memo(() => {
         [dispatch, typeLocation, navigation]
     );
     useEffect(() => {
-        console.log('worked');
         dispatch(fetchUsersAction());
         dispatch(fetchLocationAction());
     }, []);

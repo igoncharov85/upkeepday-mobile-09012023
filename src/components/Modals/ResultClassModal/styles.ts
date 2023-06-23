@@ -1,30 +1,28 @@
 import { StyleSheet } from "react-native";
 
-
 export default StyleSheet.create({
-
+    modalWrapper: { position: 'absolute', height: '100%', width: '100%', zIndex: 100, },
     container: {
-        backgroundColor: '#fff',
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        left: 0,
+        bottom: 0,
+        height: '100%',
         width: '100%',
-        borderRadius: 10,
-        paddingHorizontal: 20,
-        paddingTop: 16,
-        paddingBottom: 12,
-        shadowOffset: {
-            width: 0,
-            height: 1
-        },
-        elevation: 10,
-        shadowRadius: 6,
-        marginBottom: 20,
-
-    },
-    part: {
-        flexDirection: 'row',
+        zIndex: 1,
         justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 20,
     },
-    partTop: {
-        paddingBottom: 28
+    content: { width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' },
+    item: {
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        borderRadius: 12,
+        width: '100%',
+        padding: 16,
+
     },
     link: {
         flexDirection: 'row',
@@ -64,10 +62,10 @@ export default StyleSheet.create({
         color: '#36385A',
         marginBottom: 8,
     },
-    textRight: {
-
-        textAlign: 'right'
-    },
-
-
+    cancel: {
+        color: '#FFFFFF',
+        fontSize: 16,
+        fontWeight: '600',
+        marginTop: 16
+    }
 })

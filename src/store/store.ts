@@ -8,7 +8,8 @@ import locationReducer from './location'
 import userReducer from './user'
 import cacheReducer from './cached'
 import rootSaga from './saga/rootSaga';
-import  scheduleReducer from './shedule';
+import scheduleReducer from './shedule';
+import classesReducer from './classes';
 
 const persistConfig = {
     key: "root",
@@ -22,7 +23,8 @@ const reducer = combineReducers({
     cache: cacheReducer,
     schedule: scheduleReducer,
     location: locationReducer,
-    user: userReducer
+    user: userReducer,
+    classes: classesReducer
 })
 
 const sagaMiddleware = createSagaMiddleware();

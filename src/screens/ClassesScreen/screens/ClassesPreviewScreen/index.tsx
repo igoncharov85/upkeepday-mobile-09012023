@@ -2,28 +2,32 @@ import React, { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import { ScreenHeader } from "../../../../components/ScreenHeader";
 import styles from "./styles";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { addDayAndHoursToDate } from "../../../../services/utils/generateDate.util";
 
 import { CustomButton } from "../../../../components/UI/CustomButton";
 import { IGeneratedScheduleEntries } from "../../../../common/types/schedule.types";
 import { getWeekDates } from "../../../../services/utils/fullDateToValue.util";
-import { WeekTable } from "./WeekTable";
-import { DaysOfWeek } from "./DaysOfWeek";
 import { useAppSelector } from "../../../../store/hooks";
 import { NavigationEnum } from "../../../../common/constants/navigation";
-import Conflict from "../../../../../assets/svg/Conflict";
 import { dispatch } from "../../../../store/store";
 import { findScheduleConflicts } from "../../../../services/utils/findConflict.util";
 import { updateCurrentClassRequestAction } from "../../../../store/shedule";
 import { ScreenLoading } from "../../../../components/UI/ScreenLoading";
-import BusyField from "../../components/BusyField";
+import { WeekTable } from "./WeekTable";
+import { DaysOfWeek } from "./DaysOfWeek";
+import { fetchClassesByIdAction } from "../../../../store/classes/actions";
+import { IClassesResponse } from "../../../../common/types/classes.types";
+import PreviewModal from "../../components/PreviewModal";
 
 
 
 interface IDatePreviewScreen { }
 const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
     const navigation = useNavigation();
+    const route = useRoute();
+
+    const { item } = route.params as { item: IClassesResponse };
 
 
     const today = new Date();
@@ -33,11 +37,10 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
     const [endDateWeek, setEndDateWeek] = useState(new Date(weekDates.endDate));
     const [screenLoading, setScreenLoading] = useState(false);
     const { CurrentScheduledEntries, createCurrentClassRequest, WeekTimeSlots, GeneratedScheduleEntries, loading } = useAppSelector(state => state.schedule);
-
-
+    const { currentSession } = useAppSelector(state => state.classes);
 
     const [slots, setSlots] = useState<IGeneratedScheduleEntries[]>([]);
-    const [conflict, setConflict] = useState<IGeneratedScheduleEntries[]>(findScheduleConflicts(slots, CurrentScheduledEntries));
+    const [conflict, setConflict] = useState<IGeneratedScheduleEntries[]>(findScheduleConflicts(slots, currentSession));
 
 
 
@@ -57,14 +60,14 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
     }
 
     const onSave = () => {
-        dispatch(updateCurrentClassRequestAction({
-            Sessions: slots, Slots: WeekTimeSlots, Class: {
-                EndNumber: slots.length,
-            }
-        }))
+        // dispatch(updateCurrentClassRequestAction({
+        //     Sessions: slots, Slots: WeekTimeSlots, Class: {
+        //         EndNumber: slots.length,
+        //     }
+        // }))
 
         //@ts-ignore
-        navigation.navigate(NavigationEnum.ADD_STUDENTS_SCREEN)
+        // navigation.navigate(NavigationEnum.ADD_STUDENTS_SCREEN)
     }
 
     useEffect(() => {
@@ -79,8 +82,8 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
         if (GeneratedScheduleEntries.length > 0) {
             setScreenLoading(true)
         }
-
-    }, [GeneratedScheduleEntries, loading])
+        dispatch(fetchClassesByIdAction(item.ClassId))
+    }, [GeneratedScheduleEntries, CurrentScheduledEntries, loading])
 
     return !screenLoading ? <ScreenLoading /> : (<View style={{ height: '100%' }}>
         <View style={styles.header}>
@@ -88,14 +91,18 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
         </View>
         <Text style={styles.subTitle}>Hold and Drop in the desired spot to reschedule</Text>
         <View style={{ marginHorizontal: 20, marginTop: 12 }}>
-            <DaysOfWeek startOfWeek={startDateWeek} />
+            <DaysOfWeek
+                startOfWeek={startDateWeek}
+                goToNextWeek={goToNextWeek}
+                goToPrevWeek={goToPrevWeek}
+            />
 
         </View>
         <View style={{ flex: 1 }}>
             <WeekTable startOfWeek={startDateWeek} endOfWeek={endDateWeek} onHandleData={handeScheduleSlots} conflict={conflict} dryFields={CurrentScheduledEntries} />
         </View>
         <View style={{ padding: 20, justifyContent: 'flex-end' }}>
-            <CustomButton text={"Save"} onPress={!conflict.length ? onSave : () => { }} disabled={!(conflict.length < 1)} />
+            <CustomButton text={"Ok"} onPress={onSave} />
         </View>
 
     </View>)

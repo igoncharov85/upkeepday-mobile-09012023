@@ -6,6 +6,7 @@ import { IGeneratedScheduleEntries } from '../../../../../common/types/schedule.
 import Cancel from '../../../../../../assets/svg/Cancel';
 import { useAppSelector } from '../../../../../store/hooks';
 import BusyField from '../../../components/BusyField';
+import PreviewModal from '../../../components/PreviewModal';
 
 
 interface IWeekTableItem {
@@ -47,7 +48,6 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
       onLongPress(active)
     }
 
-
     const deleteSlot = () => {
       onDeleteSlot(activeItem)
       onLongPress(false)
@@ -55,7 +55,7 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
     const pan = useRef(new Animated.ValueXY()).current;
 
     const panResponder = PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
+      onStartShouldSetPanResponder: () => canMove,
       onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y, },], { useNativeDriver: false }),
       onPanResponderRelease: (_, gestureState) => {
         const
@@ -65,11 +65,10 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
             x: (CELL_SIZE.width / 2) * gridCellX,
             y: (CELL_SIZE.height / 2) * gridCellY,
           };
-        console.log(moveCoords);
-
         pan.setOffset(moveCoords);
         pan.setValue(moveCoords);
         onMoveSlot(activeItem, gridCellX, gridCellY,)
+
         onHandleLongPress(false);
       },
     });
@@ -114,13 +113,17 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
                 {editMode && (<TouchableOpacity style={styles.cansel} onPress={deleteSlot}>
                   <Cancel />
                 </TouchableOpacity>)}
-                <Text style={[styles.textItem, conflict && { color: 'red' }]}>{createCurrentClassRequest.Class?.Name}</Text>
+                <Text style={[styles.textItem,
+                  //  conflict && { color: 'red' }
+                ]
+                }>{createCurrentClassRequest.Class?.Name}</Text>
               </LinearGradient>
 
             </Animated.View>
           ) : null}
-          {dryField && <BusyField />}
+          {dryField && activeItem?.StartDateTime !== dryField?.StartDateTime && <BusyField />}
         </View>
+
       </TouchableOpacity >
     );
 

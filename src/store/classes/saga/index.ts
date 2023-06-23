@@ -1,88 +1,161 @@
 import { AxiosResponse } from 'axios';
 import { SagaIterator } from 'redux-saga';
 import { call, put, takeEvery } from 'redux-saga/effects';
-import { addLocationsAction, setLocationLoading, setLocationsAction } from '..';
+import { setClassesLoading, setClassesAction, addClassesAction, setSessinAction } from '..';
 import { IAction } from '../../../common/types/common.types';
-import { IIdRequest, ILocation, ILocationRequest } from '../../../common/types/location';
-import { LocationService } from '../../../services/axios/location';
+import { ClassesService } from '../../../services/axios/classes';
 import { ErrorFilterService } from '../../../services/error-filter/error-filter.service';
-import { LocationConstantsEnum } from '../constants';
+import { ClassesConstantsEnum } from '../constants';
+import { IClassesResponse, IClassesUpdateSession, ISession, TClassesId, TClassesStatus } from '../../../common/types/classes.types';
 
 
-export function* fetchLocationsWorker({
+export function* fetchClassesWorker({
     payload,
     type,
-}: IAction<null>): SagaIterator {
+}: IAction<TClassesStatus>): SagaIterator {
     try {
-        yield put(setLocationLoading(true));
-        const data: AxiosResponse<Array<ILocation>, any> = yield call(
-            LocationService.fetchLocations,
-        );
-
-        if (data?.data) {
-            yield put(setLocationsAction(data?.data))
-        }
-
-
-    } catch (error) {
-        yield call(ErrorFilterService.validateError, error)
-    } finally {
-        yield put(setLocationLoading(false));
-    }
-}
-
-export function* addLocationWorker({
-    payload,
-    type,
-}: IAction<ILocationRequest>): SagaIterator {
-    try {
-        console.log("ADD Location")
-        yield put(setLocationLoading(true));
-        const { data }: AxiosResponse<ILocation, any> = yield call(
-            LocationService.addLocation,
+        yield put(setClassesLoading(true));
+        const data: AxiosResponse<Array<IClassesResponse>, any> = yield call(
+            ClassesService.fetchClasses,
             payload,
         );
 
-        if (data) {
-            console.log("data add location", data)
-            yield put(addLocationsAction(data))
+        if (data?.data) {
+            yield put(setClassesAction(data?.data))
         }
-
 
     } catch (error) {
         yield call(ErrorFilterService.validateError, error)
     } finally {
-        yield put(setLocationLoading(false));
+        yield put(setClassesLoading(false));
     }
 }
-
-export function* fetchLocationByIdWorker({
+export function* fetchClassesByIdWorker({
     payload,
     type,
-}: IAction<IIdRequest>): SagaIterator {
+}: IAction<TClassesId>): SagaIterator {
     try {
-        yield put(setLocationLoading(true));
-        const { data }: AxiosResponse<ILocation, any> = yield call(
-            LocationService.fetchLocationById,
-            payload.Id,
+        yield put(setClassesLoading(true));
+        const data: AxiosResponse<Array<ISession>, any> = yield call(
+            ClassesService.fetchClassesById,
+            payload,
         );
 
-        if (data) {
-            yield put(addLocationsAction(data))
-        }
+        if (data?.data) {
+            console.log("classes by id ", data?.data);
+            yield put(setSessinAction(data?.data))
 
+        }
 
     } catch (error) {
         yield call(ErrorFilterService.validateError, error)
     } finally {
-        yield put(setLocationLoading(false));
+        yield put(setClassesLoading(false));
+    }
+}
+export function* deleteClassesWorker({
+    payload,
+    type,
+}: IAction<TClassesId>): SagaIterator {
+    try {
+        yield put(setClassesLoading(true));
+        yield call(ClassesService.deleteClasses, payload);
+
+        console.log("Classes deleted successfully!");
+
+    } catch (error) {
+        yield call(ErrorFilterService.validateError, error);
+    } finally {
+        yield put(setClassesLoading(false));
     }
 }
 
+export function* updateClassesWorker({
+    payload,
+    type,
+}: IAction<TClassesStatus & TClassesId>): SagaIterator {
+    try {
+        yield put(setClassesLoading(true));
+        const data: AxiosResponse<IClassesResponse, any> = yield call(
+            ClassesService.updatedStatusClasses,
+            payload,
+        );
 
 
-export function* locationSagaWatcher() {
-    yield takeEvery(LocationConstantsEnum.FETCH_LOCATIONS, fetchLocationsWorker)
-    yield takeEvery(LocationConstantsEnum.ADD_LOCATION, addLocationWorker)
-    yield takeEvery(LocationConstantsEnum.GET_LOCATION_BY_ID, fetchLocationByIdWorker)
+    } catch (error) {
+        yield call(ErrorFilterService.validateError, error);
+    } finally {
+        yield put(setClassesLoading(false));
+    }
+}
+
+export function* deleteSessionClassesWorker({
+    payload,
+    type,
+}: IAction<TClassesId>): SagaIterator {
+    try {
+        yield put(setClassesLoading(true));
+        yield call(ClassesService.deleteSessionClasses, payload);
+
+        console.log("Classes deleted successfully!");
+
+    } catch (error) {
+        yield call(ErrorFilterService.validateError, error);
+    } finally {
+        yield put(setClassesLoading(false));
+    }
+}
+
+export function* updateSessionClassesWorker({
+    payload,
+    type,
+}: IAction<IClassesUpdateSession>): SagaIterator {
+    try {
+        yield put(setClassesLoading(true));
+        const data: AxiosResponse<IClassesResponse, any> = yield call(
+            ClassesService.updatedSessionClasses,
+            payload,
+        );
+
+
+    } catch (error) {
+        yield call(ErrorFilterService.validateError, error);
+    } finally {
+        yield put(setClassesLoading(false));
+    }
+}
+
+// export function* fetchLocationByIdWorker({
+//     payload,
+//     type,
+// }: IAction<IIdRequest>): SagaIterator {
+//     try {
+//         yield put(setClassesLoading(true));
+//         const { data }: AxiosResponse<ILocation, any> = yield call(
+//             LocationService.fetchLocationById,
+//             payload.Id,
+//         );
+
+//         if (data) {
+//             yield put(addLocationsAction(data))
+//         }
+
+
+//     } catch (error) {
+//         yield call(ErrorFilterService.validateError, error)
+//     } finally {
+//         yield put(setClassesLoading(false));
+//     }
+// }
+
+
+
+export function* ClassesSagaWatcher() {
+    yield takeEvery(ClassesConstantsEnum.FETCH_CLASEES, fetchClassesWorker)
+    yield takeEvery(ClassesConstantsEnum.FETCH_CLASEES_BY_ID, fetchClassesByIdWorker)
+    yield takeEvery(ClassesConstantsEnum.DELETE_CLASEES, deleteClassesWorker)
+    yield takeEvery(ClassesConstantsEnum.UPDATE_STATUS_CLASEES, updateClassesWorker)
+    yield takeEvery(ClassesConstantsEnum.DELETE_CLASEES_SESSION, deleteSessionClassesWorker)
+    yield takeEvery(ClassesConstantsEnum.UPDATE_CLASEES_SESSION, updateSessionClassesWorker)
+    // yield takeEvery(LocationConstantsEnum.GET_LOCATION_BY_ID, fetchLocationByIdWorker)
 }

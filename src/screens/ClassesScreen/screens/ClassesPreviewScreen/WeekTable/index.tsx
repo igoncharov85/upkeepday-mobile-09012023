@@ -11,6 +11,7 @@ import { useAppSelector } from '../../../../../store/hooks';
 import { dispatch } from '../../../../../store/store';
 import { fetchScheduleByPeriodAction } from '../../../../../store/shedule/actions';
 import moment from 'moment';
+import PreviewModal from '../../../components/PreviewModal';
 
 
 
@@ -47,15 +48,13 @@ export const startOfHour = 8;
 export const WeekTable: FC<ISheduleTable> = memo(
   ({ startOfWeek, endOfWeek, onHandleData, conflict, dryFields }) => {
     const { GeneratedScheduleEntries, loading } = useAppSelector(state => state.schedule);
+    const { currentSession } = useAppSelector(state => state.classes);
     const [editMode, setEditMode] = useState(false);
-    const localHost = [
-      { ClassName: "Music", Duration: 60, SessionId: 5, SlotUid: "3add0ff1-04f0-4aaa-8dc6-f1b5ccec9bd1", StartDateTime: "2023-06-18T17:00:00" },
-      { ClassName: "erfer", Duration: 60, SessionId: 21, SlotUid: "6e5243f4-52ac-4256-98de-90467c010e22", StartDateTime: "2023-06-19T09:00:00" },
-      { ClassName: "erfer", Duration: 60, SessionId: 22, SlotUid: "de671740-ddd0-47fc-89e3-1aa5bcbbb43d", StartDateTime: "2023-06-20T07:00:00" },
-      { ClassName: "Music", Duration: 60, SessionId: 7, SlotUid: "ced0c62f-d378-492c-a8f5-a312dfd36c2f", StartDateTime: "2023-06-21T17:00:00" }
-    ];
-
-    const [slots, setSlots] = useState<IGeneratedScheduleEntries[]>(localHost as []);
+    const [isVisible, setIsVisible] = useState(false);
+    const [isVisibleEdit, setIsVisibleEdit] = useState(false);
+    const [currentSessionId, setCurrentSessionId] = useState(0);
+    const [currentSlotTime, setCurrentSlotTime] = useState('');
+    const [slots, setSlots] = useState<IGeneratedScheduleEntries[]>(currentSession as []);
 
 
 
@@ -63,7 +62,9 @@ export const WeekTable: FC<ISheduleTable> = memo(
       setEditMode(value);
     }
 
-    const onDeleteSlot = (slot: IGeneratedScheduleEntries) => {
+    const onDeleteSlot = (slot: any) => {
+      setCurrentSessionId(slot.SessionId);
+      onHandleModal();
       const newSlots = slots.filter((item) => {
         return item.StartDateTime !== slot.StartDateTime
       });
@@ -72,24 +73,41 @@ export const WeekTable: FC<ISheduleTable> = memo(
         onHandleData(slots)
       }
     }
+    const onHandleModal = () => {
+      setIsVisible(!isVisible);
+    }
+    const onHandleModalEdit = () => {
+      setIsVisibleEdit(!isVisibleEdit);
+    }
+    const onMoveSlot = (slot: any, x: number, y: number) => {
+      const newTime = addDayAndHoursToDate(slot.StartDateTime, x, y);
+      setCurrentSessionId(slot.SessionId);
+      setCurrentSlotTime(newTime);
+      onHandleModalEdit();
+      console.log('slot', slot.SessionId);
 
-    const onMoveSlot = (slot: IGeneratedScheduleEntries, x: number, y: number) => {
       const newSlots = slots.filter(item => item.SlotUid !== slot.SlotUid);
-      setSlots([...newSlots, { Duration: slot.Duration, StartDateTime: addDayAndHoursToDate(slot.StartDateTime, x, y), SlotUid: slot.SlotUid }]);
+      setSlots([...newSlots, { Duration: slot.Duration, StartDateTime: newTime, SlotUid: slot.SlotUid }]);
     }
     useEffect(() => {
       onHandleData(slots)
 
     }, [slots])
     useEffect(() => {
+      console.log('slots', slots);
+
       dispatch(fetchScheduleByPeriodAction({ startDate: moment(startOfWeek).add(-1, 'days').toISOString(), endDate: endOfWeek.toISOString() }));
-    }, []);
+    }, [startOfWeek]);
     const timeData = generateTimeData(`00:00`, '24:00');
     const weekStructure = createWeekStructure(
       startOfWeek,
       endOfWeek,
       timeData,
     );
+    useEffect(() => {
+      console.log(currentSession);
+
+    }, [currentSession])
     const date = (new Date(startOfWeek));
     return GeneratedScheduleEntries.length > 0 && !loading ? (<View style={styles.container}>
       <ScrollView contentOffset={{ x: 0, y: 64 * 8 }}>
@@ -110,13 +128,14 @@ export const WeekTable: FC<ISheduleTable> = memo(
                     const activeItem = findScheduleEntries(slots as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
                     const conflictItem = findScheduleEntries(conflict as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
                     const dryField = findScheduleEntries(dryFields as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
+
                     return <WeekTableItem
                       key={`${dayIndex}-${index}`}
                       timeIndex={index}
                       dayIndex={dayIndex}
                       startOfWeek={startOfWeek}
                       StartDateTime={addDayAndHoursToDate(date.toISOString(), dayIndex, index)}
-                      activeItem={activeItem && activeItem[0]}
+                      activeItem={activeItem[0] && activeItem[0]}
                       conflict={!!conflictItem[0]}
                       onLongPress={onChangeEditMode}
                       editMode={editMode}
@@ -132,6 +151,9 @@ export const WeekTable: FC<ISheduleTable> = memo(
           </Row>
         </Row>
       </ScrollView>
+
+      <PreviewModal editMode isVisible={isVisibleEdit} closeModal={onHandleModalEdit} currentSessionId={currentSessionId} newTime={currentSlotTime} />
+      <PreviewModal isVisible={isVisible} closeModal={onHandleModal} currentSessionId={currentSessionId} />
     </View>
 
     ) : <ActivityIndicator

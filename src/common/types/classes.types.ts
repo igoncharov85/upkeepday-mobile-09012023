@@ -15,6 +15,12 @@ export interface ISession {
     SlotUid: string;
     StartDateTime: string;
 }
+export interface ISessionSubset extends Pick<ISession, 'StartDateTime' | 'SlotUid' | 'Duration'> {
+}
+export interface IGeneratedClassesResponse {
+    GeneratedSessions: Array<ISessionSubset>;
+    CurrentSessions: Array<ISession>
+}
 export interface IClassesResponse {
     Status: string;
     TotalClassesHeld: number;
@@ -53,4 +59,23 @@ export enum EClassesStatus {
 export enum EClassesChange {
     current = 'current',
     future = 'future'
+}
+
+
+export interface IGeneratedClasses {
+    id: TClassesId;
+    to: string;
+}
+
+export interface IGeneratedClassesRequest extends IGeneratedClasses {
+    Sessions: Array<ISessionSubset>;
+}
+export interface IClassesEditName {
+    id: TClassesId;
+    Class: {
+        Name: string;
+    },
+    Location: {
+        LocationId: number;
+    }
 }

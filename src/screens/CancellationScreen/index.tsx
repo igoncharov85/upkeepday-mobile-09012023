@@ -33,9 +33,6 @@ export const CancellationScreen: FC<ICancellationScreen> = memo(() => {
   const [startDate, setStartDate] = useState(startTime);
   const [endDate, setEndDate] = useState(endTime)
   const [allDay, setAllDay] = useState(!itemData.StartDateTime);
-  const [messageVisible, setMessageVisible] = useState(false);
-  const [buttonDisabled, setButtonDisabled] = useState(false);
-  const [message, setMessage] = useState('')
 
 
   const onSetStartTime = (startDate: string) => {
@@ -44,13 +41,8 @@ export const CancellationScreen: FC<ICancellationScreen> = memo(() => {
       setEndDate(startDate)
     }
   }
-  const onChangeMessage = (text: string) => {
-    setMessage(text);
-  }
+
   const onSetEndTime = (endDate: string) => setEndDate(endDate)
-
-
-  const onConfirmPress = () => setMessageVisible(true)
 
   const handleSubmit = () => {
     //@ts-ignore
@@ -58,7 +50,6 @@ export const CancellationScreen: FC<ICancellationScreen> = memo(() => {
     navigation.goBack()
   }
   const toggleAllDay = () => setAllDay(!allDay);
-  const toggleButtonDisabled = () => setButtonDisabled(true);
   useEffect(() => {
     const startTime = itemData.StartDateTime ? itemData.StartDateTime as string : new Date(itemData?.currentDate).toISOString();
     const endTime = calculateEndDate(startTime, duration);

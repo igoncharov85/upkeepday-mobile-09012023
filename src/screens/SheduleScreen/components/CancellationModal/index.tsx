@@ -18,12 +18,14 @@ interface ICancellationModalScreen {
   isVisible: boolean;
   closeModal: () => void;
   onCancellationScreenRedirect: () => void;
+  item: IScheduleItem;
 }
 
 const CancellationModalConainer = ({
   isVisible,
   closeModal,
   onCancellationScreenRedirect,
+  item
 }: ICancellationModalScreen) => {
   const [animation] = useState(new Animated.Value(0));
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -58,7 +60,7 @@ const CancellationModalConainer = ({
         />
         <TouchableOpacity style={{ flex: 1 }} onPress={handleHideModal} />
 
-        <Animated.View style={[styles.modal]}>
+        <Animated.View style={[styles.modal, { height: item.ClassName ? 164 : 116 }]}>
           <LinearGradient
             colors={['#9A80BA', '#EFF1F5']}
             start={{ x: 0.5, y: 0 }}
@@ -71,17 +73,17 @@ const CancellationModalConainer = ({
               style={styles.cancelScheduled}>
               Cancel Scheduled Class
             </Text>
-            <Text
+            {item.ClassName && (<Text
               onPress={onStudentCheckIn}
               style={styles.cancelScheduled}>
               Student Check-in
-            </Text>
+            </Text>)}
             <TouchableOpacity onPress={handleHideModal}>
               <Text style={styles.cancelBtn}>Cancel</Text>
             </TouchableOpacity>
           </LinearGradient>
         </Animated.View>
-        <StudentCheckInModal visible={isModalVisible} visibleHandler={onStudentCheckIn} onPress={() => null} />
+        {item.ClassName && (<StudentCheckInModal data={item} visible={isModalVisible} visibleHandler={onStudentCheckIn} onPress={() => null} />)}
       </Modal>
     </>
   );
@@ -123,6 +125,7 @@ export const CancellationModal = ({ children, data }: ICancellationModalWrapper)
       <CancellationModalConainer
         isVisible={isModalVisible}
         closeModal={closeModal}
+        item={data}
         onCancellationScreenRedirect={onCancellationScreenRedirect}
       />
     </>

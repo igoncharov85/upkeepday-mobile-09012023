@@ -1,4 +1,4 @@
-import { IClassesUpdateSession, IClassesUpdateStatus, TClassesId, TClassesStatus } from "../../../common/types/classes.types";;
+import { IClassesEditName, IClassesUpdateSession, IClassesUpdateStatus, IGeneratedClasses, IGeneratedClassesRequest, TClassesId, TClassesStatus } from "../../../common/types/classes.types";;
 import { $axiosAuth } from "../base.instance";
 
 export class ClassesService {
@@ -6,7 +6,18 @@ export class ClassesService {
         return $axiosAuth.get(`/tutor/classes/${status}`)
     }
     static async fetchClassesById(id: TClassesId) {
+        return $axiosAuth.get(`/tutor/classes/${id}`)
+    }
+    static async fetchSessionClassesById(id: TClassesId) {
         return $axiosAuth.get(`/tutor/classes/${id}/sessions`)
+    }
+    static async fetchGeneratedClasses({ id, to }: (IGeneratedClasses)) {
+        // const to = new Date();
+        return $axiosAuth.get(`/tutor/classes/${id}/extend/${to}`)
+    }
+    static async GeneratedClasses({ id, to, Sessions }: (IGeneratedClassesRequest)) {
+        // const to = new Date();
+        return $axiosAuth.patch(`/tutor/classes/${id}/extend/${to}`, { Sessions })
     }
     static async deleteClasses(id: TClassesId) {
         return $axiosAuth.delete(`/tutor/classes/${id}`)
@@ -19,6 +30,10 @@ export class ClassesService {
     }
     static async deleteSessionClasses(id: TClassesId) {
         return $axiosAuth.delete(`/tutor/schedules/${id}`)
+    }
+    static async editNameClasses(data: IClassesEditName) {
+        const { Class, Location } = data;
+        return $axiosAuth.patch(`/tutor/classes/${data.id}/name_location`, { Class, Location })
     }
 
 }

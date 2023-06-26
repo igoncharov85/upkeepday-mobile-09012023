@@ -23,10 +23,10 @@ export const EditClassScreen = () => {
                 onBackPress={() => navigation.goBack()}
             />
             <View style={styles.buttonWrapper}>
-                <ClassesEditButton title={'Update Classes'} navigationName={'NavigationEnum.ADD_CLASS_SCREEN'} />
-                <ClassesEditButton title={'Update Finish Date (Extend)'} navigationName={'NavigationEnum.ADD_CLASS_SCREEN'} />
-                <ClassesEditButton title={'Update Students'} navigationName={'NavigationEnum.DATE_RECURRENCE_SCREEN'} />
-                <ClassesEditButton title={'Rollover Class'} navigationName={'NavigationEnum.All_CLASSES_SCREEN'} />
+                <ClassesEditButton title={'Update Classes'} navigationName={NavigationEnum.CLASSES_EDIT_NAME_SCREEN} data={item} />
+                <ClassesEditButton title={'Update Finish Date (Extend)'} navigationName={NavigationEnum.CLASSES_EDIT_DATE_SCREEN} data={item} />
+                <ClassesEditButton title={'Update Students'} navigationName={NavigationEnum.ADD_STUDENTS_SCREEN} />
+                <ClassesEditButton title={'Rollover Class'} navigationName={NavigationEnum.ADD_CLASS_SCREEN} />
                 <ClassesEditButton title={'Archive Class'} navigationName={NavigationEnum.RESULT_CLASS_MODAL} data={
                     {
                         item: item,
@@ -50,6 +50,8 @@ const ClassesEditButton = ({ title, navigationName, data }:
     const onPress = () => {
         //@ts-ignore
         navigation.navigate(navigationName, data ? data : null)
+        console.log('data', data, '\n\n\n resul^', data ? data : null);
+
     };
     return (
         <TouchableOpacity onPress={onPress} style={styles.block}>

@@ -1,8 +1,5 @@
-import { BASE_URL } from "../../../common/constants/server";
-import { IUserCreateRequest } from "../../../common/types/user";
-import { AsyncStorageService } from "../../async-storage";
+import { IUserCheckins, IUserCheckinsRequest, IUserCreateRequest, ICheckinsId, } from "../../../common/types/user";
 import { $axiosAuth } from "../base.instance";
-import axios from 'axios'
 
 export class UserService {
     static async fetchAllUsers() {
@@ -10,5 +7,11 @@ export class UserService {
     }
     static async createUser(data: IUserCreateRequest) {
         return await $axiosAuth.post('/tutor/students', data)
+    }
+    static async fetchCheckinsUser(sessionId: ICheckinsId) {
+        return await $axiosAuth.get(`/tutor/checkins/${sessionId}`)
+    }
+    static async checkinsUser(data: { sessionId: ICheckinsId, chekins: IUserCheckinsRequest }) {
+        return await $axiosAuth.put(`/tutor/checkins/${data.sessionId}`, data.chekins)
     }
 }

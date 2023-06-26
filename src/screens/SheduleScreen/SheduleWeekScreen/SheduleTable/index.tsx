@@ -82,7 +82,7 @@ export const SheduleTable: FC<ISheduleTable> = memo(
                             Duration={item.Duration}
                             SlotUid={item.SlotUid}
                             StartDateTime={item.StartDateTime}
-                            ScheduleEntryId={0}
+                            ScheduleEntryId={item.SessionId}
                             currentDate={currentDate}
                           />
                         );

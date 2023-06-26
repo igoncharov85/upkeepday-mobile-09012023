@@ -16,7 +16,7 @@ import { updateCurrentClassRequestAction } from "../../../../store/shedule";
 import { ScreenLoading } from "../../../../components/UI/ScreenLoading";
 import { WeekTable } from "./WeekTable";
 import { DaysOfWeek } from "./DaysOfWeek";
-import { fetchClassesByIdAction } from "../../../../store/classes/actions";
+import { fetchSessionClassesByIdAction } from "../../../../store/classes/actions";
 import { IClassesResponse } from "../../../../common/types/classes.types";
 import PreviewModal from "../../components/PreviewModal";
 
@@ -60,14 +60,9 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
     }
 
     const onSave = () => {
-        // dispatch(updateCurrentClassRequestAction({
-        //     Sessions: slots, Slots: WeekTimeSlots, Class: {
-        //         EndNumber: slots.length,
-        //     }
-        // }))
 
         //@ts-ignore
-        // navigation.navigate(NavigationEnum.ADD_STUDENTS_SCREEN)
+        navigation.goBack()
     }
 
     useEffect(() => {
@@ -82,7 +77,7 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
         if (GeneratedScheduleEntries.length > 0) {
             setScreenLoading(true)
         }
-        dispatch(fetchClassesByIdAction(item.ClassId))
+        dispatch(fetchSessionClassesByIdAction(item.ClassId))
     }, [GeneratedScheduleEntries, CurrentScheduledEntries, loading])
 
     return !screenLoading ? <ScreenLoading /> : (<View style={{ height: '100%' }}>

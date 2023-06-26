@@ -1,10 +1,16 @@
-import React, { FC, memo } from 'react';
+import React, { FC, memo, useEffect, useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 import styles from './styles';
 import CheckIcon from '../../../../../assets/svg/classes/CheckIcon';
 import { CustomButton } from '../../../../components/UI/CustomButton';
+import { IScheduleItem } from '../../../../common/types/schedule.types';
+import { dispatch } from '../../../../store/store';
+import { checkinsUserAction, fetchCheckinsUserAction } from '../../../../store/user/actions';
+import { useAppSelector } from '../../../../store/hooks';
+import { ECheckinsStatus, ICheckinUser } from '../../../../common/types/user';
+import { useNavigation } from '@react-navigation/native';
 
 
 
@@ -12,14 +18,73 @@ interface AddSessionModalProps {
   visible: boolean;
   visibleHandler: () => void;
   onPress: () => void;
+  data: any;
+}
+const getStatus = ({
+  present,
+  absent,
+}: {
+  present: boolean;
+  absent: boolean;
+}) => {
+  if (present) {
+    return ECheckinsStatus.Present;
+  }
+  if (absent) {
+    return ECheckinsStatus.Absent;
+  }
+  return ECheckinsStatus.Empty;
 }
 
 export const StudentCheckInModal: FC<AddSessionModalProps> = memo(
-  ({ visible, visibleHandler, onPress }) => {
-    const onCreateLesson = () => {
+  ({ visible, visibleHandler, data }) => {
+    const navigation = useNavigation();
+    const sessionId = data.ScheduleEntryId;
+    const { checkins } = useAppSelector((state) => state.user);
+    const [checkinsStudent, setCheckinsStudent] = useState([]);
+    const [resultCheckinsStudent, setResultCheckinsStudent] = useState([]);
+    const [allIn, setAllIn] = useState(false);
+
+
+    useEffect(() => {
+      dispatch(fetchCheckinsUserAction(sessionId));
+    }, []);
+
+    const onSave = () => {
+      dispatch(checkinsUserAction(
+        {
+          sessionId: sessionId,
+          chekins: resultCheckinsStudent,
+        }));
       visibleHandler();
-      onPress && onPress();
+
     }
+
+
+    const onHandleCheckStudent = ({ StudentId, CheckInStatus }: {
+      StudentId: number;
+      CheckInStatus: ECheckinsStatus;
+    }) => {
+      const newCheckinsStudent: any = [...resultCheckinsStudent];
+      const index = newCheckinsStudent.findIndex((item: ICheckinUser) => item.StudentId === StudentId);
+      newCheckinsStudent[index] = { StudentId, CheckInStatus };
+      setResultCheckinsStudent(newCheckinsStudent);
+    }
+    const onHandleCheckAll = () => {
+      setAllIn(!allIn);
+      const newData = checkins.map((item) => { return { StudentId: item.StudentId, CheckInStatus: getStatus({ present: !allIn, absent: false }) } });
+      setResultCheckinsStudent(newData as []);
+      setCheckinsStudent(newData as []);
+    }
+
+
+    useEffect(() => {
+      const newData = checkins.map((item) => { return { StudentId: item.StudentId, CheckInStatus: item.CheckInStatus } });
+      setResultCheckinsStudent(newData as []);
+      setCheckinsStudent(newData as []);
+
+    }, [checkins]);
+
     return visible ? (
       <TouchableOpacity style={styles.modalWrapper} activeOpacity={1}>
         <LinearGradient
@@ -31,19 +96,26 @@ export const StudentCheckInModal: FC<AddSessionModalProps> = memo(
           style={styles.container}>
           <View style={styles.modal}>
             <View style={styles.content}>
-              <Text style={styles.title}>Class Name Student Check-in</Text>
-              <View style={styles.allContainer}>
-                <CheckButton active={false} icon />
-                <Text style={styles.text}>ALL IN</Text>
-              </View>
-              <Line />
-              <CheckItem />
-              <CheckItem />
-              <CheckItem />
-              <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', width: '100%', flex: 1, alignItems: 'flex-end', marginBottom: 48 }}>
-                <CustomButton text={'Skip'} style={{ width: 96 }} onPress={visibleHandler} />
-                <CustomButton text={'Confirm'} style={{ width: 96 }} onPress={visibleHandler} />
-              </View>
+              {checkins.length ? (<>
+                <Text style={styles.title}>Class Name Student Check-in</Text>
+                <View style={styles.allContainer}>
+                  <CheckButton active={allIn} icon onPress={onHandleCheckAll} />
+                  <Text style={styles.text}>ALL IN</Text>
+                </View>
+                <Line />
+                {checkins.map((item, index) => {
+                  return (
+                    <CheckItem key={item.StudentId} student={item} status={checkinsStudent[index]} onHandleCheckStudent={onHandleCheckStudent} />
+                  )
+                })}
+                <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', width: '100%', flex: 1, alignItems: 'flex-end', marginBottom: 48 }}>
+                  <CustomButton text={'Skip'} style={{ width: 96 }} onPress={visibleHandler} />
+                  <CustomButton text={'Confirm'} style={{ width: 96 }} onPress={onSave} />
+                </View></>) : (<View style={{ justifyContent: 'space-between', alignItems: 'center', height: '100%', flex: 1, width: '100%', margin: 20 }}>
+                  <View />
+                  <Text style={styles.title}>No students in this class</Text>
+                  <CustomButton text={'Ok'} style={{ width: '90%' }} onPress={visibleHandler} />
+                </View>)}
             </View>
           </View>
         </LinearGradient>
@@ -53,31 +125,64 @@ export const StudentCheckInModal: FC<AddSessionModalProps> = memo(
 );
 
 
-const CheckButton = ({ active, icon }: { active?: boolean; icon?: boolean }) => {
-  const [isActive, setIsActive] = React.useState<boolean>(active || false);
+const CheckButton = ({ active, icon, onPress }: { active: boolean; icon?: boolean; onPress?: any }) => {
+
   const handlePress = () => {
-    setIsActive(!isActive);
+    onPress(icon);
   }
   return (
-    <TouchableOpacity style={styles.checkBtn} onPress={handlePress}>
+    <TouchableOpacity onPress={handlePress}>
       <CheckIcon active={icon} />
-      {isActive && <View style={{ position: 'absolute', height: 25, width: 25, backgroundColor: '#fff', top: 2, left: 2, borderRadius: 3 }} />}
+      {!active && <View style={styles.checkBtnActive} />}
     </TouchableOpacity>
   )
 
 };
-const CheckItem = ({ active, icon }: { active?: boolean; icon?: boolean }) => {
+const CheckItem = ({ student, status, onHandleCheckStudent }: { student: ICheckinUser, status: any, onHandleCheckStudent: any }) => {
+  const [checkStatus, setCheckStatus] = useState({
+    present: false,
+    absent: false,
+  });
+
+  useEffect(() => {
+    if (status.CheckInStatus === ECheckinsStatus.Present) {
+      setCheckStatus({ present: true, absent: false });
+    } else if (status.CheckInStatus === ECheckinsStatus.Absent) {
+      setCheckStatus({ present: false, absent: true });
+    } else {
+      setCheckStatus({ present: false, absent: false });
+    }
+
+  }, [status]);
+
+  const handlePress = (type: boolean) => {
+    if (type) {
+      setCheckStatus((state) => {
+
+        return { present: !state.present, absent: false }
+      });
+    } else {
+      setCheckStatus((state) => {
+        return { present: false, absent: !state.absent }
+      });
+    }
+  };
+
+
+  useEffect(() => {
+    onHandleCheckStudent({ StudentId: student.StudentId, CheckInStatus: getStatus(checkStatus) });
+  }, [checkStatus]);
 
   return (
     <>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', height: 62, alignItems: 'center' }}>
+      <View style={styles.checkItem}>
         <View>
-          <Text style={styles.text}>Anna Asol</Text>
+          <Text style={styles.text}>{student.FirstName} {student.LastName}</Text>
         </View>
         <View style={{ flexDirection: 'row' }}>
-          <CheckButton icon />
+          <CheckButton onPress={handlePress} active={checkStatus.present} icon={true} />
           <View style={{ width: 20 }} />
-          <CheckButton />
+          <CheckButton onPress={handlePress} active={checkStatus.absent} icon={false} />
           <View style={{ width: 25 }} />
         </View>
       </View>

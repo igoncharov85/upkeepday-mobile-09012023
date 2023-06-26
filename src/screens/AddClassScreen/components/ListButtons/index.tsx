@@ -7,13 +7,14 @@ interface IListButtons {
     onPress?: (number: number) => void,
     label?: string,
     index?: number
+    disabled?: boolean
 }
 
-export const ListButtons: React.FC<IListButtons> = (({ buttons, onPress, label, index }) => {
+export const ListButtons: React.FC<IListButtons> = (({ buttons, onPress, label, index, disabled = false }) => {
     const [activeIndex, setActiveIndex] = useState(index ? index : 0);
 
     const handlePress = (index: number) => {
-        setActiveIndex(index);
+        !disabled && setActiveIndex(index);
         onPress && onPress(index);
     };
 

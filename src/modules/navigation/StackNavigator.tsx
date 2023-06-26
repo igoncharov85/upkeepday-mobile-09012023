@@ -23,6 +23,9 @@ import { ClassesScreen } from '../../screens/ClassesScreen';
 import { EditClassScreen } from '../../screens/EditClassScreen';
 import ClassesPreviewScreen from '../../screens/ClassesScreen/screens/ClassesPreviewScreen';
 import ResultClassModal from '../../components/Modals/ResultClassModal';
+import ClassesEditNameScreen from '../../screens/ClassesScreen/screens/ClassesEditNameScreen';
+import ClassesEditDateScreen from '../../screens/ClassesScreen/screens/ClassesEditDateScreen';
+import ClassesEditPreviewScreen from '../../screens/ClassesScreen/screens/ClassesEditDateScreen/ClassesEditPreviewScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -35,7 +38,7 @@ export const StackNavigator = memo(() => {
 
     <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName={isAuth ? NavigationEnum.HOME_SCREEN : NavigationEnum.LOGIN}>
 
-      <Stack.Group screenOptions={{ presentation: 'modal' }}>
+      <Stack.Group >
         <Stack.Screen name={NavigationEnum.LOGIN} component={LoginScreen} />
 
         <Stack.Screen
@@ -114,6 +117,19 @@ export const StackNavigator = memo(() => {
           name={NavigationEnum.CLASSES_PREVIEW_SCREEN}
           component={ClassesPreviewScreen}
         />
+        <Stack.Screen
+          name={NavigationEnum.CLASSES_EDIT_NAME_SCREEN}
+          component={ClassesEditNameScreen}
+        />
+        <Stack.Screen
+          name={NavigationEnum.CLASSES_EDIT_DATE_SCREEN}
+          component={ClassesEditDateScreen}
+        />
+        <Stack.Screen
+          name={NavigationEnum.CLASSES_EDIT_PREVIEW_SCREEN}
+          component={ClassesEditPreviewScreen}
+        />
+
       </Stack.Group>
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen

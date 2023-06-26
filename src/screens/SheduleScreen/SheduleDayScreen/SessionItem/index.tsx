@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { CancellationModal } from '../../components/CancellationModal';
 import styles from './styles';
 import { IScheduleItem } from '../../../../common/types/schedule.types';
+import { id } from 'date-fns/locale';
 enum LessonType {
   Lesson,
   Trial,
@@ -18,9 +19,8 @@ interface SessionItemProps {
 }
 
 export const SessionItem: FC<SessionItemProps> = memo(
-  ({ name, timeContinued, timeStart, type, data }) => {
+  ({ name, timeContinued, timeStart, type, data, id }) => {
     const isTrialLesson = type === LessonType.Trial;
-
     return (
       <CancellationModal data={data}>
         <View style={styles.container}>

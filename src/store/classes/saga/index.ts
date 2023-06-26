@@ -1,12 +1,12 @@
 import { AxiosResponse } from 'axios';
 import { SagaIterator } from 'redux-saga';
 import { call, put, takeEvery } from 'redux-saga/effects';
-import { setClassesLoading, setClassesAction, addClassesAction, setSessinAction } from '..';
+import { setClassesLoading, setClassesAction, addClassesAction, setSessinAction, setClassAction, setCurrentSessionAction, setGenerateSessionAction } from '..';
 import { IAction } from '../../../common/types/common.types';
 import { ClassesService } from '../../../services/axios/classes';
 import { ErrorFilterService } from '../../../services/error-filter/error-filter.service';
 import { ClassesConstantsEnum } from '../constants';
-import { IClassesResponse, IClassesUpdateSession, ISession, TClassesId, TClassesStatus } from '../../../common/types/classes.types';
+import { IClassesEditName, IClassesResponse, IClassesUpdateSession, IGeneratedClasses, IGeneratedClassesRequest, IGeneratedClassesResponse, ISession, ISessionSubset, TClassesId, TClassesStatus } from '../../../common/types/classes.types';
 
 
 export function* fetchClassesWorker({
@@ -36,13 +36,36 @@ export function* fetchClassesByIdWorker({
 }: IAction<TClassesId>): SagaIterator {
     try {
         yield put(setClassesLoading(true));
-        const data: AxiosResponse<Array<ISession>, any> = yield call(
+        const data: AxiosResponse<IClassesResponse, any> = yield call(
             ClassesService.fetchClassesById,
             payload,
         );
 
         if (data?.data) {
-            console.log("classes by id ", data?.data);
+            console.log("fetchClassesByIdWorker");
+            yield put(setClassAction(data?.data))
+
+        }
+
+    } catch (error) {
+        yield call(ErrorFilterService.validateError, error)
+    } finally {
+        yield put(setClassesLoading(false));
+    }
+}
+export function* fetchSessionClassesByIdWorker({
+    payload,
+    type,
+}: IAction<TClassesId>): SagaIterator {
+    try {
+        yield put(setClassesLoading(true));
+        const data: AxiosResponse<Array<ISession>, any> = yield call(
+            ClassesService.fetchSessionClassesById,
+            payload,
+        );
+
+        if (data?.data) {
+            console.log("fetchSessionClassesByIdWorker");
             yield put(setSessinAction(data?.data))
 
         }
@@ -53,6 +76,47 @@ export function* fetchClassesByIdWorker({
         yield put(setClassesLoading(false));
     }
 }
+export function* fetchGeneratedClassesWorker({
+    payload,
+    type,
+}: IAction<IGeneratedClasses>): SagaIterator {
+    try {
+        yield put(setClassesLoading(true));
+
+        const { data }: AxiosResponse<(IGeneratedClassesResponse), any> = yield call(
+            ClassesService.fetchGeneratedClasses,
+            payload,
+        );
+        if (data) {
+            yield put(setGenerateSessionAction(data.GeneratedSessions))
+            yield put(setCurrentSessionAction(data.CurrentSessions))
+
+        }
+
+    } catch (error) {
+        yield call(ErrorFilterService.validateError, error)
+    } finally {
+        yield put(setClassesLoading(false));
+    }
+}
+export function* GeneratedClassesWorker({
+    payload,
+    type,
+}: IAction<IGeneratedClassesRequest>): SagaIterator {
+    try {
+        yield put(setClassesLoading(true));
+
+        yield call(ClassesService.GeneratedClasses, payload);
+
+
+    } catch (error) {
+        yield call(ErrorFilterService.validateError, error)
+    } finally {
+        yield put(setClassesLoading(false));
+    }
+}
+
+
 export function* deleteClassesWorker({
     payload,
     type,
@@ -124,38 +188,37 @@ export function* updateSessionClassesWorker({
         yield put(setClassesLoading(false));
     }
 }
+export function* editNameClassesWorker({
+    payload,
+    type,
+}: IAction<IClassesEditName>): SagaIterator {
+    try {
 
-// export function* fetchLocationByIdWorker({
-//     payload,
-//     type,
-// }: IAction<IIdRequest>): SagaIterator {
-//     try {
-//         yield put(setClassesLoading(true));
-//         const { data }: AxiosResponse<ILocation, any> = yield call(
-//             LocationService.fetchLocationById,
-//             payload.Id,
-//         );
-
-//         if (data) {
-//             yield put(addLocationsAction(data))
-//         }
+        yield put(setClassesLoading(true));
+        yield call(ClassesService.editNameClasses, payload);
+        console.log('editNameClassesWorker');
 
 
-//     } catch (error) {
-//         yield call(ErrorFilterService.validateError, error)
-//     } finally {
-//         yield put(setClassesLoading(false));
-//     }
-// }
+    } catch (error) {
+        console.log(error);
+
+        yield call(ErrorFilterService.validateError, error);
+    } finally {
+        yield put(setClassesLoading(false));
+    }
+}
 
 
 
 export function* ClassesSagaWatcher() {
     yield takeEvery(ClassesConstantsEnum.FETCH_CLASEES, fetchClassesWorker)
     yield takeEvery(ClassesConstantsEnum.FETCH_CLASEES_BY_ID, fetchClassesByIdWorker)
+    yield takeEvery(ClassesConstantsEnum.FETCH_SESSION_CLASEES_BY_ID, fetchSessionClassesByIdWorker)
     yield takeEvery(ClassesConstantsEnum.DELETE_CLASEES, deleteClassesWorker)
     yield takeEvery(ClassesConstantsEnum.UPDATE_STATUS_CLASEES, updateClassesWorker)
     yield takeEvery(ClassesConstantsEnum.DELETE_CLASEES_SESSION, deleteSessionClassesWorker)
     yield takeEvery(ClassesConstantsEnum.UPDATE_CLASEES_SESSION, updateSessionClassesWorker)
-    // yield takeEvery(LocationConstantsEnum.GET_LOCATION_BY_ID, fetchLocationByIdWorker)
+    yield takeEvery(ClassesConstantsEnum.EDIT_CLASS_NAME, editNameClassesWorker)
+    yield takeEvery(ClassesConstantsEnum.FETCH_GENERATED_CLASSES, fetchGeneratedClassesWorker)
+    yield takeEvery(ClassesConstantsEnum.FETCH_PATCH_GENERATED_CLASSES, GeneratedClassesWorker)
 }

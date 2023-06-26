@@ -1,10 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, Touchable, TouchableOpacity, Text } from 'react-native';
 import { ClassesNavigation } from './components/ClassesNavigation';
 import ClassesItem from './components/ClassesItem';
 import styles from './styles';
 import { useAppSelector } from '../../store/hooks';
+import { dispatch } from '../../store/store';
+import { fetchClassesByIdAction } from '../../store/classes/actions';
 
 
 export const ClassesScreen = () => {

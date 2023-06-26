@@ -48,14 +48,13 @@ export default StyleSheet.create({
     color: '#002251',
     width: '50%',
   },
-  checkBtn: {
-
-  },
+  checkItem: { flexDirection: 'row', justifyContent: 'space-between', width: '100%', height: 62, alignItems: 'center' },
   allContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 44,
   },
+  checkBtnActive: { position: 'absolute', height: 25, width: 25, backgroundColor: '#fff', top: 2, left: 2, borderRadius: 3 },
   text: {
     marginLeft: 18,
     fontStyle: 'normal',

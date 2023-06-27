@@ -38,18 +38,18 @@ if (Platform.OS === 'ios') {
 const ClassesEditNameScreen: React.FC<IAddClassScreen> = memo(() => {
     const navigation = useNavigation();
     const route = useRoute();
-    const item: any = route.params;
+    const { item }: any = route.params;
     const dispatch = useDispatch();
     const formInitialValues = {
         name: item.Name,
         locationType: item.Location.LocationType,
-        addressLine: item.Location.LocationId,
+        addressLine: item.Location.Address,
         url: "",
     };
     const { locations } = useAppSelector(state => state.location);
     const [typeLocation, setTypeLocation] = useState<TypeLocation>(item.Location.LocationType === "Online" ? TypeLocation.Online : TypeLocation.InPerson);
     const [modalVisible, setModalVisible] = useState(false);
-    const [classLocation, setClassLocation] = useState(item.Location.Address || "Address Line");
+    const [classLocation, setClassLocation] = useState(item.Location.Address || '');
     const [locationId, setLocationId] = useState(item.Location.LocationId);
 
     useEffect(() => {
@@ -78,10 +78,14 @@ const ClassesEditNameScreen: React.FC<IAddClassScreen> = memo(() => {
             handleChange,
             handleSubmit,
             isValid,
+            setFieldValue
         }: FormikProps<typeof formInitialValues>) => {
             const [touch, setTouch] = useState(false);
             const [valid, setValid] = useState(false);
-
+            useEffect(() => {
+                console.log(classLocation);
+                setFieldValue("addressLine", classLocation);
+            }, [classLocation]);
             useEffect(() => {
                 if (touch) {
                     setValid(isValid)
@@ -129,7 +133,7 @@ const ClassesEditNameScreen: React.FC<IAddClassScreen> = memo(() => {
                         <CustomButton
                             text={"Finish"}
                             onPress={handleSubmit}
-                            disabled={!valid}
+                            disabled={!isValid}
                         />
                     </View>
                 </>
@@ -151,13 +155,16 @@ const ClassesEditNameScreen: React.FC<IAddClassScreen> = memo(() => {
                     Location: {
                         LocationType: typeLocation == TypeLocation.InPerson ? 'Office' : 'Online', Url: typeLocation == TypeLocation.InPerson ? '' : values.url,
                         LocationId: locationId,
-                        Address: typeLocation == TypeLocation.InPerson ? classLocation : 'Address Line'
+                        Address: values.addressLine
                     }
                 },
 
-                actionBtn: () => dispatch(editNameClassesAction(
-                    { id: item.ClassId, Class: { Name: values.name }, Location: { LocationId: locationId } }
-                )),
+                actionBtn: () => {
+                    dispatch(editNameClassesAction(
+                        { id: item.ClassId, Class: { Name: values.name }, Location: { LocationId: locationId } }
+                    ));
+                    navigation.goBack();
+                },
                 nameAction: 'Confirm',
             });
         },
@@ -175,7 +182,7 @@ const ClassesEditNameScreen: React.FC<IAddClassScreen> = memo(() => {
                 <View style={[styles.container, { height: windowHeight - 20 }]}>
                     <ScreenHeader
                         onBackPress={navigation.goBack}
-                        text="Add Class General Data"
+                        text="Edit Class"
                         withBackButton={true}
                     />
                     <Formik

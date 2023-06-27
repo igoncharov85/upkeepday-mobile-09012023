@@ -1,4 +1,4 @@
-import { IUserCheckins, IUserCheckinsRequest, IUserCreateRequest, ICheckinsId, } from "../../../common/types/user";
+import { IUserCheckins, IUserCheckinsRequest, IUserCreateRequest, ICheckinsId, IDeleteUserRequest, IUpdateStudent, } from "../../../common/types/user";
 import { $axiosAuth } from "../base.instance";
 
 export class UserService {
@@ -13,5 +13,14 @@ export class UserService {
     }
     static async checkinsUser(data: { sessionId: ICheckinsId, chekins: IUserCheckinsRequest }) {
         return await $axiosAuth.put(`/tutor/checkins/${data.sessionId}`, data.chekins)
+    }
+    static async deleteUser(data: (IDeleteUserRequest)) {
+        return await $axiosAuth.delete(`/tutor/students/${data.StudentId}/classes`, { data })
+    }
+    static async updatedUser(data: (IUpdateStudent)) {
+        const { StudentId, ...rest } = data
+        console.log('\n\n\n\n\n\n\n\n Add student data:', rest, '\n\n\n\n\n\n\n\n');
+
+        return await $axiosAuth.put(`/tutor/classes/${StudentId}/students`, { rest })
     }
 }

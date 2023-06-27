@@ -26,6 +26,8 @@ import ResultClassModal from '../../components/Modals/ResultClassModal';
 import ClassesEditNameScreen from '../../screens/ClassesScreen/screens/ClassesEditNameScreen';
 import ClassesEditDateScreen from '../../screens/ClassesScreen/screens/ClassesEditDateScreen';
 import ClassesEditPreviewScreen from '../../screens/ClassesScreen/screens/ClassesEditDateScreen/ClassesEditPreviewScreen';
+import ClassesStudentScreen from '../../screens/ClassesScreen/screens/ClassesStudentScreen';
+import ChangeStudentScreen from '../../screens/ClassesScreen/screens/ClassesStudentScreen/ChangeStudentScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -128,6 +130,15 @@ export const StackNavigator = memo(() => {
         <Stack.Screen
           name={NavigationEnum.CLASSES_EDIT_PREVIEW_SCREEN}
           component={ClassesEditPreviewScreen}
+        />
+
+        <Stack.Screen
+          name={NavigationEnum.CLASSES_STUDENT_SCREEN}
+          component={ClassesStudentScreen}
+        />
+        <Stack.Screen
+          name={NavigationEnum.CHANGE_STUDENT_SCREEN}
+          component={ChangeStudentScreen}
         />
 
       </Stack.Group>

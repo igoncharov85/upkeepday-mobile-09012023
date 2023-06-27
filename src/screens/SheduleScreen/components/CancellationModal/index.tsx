@@ -83,7 +83,7 @@ const CancellationModalConainer = ({
             </TouchableOpacity>
           </LinearGradient>
         </Animated.View>
-        {item.ClassName && (<StudentCheckInModal data={item} visible={isModalVisible} visibleHandler={onStudentCheckIn} onPress={() => null} />)}
+        {item.ClassName && (<StudentCheckInModal data={item} visible={isModalVisible} visibleHandler={onStudentCheckIn} onPress={() => null} hideOwnModal={handleHideModal} />)}
       </Modal>
     </>
   );

@@ -1,9 +1,9 @@
 import * as React from 'react';
-import Svg, {Path} from 'react-native-svg';
+import Svg, { Path } from 'react-native-svg';
 
 function Plus(props: any) {
   return (
-    <Svg width="56" height="56" viewBox="0 0 56 56" fill="none">
+    <Svg width={props.size ? props.size : "56"} height={props.size ? props.size : "56"} viewBox="0 0 56 56" fill="none">
       <Path
         d="M56 28C56 12.536 43.464 0 28 0C12.536 0 0 12.536 0 28C0 43.464 12.536 56 28 56C43.464 56 56 43.464 56 28Z"
         fill="#9A80BA"

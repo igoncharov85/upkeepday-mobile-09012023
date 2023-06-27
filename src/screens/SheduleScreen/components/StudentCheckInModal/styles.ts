@@ -37,8 +37,6 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    marginTop: 64,
-    marginBottom: 32,
     fontWeight: '600',
     fontSize: 20,
     lineHeight: 24,

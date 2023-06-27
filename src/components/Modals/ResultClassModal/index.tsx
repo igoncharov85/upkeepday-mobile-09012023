@@ -42,6 +42,7 @@ const ResultClassModal = () => {
                     <View />
                     <View style={styles.content}>
                         <View style={styles.container}>
+                            <View />
                             <View style={styles.item}>
                                 {item.Name ?
                                     (<View>

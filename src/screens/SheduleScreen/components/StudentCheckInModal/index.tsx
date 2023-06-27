@@ -19,6 +19,7 @@ interface AddSessionModalProps {
   visibleHandler: () => void;
   onPress: () => void;
   data: any;
+  hideOwnModal: () => void;
 }
 const getStatus = ({
   present,
@@ -37,9 +38,11 @@ const getStatus = ({
 }
 
 export const StudentCheckInModal: FC<AddSessionModalProps> = memo(
-  ({ visible, visibleHandler, data }) => {
+  ({ visible, visibleHandler, data, hideOwnModal }) => {
     const navigation = useNavigation();
     const sessionId = data.ScheduleEntryId;
+
+    const name = data.ClassName;
     const { checkins } = useAppSelector((state) => state.user);
     const [checkinsStudent, setCheckinsStudent] = useState([]);
     const [resultCheckinsStudent, setResultCheckinsStudent] = useState([]);
@@ -47,17 +50,18 @@ export const StudentCheckInModal: FC<AddSessionModalProps> = memo(
 
 
     useEffect(() => {
-      dispatch(fetchCheckinsUserAction(sessionId));
+      sessionId && dispatch(fetchCheckinsUserAction(sessionId));
     }, []);
 
     const onSave = () => {
+
       dispatch(checkinsUserAction(
         {
           sessionId: sessionId,
           chekins: resultCheckinsStudent,
         }));
       visibleHandler();
-
+      hideOwnModal()
     }
 
 
@@ -76,7 +80,10 @@ export const StudentCheckInModal: FC<AddSessionModalProps> = memo(
       setResultCheckinsStudent(newData as []);
       setCheckinsStudent(newData as []);
     }
-
+    const skip = () => {
+      visibleHandler();
+      hideOwnModal()
+    }
 
     useEffect(() => {
       const newData = checkins.map((item) => { return { StudentId: item.StudentId, CheckInStatus: item.CheckInStatus } });
@@ -97,7 +104,8 @@ export const StudentCheckInModal: FC<AddSessionModalProps> = memo(
           <View style={styles.modal}>
             <View style={styles.content}>
               {checkins.length ? (<>
-                <Text style={styles.title}>Class Name Student Check-in</Text>
+                <Text style={[styles.title, { marginTop: 64 }]}>{name}</Text>
+                <Text style={[styles.title, { marginBottom: 32 }]}>Student Check-in</Text>
                 <View style={styles.allContainer}>
                   <CheckButton active={allIn} icon onPress={onHandleCheckAll} />
                   <Text style={styles.text}>ALL IN</Text>
@@ -109,7 +117,7 @@ export const StudentCheckInModal: FC<AddSessionModalProps> = memo(
                   )
                 })}
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', width: '100%', flex: 1, alignItems: 'flex-end', marginBottom: 48 }}>
-                  <CustomButton text={'Skip'} style={{ width: 96 }} onPress={visibleHandler} />
+                  <CustomButton text={'Skip'} style={{ width: 96 }} onPress={skip} />
                   <CustomButton text={'Confirm'} style={{ width: 96 }} onPress={onSave} />
                 </View></>) : (<View style={{ justifyContent: 'space-between', alignItems: 'center', height: '100%', flex: 1, width: '100%', margin: 20 }}>
                   <View />
@@ -173,11 +181,18 @@ const CheckItem = ({ student, status, onHandleCheckStudent }: { student: IChecki
     onHandleCheckStudent({ StudentId: student.StudentId, CheckInStatus: getStatus(checkStatus) });
   }, [checkStatus]);
 
+  const getName = () => {
+    let fullName = student.FirstName + ' ' + student.LastName;
+    if (fullName.length > 15) {
+      fullName = fullName.slice(0, 15).concat("...");
+    }
+    return fullName;
+  }
   return (
     <>
       <View style={styles.checkItem}>
         <View>
-          <Text style={styles.text}>{student.FirstName} {student.LastName}</Text>
+          <Text style={styles.text}>{getName()}</Text>
         </View>
         <View style={{ flexDirection: 'row' }}>
           <CheckButton onPress={handlePress} active={checkStatus.present} icon={true} />

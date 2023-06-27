@@ -42,10 +42,22 @@ export interface IUserCheckins {
 export interface IUserCheckinsRequest {
     chekins: Array<IUserCheckins>,
 }
-// export interface IUserCheckins {
-//     chekins: Array<IUserCheckins>,
-//     sessionId: TCheckinsId
-// }
+export interface IDeleteUserRequest {
+    StudentId: number,
+    Classes: Array<number>,
+}
+interface IStudent {
+    FirstName: "string",
+    LastName: "string",
+    Email: "string",
+    Phone: "string",
+    Notes: "string"
+}
+export interface IUpdateStudent {
+    StudentId: number,
+    ExistingStudents: Array<number>,
+    NewStudents: Array<IStudent>,
+}
 export interface ICheckinUser {
     FirstName: string,
     LastName: string,

@@ -51,7 +51,8 @@ if (Platform.OS === 'ios') {
 }
 export const ClassesEditDateScreen: React.FC<ISelectDateScreen> = memo(() => {
     const route = useRoute();
-    const item: any = route.params;
+    const { item }: any = route.params;
+    console.log(item, 'item\n\n\n\n\n\n\n\n\n-------------');
 
     const formInitialValues = {
         endScheduleType: "",
@@ -61,7 +62,7 @@ export const ClassesEditDateScreen: React.FC<ISelectDateScreen> = memo(() => {
         numberOf: item.EndNumber || 0,
     };
     const navigation = useNavigation();
-
+    const endScheduleType = item.EndScheduleType.slice(13);
 
     const SelectDateForm = ({
         values,
@@ -92,24 +93,26 @@ export const ClassesEditDateScreen: React.FC<ISelectDateScreen> = memo(() => {
             }
 
         }
+
+
         return (
             <View style={[styles.container, { minHeight: windowHeight, justifyContent: 'flex-start' }]}>
-                <ScreenHeader onBackPress={navigation.goBack} text="Add Class General Data" withBackButton={true} />
+                <ScreenHeader onBackPress={navigation.goBack} text="Update Finish Date (Extend)" withBackButton={true} />
                 <View>
 
-                    <ListButtons disabled buttons={[' Fixed number of classes', 'On Specific Date', ' Fixed period in time']} label="Class Type" onPress={() => { }} index={getTypeDate(item.EndScheduleType)} />
-                    {item.EndScheduleType == EndScheduleType.FixedClassesNumber &&
+                    <ListButtons disabled buttons={[' Fixed number of classes', 'On Specific Date', ' Fixed period in time']} label="Class Type" onPress={() => { }} index={getTypeDate(endScheduleType)} />
+                    {endScheduleType == EndScheduleType.FixedClassesNumber &&
                         <InputForm
                             keyboardType="numeric"
                             labelText='Enter Total Number of Classes'
                             onChangeText={handleChange('totalClasses')}
                             value={values.totalClasses.toString()}
                         />}
-                    {item.EndScheduleType == EndScheduleType.SpecificEndDate &&
+                    {endScheduleType == EndScheduleType.SpecificEndDate &&
                         <InputWithDate labelText={"Enter Finish Date"} handleChange={(setFieldValue)} nameField="finishDate" dateValue={values.finishDate} />}
 
-                    {item.EndScheduleType == EndScheduleType.FixedMonthNumber ||
-                        item.EndScheduleType == EndScheduleType.FixedWeekNumber
+                    {endScheduleType == EndScheduleType.FixedMonthNumber ||
+                        endScheduleType == EndScheduleType.FixedWeekNumber
                         &&
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <InputForm
@@ -141,20 +144,20 @@ export const ClassesEditDateScreen: React.FC<ISelectDateScreen> = memo(() => {
         validationSchema: () => {
             return Yup.object().shape({
                 startDate: Yup.string().required(''),
-                totalClasses: item.EndScheduleType == EndScheduleType.FixedClassesNumber ? Yup.number().min(1, "Number of totalClasses should be greater than 0").required('') : Yup.number(),
-                finishDate: item.EndScheduleType == EndScheduleType.SpecificEndDate ? Yup.string().test('endDate', 'Finish date should be greater than start date', function (value: any) {
+                totalClasses: endScheduleType == EndScheduleType.FixedClassesNumber ? Yup.number().min(1, "Number of totalClasses should be greater than 0").required('') : Yup.number(),
+                finishDate: endScheduleType == EndScheduleType.SpecificEndDate ? Yup.string().test('endDate', 'Finish date should be greater than start date', function (value: any) {
                     const { startDate }: any = this.parent;
 
 
                     return new Date(value) > new Date(startDate);
                 }).required('start date')
                     : Yup.string(),
-                numberOf: item.EndScheduleType == EndScheduleType.FixedWeekNumber || item.EndScheduleType == EndScheduleType.FixedMonthNumber ? Yup.number().min(1, "NumberOf ").required('') : Yup.number(),
+                numberOf: endScheduleType == EndScheduleType.FixedWeekNumber || endScheduleType == EndScheduleType.FixedMonthNumber ? Yup.number().min(1, "NumberOf ").required('') : Yup.number(),
             })
         },
         handleSubmit: (values,) => {
             let sendString = '';
-            switch (item.EndScheduleType) {
+            switch (endScheduleType) {
                 case EndScheduleType.FixedClassesNumber:
                     sendString = values.totalClasses
                     break

@@ -144,7 +144,7 @@ const ClassesEditNameScreen: React.FC<IAddClassScreen> = memo(() => {
         (values: any) => {
 
             console.log(values.locationId, 'send id');
-
+            const Location = values.url ? { LocationId: values.locationId, Url: values.url } : { LocationId: values.locationId }
             //@ts-ignore
             navigation.navigate(NavigationEnum.RESULT_CLASS_MODAL, {
                 item:
@@ -160,7 +160,7 @@ const ClassesEditNameScreen: React.FC<IAddClassScreen> = memo(() => {
 
                 actionBtn: () => {
                     dispatch(editNameClassesAction(
-                        { id: item.ClassId, Class: { Name: values.name }, Location: { LocationId: values.locationId } }
+                        { id: item.ClassId, Class: { Name: values.name }, Location: Location }
                     ));
                     navigation.goBack();
                 },

@@ -77,5 +77,6 @@ export interface IClassesEditName {
     },
     Location: {
         LocationId: number;
+        Url?: string;
     }
 }

@@ -7,6 +7,9 @@ import { ClassesService } from '../../../services/axios/classes';
 import { ErrorFilterService } from '../../../services/error-filter/error-filter.service';
 import { ClassesConstantsEnum } from '../constants';
 import { IClassesEditName, IClassesResponse, IClassesUpdateSession, IGeneratedClasses, IGeneratedClassesRequest, IGeneratedClassesResponse, ISession, ISessionSubset, TClassesId, TClassesStatus } from '../../../common/types/classes.types';
+import { convertSessionsToLocalTime } from '../../../services/utils/convertToUTC';
+
+
 
 
 export function* fetchClassesWorker({
@@ -89,7 +92,7 @@ export function* fetchGeneratedClassesWorker({
         );
         if (data) {
             yield put(setGenerateSessionAction(data.GeneratedSessions))
-            yield put(setCurrentSessionAction(data.CurrentSessions))
+            yield put(setCurrentSessionAction(convertSessionsToLocalTime(data.CurrentSessions)))
 
         }
 

@@ -1,4 +1,5 @@
-import { IClassesEditName, IClassesUpdateSession, IClassesUpdateStatus, IGeneratedClasses, IGeneratedClassesRequest, TClassesId, TClassesStatus } from "../../../common/types/classes.types";;
+import { IClassesEditName, IClassesUpdateSession, IClassesUpdateStatus, IGeneratedClasses, IGeneratedClassesRequest, TClassesId, TClassesStatus } from "../../../common/types/classes.types"; import { convertToUTC } from "../../utils/convertToUTC";
+;
 import { $axiosAuth } from "../base.instance";
 
 export class ClassesService {
@@ -26,7 +27,8 @@ export class ClassesService {
         return $axiosAuth.patch(`/tutor/classes/${id}`, { Status })
     }
     static async updatedSessionClasses({ id, change, StartDateTime }: IClassesUpdateSession) {
-        return $axiosAuth.put(`/tutor/schedules/${id}/${change}`, { StartDateTime })
+        const utcStartDateTime = convertToUTC(StartDateTime);
+        return $axiosAuth.put(`/tutor/schedules/${id}/${change}`, { utcStartDateTime })
     }
     static async deleteSessionClasses(id: TClassesId) {
         return $axiosAuth.delete(`/tutor/schedules/${id}`)

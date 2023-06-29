@@ -19,12 +19,12 @@ export const EditClassScreen = () => {
     return (
         <View style={styles.container}>
             <ScreenHeader
-                text={'Music Class Name'}
+                text={item.item.Name}
                 withBackButton={true}
                 onBackPress={() => navigation.goBack()}
             />
             <View style={styles.buttonWrapper}>
-                <ClassesEditButton title={'Update Classes'} navigationName={NavigationEnum.CLASSES_EDIT_NAME_SCREEN} data={item} />
+                <ClassesEditButton title={'Update Class Name and Location'} navigationName={NavigationEnum.CLASSES_EDIT_NAME_SCREEN} data={item} />
                 <ClassesEditButton title={'Update Finish Date (Extend)'} navigationName={NavigationEnum.CLASSES_EDIT_DATE_SCREEN} data={item} />
                 <ClassesEditButton title={'Update Students'} navigationName={NavigationEnum.CLASSES_STUDENT_SCREEN} data={item} />
                 <ClassesEditButton title={'Rollover Class'} navigationName={NavigationEnum.ADD_CLASS_SCREEN} />

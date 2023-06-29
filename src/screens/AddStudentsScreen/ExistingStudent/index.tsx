@@ -1,9 +1,8 @@
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 
 import { dispatch } from '../../../store/store';
 import { fetchUsersAction } from '../../../store/user/actions';
-import { useAppSelector } from '../../../store/hooks';
 import SearchIcon from '../../../../assets/svg/SearchIcon';
 import styles from './styles';
 import SelectedUser from '../../../../assets/svg/SelectedUser';
@@ -24,13 +23,21 @@ export const ExistingStudent: React.FC<IExistingStudentProps> = ({ students, onC
     const navigation = useNavigation();
     // const [existingStudents, setExistingStudents] = useState<Array<IExistingStudent>>([])
     const [searchText, setSearchText] = useState('');
+    console.log(selectedUsers, 'selectedUsers');
+
     const goNextStep = () => {
 
         //@ts-ignore
         navigation.navigate(NavigationEnum.PREPAYMENT_CONFIGURATION_SCREEN)
     };
 
-
+    const getName = (student: any) => {
+        let fullName = student.FirstName + ' ' + student.LastName;
+        if (fullName.length > 15) {
+            fullName = fullName.slice(0, 15).concat("...");
+        }
+        return fullName;
+    }
     useEffect(() => {
         dispatch(fetchUsersAction());
     }, []);
@@ -50,11 +57,11 @@ export const ExistingStudent: React.FC<IExistingStudentProps> = ({ students, onC
                     <View >
                         {students?.filter((user) => user.FirstName?.toLowerCase().includes(searchText?.toLowerCase())).map((user) => {
                             //@ts-ignore
-                            let active = selectedUsers.some((selectedUser) => (user?.EnrolledClasses ? selectedUser?.id === user?.StudentId : selectedUser?.Email === user?.Email));
+                            let active = selectedUsers.some((selectedUser) => (user?.EnrolledClasses ? selectedUser?.StudentId === user?.StudentId : selectedUser?.Email === user?.Email));
 
                             return (
                                 //@ts-ignore
-                                <Student name={user.FirstName} onClick={onChancheUsers} user={user} key={user?.Email || user.Id} selectedUser={active} />
+                                <Student name={getName(user)} onClick={onChancheUsers} user={user} key={user?.Email || user.Id} selectedUser={active} />
                             )
                         })}
                     </View>
@@ -83,12 +90,16 @@ const Student: React.FC<Student> = ({ name, user, onClick, selectedUser }) => {
         onClick(user)
         setSelected(!selected)
     }
+
     return (
         <>
             <TouchableOpacity onPress={onSelectUser}>
                 <View style={styles.student}>
                     <Text style={styles.studentName}>{name}</Text>
-                    {selected && <SelectedUser />}
+                    <View style={styles.boxContainer}>
+                        <SelectedUser />
+                        {!selected && <View style={styles.emptyBox} />}
+                    </View>
                 </View>
             </TouchableOpacity>
             <DecorationLine />

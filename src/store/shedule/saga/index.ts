@@ -47,7 +47,7 @@ export function* generateScheduleWorker({
     if (data) {
       yield put(setTimeSlotsAction(data.Slots))
       yield put(setGeneratedScheduleEntriesAction(data.GeneratedSessions))
-      yield put(setCurrentScheduleEntries(data.CurrentSessions))
+      yield put(setCurrentScheduleEntries(convertToLocaleTime(data.CurrentSessions)))
     }
 
   } catch (error) {

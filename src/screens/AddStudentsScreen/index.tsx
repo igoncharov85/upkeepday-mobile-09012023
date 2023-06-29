@@ -114,7 +114,7 @@ export const AddStudentsScreen: React.FC<IAddStudentsScreen> = () => {
             <View style={{ flex: 1 }}>
                 <View style={{ flex: 1 }}>
                     {typeAction === TypeAction.ExistingStudent ?
-                        <ExistingStudent students={existingStudent} onChancheUsers={handleChancheUsers} selectedUsers={selectedStudents} /> :
+                        <ExistingStudent students={existingStudent} onChancheUsers={handleChancheUsers} selectedUsers={removeEmptyObjects(selectedStudents)} /> :
                         <NewStudent handleTypeChange={setThisScreen} onAddNewStudent={handleAddNewStudent} />
                     }
                 </View>

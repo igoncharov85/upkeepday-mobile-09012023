@@ -34,7 +34,7 @@ export const AddSessionModal: FC<AddSessionModalProps> = memo(
           <View />
           <View style={{ width: '100%', alignItems: 'center' }}>
             <SessionButton title={'Add Class'} onPress={onCreateLesson} />
-            <SessionButton title={'Add Trial'} disabled={true} />
+            {/* <SessionButton title={'Add Trial'} disabled={true} /> */}
           </View>
         </LinearGradient>
       </TouchableOpacity>

@@ -27,7 +27,13 @@ export const ExistingStudent: React.FC<IExistingStudentProps> = ({ students, onC
     const [searchText, setSearchText] = useState('');
 
 
-
+    const getName = (student: any) => {
+        let fullName = student.FirstName + ' ' + student.LastName;
+        if (fullName.length > 15) {
+            fullName = fullName.slice(0, 15).concat("...");
+        }
+        return fullName;
+    }
     useEffect(() => {
         dispatch(fetchUsersAction());
     }, []);
@@ -51,7 +57,7 @@ export const ExistingStudent: React.FC<IExistingStudentProps> = ({ students, onC
 
                             return (
                                 //@ts-ignore
-                                <Student name={user.FirstName} onClick={onChancheUsers} user={user} key={user?.Email || user.Id} selectedUser={active} />
+                                <Student name={getName(user)} onClick={onChancheUsers} user={user} key={user?.Email || user.Id} selectedUser={active} />
                             )
                         })}
                     </View>
@@ -85,7 +91,10 @@ const Student: React.FC<Student> = ({ name, user, onClick, selectedUser }) => {
             <TouchableOpacity onPress={onSelectUser}>
                 <View style={styles.student}>
                     <Text style={styles.studentName}>{name}</Text>
-                    {selected && <SelectedUser />}
+                    <View style={styles.boxContainer}>
+                        <SelectedUser />
+                        {selected && <View style={styles.emptyBox} />}
+                    </View>
                 </View>
             </TouchableOpacity>
             <DecorationLine />

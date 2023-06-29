@@ -34,5 +34,17 @@ export default StyleSheet.create({
         marginLeft: -40,
         height: 1,
         backgroundColor: '#BAC2CB',
+    },
+    boxContainer: {
+        position: 'relative',
+    },
+    emptyBox: {
+        position: 'absolute',
+        top: 1.5,
+        left: 1.5,
+        width: 26,
+        height: 26,
+        borderRadius: 3,
+        backgroundColor: '#F2F2F2',
     }
 })

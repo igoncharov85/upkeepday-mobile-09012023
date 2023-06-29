@@ -53,7 +53,7 @@ export const ExistingStudent: React.FC<IExistingStudentProps> = ({ students, onC
                     <View >
                         {students?.filter((user) => user.FirstName?.toLowerCase().includes(searchText?.toLowerCase())).map((user) => {
                             //@ts-ignore
-                            let active = selectedUsers.some((selectedUser) => (user?.EnrolledClasses ? selectedUser?.id === user?.StudentId : selectedUser?.Email === user?.Email));
+                            let active = selectedUsers.some((selectedUser) => (user?.EnrolledClasses ? selectedUser?.StudentId === user?.StudentId : selectedUser?.Email === user?.Email));
 
                             return (
                                 //@ts-ignore

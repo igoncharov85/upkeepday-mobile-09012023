@@ -45,6 +45,7 @@ const ClassesEditNameScreen: React.FC<IAddClassScreen> = memo(() => {
         locationType: item.Location.LocationType,
         addressLine: item.Location.Address,
         url: "",
+        locationId: item.Location.LocationId,
     };
     const { locations } = useAppSelector(state => state.location);
     const [typeLocation, setTypeLocation] = useState<TypeLocation>(item.Location.LocationType === "Online" ? TypeLocation.Online : TypeLocation.InPerson);
@@ -80,23 +81,20 @@ const ClassesEditNameScreen: React.FC<IAddClassScreen> = memo(() => {
             isValid,
             setFieldValue
         }: FormikProps<typeof formInitialValues>) => {
-            const [touch, setTouch] = useState(false);
-            const [valid, setValid] = useState(false);
+
             useEffect(() => {
-                console.log(classLocation);
                 setFieldValue("addressLine", classLocation);
             }, [classLocation]);
+
             useEffect(() => {
-                if (touch) {
-                    setValid(isValid)
-                }
-            }, [isValid]);
+                setFieldValue("locationId", locationId);
+            }, [locationId]);
+
 
             return (
                 <>
                     <View style={{ marginTop: 12 }}>
                         <InputForm
-                            onTouchStart={() => setTouch(true)}
                             labelText="Name"
                             value={values.name}
                             onChange={handleChange("name")}
@@ -145,6 +143,7 @@ const ClassesEditNameScreen: React.FC<IAddClassScreen> = memo(() => {
     const handleSubmit = useCallback(
         (values: any) => {
 
+            console.log(values.locationId, 'send id');
 
             //@ts-ignore
             navigation.navigate(NavigationEnum.RESULT_CLASS_MODAL, {
@@ -154,14 +153,14 @@ const ClassesEditNameScreen: React.FC<IAddClassScreen> = memo(() => {
                     Name: values.name,
                     Location: {
                         LocationType: typeLocation == TypeLocation.InPerson ? 'Office' : 'Online', Url: typeLocation == TypeLocation.InPerson ? '' : values.url,
-                        LocationId: locationId,
+                        LocationId: values.locationId,
                         Address: values.addressLine
                     }
                 },
 
                 actionBtn: () => {
                     dispatch(editNameClassesAction(
-                        { id: item.ClassId, Class: { Name: values.name }, Location: { LocationId: locationId } }
+                        { id: item.ClassId, Class: { Name: values.name }, Location: { LocationId: values.locationId } }
                     ));
                     navigation.goBack();
                 },

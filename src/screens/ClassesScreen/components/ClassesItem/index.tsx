@@ -24,6 +24,7 @@ interface IClassesItem {
 
 const ClassesItem: React.FC<IClassesItem> = ({ item }) => {
     const navigation = useNavigation();
+    console.log(item);
 
     const handleEdit = () => {
         //@ts-ignore

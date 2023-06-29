@@ -1,6 +1,6 @@
 import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 import { View, ScrollView, Dimensions, KeyboardAvoidingView, Platform } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 import { LocationSelect } from "./components/LocationSelect";
 import { ScreenHeader } from "../../components/ScreenHeader";
@@ -18,6 +18,7 @@ import { AddClassNameSchema, AddClassSchema } from "../../common/shemas/addClass
 import { formicDefaultProps } from "../../common/constants/styles/form.config";
 import { fetchUsersAction } from "../../store/user/actions";
 import { fetchLocationAction } from "../../store/location/actions";
+import { useAppSelector } from "../../store/hooks";
 
 interface IAddClassScreen { }
 
@@ -26,12 +27,7 @@ enum TypeLocation {
     InPerson = 1,
 }
 
-const formInitialValues = {
-    name: "",
-    locationType: "",
-    addressLine: "",
-    url: "",
-};
+
 let windowHeight: any;
 if (Platform.OS === 'ios') {
     windowHeight = Dimensions.get('window').height - 80;
@@ -39,11 +35,22 @@ if (Platform.OS === 'ios') {
     windowHeight = Dimensions.get('window').height - 20;
 }
 export const AddClassScreen: React.FC<IAddClassScreen> = memo(() => {
+    const route = useRoute();
+    const { screenName }: any = route.params;
+    console.log(screenName);
+
+    const { createCurrentClassRequest }: any = useAppSelector(state => state.schedule);
     const [typeLocation, setTypeLocation] = useState<TypeLocation>(
         TypeLocation.Online
     );
+    const formInitialValues = {
+        name: createCurrentClassRequest.Class.Name || "",
+        locationType: createCurrentClassRequest.Location.LocationType || "",
+        addressLine: createCurrentClassRequest.Location.AddressLine || "",
+        url: createCurrentClassRequest.Location.Url || "",
+    };
     const [modalVisible, setModalVisible] = useState(false);
-    const [classLocation, setClassLocation] = useState("");
+    const [classLocation, setClassLocation] = useState(formInitialValues.addressLine || "");
     const navigation = useNavigation();
     const dispatch = useDispatch();
 
@@ -151,7 +158,7 @@ export const AddClassScreen: React.FC<IAddClassScreen> = memo(() => {
                 <View style={[styles.container, { height: windowHeight - 20 }]}>
                     <ScreenHeader
                         onBackPress={navigation.goBack}
-                        text="Add Class General Data"
+                        text={screenName || "Add Class General Data"}
                         withBackButton={true}
                     />
                     <Formik

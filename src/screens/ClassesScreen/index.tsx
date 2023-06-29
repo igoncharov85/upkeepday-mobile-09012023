@@ -15,7 +15,7 @@ export const ClassesScreen = () => {
     const isFocused = useIsFocused();
 
     useEffect(() => {
-        isFocused && dispatch(fetchClassesAction(classes[0].Status.toLocaleLowerCase() as TClassesStatus));
+        isFocused && dispatch(fetchClassesAction(classes[0]?.Status?.toLocaleLowerCase() as TClassesStatus));
     }, [isFocused]);
     return (
         <View style={{ flex: 1 }}>

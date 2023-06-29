@@ -2,7 +2,20 @@ import moment from 'moment';
 
 
 export function convertToUTC(data: any): any {
-    moment(data).utc().format('YYYY-MM-DDTHH:mm:ss')
+    if (typeof data === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/.test(data)) {
+        let date = new Date(data);
+        return date.toISOString();
+    } else if (Array.isArray(data)) {
+        return data.map(convertToUTC);
+    } else if (typeof data === 'object') {
+        let result: any = {};
+        for (const key in data) {
+            result[key] = convertToUTC(data[key]);
+        }
+        return result;
+    } else {
+        return data;
+    }
 }
 
 export function convertToLocaleTime(data: any[]): any[] {

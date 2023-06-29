@@ -10,14 +10,15 @@ import { dispatch } from '../../store/store';
 import { createScheduleAction } from '../../store/shedule/actions';
 import { useAppSelector } from '../../store/hooks';
 import { IGeneratedScheduleEntries, IStudents, IWeekTimeSlot } from '../../common/types/schedule.types';
+import { updatedStatusClassesAction } from '../../store/classes/actions';
 
 
 interface IPrepaymentConfigurationScreen { }
 
 export const PrepaymentConfigurationScreen: React.FC<IPrepaymentConfigurationScreen> = () => {
     const { createCurrentClassRequest } = useAppSelector(state => state.schedule)
-    const [makeupRequired, setMakeupRequired] = useState(0)
-    const [trackPrepayment, setTrackPrepayment] = useState(0)
+    const [makeupRequired, setMakeupRequired] = useState(createCurrentClassRequest.Class?.MakeupRequired ? 1 : 0)
+    const [trackPrepayment, setTrackPrepayment] = useState(createCurrentClassRequest.Class?.TrackPrepayment ? 1 : 0)
     const navigation = useNavigation();
 
     const location = createCurrentClassRequest.Location?.LocationType === "Online" ? {
@@ -44,10 +45,12 @@ export const PrepaymentConfigurationScreen: React.FC<IPrepaymentConfigurationScr
                 Sessions: createCurrentClassRequest.Sessions as IGeneratedScheduleEntries[]
             }
         ))
-        console.log(location, 'location');
 
         //@ts-ignore
         navigation.navigate(NavigationEnum.HOME_SCREEN, { key: Date.now() })
+
+
+
     };
 
 

@@ -52,7 +52,6 @@ if (Platform.OS === 'ios') {
 export const ClassesEditDateScreen: React.FC<ISelectDateScreen> = memo(() => {
     const route = useRoute();
     const { item }: any = route.params;
-    console.log(item, 'item\n\n\n\n\n\n\n\n\n-------------');
 
     const formInitialValues = {
         endScheduleType: "",
@@ -74,24 +73,16 @@ export const ClassesEditDateScreen: React.FC<ISelectDateScreen> = memo(() => {
     }: FormikProps<typeof formInitialValues>) => {
 
         const getTypeDate = (type: string) => {
-
             switch (type) {
                 case EndScheduleType.FixedClassesNumber:
-                    console.log(values.totalClasses);
-
                     return TypeDate.FixedNumberOfClasses;
                 case EndScheduleType.SpecificEndDate:
-                    console.log(values.finishDate);
                     return TypeDate.OnSpecificDate;
                 case EndScheduleType.FixedWeekNumber:
-                    console.log(values.numberOf);
                     return TypeDate.FixedWeekNumber;
                 case EndScheduleType.FixedMonthNumber:
-                    console.log(values.numberOf);
                     return TypeDate.FixedWeekNumber;
-
             }
-
         }
 
 

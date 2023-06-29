@@ -37,7 +37,19 @@ export enum EndScheduleType {
     FixedWeekNumber = 'FixedWeekNumber',
     FixedMonthNumber = 'FixedMonthNumber'
 }
-
+const getStringTypeDate = (type: string): number => {
+    switch (type) {
+        case EndScheduleType.FixedClassesNumber:
+            return TypeDate.FixedNumberOfClasses;
+        case EndScheduleType.SpecificEndDate:
+            return TypeDate.OnSpecificDate;
+        case EndScheduleType.FixedWeekNumber:
+            return TypeDate.FixedWeekNumber;
+        case EndScheduleType.FixedMonthNumber:
+            return TypeDate.FixedWeekNumber;
+        default: return 0;
+    }
+}
 interface ISelectDateScreen { }
 
 
@@ -50,9 +62,8 @@ if (Platform.OS === 'ios') {
 }
 export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
     const { createCurrentClassRequest } = useAppSelector(state => state.schedule)
-    const [numberOf, setNumberOf] = useState(0);
-    const [totalClasses, setTotalClasses] = useState(0);
-    const [glovalTypeLocation, setGlovalTypeLocation] = useState(0);
+    const [numberOf, setNumberOf] = useState(createCurrentClassRequest.Class?.EndNumber ? createCurrentClassRequest.Class?.EndNumber : 0);
+    const [totalClasses, setTotalClasses] = useState(createCurrentClassRequest.Class?.EndNumber ? createCurrentClassRequest.Class?.EndNumber : 0);
 
     const [startDate, setStartDate] = useState(createCurrentClassRequest.Class?.StartDate ? createCurrentClassRequest.Class?.StartDate : '');
     const [finishDate, setFinishDate] = useState(createCurrentClassRequest.Class?.EndDate ? createCurrentClassRequest.Class?.EndDate : '');
@@ -66,10 +77,9 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
     };
     const navigation = useNavigation();
 
-    const typeRef = useRef<string>('');
-    const typeNumberRef = useRef<number>(0);
+    const typeRef = useRef<string>(createCurrentClassRequest.Class?.EndScheduleType ? createCurrentClassRequest.Class?.EndScheduleType : EndScheduleType.FixedClassesNumber);
+    const typeNumberRef = useRef<number>(getStringTypeDate(typeRef.current));
     const getTypeDate = (type: number) => {
-
         switch (type) {
             case 0:
                 typeRef.current = EndScheduleType.FixedClassesNumber;
@@ -89,7 +99,6 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
                 typeNumberRef.current = 2;
                 return EndScheduleType.FixedMonthNumber;
         }
-
     }
 
 
@@ -142,7 +151,7 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
                                 value={values.numberOf.toString()}
                                 style={{ width: 180, marginRight: 24 }}
                             />
-                            <ListGradientCircleButtons onPress={onFixedPeriodTime} buttons={['Weeks', 'Months']} />
+                            <ListGradientCircleButtons onPress={onFixedPeriodTime} buttons={['Weeks', 'Months']} index={createCurrentClassRequest.Class?.EndScheduleType && createCurrentClassRequest.Class?.EndScheduleType == 'FixedWeekNumber' ? 0 : 1} />
                         </View>}
 
 

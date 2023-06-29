@@ -15,24 +15,29 @@ export const EditClassScreen = () => {
     const navigation = useNavigation();
     const route = useRoute();
     const item: any = route.params;
-    console.log(item);
     const relloverClass = () => {
         const classLesson = item.item;
-        console.log(classLesson.EndScheduleType.slice(1));
 
         dispatch(
             updateCurrentClassRequestAction({
                 Class: {
                     Name: classLesson.Name,
-                    StartDate: classLesson.StartDate,
-                    EndDate: classLesson.EndDate,
+                    StartDate: '',
+                    EndDate: '',
                     EndNumber: classLesson.EndNumber,
-                    EndScheduleType: classLesson.EndScheduleType,
+                    EndScheduleType: classLesson.EndScheduleType.slice(13),
                     MakeupRequired: classLesson.MakeupRequired,
                     TrackPrepayment: classLesson.TrackPrepayment,
 
                 },
-                Location: {},
+                Location: {
+                    Name: classLesson.Location.Address,
+                    Url: classLesson.Location.Url,
+                    LocationType: classLesson.Location.LocationType,
+                    AddressLine: classLesson.Location.Address,
+                    LocationId: classLesson.Location.LocationId
+
+                },
                 Students: classLesson.Students,
                 Slots: [],
                 Sessions: [],
@@ -50,7 +55,7 @@ export const EditClassScreen = () => {
                 <ClassesEditButton title={'Update Class Name and Location'} navigationName={NavigationEnum.CLASSES_EDIT_NAME_SCREEN} data={item} />
                 <ClassesEditButton title={'Update Finish Date (Extend)'} navigationName={NavigationEnum.CLASSES_EDIT_DATE_SCREEN} data={item} />
                 <ClassesEditButton title={'Update Students'} navigationName={NavigationEnum.CLASSES_STUDENT_SCREEN} data={item} />
-                <ClassesEditButton title={'Rollover Class'} navigationName={NavigationEnum.ADD_CLASS_SCREEN} action={relloverClass} data={{ screenName: 'Rollover Class' }} />
+                <ClassesEditButton title={'Rollover Class'} navigationName={NavigationEnum.ADD_CLASS_SCREEN} action={relloverClass} data={{ screenName: 'Rollover Class', item: item.item }} />
                 <ClassesEditButton title={'Archive Class'} navigationName={NavigationEnum.RESULT_CLASS_MODAL} data={
                     {
                         item: item.item,

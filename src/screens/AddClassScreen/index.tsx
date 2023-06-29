@@ -36,13 +36,16 @@ if (Platform.OS === 'ios') {
 }
 export const AddClassScreen: React.FC<IAddClassScreen> = memo(() => {
     const route = useRoute();
-    const { screenName }: any = route.params;
-    console.log(screenName);
+    const { screenName, item }: any = route.params || {
+        screenName: "",
+        item: {},
+    };
 
     const { createCurrentClassRequest }: any = useAppSelector(state => state.schedule);
     const [typeLocation, setTypeLocation] = useState<TypeLocation>(
-        TypeLocation.Online
+        createCurrentClassRequest.Location.LocationType && createCurrentClassRequest.Location.LocationType == "Office" ? 1 : 0
     );
+
     const formInitialValues = {
         name: createCurrentClassRequest.Class.Name || "",
         locationType: createCurrentClassRequest.Location.LocationType || "",
@@ -50,7 +53,7 @@ export const AddClassScreen: React.FC<IAddClassScreen> = memo(() => {
         url: createCurrentClassRequest.Location.Url || "",
     };
     const [modalVisible, setModalVisible] = useState(false);
-    const [classLocation, setClassLocation] = useState(formInitialValues.addressLine || "");
+    const [classLocation, setClassLocation] = useState(createCurrentClassRequest.Location.AddressLine || "");
     const navigation = useNavigation();
     const dispatch = useDispatch();
 
@@ -78,7 +81,7 @@ export const AddClassScreen: React.FC<IAddClassScreen> = memo(() => {
             const [touch, setTouch] = useState(false);
             const [valid, setValid] = useState(false);
             useEffect(() => {
-                if (touch) {
+                if (touch || screenName) {
                     setValid(isValid)
                 }
             }, [isValid]);

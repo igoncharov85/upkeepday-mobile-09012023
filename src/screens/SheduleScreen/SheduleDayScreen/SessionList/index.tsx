@@ -46,7 +46,7 @@ export const SessionItemList: React.FC<ISessionItemListProps> = memo(
 
     return (
       <>
-        <ScrollView style={{ marginBottom: 200 }}>
+        <ScrollView style={{ marginBottom: 40 }}>
           {sessionItems?.map((item, index) => (
             <SessionItem
               key={item.id}

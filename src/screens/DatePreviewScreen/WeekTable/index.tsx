@@ -48,46 +48,41 @@ interface ISheduleTable {
 export const startOfHour = 8;
 export const WeekTable: FC<ISheduleTable> = memo(
   ({ startOfWeek, endOfWeek, onHandleData, conflict }) => {
-    const { GeneratedScheduleEntries, loading } = useAppSelector(state => state.schedule);
+    const { GeneratedScheduleEntries, CurrentScheduledEntries, loading } = useAppSelector(state => state.schedule);
     const [editMode, setEditMode] = useState(false);
-    const [isSlotEdit, setIsSlotEdit] = useState(false);
-    const [SlotUid, setSlotUid] = useState('');
     const [slots, setSlots] = useState<IGeneratedScheduleEntries[]>(GeneratedScheduleEntries as []);
 
+    const [isVisible, setIsVisible] = useState(false);
+    const [isVisibleEdit, setIsVisibleEdit] = useState(false);
 
 
     const onChangeEditMode = (value: boolean) => {
-      setEditMode(value);
-      setSlotUid('')
+      setEditMode(value)
     }
 
-    const onDeleteSlot = (slot: IGeneratedScheduleEntries) => {
-      if (editMode) {
-        const index = slots.findIndex((event) => event?.StartDateTime === slot?.StartDateTime);
-        const newSlots = slots.filter((_, i) => i !== index);
-
-        if (JSON.stringify(slots) !== JSON.stringify(newSlots)) {
-          setSlotUid(slot.SlotUid)
-          setSlots(newSlots);
-          setIsSlotEdit(true);
-          onHandleData(slots)
-
-        }
-      }
-
-    }
-
-    const onMoveSlot = (slot: IGeneratedScheduleEntries) => {
-      if (SlotUid && isSlotEdit) {
-        setSlots([...slots, { Duration: slot.Duration, StartDateTime: slot.StartDateTime, SlotUid: SlotUid }]);
-
-        setSlotUid('')
-        setIsSlotEdit(false)
-        setEditMode(false);
+    const onDeleteSlot = (slot: any) => {
+      onHandleModal();
+      const newSlots = slots.filter((item) => {
+        return item.StartDateTime !== slot.StartDateTime
+      });
+      if (JSON.stringify(slots) !== JSON.stringify(newSlots)) {
+        setSlots(newSlots);
         onHandleData(slots)
       }
+    }
+    const onHandleModal = () => {
+      setIsVisible(!isVisible);
+    }
+    const onHandleModalEdit = () => {
+      setIsVisibleEdit(!isVisibleEdit);
+    }
+    const onMoveSlot = (slot: any, x: number, y: number) => {
+      const newTime = addDayAndHoursToDate(slot.StartDateTime, x, y);
+      onHandleModalEdit();
+      console.log('slot', slot.SessionId);
 
-
+      const newSlots = slots.filter(item => item.SlotUid !== slot.SlotUid);
+      setSlots([...newSlots, { Duration: slot.Duration, StartDateTime: newTime, SlotUid: slot.SlotUid }]);
     }
     useEffect(() => {
       onHandleData(slots)
@@ -116,6 +111,7 @@ export const WeekTable: FC<ISheduleTable> = memo(
                 <Column key={dayIndex}>
                   {dayEvents?.map((_, index) => {
                     const currentDate = new Date(addDayAndHoursToDate(date.toISOString(), dayIndex, 0))
+                    const dryField = findScheduleEntries(CurrentScheduledEntries as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
 
                     const activeItem = findScheduleEntries(slots as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
                     const conflictItem = findScheduleEntries(conflict as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
@@ -131,7 +127,7 @@ export const WeekTable: FC<ISheduleTable> = memo(
                       editMode={editMode}
                       onDeleteSlot={onDeleteSlot}
                       onMoveSlot={onMoveSlot}
-                    />;
+                      dryField={dryField && dryField[0]} />;
                   })}
 
                 </Column>

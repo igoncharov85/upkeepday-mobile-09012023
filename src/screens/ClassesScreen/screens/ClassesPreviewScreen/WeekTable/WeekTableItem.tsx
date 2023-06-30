@@ -6,7 +6,6 @@ import { IGeneratedScheduleEntries } from '../../../../../common/types/schedule.
 import Cancel from '../../../../../../assets/svg/Cancel';
 import { useAppSelector } from '../../../../../store/hooks';
 import BusyField from '../../../components/BusyField';
-import PreviewModal from '../../../components/PreviewModal';
 
 
 interface IWeekTableItem {
@@ -114,7 +113,7 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
                   <Cancel />
                 </TouchableOpacity>)}
                 <Text style={[styles.textItem,
-                  //  conflict && { color: 'red' }
+                conflict && { color: 'red' }
                 ]
                 }>{createCurrentClassRequest.Class?.Name}</Text>
               </LinearGradient>

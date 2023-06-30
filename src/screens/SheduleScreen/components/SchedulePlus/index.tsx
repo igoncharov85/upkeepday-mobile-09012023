@@ -25,7 +25,12 @@ export const SchedulePlus: FC<ISchedulePlus> = memo(({ onButtonPress }) => {
           TrackPrepayment: false,
 
         },
-        Location: {},
+        Location: {
+          LocationId: 0,
+          LocationType: '',
+          Url: '',
+          AddressLine: '',
+        },
         Students: [],
         Slots: [],
         Sessions: [],

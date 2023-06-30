@@ -4,12 +4,11 @@ export default StyleSheet.create({
   container: {
     marginTop: 10,
     position: 'relative'
-    // flex: 1
   },
   containerItem: {
+    position: 'relative',
     height: 64,
-    // position: 'absolute',
-    minWidth: '14.28571428571429%',
+    minWidth: 48,
     borderWidth: 1,
     borderColor: 'rgba(47,48,69,0.06)',
     borderStyle: 'solid',
@@ -57,4 +56,16 @@ export default StyleSheet.create({
     zIndex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
   },
+  cansel: { position: 'absolute', top: 0, right: 0 },
+  wrapperItem: {
+    zIndex: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    borderRadius: 4,
+    top: 0,
+    left: 0,
+    right: 0,
+    height: `100%`,
+  }
 });

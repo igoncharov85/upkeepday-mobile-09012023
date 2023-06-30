@@ -1,5 +1,5 @@
-import {FormikProps, withFormik} from 'formik';
-import React, {FC, memo, useEffect} from 'react';
+import { FormikProps, withFormik } from 'formik';
+import React, { FC, memo, useEffect } from 'react';
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -8,28 +8,28 @@ import {
   View,
 } from 'react-native';
 import CalendarSvg from '../../../assets/svg/CalendarSvg';
-import {NavigationEnum} from '../../common/constants/navigation';
-import {keyboardSettings} from '../../common/constants/styles/keyboard';
-import {LoginSchema} from '../../common/shemas/auth.shape';
-import {ILoginRequest} from '../../common/types/auth.types';
-import {INavigationBase} from '../../common/types/component.styles';
+import { NavigationEnum } from '../../common/constants/navigation';
+import { keyboardSettings } from '../../common/constants/styles/keyboard';
+import { LoginSchema } from '../../common/shemas/auth.shape';
+import { ILoginRequest } from '../../common/types/auth.types';
+import { INavigationBase } from '../../common/types/component.styles';
 import { KeyboardDismissHOC } from '../../components/hoc/KeyboardDismissHOC';
-import {ScreenHeader} from '../../components/ScreenHeader';
-import {CustomButton} from '../../components/UI/CustomButton';
-import {CustomInput} from '../../components/UI/CustomInput';
+import { ScreenHeader } from '../../components/ScreenHeader';
+import { CustomButton } from '../../components/UI/CustomButton';
+import { CustomInput } from '../../components/UI/CustomInput';
 import NavigationActions from '../../services/navigation-service';
-import {loginAction} from '../../store/auth/actions';
-import {useAppSelector} from '../../store/hooks';
-import {dispatch} from '../../store/store';
+import { loginAction } from '../../store/auth/actions';
+import { useAppSelector } from '../../store/hooks';
+import { dispatch } from '../../store/store';
 import styles from './styles';
 
 const formInitialValues = {
   email: '',
   password: '',
 };
-interface ILoginScreen extends INavigationBase {}
-export const LoginScreen: FC<ILoginScreen> = memo(({navigation}) => {
-  const {loading} = useAppSelector(state => state.auth);
+interface ILoginScreen extends INavigationBase { }
+export const LoginScreen: FC<ILoginScreen> = memo(({ navigation }) => {
+  const { loading } = useAppSelector(state => state.auth);
   const onForgotPassRedirect = () => {
     navigation.navigate(NavigationEnum.FORGOT_PASSWORD_SEND_EMAIL);
   };

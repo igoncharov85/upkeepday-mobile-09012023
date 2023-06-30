@@ -5,6 +5,7 @@ import { UserContactsEnum } from "../constants";
 
 //Use for get list of students
 export const fetchUsersAction = createAction<undefined>(UserContactsEnum.FETCH_ALL_USERS)
+export const fetchUsersByIdAction = createAction<ICheckinsId>(UserContactsEnum.FETCH_USERS_BY_ID)
 //Use for add student
 export const createUserAction = createAction<IUserCreateRequest>(UserContactsEnum.CREATE_USER)
 export const fetchCheckinsUserAction = createAction<ICheckinsId>(UserContactsEnum.FETCH_CHECKINS_USER)

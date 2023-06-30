@@ -21,9 +21,7 @@ interface IExistingStudentProps {
 export const ExistingStudent: React.FC<IExistingStudentProps> = ({ students, onChancheUsers, selectedUsers }) => {
 
     const navigation = useNavigation();
-    // const [existingStudents, setExistingStudents] = useState<Array<IExistingStudent>>([])
     const [searchText, setSearchText] = useState('');
-    console.log(selectedUsers, 'selectedUsers');
 
     const goNextStep = () => {
 

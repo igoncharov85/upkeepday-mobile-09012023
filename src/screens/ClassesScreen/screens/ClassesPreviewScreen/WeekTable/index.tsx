@@ -84,8 +84,6 @@ export const WeekTable: FC<ISheduleTable> = memo(
       setCurrentSessionId(slot.SessionId);
       setCurrentSlotTime(newTime);
       onHandleModalEdit();
-      console.log('slot', slot.SessionId);
-
       const newSlots = slots.filter(item => item.SlotUid !== slot.SlotUid);
       setSlots([...newSlots, { Duration: slot.Duration, StartDateTime: newTime, SlotUid: slot.SlotUid }]);
     }
@@ -94,8 +92,6 @@ export const WeekTable: FC<ISheduleTable> = memo(
 
     }, [slots])
     useEffect(() => {
-      console.log('slots', slots);
-
       dispatch(fetchScheduleByPeriodAction({ startDate: moment(startOfWeek).add(-1, 'days').toISOString(), endDate: endOfWeek.toISOString() }));
     }, [startOfWeek]);
     const timeData = generateTimeData(`00:00`, '24:00');
@@ -104,10 +100,6 @@ export const WeekTable: FC<ISheduleTable> = memo(
       endOfWeek,
       timeData,
     );
-    useEffect(() => {
-      console.log(currentSession);
-
-    }, [currentSession])
     const date = (new Date(startOfWeek));
     return GeneratedScheduleEntries.length > 0 && !loading ? (<View style={styles.container}>
       <ScrollView contentOffset={{ x: 0, y: 64 * 8 }}>

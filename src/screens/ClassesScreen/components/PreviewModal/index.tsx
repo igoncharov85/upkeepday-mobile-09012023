@@ -40,7 +40,6 @@ const PreviewModal = ({
   };
 
   const onDeleteSlot = () => {
-    console.log(currentSessionId, 'delete slot');
     dispatch(deleteSessionClassesAction(currentSessionId as number))
     handleHideModal();
 

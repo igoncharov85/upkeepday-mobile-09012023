@@ -18,9 +18,18 @@ export class UserService {
         return await $axiosAuth.delete(`/tutor/students/${data.StudentId}/classes`, { data })
     }
     static async updatedUser(data: (IUpdateStudent)) {
-        const { StudentId, ...rest } = data
-        console.log('\n\n\n\n\n\n\n\n Add student data:', rest, '\n\n\n\n\n\n\n\n');
+        const { StudentId, ExistingStudents, NewStudents } = data
+        console.log(
+            'result send data: \n\n\n\n\n'
+            , ExistingStudents, NewStudents
+        );
 
-        return await $axiosAuth.put(`/tutor/classes/${StudentId}/students`, { rest })
+        return await $axiosAuth.put(`/tutor/classes/${StudentId}/students`, {
+            ExistingStudents,
+            NewStudents
+        })
+    }
+    static async fetchUsersById(sessionId: ICheckinsId) {
+        return await $axiosAuth.get(`/tutor/classes/${sessionId}/students`,)
     }
 }

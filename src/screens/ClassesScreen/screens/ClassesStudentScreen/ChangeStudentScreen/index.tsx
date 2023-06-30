@@ -30,7 +30,7 @@ function removeEmptyObjects(array: any[]) {
 const ChangeStudentScreen: React.FC<IAddStudentsScreen> = () => {
     const navigation = useNavigation();
     const route = useRoute();
-    const { item }: any = route.params;
+    const { item, currentStudent }: any = route.params;
 
     const { students } = useAppSelector(state => state.user)
     const [typeAction, setTypeAction] = useState(0);
@@ -43,15 +43,20 @@ const ChangeStudentScreen: React.FC<IAddStudentsScreen> = () => {
         newStudents: [],
     });
     const goNextStep = () => {
-        //@ts-ignore
-        navigation.goBack();
-        navigation.goBack();
 
         dispatch(updateUserAction({
             StudentId: item.ClassId,
             ExistingStudents: resultData.existingStudents,
             NewStudents: resultData.newStudents,
         }))
+        console.log('\n\n\n\n\n\n\n\n\nsend Data:', {
+            StudentId: item.ClassId,
+            ExistingStudents: resultData.existingStudents,
+            NewStudents: resultData.newStudents,
+        });
+
+        //@ts-ignore
+        navigation.goBack();
     };
     const handleTypeChange = (type: any) => {
         setTypeAction(type);
@@ -60,16 +65,10 @@ const ChangeStudentScreen: React.FC<IAddStudentsScreen> = () => {
         setTypeAction(TypeAction.ExistingStudent);
     }
     const handleChancheUsers = (student: IExistingStudent) => {
-        //@ts-ignore
-
 
         setSelectedStudents(existingStudents => {
-
-
             //@ts-ignore
             if (student?.StudentId) {
-                //@ts-ignore
-
                 //@ts-ignore
                 let index = existingStudents.some((event) => event.StudentId === student?.StudentId)
                 //@ts-ignore
@@ -103,7 +102,7 @@ const ChangeStudentScreen: React.FC<IAddStudentsScreen> = () => {
     useEffect(() => {
         let newStudentsData: any = [];
         let existingStudentsData: any = [];
-        const data = removeEmptyObjects(selectedStudents).forEach((item) => {
+        removeEmptyObjects(selectedStudents).forEach((item) => {
             if (item?.StudentId) {
                 existingStudentsData.push(item.StudentId);
             }
@@ -119,7 +118,13 @@ const ChangeStudentScreen: React.FC<IAddStudentsScreen> = () => {
         )
 
     }, [selectedStudents, newStudents]);
-
+    useEffect(() => {
+        const { currentStudent }: any = route.params;
+        const currentStudentArray = currentStudent.map((item: any) => {
+            return { StudentId: item.StudentId }
+        });
+        setSelectedStudents(currentStudentArray)
+    }, [currentStudent]);
     const goBack = () => navigation.goBack()
 
     return (

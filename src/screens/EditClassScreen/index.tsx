@@ -25,7 +25,7 @@ export const EditClassScreen = () => {
                     StartDate: '',
                     EndDate: '',
                     EndNumber: classLesson.EndNumber,
-                    EndScheduleType: classLesson.EndScheduleType.slice(13),
+                    EndScheduleType: classLesson.EndScheduleType,
                     MakeupRequired: classLesson.MakeupRequired,
                     TrackPrepayment: classLesson.TrackPrepayment,
 

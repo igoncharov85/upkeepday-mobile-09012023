@@ -17,6 +17,11 @@ export interface IUserStudent {
     Notes?: string
 }
 
+export interface IUserStudentResponse {
+    StudentId: number,
+    FirstName: string
+    LastName: string,
+}
 
 export interface IUserCreateRequest {
     FirstName: string,

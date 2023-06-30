@@ -1,20 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, Text, View, TouchableOpacity, TextInput } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
 import { NavigationEnum } from '../../../../common/constants/navigation';
 import { CustomButton } from '../../../../components/UI/CustomButton';
-// import { ExistingStudent } from './ExistingStudent';
-// import { NewStudent } from './NewStudent';
-import { IExistingStudent } from '../../../../common/types/schedule.types';
-import { useAppSelector } from '../../../../store/hooks';
-import { updateCurrentClassRequestAction } from '../../../../store/shedule';
 import { dispatch } from '../../../../store/store';
 import { ScreenHeader } from '../../../../components/ScreenHeader';
 import SearchIcon from '../../../../../assets/svg/SearchIcon';
 import styles from './styles';
 import CheckIcon from '../../../../../assets/svg/classes/CheckIcon';
 import MinPlus from '../../../../../assets/svg/schedule/MinPlus';
-import { deleteUserAction } from '../../../../store/user/actions';
+import { deleteUserAction, fetchUsersByIdAction } from '../../../../store/user/actions';
+import { useAppSelector } from '../../../../store/hooks';
 
 interface IAddStudentsScreen { }
 
@@ -26,13 +22,13 @@ function removeEmptyObjects(array: any[]) {
 const ClassesStudentScreen: React.FC<IAddStudentsScreen> = () => {
     const route = useRoute();
     const { item }: any = route.params;
-    const students = item?.Students || [];
-
+    const isFocused = useIsFocused();
+    const { currentStudent, loading }: any = useAppSelector((state: any) => state.user);
     const navigation = useNavigation();
     const [searchText, setSearchText] = useState('');
-    const [studentsList, setStudentsList] = useState(students);
+    const [studentsList, setStudentsList] = useState(currentStudent);
     //@ts-ignore
-    const goNextStep = () => navigation.navigate(NavigationEnum.PREPAYMENT_CONFIGURATION_SCREEN);
+    const goNextStep = () => navigation.navigate(NavigationEnum.EDIT_CLASS_SCREEN);
 
     const onDeleteStudent = (studentId: number) => {
         dispatch(deleteUserAction({ StudentId: studentId, Classes: [item.ClassId] }));
@@ -41,11 +37,13 @@ const ClassesStudentScreen: React.FC<IAddStudentsScreen> = () => {
 
     const onAddStudent = () => {
         //@ts-ignore
-        navigation.navigate(NavigationEnum.CHANGE_STUDENT_SCREEN, { item });
+        navigation.navigate(NavigationEnum.CHANGE_STUDENT_SCREEN, { item, currentStudent });
     }
     const goBack = () => navigation.goBack()
-
-    return (
+    useEffect(() => {
+        dispatch(fetchUsersByIdAction(item.ClassId));
+    }, [isFocused]);
+    return loading ? <Text>loading...</Text> : (
         <View style={{ flex: 1, height: '100%' }}>
             <View style={{ padding: 20, paddingBottom: 0 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', zIndex: 1, maxWidth: '50%' }}>
@@ -72,10 +70,10 @@ const ClassesStudentScreen: React.FC<IAddStudentsScreen> = () => {
                             <View style={styles.container}>
 
                                 <View >
-                                    {studentsList?.filter((user: any) => user.FullName?.toLowerCase().includes(searchText?.toLowerCase())).map((user: any) => {
+                                    {studentsList?.filter((user: any) => `${user.FirstName} ${user.LastName}`.toLowerCase().includes(searchText?.toLowerCase())).map((user: any) => {
                                         return (
                                             //@ts-ignore
-                                            <Student name={user.FullName} onClick={() => onDeleteStudent(user.StudentId)} key={user.StudentId} />
+                                            <Student name={`${user.FirstName} ${user.LastName}`} onClick={() => onDeleteStudent(user.StudentId)} key={user.StudentId} />
                                         )
                                     })}
                                 </View>

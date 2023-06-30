@@ -79,8 +79,6 @@ export const WeekTable: FC<ISheduleTable> = memo(
     const onMoveSlot = (slot: any, x: number, y: number) => {
       const newTime = addDayAndHoursToDate(slot.StartDateTime, x, y);
       onHandleModalEdit();
-      console.log('slot', slot.SessionId);
-
       const newSlots = slots.filter(item => item.SlotUid !== slot.SlotUid);
       setSlots([...newSlots, { Duration: slot.Duration, StartDateTime: newTime, SlotUid: slot.SlotUid }]);
     }

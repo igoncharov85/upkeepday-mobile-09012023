@@ -1,9 +1,9 @@
 import { AxiosResponse } from "axios";
 import { SagaIterator } from "redux-saga";
 import { call, put, takeEvery } from "redux-saga/effects";
-import { addStudentAction, setCheckinStudentAction, setStudentAction } from "..";
+import { addStudentAction, setCheckinStudentAction, setCurrentStudentAction, setStudentAction } from "..";
 import { IAction } from "../../../common/types/common.types";
-import { ICheckinUser, IUserCreateRequest, IUserStudent, ICheckinsId, IUserCheckinsRequest, IDeleteUserRequest, IUpdateStudent } from "../../../common/types/user";
+import { ICheckinUser, IUserCreateRequest, IUserStudent, ICheckinsId, IUserCheckinsRequest, IDeleteUserRequest, IUpdateStudent, IUserStudentResponse } from "../../../common/types/user";
 import { UserService } from "../../../services/axios/user";
 import { ErrorFilterService } from "../../../services/error-filter/error-filter.service";
 import { UserContactsEnum } from "../constants";
@@ -17,6 +17,23 @@ export function* fetchUserWorker(payload: IAction<null>): SagaIterator {
         console.log('student data', data)
         if (data) {
             yield put(setStudentAction(data))
+        }
+    } catch (error) {
+        console.log('error', error);
+
+        ErrorFilterService.validateError(error)
+    }
+}
+export function* fetchUserByIdWorker(payload: IAction<ICheckinsId>): SagaIterator {
+    try {
+        console.log('fetchUserByClassIDWorker')
+        const { data }: AxiosResponse<Array<IUserStudentResponse>, any> = yield call(
+            UserService.fetchUsersById,
+            payload.payload
+        );
+        console.log('student data', data)
+        if (data) {
+            yield put(setCurrentStudentAction(data))
         }
     } catch (error) {
         console.log('error', error);
@@ -97,6 +114,7 @@ export function* updateUserWorker(payload: IAction<IUpdateStudent>): SagaIterato
 
 export function* userWatcher() {
     yield takeEvery(UserContactsEnum.FETCH_ALL_USERS, fetchUserWorker)
+    yield takeEvery(UserContactsEnum.FETCH_USERS_BY_ID, fetchUserByIdWorker)
     yield takeEvery(UserContactsEnum.CREATE_USER, createUserWorker)
     yield takeEvery(UserContactsEnum.FETCH_CHECKINS_USER, fetchCheckinUserWorker)
     yield takeEvery(UserContactsEnum.CHECKIN_USERS, checkinUserWorker)

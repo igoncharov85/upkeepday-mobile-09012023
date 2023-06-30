@@ -24,12 +24,6 @@ interface Day {
 }
 
 
-interface EntryCount {
-    year: number;
-    month: number;
-    day: number;
-    count: number;
-}
 
 function getSectionsCountByDate(entries: any[], date: Date): number {
     const dateString = date.toISOString().substring(0, 10);
@@ -154,7 +148,7 @@ export const ScheduleCalendar: React.FC<IScheduleCalendarProps> = ({ startingDay
         },
     });
     useEffect(() => {
-        generateDays();
+        isFocused && generateDays();
     }, [isFocused]);
 
     return loading ? <ScreenLoading /> : (

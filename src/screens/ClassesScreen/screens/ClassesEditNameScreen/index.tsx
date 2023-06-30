@@ -53,10 +53,6 @@ const ClassesEditNameScreen: React.FC<IAddClassScreen> = memo(() => {
     const [classLocation, setClassLocation] = useState(item.Location.Address || '');
     const [locationId, setLocationId] = useState(item.Location.LocationId);
 
-    useEffect(() => {
-        console.log(locations);
-
-    }, [locations]);
 
     const handleShowModal = useCallback(() => {
         setModalVisible(!modalVisible);
@@ -69,8 +65,6 @@ const ClassesEditNameScreen: React.FC<IAddClassScreen> = memo(() => {
     const handleClassLocation = useCallback((location: string, id: number) => {
         setClassLocation(location);
         setLocationId(id);
-        console.log('location id:', id);
-
     }, []);
 
     const renderForm = useCallback(
@@ -142,8 +136,6 @@ const ClassesEditNameScreen: React.FC<IAddClassScreen> = memo(() => {
 
     const handleSubmit = useCallback(
         (values: any) => {
-
-            console.log(values.locationId, 'send id');
             const Location = values.url ? { LocationId: values.locationId, Url: values.url } : { LocationId: values.locationId }
             //@ts-ignore
             navigation.navigate(NavigationEnum.RESULT_CLASS_MODAL, {
@@ -162,7 +154,8 @@ const ClassesEditNameScreen: React.FC<IAddClassScreen> = memo(() => {
                     dispatch(editNameClassesAction(
                         { id: item.ClassId, Class: { Name: values.name }, Location: Location }
                     ));
-                    navigation.goBack();
+                    //@ts-ignore
+                    navigation.navigate(NavigationEnum.EDIT_CLASS_SCREEN);
                 },
                 nameAction: 'Confirm',
             });

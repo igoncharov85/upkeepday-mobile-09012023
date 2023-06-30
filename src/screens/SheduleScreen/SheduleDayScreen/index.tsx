@@ -73,7 +73,7 @@ export const ScheduleDayScreen: React.FC<IScheduleDayScreen> = memo(() => {
 	}, [currentDay])
 	useEffect(() => {
 		let localCurrentDay = new Date(currentDay);
-		dispatch(fetchScheduleByPeriodAction({ startDate: localCurrentDay.toISOString(), endDate: addDayAndHoursToDate(currentDay, 1, 0) }));
+		isFocused && dispatch(fetchScheduleByPeriodAction({ startDate: localCurrentDay.toISOString(), endDate: addDayAndHoursToDate(currentDay, 1, 0) }));
 	}, [isFocused]);
 	return loading ? <ScreenLoading /> : (
 		<View>

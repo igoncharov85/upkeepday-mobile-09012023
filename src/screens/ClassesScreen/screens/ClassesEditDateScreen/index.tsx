@@ -61,7 +61,7 @@ export const ClassesEditDateScreen: React.FC<ISelectDateScreen> = memo(() => {
         numberOf: item.EndNumber || 0,
     };
     const navigation = useNavigation();
-    const endScheduleType = item.EndScheduleType.slice(13);
+    const endScheduleType = item.EndScheduleType;
 
     const SelectDateForm = ({
         values,
@@ -163,8 +163,6 @@ export const ClassesEditDateScreen: React.FC<ISelectDateScreen> = memo(() => {
             dispatch(
                 fetchGeneratedClassesAction({ id: item.ClassId, to: sendString })
             )
-            console.log('fetch');
-
             navigation.navigate(
                 //@ts-ignore
                 NavigationEnum.CLASSES_EDIT_PREVIEW_SCREEN,

@@ -28,6 +28,7 @@ export const PrepaymentConfigurationScreen: React.FC<IPrepaymentConfigurationScr
         LocationId: createCurrentClassRequest.Location?.LocationId,
     }
     const goTextStep = () => {
+
         dispatch(createScheduleAction(
             {
                 Class: {

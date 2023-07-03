@@ -20,7 +20,6 @@ export function* fetchSchedulesWorker({
       ScheduleService.fetchSchedule,
       payload
     );
-    console.log("data: ", data)
     if (data) {
       //@ts-ignore
       yield put(setCurrentScheduleEntries(convertToLocaleTime(data)))
@@ -40,7 +39,6 @@ export function* generateScheduleWorker({
   try {
     yield put(setGeneratedScheduleEntriesAction([]))
     yield put(setScheduleLoading(true));
-    console.log("payload: \n\n\n\n\n", payload);
 
     const { data }: AxiosResponse<IGeneratedScheduleResponse, any> = yield call(
       ScheduleService.generateScheduleEntry,
@@ -49,9 +47,6 @@ export function* generateScheduleWorker({
     if (data) {
       yield put(setTimeSlotsAction(data.Slots))
       yield put(setGeneratedScheduleEntriesAction(data.GeneratedSessions))
-      console.log('\n\n\n\n\n\n\n\n\n\n\n', data.GeneratedSessions, '\n&&&&&&&&&&&&&&&');
-      console.log('\n\n\n\n\n\n\n\n\n\n\n', data.CurrentSessions, '\n***************\n');
-      console.log('\n\n\n\n\n\n\n\n\n\n\n', convertToLocaleTime(data.CurrentSessions), '\n+++++++++++++++++');
 
       yield put(setCurrentScheduleEntries(convertToLocaleTime(data.CurrentSessions)))
     }
@@ -74,7 +69,6 @@ export function* deleteScheduleByPeriodWorker({
       ScheduleService.deleteSchedules,
       payload
     );
-    console.log("data: ", data)
   } catch (error) {
     yield call(ErrorFilterService.validateError, error)
   } finally {
@@ -93,8 +87,6 @@ export function* createSchedule({
       ScheduleService.createClass,
       payload
     );
-    //TODO navigation
-    console.log("createSchedule data: ", data)
   } catch (error) {
     yield call(ErrorFilterService.validateError, error)
   }

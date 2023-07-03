@@ -96,7 +96,6 @@ export const LoginScreen: FC<ILoginScreen> = memo(({ navigation }) => {
         Password: values.password,
       };
       dispatch(loginAction(data));
-      console.log('login worked', data);
     },
     validateOnChange: true,
   })(renderForm);

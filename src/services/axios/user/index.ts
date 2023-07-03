@@ -19,10 +19,6 @@ export class UserService {
     }
     static async updatedUser(data: (IUpdateStudent)) {
         const { StudentId, ExistingStudents, NewStudents } = data
-        console.log(
-            'result send data: \n\n\n\n\n'
-            , ExistingStudents, NewStudents
-        );
 
         return await $axiosAuth.put(`/tutor/classes/${StudentId}/students`, {
             ExistingStudents,

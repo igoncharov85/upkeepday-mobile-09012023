@@ -44,6 +44,8 @@ export function convertSessionsToLocalTime(CurrentSessions: any) {
 
         convertedSessions.push(convertedSession);
     });
+    console.log("до", CurrentSessions);
+    console.log("після", convertedSessions);
 
     return convertedSessions;
 }

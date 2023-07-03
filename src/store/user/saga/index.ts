@@ -10,11 +10,9 @@ import { UserContactsEnum } from "../constants";
 
 export function* fetchUserWorker(payload: IAction<null>): SagaIterator {
     try {
-        console.log('fetchUserWorker')
         const { data }: AxiosResponse<Array<IUserStudent>, any> = yield call(
             UserService.fetchAllUsers,
         );
-        console.log('student data', data)
         if (data) {
             yield put(setStudentAction(data))
         }
@@ -26,12 +24,10 @@ export function* fetchUserWorker(payload: IAction<null>): SagaIterator {
 }
 export function* fetchUserByIdWorker(payload: IAction<ICheckinsId>): SagaIterator {
     try {
-        console.log('fetchUserByClassIDWorker')
         const { data }: AxiosResponse<Array<IUserStudentResponse>, any> = yield call(
             UserService.fetchUsersById,
             payload.payload
         );
-        console.log('student data', data)
         if (data) {
             yield put(setCurrentStudentAction(data))
         }
@@ -42,15 +38,12 @@ export function* fetchUserByIdWorker(payload: IAction<ICheckinsId>): SagaIterato
     }
 }
 export function* fetchCheckinUserWorker(payload: IAction<ICheckinsId>): SagaIterator {
-    console.log('fetchCheckinUserWorker payload:', payload);
-
     try {
         const { data }: AxiosResponse<Array<ICheckinUser>, any> = yield call(
             UserService.fetchCheckinsUser,
             payload.payload
         );
         if (data) {
-            console.log(data, 'fetchCheckinUserWorker')
             yield put(setCheckinStudentAction(data))
         }
     } catch (error) {
@@ -62,7 +55,6 @@ export function* fetchCheckinUserWorker(payload: IAction<ICheckinsId>): SagaIter
 
 export function* createUserWorker(payload: IAction<IUserCreateRequest>): SagaIterator {
     try {
-        console.log('createUserWorker')
         const { data }: AxiosResponse<IUserStudent, any> = yield call(
             UserService.createUser,
             payload.payload
@@ -70,7 +62,6 @@ export function* createUserWorker(payload: IAction<IUserCreateRequest>): SagaIte
         if (data) {
             yield put(addStudentAction(data))
         }
-        console.log("data: createUserWorker", data)
     } catch (error) {
         ErrorFilterService.validateError(error)
     }
@@ -84,7 +75,6 @@ export function* checkinUserWorker(payload: IAction<any>): SagaIterator {
         if (data) {
             yield put(addStudentAction(data))
         }
-        console.log("data: createUserWorker", data)
     } catch (error) {
         ErrorFilterService.validateError(error)
     }

@@ -18,9 +18,20 @@ import { WeekTable } from "./WeekTable";
 import { DaysOfWeek } from "./DaysOfWeek";
 import { fetchSessionClassesByIdAction } from "../../../../store/classes/actions";
 import { IClassesResponse } from "../../../../common/types/classes.types";
-import PreviewModal from "../../components/PreviewModal";
 
+function removeElementsFromArray(arr1: any[], arr2: any[]) {
+    console.log(
+        arr1,
+        "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%",
+        arr2,
+    );
 
+    return arr1.filter(item1 => {
+        return !arr2.some(item2 => {
+            return JSON.stringify(item1) === JSON.stringify(item2);
+        });
+    });
+}
 
 interface IDatePreviewScreen { }
 const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
@@ -36,11 +47,11 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
     const [startDateWeek, setStartDateWeek] = useState(new Date(weekDates.startDate));
     const [endDateWeek, setEndDateWeek] = useState(new Date(weekDates.endDate));
     const [screenLoading, setScreenLoading] = useState(false);
-    const { CurrentScheduledEntries, createCurrentClassRequest, WeekTimeSlots, GeneratedScheduleEntries, loading } = useAppSelector(state => state.schedule);
+    const { CurrentScheduledEntries, GeneratedScheduleEntries, loading } = useAppSelector(state => state.schedule);
     const { currentSession } = useAppSelector(state => state.classes);
 
     const [slots, setSlots] = useState<IGeneratedScheduleEntries[]>([]);
-    const [conflict, setConflict] = useState<IGeneratedScheduleEntries[]>(findScheduleConflicts(slots, currentSession));
+    const [conflict, setConflict] = useState<IGeneratedScheduleEntries[]>(findScheduleConflicts(removeElementsFromArray(slots, currentSession), currentSession));
 
 
 
@@ -70,6 +81,7 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
             setScreenLoading(false)
         };
     }, []);
+    console.log(removeElementsFromArray(CurrentScheduledEntries, currentSession), 'removeElementsFromArray\n\n\n\n\n\n\n\n\n\n\n\n');
 
 
 
@@ -94,7 +106,7 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
 
         </View>
         <View style={{ flex: 1 }}>
-            <WeekTable startOfWeek={startDateWeek} endOfWeek={endDateWeek} onHandleData={handeScheduleSlots} conflict={conflict} dryFields={CurrentScheduledEntries} />
+            <WeekTable startOfWeek={startDateWeek} endOfWeek={endDateWeek} onHandleData={handeScheduleSlots} conflict={conflict} dryFields={removeElementsFromArray(CurrentScheduledEntries, currentSession)} />
         </View>
         <View style={{ padding: 20, justifyContent: 'flex-end' }}>
             <CustomButton text={"Ok"} onPress={onSave} />

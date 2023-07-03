@@ -36,7 +36,6 @@ export function* addLocationWorker({
     type,
 }: IAction<ILocationRequest>): SagaIterator {
     try {
-        console.log("ADD Location")
         yield put(setLocationLoading(true));
         const { data }: AxiosResponse<ILocation, any> = yield call(
             LocationService.addLocation,
@@ -44,7 +43,7 @@ export function* addLocationWorker({
         );
 
         if (data) {
-            console.log("data add location", data)
+
             yield put(addLocationsAction(data))
         }
 

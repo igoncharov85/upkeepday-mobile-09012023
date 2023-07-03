@@ -51,12 +51,11 @@ export const WeekTable: FC<ISheduleTable> = memo(
     const { currentSession } = useAppSelector(state => state.classes);
     const [editMode, setEditMode] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
+    const [changeEdit, setChangeEdit] = useState(false);
     const [isVisibleEdit, setIsVisibleEdit] = useState(false);
     const [currentSessionId, setCurrentSessionId] = useState(0);
     const [currentSlotTime, setCurrentSlotTime] = useState('');
     const [slots, setSlots] = useState<IGeneratedScheduleEntries[]>(currentSession as []);
-
-
 
     const onChangeEditMode = (value: boolean) => {
       setEditMode(value);

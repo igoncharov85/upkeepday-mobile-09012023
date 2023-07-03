@@ -45,7 +45,7 @@ export function* fetchClassesByIdWorker({
         );
 
         if (data?.data) {
-            console.log("fetchClassesByIdWorker");
+
             yield put(setClassAction(data?.data))
 
         }
@@ -68,8 +68,7 @@ export function* fetchSessionClassesByIdWorker({
         );
 
         if (data?.data) {
-            console.log("fetchSessionClassesByIdWorker");
-            yield put(setSessinAction(data?.data))
+            yield put(setSessinAction(convertSessionsToLocalTime(data?.data)))
 
         }
 
@@ -92,6 +91,9 @@ export function* fetchGeneratedClassesWorker({
         );
         if (data) {
             yield put(setGenerateSessionAction(data.GeneratedSessions))
+            console.log(convertSessionsToLocalTime(data.CurrentSessions), "convertSessionsToLocalTime(data.CurrentSessions)\n\n");
+            console.log(data.CurrentSessions, "data.CurrentSessions\n\n------------------\n\n");
+
             yield put(setCurrentSessionAction(convertSessionsToLocalTime(data.CurrentSessions)))
 
         }
@@ -128,8 +130,6 @@ export function* deleteClassesWorker({
         yield put(setClassesLoading(true));
         yield call(ClassesService.deleteClasses, payload);
 
-        console.log("Classes deleted successfully!");
-
     } catch (error) {
         yield call(ErrorFilterService.validateError, error);
     } finally {
@@ -163,9 +163,6 @@ export function* deleteSessionClassesWorker({
     try {
         yield put(setClassesLoading(true));
         yield call(ClassesService.deleteSessionClasses, payload);
-
-        console.log("Classes deleted successfully!");
-
     } catch (error) {
         yield call(ErrorFilterService.validateError, error);
     } finally {
@@ -179,7 +176,7 @@ export function* updateSessionClassesWorker({
 }: IAction<IClassesUpdateSession>): SagaIterator {
     try {
         yield put(setClassesLoading(true));
-        const data: AxiosResponse<IClassesResponse, any> = yield call(
+        yield call(
             ClassesService.updatedSessionClasses,
             payload,
         );
@@ -199,8 +196,6 @@ export function* editNameClassesWorker({
 
         yield put(setClassesLoading(true));
         yield call(ClassesService.editNameClasses, payload);
-        console.log('editNameClassesWorker');
-
 
     } catch (error) {
         console.log(error);

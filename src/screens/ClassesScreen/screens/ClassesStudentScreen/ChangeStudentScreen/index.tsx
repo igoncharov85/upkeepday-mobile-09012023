@@ -49,11 +49,6 @@ const ChangeStudentScreen: React.FC<IAddStudentsScreen> = () => {
             ExistingStudents: resultData.existingStudents,
             NewStudents: resultData.newStudents,
         }))
-        console.log('\n\n\n\n\n\n\n\n\nsend Data:', {
-            StudentId: item.ClassId,
-            ExistingStudents: resultData.existingStudents,
-            NewStudents: resultData.newStudents,
-        });
 
         //@ts-ignore
         navigation.goBack();

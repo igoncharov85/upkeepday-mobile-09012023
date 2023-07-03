@@ -53,7 +53,6 @@ export const ExistingStudent: React.FC<IExistingStudentProps> = ({ students, onC
                             let active = selectedUsers.every(selectedUser => {
                                 //@ts-ignore
                                 if (user?.FirstName === selectedUser?.FirstName || user?.StudentId === selectedUser?.StudentId) {
-                                    console.log(user?.FirstName);
                                     return false;
 
                                 }

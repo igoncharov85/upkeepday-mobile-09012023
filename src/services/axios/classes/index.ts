@@ -2,6 +2,7 @@ import { IClassesEditName, IClassesUpdateSession, IClassesUpdateStatus, IGenerat
 ;
 import { $axiosAuth } from "../base.instance";
 
+
 export class ClassesService {
     static async fetchClasses(status: TClassesStatus) {
         return $axiosAuth.get(`/tutor/classes/${status}`)
@@ -26,9 +27,9 @@ export class ClassesService {
     static async updatedStatusClasses({ id, Status }: IClassesUpdateStatus) {
         return $axiosAuth.patch(`/tutor/classes/${id}`, { Status })
     }
+
     static async updatedSessionClasses({ id, change, StartDateTime }: IClassesUpdateSession) {
-        const utcStartDateTime = convertToUTC(StartDateTime);
-        return $axiosAuth.put(`/tutor/schedules/${id}/${change}`, { utcStartDateTime })
+        return $axiosAuth.put(`/tutor/schedules/${id}/${change}`, { StartDateTime })
     }
     static async deleteSessionClasses(id: TClassesId) {
         return $axiosAuth.delete(`/tutor/schedules/${id}`)

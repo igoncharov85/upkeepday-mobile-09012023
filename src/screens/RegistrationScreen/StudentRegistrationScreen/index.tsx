@@ -41,8 +41,8 @@ interface IStudentRegistrationScreen extends INavigationBase {
   type: TRole;
 }
 export const StudentRegistrationScreen: FC<IStudentRegistrationScreen> = memo(
-  ({setScreen, navigation, type}) => {
-    const {loading} = useAppSelector(state => state.auth);
+  ({ setScreen, navigation, type }) => {
+    const { loading } = useAppSelector(state => state.auth);
 
     useEffect(() => {
       dispatch(setStatesAction([]));
@@ -183,9 +183,8 @@ export const StudentRegistrationScreen: FC<IStudentRegistrationScreen> = memo(
               PostalCode: values.postalCode,
               State: values.state,
             };
-            dispatch(registrationAction({data, type}));
+            dispatch(registrationAction({ data, type }));
             dispatch(cacheRegistrationFormAction(data));
-            console.log('login worked', data);
           },
           ...formicDefaultProps,
           enableReinitialize: false,

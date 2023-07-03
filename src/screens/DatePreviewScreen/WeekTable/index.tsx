@@ -79,12 +79,11 @@ export const WeekTable: FC<ISheduleTable> = memo(
     const onMoveSlot = (slot: any, x: number, y: number) => {
       const newTime = addDayAndHoursToDate(slot.StartDateTime, x, y);
       onHandleModalEdit();
-      const newSlots = slots.filter(item => item.SlotUid !== slot.SlotUid);
-      setSlots([...newSlots, { Duration: slot.Duration, StartDateTime: newTime, SlotUid: slot.SlotUid }]);
+      const newSlots = slots.filter(item => item.StartDateTime !== slot.StartDateTime);
+      setSlots([...newSlots, { Duration: slot.Duration, StartDateTime: newTime, SlotUid: '' }]);
     }
     useEffect(() => {
       onHandleData(slots)
-
     }, [slots])
     const timeData = generateTimeData(`00:00`, '24:00');
 

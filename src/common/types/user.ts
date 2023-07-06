@@ -16,7 +16,13 @@ export interface IUserStudent {
     EnrolledClasses: Array<IEnrolledClass>
     Notes?: string
 }
-
+export interface IStudentsResponse {
+    FirstName: string,
+    LastName: string,
+    Email: string,
+    PhoneNumber: string,
+    Notes: string
+}
 export interface IUserStudentResponse {
     StudentId: number,
     FirstName: string
@@ -27,7 +33,6 @@ export interface IUserCreateRequest {
     FirstName: string,
     LastName: string,
     Email: string,
-    PhoneCountry: string,
     PhoneNumber: string,
     Notes: string
 }
@@ -47,16 +52,24 @@ export interface IUserCheckins {
 export interface IUserCheckinsRequest {
     chekins: Array<IUserCheckins>,
 }
+export interface IStudentRequest {
+    StudentId: number,
+
+}
+export interface IStudentsRequest {
+    status: string,
+
+}
 export interface IDeleteUserRequest {
     StudentId: number,
     Classes: Array<number>,
 }
-interface IStudent {
-    FirstName: "string",
-    LastName: "string",
-    Email: "string",
-    Phone: "string",
-    Notes: "string"
+export interface IStudent {
+    FirstName: string,
+    LastName: string,
+    Email: string,
+    PhoneNumber: string,
+    Notes: string
 }
 export interface IUpdateStudent {
     StudentId: number,
@@ -68,4 +81,15 @@ export interface ICheckinUser {
     LastName: string,
     StudentId: number,
     CheckInStatus: TCheckinsStatus,
+}
+
+export interface IStudentResponse {
+    FirstName: string,
+    LastName: string,
+    Email: string,
+    PhoneNumber: string,
+    Notes: string,
+    StudentId: number,
+    EnrolledClasses: Array<any>,
+    Balance: number
 }

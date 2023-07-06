@@ -1,5 +1,5 @@
 import { createAction } from "@reduxjs/toolkit";
-import { IUserCheckins, IUserCreateRequest, ICheckinsId, IUserCheckinsRequest, IDeleteUserRequest, IUpdateStudent } from "../../../common/types/user";
+import { IUserCreateRequest, ICheckinsId, IUserCheckinsRequest, IDeleteUserRequest, IUpdateStudent, IStudentsRequest, IStudentRequest, IStudent } from "../../../common/types/user";
 import { UserContactsEnum } from "../constants";
 
 
@@ -11,4 +11,9 @@ export const createUserAction = createAction<IUserCreateRequest>(UserContactsEnu
 export const fetchCheckinsUserAction = createAction<ICheckinsId>(UserContactsEnum.FETCH_CHECKINS_USER)
 export const checkinsUserAction = createAction<ICheckinsId & IUserCheckinsRequest>(UserContactsEnum.CHECKIN_USERS)
 export const deleteUserAction = createAction<IDeleteUserRequest>(UserContactsEnum.DELETE_USER)
+
 export const updateUserAction = createAction<IUpdateStudent>(UserContactsEnum.UPDATE_USER)
+
+export const deleteStudentAction = createAction<IStudentRequest>(UserContactsEnum.DELETE_STUDENTS)
+export const fetchStudentsAction = createAction<IStudentsRequest>(UserContactsEnum.FETCH_STUDENTS_BY_STATUS)
+export const updateStudentAction = createAction<(IStudentRequest & IStudent)>(UserContactsEnum.UPDATE_STUDENTS)

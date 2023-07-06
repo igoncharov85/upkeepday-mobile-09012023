@@ -1,12 +1,13 @@
 import { AxiosResponse } from "axios";
 import { SagaIterator } from "redux-saga";
 import { call, put, takeEvery } from "redux-saga/effects";
-import { addStudentAction, setCheckinStudentAction, setCurrentStudentAction, setStudentAction } from "..";
+import { addStudentAction, setCheckinStudentAction, setCurrentStudentAction, setStudentAction, setUsersAction } from "..";
 import { IAction } from "../../../common/types/common.types";
-import { ICheckinUser, IUserCreateRequest, IUserStudent, ICheckinsId, IUserCheckinsRequest, IDeleteUserRequest, IUpdateStudent, IUserStudentResponse } from "../../../common/types/user";
+import { ICheckinUser, IUserCreateRequest, IUserStudent, ICheckinsId, IUserCheckinsRequest, IDeleteUserRequest, IUpdateStudent, IUserStudentResponse, IStudentRequest, IStudentResponse, IStudentsRequest, IStudentsResponse } from "../../../common/types/user";
 import { UserService } from "../../../services/axios/user";
 import { ErrorFilterService } from "../../../services/error-filter/error-filter.service";
 import { UserContactsEnum } from "../constants";
+import { IStudent } from "../../../common/types/classes.types";
 
 export function* fetchUserWorker(payload: IAction<null>): SagaIterator {
     try {
@@ -102,6 +103,46 @@ export function* updateUserWorker(payload: IAction<IUpdateStudent>): SagaIterato
     }
 }
 
+
+// delete student 
+export function* deleteStudentWorker(payload: IAction<IStudentRequest>): SagaIterator {
+    try {
+        yield call(
+            UserService.deleteStudent,
+            payload.payload
+        );
+
+    } catch (error) {
+        ErrorFilterService.validateError(error)
+    }
+}
+// get student 
+export function* fetchStudentsWorker(payload: IAction<IStudentsRequest>): SagaIterator {
+    try {
+        const { data }: AxiosResponse<Array<IStudentResponse>, any> = yield call(
+            UserService.fetchStudentsByStatus,
+            payload.payload
+        );
+        if (data) {
+            yield put(setUsersAction(data))
+        }
+    } catch (error) {
+        ErrorFilterService.validateError(error)
+    }
+}
+// update student 
+export function* updateStudentWorker(payload: IAction<IStudentRequest & IUserCreateRequest>): SagaIterator {
+    try {
+        yield call(
+            UserService.updateStudent,
+            payload.payload
+        );
+
+    } catch (error) {
+        ErrorFilterService.validateError(error)
+    }
+}
+
 export function* userWatcher() {
     yield takeEvery(UserContactsEnum.FETCH_ALL_USERS, fetchUserWorker)
     yield takeEvery(UserContactsEnum.FETCH_USERS_BY_ID, fetchUserByIdWorker)
@@ -110,4 +151,7 @@ export function* userWatcher() {
     yield takeEvery(UserContactsEnum.CHECKIN_USERS, checkinUserWorker)
     yield takeEvery(UserContactsEnum.DELETE_USER, deleteUserWorker)
     yield takeEvery(UserContactsEnum.UPDATE_USER, updateUserWorker)
+    yield takeEvery(UserContactsEnum.DELETE_STUDENTS, deleteStudentWorker)
+    yield takeEvery(UserContactsEnum.FETCH_STUDENTS_BY_STATUS, fetchStudentsWorker)
+    yield takeEvery(UserContactsEnum.UPDATE_STUDENTS, updateStudentWorker)
 }

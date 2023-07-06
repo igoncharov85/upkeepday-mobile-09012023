@@ -28,6 +28,8 @@ import ClassesEditDateScreen from '../../screens/ClassesScreen/screens/ClassesEd
 import ClassesEditPreviewScreen from '../../screens/ClassesScreen/screens/ClassesEditDateScreen/ClassesEditPreviewScreen';
 import ClassesStudentScreen from '../../screens/ClassesScreen/screens/ClassesStudentScreen';
 import ChangeStudentScreen from '../../screens/ClassesScreen/screens/ClassesStudentScreen/ChangeStudentScreen';
+import StudentsScreen from '../../screens/StudentsScreen';
+import { EditStudentScreen } from '../../screens/StudentsScreen/screens/EditStudentScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -139,6 +141,16 @@ export const StackNavigator = memo(() => {
         <Stack.Screen
           name={NavigationEnum.CHANGE_STUDENT_SCREEN}
           component={ChangeStudentScreen}
+        />
+        <Stack.Screen
+          name={NavigationEnum.STUDENTS_SCREEN}
+          component={StudentsScreen}
+        />
+        <Stack.Screen
+          name={NavigationEnum.EDIT_STUDENTS_SCREEN}
+
+          //@ts-ignore
+          component={EditStudentScreen}
         />
 
       </Stack.Group>

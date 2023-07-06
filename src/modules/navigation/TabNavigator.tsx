@@ -15,6 +15,7 @@ import Todo from '../../../assets/svg/schedule/Todo';
 import { SchedulePlus } from '../../screens/SheduleScreen/components/SchedulePlus';
 import { SheduleHeader } from '../../screens/SheduleScreen/components/SheduleHeader';
 import { ClassesScreen } from '../../screens/ClassesScreen';
+import StudentsScreen from '../../screens/StudentsScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -84,10 +85,11 @@ export const TabNavigator = () => {
           }
         />
         <Tab.Screen
-          name={'NavigationEnum.STUDENTS_TAB1'}
-          component={ScheduleScreen}
+          name={NavigationEnum.STUDENTS_TAB}
+          component={StudentsScreen}
           options={
             {
+              title: "Students",
               tabBarLabel: 'Students',
               tabBarIcon: ({ color, size }) => (
                 <Students name="calendar" size={size} color={color} />

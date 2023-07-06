@@ -22,6 +22,7 @@ const ResultClassModal = () => {
         navigation.goBack();
     }
     const { item, actionBtn, nameAction } = params;
+    console.log(item, 'modal\n\n\n');
 
     const handleAction = () => {
         actionBtn();
@@ -58,7 +59,17 @@ const ResultClassModal = () => {
                                             </View>
                                             <Text style={styles.underlineText}>Payment Tracking</Text>
                                         </View>
-                                    </View>) : (<Text>Class not found</Text>)}
+                                    </View>) : null}
+                                {item.Balance ?
+                                    (<View>
+                                        <Text style={styles.title}>{item.FirstName} {item.LastName}</Text>
+                                        <Text style={styles.text}>{item.Email} students</Text>
+                                        <Text style={styles.text}>{item.PhoneNumber}</Text>
+                                        <Text style={styles.text}>
+                                            <Text style={styles.title}>Notes: </Text>
+                                            {item.Notes}</Text>
+
+                                    </View>) : null}
                             </View>
                             <View style={{ width: '100%', alignItems: 'center' }}>
                                 <CustomButton text={nameAction} onPress={handleAction} />

@@ -27,9 +27,9 @@ const StudentsItem: React.FC<IStudentsItem> = ({ item }) => {
         navigation.navigate(NavigationEnum.EDIT_STUDENTS_SCREEN, { item });
     };
 
-    const handleDocument = () => {
+    const handleInfo = () => {
         //@ts-ignore
-        navigation.navigate(NavigationEnum.CLASSES_PREVIEW_SCREEN, { item });
+        navigation.navigate(NavigationEnum.PREVIEW_STUDENTS_SCREEN, { item });
     }
 
     const handleDelete = () => {
@@ -50,7 +50,10 @@ const StudentsItem: React.FC<IStudentsItem> = ({ item }) => {
                         <View style={styles.paymentItem}>
                             <PhoneIcon />
                         </View>
-                        <Text style={styles.text}>{item.PhoneNumber}</Text>
+                        <Text style={styles.text}>
+                            {
+                                //@ts-ignore
+                                item.Phone}</Text>
                     </View>
                     <View style={styles.payment}>
                         <View style={styles.paymentItem}>
@@ -64,7 +67,12 @@ const StudentsItem: React.FC<IStudentsItem> = ({ item }) => {
                     </Text>
                 </View>
                 <View>
-                    <Text style={[styles.underlineText, styles.textRight]}>Enrolled Classes: {item.EnrolledClasses.length}</Text>
+                    <TouchableOpacity
+                        style={styles.linkItem}
+                        onPress={handleInfo}>
+                        <Text style={[styles.underlineText, styles.textRight]}>Enrolled Classes: {item.EnrolledClasses.length}</Text>
+
+                    </TouchableOpacity>
                     <Text style={[styles.underlineText, styles.textRight]}>Balance: <Text style={{ color: '#169861' }}>
                         {item.Balance}
                     </Text>
@@ -85,7 +93,7 @@ const StudentsItem: React.FC<IStudentsItem> = ({ item }) => {
                     ) : (
                         <TouchableOpacity
                             style={styles.linkItem}
-                            onPress={handleEdit}
+                            onPress={handleDelete}
                         >
                         </TouchableOpacity>
                     )}

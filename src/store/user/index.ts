@@ -1,18 +1,21 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ICheckinUser, IStudentResponse, IStudentsResponse, IUserStudent, IUserStudentResponse } from "../../common/types/user";
+import { ICheckinUser, IStudentByIdResponse, IStudentResponse, IStudentsResponse, IUserStudent, IUserStudentResponse } from "../../common/types/user";
 
 interface IUserStore {
     students: Array<IUserStudent>;
     currentStudent: Array<IUserStudentResponse>;
     checkins: Array<ICheckinUser>;
     users: Array<IStudentResponse>;
+    studentList: Array<IStudentByIdResponse>;
 }
 
 const initialState: IUserStore = {
     students: [],
     currentStudent: [],
     checkins: [],
-    users: []
+    users: [],
+    studentList: []
+
 }
 
 const userSlice = createSlice({
@@ -34,9 +37,12 @@ const userSlice = createSlice({
         addStudentAction: (state, action: PayloadAction<IUserStudent>) => {
             state.students = [action.payload, ...state.students]
         },
+        setStudentListAction: (state, action: PayloadAction<Array<IStudentByIdResponse>>) => {
+            state.studentList = action.payload
+        }
     },
 })
 
 
-export const { setStudentAction, addStudentAction, setCheckinStudentAction, setCurrentStudentAction, setUsersAction } = userSlice.actions
+export const { setStudentAction, addStudentAction, setCheckinStudentAction, setCurrentStudentAction, setUsersAction, setStudentListAction } = userSlice.actions
 export default userSlice.reducer

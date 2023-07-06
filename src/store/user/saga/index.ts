@@ -1,9 +1,9 @@
 import { AxiosResponse } from "axios";
 import { SagaIterator } from "redux-saga";
 import { call, put, takeEvery } from "redux-saga/effects";
-import { addStudentAction, setCheckinStudentAction, setCurrentStudentAction, setStudentAction, setUsersAction } from "..";
+import { addStudentAction, setCheckinStudentAction, setCurrentStudentAction, setStudentAction, setStudentListAction, setUsersAction } from "..";
 import { IAction } from "../../../common/types/common.types";
-import { ICheckinUser, IUserCreateRequest, IUserStudent, ICheckinsId, IUserCheckinsRequest, IDeleteUserRequest, IUpdateStudent, IUserStudentResponse, IStudentRequest, IStudentResponse, IStudentsRequest, IStudentsResponse } from "../../../common/types/user";
+import { ICheckinUser, IUserCreateRequest, IUserStudent, ICheckinsId, IUserCheckinsRequest, IDeleteUserRequest, IUpdateStudent, IUserStudentResponse, IStudentRequest, IStudentResponse, IStudentsRequest, IStudentsResponse, IStudentByIdResponse } from "../../../common/types/user";
 import { UserService } from "../../../services/axios/user";
 import { ErrorFilterService } from "../../../services/error-filter/error-filter.service";
 import { UserContactsEnum } from "../constants";
@@ -130,6 +130,21 @@ export function* fetchStudentsWorker(payload: IAction<IStudentsRequest>): SagaIt
         ErrorFilterService.validateError(error)
     }
 }
+export function* fetchStudentsByIdWorker(payload: IAction<IStudentRequest>): SagaIterator {
+    try {
+        const { data }: AxiosResponse<Array<IStudentByIdResponse>, any> = yield call(
+            UserService.fetchStudentById,
+            payload.payload
+        );
+        if (data) {
+            console.log(data);
+
+            yield put(setStudentListAction(data))
+        }
+    } catch (error) {
+        ErrorFilterService.validateError(error)
+    }
+}
 // update student 
 export function* updateStudentWorker(payload: IAction<IStudentRequest & IUserCreateRequest>): SagaIterator {
     try {
@@ -153,5 +168,6 @@ export function* userWatcher() {
     yield takeEvery(UserContactsEnum.UPDATE_USER, updateUserWorker)
     yield takeEvery(UserContactsEnum.DELETE_STUDENTS, deleteStudentWorker)
     yield takeEvery(UserContactsEnum.FETCH_STUDENTS_BY_STATUS, fetchStudentsWorker)
+    yield takeEvery(UserContactsEnum.FETCH_STUDENTS_BY_ID, fetchStudentsByIdWorker)
     yield takeEvery(UserContactsEnum.UPDATE_STUDENTS, updateStudentWorker)
 }

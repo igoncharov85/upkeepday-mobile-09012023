@@ -41,4 +41,7 @@ export class UserService {
 
         return await $axiosAuth.put(`/tutor/students/${StudentId}`, student)
     }
+    static async fetchStudentById({ StudentId }: (IStudentRequest)) {
+        return await $axiosAuth.get(`/tutor/students/${StudentId}/classes`)
+    }
 }

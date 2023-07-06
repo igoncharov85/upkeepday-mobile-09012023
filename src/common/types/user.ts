@@ -68,7 +68,7 @@ export interface IStudent {
     FirstName: string,
     LastName: string,
     Email: string,
-    PhoneNumber: string,
+    Phone: string,
     Notes: string
 }
 export interface IUpdateStudent {
@@ -92,4 +92,20 @@ export interface IStudentResponse {
     StudentId: number,
     EnrolledClasses: Array<any>,
     Balance: number
+}
+export interface ISlot {
+    SlotUid: string;
+    DayOfWeek: number;
+    StartTime: string;
+    Duration: number;
+}
+export interface IStudentByIdResponse {
+    Status: string;
+    ClassId: number;
+    Name: string;
+    StartDate: string;
+    EndDate: string;
+    Attended: number;
+    Scheduled: number;
+    Slots: ISlot[];
 }

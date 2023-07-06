@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import { dispatch } from '../../../../store/store';
-import { createUserAction, updateStudentAction } from '../../../../store/user/actions';
+import { createUserAction, fetchStudentsByIdAction, updateStudentAction } from '../../../../store/user/actions';
 import styles from './styles';
 import { Formik, FormikProps, withFormik } from 'formik';
 import { IUserCreateRequest, IUserStudent } from '../../../../common/types/user';
@@ -14,6 +14,7 @@ import { IExistingStudent } from '../../../../common/types/schedule.types';
 import { InputForm } from '../../../AddClassScreen/components/InputForm';
 import { ScreenHeader } from '../../../../components/ScreenHeader';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { NavigationEnum } from '../../../../common/constants/navigation';
 
 interface INewStudentProps {
 }
@@ -32,13 +33,15 @@ export const EditStudentScreen: React.FC<INewStudentProps> = () => {
         FirstName: item.FirstName || '',
         LastName: item.LastName || '',
         Email: item.Email || '',
-        Phone: item.PhoneNumber || '',
+        Phone: item.Phone || '',
         Notes: item.Notes || '',
     };
+    useEffect(() => {
+        dispatch(fetchStudentsByIdAction({ StudentId: item.StudentId }))
+    }, []);
     const goBack = () => {
         navigation.goBack();
     };
-    const handleTypeChange = () => { };
     const renderForm = ({
         touched,
         errors,
@@ -108,12 +111,12 @@ export const EditStudentScreen: React.FC<INewStudentProps> = () => {
                 FirstName: values.FirstName,
                 LastName: values.LastName,
                 Email: values.Email,
-                PhoneNumber: values.Phone,
+                Phone: values.Phone,
                 Notes: values.Notes || '',
 
             }));
-
-            resetForm();
+            //@ts-ignore
+            navigation.navigate(NavigationEnum.STUDENTS_TAB);
         },
         ...formicDefaultProps,
     })(renderForm);

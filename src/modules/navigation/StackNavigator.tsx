@@ -30,6 +30,7 @@ import ClassesStudentScreen from '../../screens/ClassesScreen/screens/ClassesStu
 import ChangeStudentScreen from '../../screens/ClassesScreen/screens/ClassesStudentScreen/ChangeStudentScreen';
 import StudentsScreen from '../../screens/StudentsScreen';
 import { EditStudentScreen } from '../../screens/StudentsScreen/screens/EditStudentScreen';
+import PreviewStudentScreen from '../../screens/StudentsScreen/screens/PreviewStudentScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -148,9 +149,12 @@ export const StackNavigator = memo(() => {
         />
         <Stack.Screen
           name={NavigationEnum.EDIT_STUDENTS_SCREEN}
-
           //@ts-ignore
           component={EditStudentScreen}
+        />
+        <Stack.Screen
+          name={NavigationEnum.PREVIEW_STUDENTS_SCREEN}
+          component={PreviewStudentScreen}
         />
 
       </Stack.Group>

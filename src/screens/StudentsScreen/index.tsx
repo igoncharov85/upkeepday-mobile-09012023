@@ -15,7 +15,6 @@ const StudentsScreen = () => {
     const { users } = useAppSelector(state => state.user);
 
     useEffect(() => {
-        console.log(users);
 
     }, [users]);
     return (

@@ -29,6 +29,12 @@ export default StyleSheet.create({
         lineHeight: 19,
         color: '#171930',
     },
+    text: {
+        fontWeight: '600',
+        fontSize: 12,
+        lineHeight: 19,
+        color: '#171930',
+    },
     decorationLine: {
         width: '150%',
         marginLeft: -40,

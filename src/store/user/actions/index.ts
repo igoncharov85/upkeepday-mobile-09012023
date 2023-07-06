@@ -16,4 +16,5 @@ export const updateUserAction = createAction<IUpdateStudent>(UserContactsEnum.UP
 
 export const deleteStudentAction = createAction<IStudentRequest>(UserContactsEnum.DELETE_STUDENTS)
 export const fetchStudentsAction = createAction<IStudentsRequest>(UserContactsEnum.FETCH_STUDENTS_BY_STATUS)
+export const fetchStudentsByIdAction = createAction<IStudentRequest>(UserContactsEnum.FETCH_STUDENTS_BY_ID)
 export const updateStudentAction = createAction<(IStudentRequest & IStudent)>(UserContactsEnum.UPDATE_STUDENTS)

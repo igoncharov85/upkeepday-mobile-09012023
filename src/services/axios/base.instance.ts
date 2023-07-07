@@ -14,8 +14,8 @@ export const $axiosAuth = axios.create({
 });
 
 $axiosBase.interceptors.request.use(
-    async (config) => {
-        console.log(`--------------------------\nrequest: ${config.baseURL}${config.url}\n_____________________________________\n`);
+    async (config: any) => {
+        console.log(`--------------------------\nrequest: ${config.method.toUpperCase()} ${config.baseURL}${config.url}\n_____________________________________\n`);
         return config;
     },
     (error) => {
@@ -28,7 +28,7 @@ $axiosAuth.interceptors.request.use(
     async (config: any) => {
         const token = await AsyncStorageService.getToken();
 
-        console.log(`\n_____________________________________\nrequest: ${config.baseURL}${config.url} ${token}\n_____________________________________\n`);
+        console.log(`\n_____________________________________\nrequest: ${config.method.toUpperCase()} ${config.baseURL}${config.url} ${token}\n_____________________________________\n`);
         config.headers = {
             ...config.headers,
             Accept: "*/*",

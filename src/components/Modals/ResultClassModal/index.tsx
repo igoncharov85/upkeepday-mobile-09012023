@@ -64,7 +64,7 @@ const ResultClassModal = () => {
                                     (<View>
                                         <Text style={styles.title}>{item.FirstName} {item.LastName}</Text>
                                         <Text style={styles.text}>{item.Email} students</Text>
-                                        <Text style={styles.text}>{item.PhoneNumber}</Text>
+                                        <Text style={styles.text}>{item.Phone}</Text>
                                         <Text style={styles.text}>
                                             <Text style={styles.title}>Notes: </Text>
                                             {item.Notes}</Text>

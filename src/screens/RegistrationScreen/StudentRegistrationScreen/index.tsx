@@ -29,7 +29,7 @@ const registrationProps = {
   password: '',
   lastName: '',
   firstName: '',
-  phoneNumber: '',
+  phone: '',
   address: '',
   postalCode: '',
   country: '',
@@ -104,11 +104,11 @@ export const StudentRegistrationScreen: FC<IStudentRegistrationScreen> = memo(
           </View>
           <View style={styles.inputWrapper}>
             <CustomInput
-              onChangeText={handleChange('phoneNumber')}
-              onBlur={handleBlur('phoneNumber')}
-              value={values.phoneNumber}
-              touched={!!touched.phoneNumber}
-              validationErrorText={errors.phoneNumber}
+              onChangeText={handleChange('phone')}
+              onBlur={handleBlur('phone')}
+              value={values.phone}
+              touched={!!touched.phone}
+              validationErrorText={errors.phone}
               placeholder={'Phone number'}
               labelText={'Phone number'}
             />
@@ -179,7 +179,7 @@ export const StudentRegistrationScreen: FC<IStudentRegistrationScreen> = memo(
               LastName: values.lastName,
               Login: values.email,
               PhoneCountry: values.postalCode,
-              PhoneNumber: values.phoneNumber,
+              Phone: values.phone,
               PostalCode: values.postalCode,
               State: values.state,
             };

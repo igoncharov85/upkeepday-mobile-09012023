@@ -67,13 +67,15 @@ export const PrepaymentConfigurationScreen: React.FC<IPrepaymentConfigurationScr
             <View style={{ padding: 20, paddingBottom: 0 }}>
                 <ScreenHeader text={'Prepayment Configuration'} onBackPress={() => navigation.goBack()} withBackButton={true} />
             </View>
-            <Text style={styles.subtitle}>CP will track prepayments against student’s attendance</Text>
+            <View style={{ alignItems: 'center' }}>
+                <Text style={styles.subtitle}>UpkeepDay will track prepayments against student’s attendance</Text>
+            </View>
             <View>
                 <ListGradientCircleButtons onPress={HandleMakeupRequired} label='Do you require to schedule a make-up for this Class?' buttons={[{ title: 'Yes', subtitle: ' - I need to make up a class if student(s) was absent' }, { title: 'No', subtitle: ' - I don’t need to make up a class if student(s) was absent' }]} />
                 <ListGradientCircleButtons onPress={HandleTrackPrepayment} twoLines={true} label='Do you receive Prepayment for this Class?' buttons={[{ title: 'Yes', subtitle: ' - Track my prepayments' }, { title: 'No', subtitle: ' ' }]} />
             </View>
             <View style={{ flex: 1, padding: 20, justifyContent: 'flex-end' }}>
-                <CustomButton text={'Next Step'} onPress={goTextStep} />
+                <CustomButton text={'Save'} onPress={goTextStep} />
             </View>
         </View >
     )

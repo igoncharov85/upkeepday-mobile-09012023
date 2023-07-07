@@ -6,6 +6,7 @@ export default StyleSheet.create({
         paddingTop: 8
     },
     title: {
+        width: '70%',
         fontSize: 14,
         lineHeight: 19,
         color: 'rgba(23, 25, 48, 0.4)',

@@ -82,6 +82,7 @@ export const StudentRegistrationScreen: FC<IStudentRegistrationScreen> = memo(
           </View>
           <View style={styles.inputWrapper}>
             <CustomInput
+              autoCapitalize='words'
               onChangeText={handleChange('firstName')}
               onBlur={handleBlur('firstName')}
               value={values.firstName}
@@ -93,6 +94,7 @@ export const StudentRegistrationScreen: FC<IStudentRegistrationScreen> = memo(
           </View>
           <View style={styles.inputWrapper}>
             <CustomInput
+              autoCapitalize='words'
               onChangeText={handleChange('lastName')}
               onBlur={handleBlur('lastName')}
               value={values.lastName}
@@ -115,6 +117,7 @@ export const StudentRegistrationScreen: FC<IStudentRegistrationScreen> = memo(
           </View>
           <View style={styles.inputWrapper}>
             <CustomInput
+              autoCapitalize='words'
               onChangeText={handleChange('address')}
               onBlur={handleBlur('address')}
               value={values.address}

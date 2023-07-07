@@ -54,7 +54,7 @@ export const ChooseRoleScreen: FC<IChooseRoleScreen> = memo(
     };
     return (
       <View style={styles.container}>
-        <ScreenHeader text={'Welcome To CP'} />
+        <ScreenHeader text={'Welcome To UpkeepDay!'} />
 
         <View style={styles.contentWrapper}>
           <View style={styles.subWrapper}>

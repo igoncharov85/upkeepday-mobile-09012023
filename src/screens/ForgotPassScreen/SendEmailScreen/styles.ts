@@ -11,7 +11,9 @@ export default StyleSheet.create({
         height: '100%',
         alignItems: 'center'
     },
-  
+    scroll: {
+        width: '100%',
+    },
     formWrapper: {
         alignItems: 'center',
         width: '100%',

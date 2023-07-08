@@ -93,7 +93,7 @@ export const WeekTable: FC<ISheduleTable> = memo(
       onHandleData(slots)
 
     }, [slots])
-    const timeData = generateTimeData(`00:00`, '24:00');
+    const timeData = generateTimeData('00:00', '23:00');
 
     const weekStructure = createWeekStructure(
       startOfWeek,

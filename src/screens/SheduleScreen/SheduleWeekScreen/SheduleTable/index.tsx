@@ -38,7 +38,7 @@ export const SheduleTable: FC<ISheduleTable> = memo(
 
     const isFocused = useIsFocused();
     const startWeekOfDay = getToday(startOfWeek)[1];
-    const timeData = generateTimeData('00:00', '24:00');
+    const timeData = generateTimeData('00:00', '23:00');
     const weekStructure = createWeekStructure(startOfWeek, endOfWeek, timeData);
 
 

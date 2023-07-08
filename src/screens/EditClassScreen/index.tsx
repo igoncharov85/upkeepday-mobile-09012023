@@ -16,9 +16,9 @@ export const EditClassScreen = () => {
     const route = useRoute();
     const item: any = route.params;
     const relloverClass = () => {
-        const classLesson = item.item;
+        const classLesson = item?.item;
 
-        dispatch(
+        classLesson && dispatch(
             updateCurrentClassRequestAction({
                 Class: {
                     Name: classLesson.Name,
@@ -47,19 +47,19 @@ export const EditClassScreen = () => {
     return (
         <View style={styles.container}>
             <ScreenHeader
-                text={item.item.Name}
+                text={item?.item.Name}
                 withBackButton={true}
                 onBackPress={() => navigation.goBack()}
             />
             <View style={styles.buttonWrapper}>
                 <ClassesEditButton title={'Update Class Name and Location'} navigationName={NavigationEnum.CLASSES_EDIT_NAME_SCREEN} data={item} />
-                <ClassesEditButton title={'Update Finish Date (Extend)'} navigationName={NavigationEnum.CLASSES_EDIT_DATE_SCREEN} data={item} />
+                {/* <ClassesEditButton title={'Update Finish Date (Extend)'} navigationName={NavigationEnum.CLASSES_EDIT_DATE_SCREEN} data={item} /> */}
                 <ClassesEditButton title={'Update Students'} navigationName={NavigationEnum.CLASSES_STUDENT_SCREEN} data={item} />
-                <ClassesEditButton title={'Rollover Class'} navigationName={NavigationEnum.ADD_CLASS_SCREEN} action={relloverClass} data={{ screenName: 'Rollover Class', item: item.item }} />
+                <ClassesEditButton title={'Rollover Class'} navigationName={NavigationEnum.ADD_CLASS_SCREEN} action={relloverClass} data={{ screenName: 'Rollover Class', item: item?.item }} />
                 <ClassesEditButton title={'Archive Class'} navigationName={NavigationEnum.RESULT_CLASS_MODAL} data={
                     {
-                        item: item.item,
-                        actionBtn: () => dispatch(updatedStatusClassesAction({ id: item.item.ClassId, Status: 'Archived' })),
+                        item: item?.item,
+                        actionBtn: () => dispatch(updatedStatusClassesAction({ id: item?.item.ClassId, Status: 'Archived' })),
                         nameAction: 'Archive',
                     }
                 } />

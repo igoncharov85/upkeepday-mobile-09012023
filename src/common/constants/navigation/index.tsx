@@ -24,6 +24,7 @@ export enum NavigationEnum {
   SCHEDULE_TAB = 'navigation/SCHEDULE_TAB',
   TO_DO_TAB = 'navigation/TO_DO_TAB',
   CLASSES_TAB = 'navigation/CLASSES_TAB',
+  MORE_TAB = 'navigation/MORE_TAB',
   //CLASSES
   CLASS_SCREEN = 'navigation/CLASS_SCREEN',
   EDIT_CLASS_SCREEN = 'navigation/EDIT_CLASS_SCREEN',
@@ -37,6 +38,8 @@ export enum NavigationEnum {
   STUDENTS_SCREEN = 'navigation/STUDENTS_SCREEN',
   EDIT_STUDENTS_SCREEN = 'navigation/EDIT_STUDENTS_SCREEN',
   PREVIEW_STUDENTS_SCREEN = 'navigation/PREVIEW_STUDENTS_SCREEN',
+  //MORE
+  MORE_SCREEN = 'navigation/MORE_SCREEN',
 
   RESULT_CLASS_MODAL = 'navigation/RESULT_CLASS_MODAL'
 }

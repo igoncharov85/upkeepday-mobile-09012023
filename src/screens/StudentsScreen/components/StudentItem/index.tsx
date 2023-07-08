@@ -12,6 +12,7 @@ import { IStudentResponse } from "../../../../common/types/user";
 import PhoneIcon from "../../../../../assets/svg/students/PhoneIcon";
 import { dispatch } from "../../../../store/store";
 import { deleteStudentAction } from "../../../../store/user/actions";
+import CheckIcon from "../../../../../assets/svg/classes/CheckIcon";
 
 interface IStudentsItem {
     item: IStudentResponse
@@ -33,6 +34,8 @@ const StudentsItem: React.FC<IStudentsItem> = ({ item }) => {
     }
 
     const handleDelete = () => {
+        console.log(item, 'delete student -------------------------------------------');
+
         //@ts-ignore
         navigation.navigate(NavigationEnum.RESULT_CLASS_MODAL, {
             item: item,
@@ -82,7 +85,7 @@ const StudentsItem: React.FC<IStudentsItem> = ({ item }) => {
 
             <View style={styles.part}>
                 <View style={styles.link}>
-                    {item.EnrolledClasses[0].Status?.toLocaleLowerCase() === EClassesStatus.scheduled ? (
+                    {item.EnrolledClasses[0] && item.EnrolledClasses[0].Status?.toLocaleLowerCase() === EClassesStatus.scheduled ? (
                         <>
                             <TouchableOpacity
                                 style={styles.linkItem}
@@ -95,6 +98,7 @@ const StudentsItem: React.FC<IStudentsItem> = ({ item }) => {
                             style={styles.linkItem}
                             onPress={handleDelete}
                         >
+                            <CheckIcon />
                         </TouchableOpacity>
                     )}
                 </View>

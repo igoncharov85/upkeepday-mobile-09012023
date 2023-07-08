@@ -9,7 +9,7 @@ import SearchIcon from '../../../../../assets/svg/SearchIcon';
 import styles from './styles';
 import CheckIcon from '../../../../../assets/svg/classes/CheckIcon';
 import MinPlus from '../../../../../assets/svg/schedule/MinPlus';
-import { deleteUserAction, fetchStudentsByIdAction, fetchUsersByIdAction } from '../../../../store/user/actions';
+import { deleteStudentAction, deleteUserAction, fetchStudentsByIdAction, fetchUsersByIdAction } from '../../../../store/user/actions';
 import { useAppSelector } from '../../../../store/hooks';
 import { EditStudentsNavigation } from './StudentsNavigation';
 
@@ -32,10 +32,22 @@ const PreviewStudentScreen: React.FC<IAddStudentsScreen> = () => {
     const [studentsList, setStudentsList] = useState(studentList);
     const [status, setStatus] = useState('');
     //@ts-ignore
-    const goNextStep = () => navigation.navigate(NavigationEnum.EDIT_CLASS_SCREEN);
+    const goNextStep = () => navigation.navigate(NavigationEnum.STUDENTS_TAB);
 
-    function onDeleteStudent(ClassId: number) {
-        dispatch(deleteUserAction({ StudentId: item.StudentId, Classes: [ClassId] }));
+    function onDeleteStudent(ClassId: number, Name: string) {
+        console.log(item, '((((((((((((((((((((((((((((((((');
+        console.log(Name);
+
+        //@ts-ignore
+        navigation.navigate(NavigationEnum.RESULT_CLASS_MODAL, {
+            item: {
+                StudentName: `${item.FirstName} ${item.LastName}`,
+                ClassName: Name
+            },
+            actionBtn: () => { dispatch(deleteUserAction({ StudentId: item.StudentId, Classes: [ClassId] })) },
+            nameAction: 'Confirm',
+        })
+
     }
     const onHandleNavigation = (type: any) => {
         setStatus(type);
@@ -44,6 +56,8 @@ const PreviewStudentScreen: React.FC<IAddStudentsScreen> = () => {
     const goBack = () => navigation.goBack()
 
     useEffect(() => {
+        console.log(isFocused);
+
         dispatch(fetchStudentsByIdAction({ StudentId: item.StudentId }));
     }, [isFocused]);
 
@@ -75,7 +89,7 @@ const PreviewStudentScreen: React.FC<IAddStudentsScreen> = () => {
                             <View style={styles.container}>
 
                                 <View >
-                                    {studentList?.filter((user: any) => user.Name.toLowerCase().includes(searchText?.toLowerCase()) && status == user?.Status?.toLowerCase()).map((user: any) => {
+                                    {studentList?.filter((user: any) => user.Name?.toLowerCase().includes(searchText?.toLowerCase()) && status == user?.Status?.toLowerCase()).map((user: any) => {
                                         return (
                                             //@ts-ignore
                                             <Student item={user} onDeleteClass={onDeleteStudent} key={user.ClassId} />
@@ -101,7 +115,7 @@ interface IStudent {
 const Student: React.FC<IStudent> = ({ item, onDeleteClass }) => {
     const { Name, Attended, EndDate, Scheduled, StartDate, Status, ClassId }: any = item || {};
     const onDeleteStudent = () => {
-        onDeleteClass(ClassId);
+        onDeleteClass(ClassId, Name);
     }
     return (
         <>

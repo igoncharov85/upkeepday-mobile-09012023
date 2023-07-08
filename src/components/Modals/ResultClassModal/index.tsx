@@ -27,7 +27,7 @@ const ResultClassModal = () => {
     const handleAction = () => {
         actionBtn();
         closeModal();
-        dispatch(fetchClassesAction(item.Status.toLowerCase()))
+        item?.Status && dispatch(fetchClassesAction(item.Status.toLowerCase()))
     }
 
     return (
@@ -62,12 +62,20 @@ const ResultClassModal = () => {
                                     </View>) : null}
                                 {item.Balance ?
                                     (<View>
-                                        <Text style={styles.title}>{item.FirstName} {item.LastName}</Text>
-                                        <Text style={styles.text}>{item.Email} students</Text>
-                                        <Text style={styles.text}>{item.PhoneNumber}</Text>
-                                        <Text style={styles.text}>
-                                            <Text style={styles.title}>Notes: </Text>
+                                        <Text style={[styles.title, { textAlign: 'center' }]}>{item.FirstName} {item.LastName}</Text>
+                                        <Text style={[styles.text, { textAlign: 'center' }]}>{item.Phone}</Text>
+                                        <Text style={[styles.text, { textAlign: 'center' }]}>{item.Email}</Text>
+                                        <Text style={[styles.text, { textAlign: 'center' }]}>
+                                            <Text style={styles.title}>{item.Notes && 'Notes:'}</Text>
                                             {item.Notes}</Text>
+
+                                    </View>) : null}
+                                {item.StudentName ?
+                                    (<View>
+                                        <Text style={[styles.title, { textAlign: 'center' }]}>Remove Student</Text>
+                                        <Text style={[styles.text, { textAlign: 'center' }]}>{item.StudentName}</Text>
+                                        <Text style={[styles.text, { textAlign: 'center' }]}>{item.ClassName}</Text>
+
 
                                     </View>) : null}
                             </View>

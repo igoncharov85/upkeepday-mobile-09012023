@@ -2,7 +2,7 @@ import { useIsFocused } from '@react-navigation/native';
 import React, { useEffect } from 'react';
 import { View, ScrollView } from 'react-native';
 import { StudentsNavigation } from './components/StudentsNavigation';
-import ClassesItem from './components/StudentItem';
+import StudentItem from './components/StudentItem';
 import styles from './styles';
 import { useAppSelector } from '../../store/hooks';
 import { dispatch } from '../../store/store';
@@ -24,7 +24,7 @@ const StudentsScreen = () => {
                 <View style={styles.container}>
                     {
                         users.map((item, index) => (
-                            <ClassesItem key={index} item={item} />
+                            <StudentItem key={index} item={item} />
                         ))
                     }
                 </View>

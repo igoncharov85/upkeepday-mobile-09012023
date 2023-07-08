@@ -28,4 +28,7 @@ export class AuthService {
     static async getStates(country: string) {
         return axios.get(`${BASE_URL}/reference/countries/${country}`)
     }
+    static async logout() {
+        return $axiosBase.post('/account/logout')
+    }
 }

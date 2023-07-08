@@ -12,7 +12,6 @@ import { useAppSelector } from "../../../../store/hooks";
 import { NavigationEnum } from "../../../../common/constants/navigation";
 import { dispatch } from "../../../../store/store";
 import { findScheduleConflicts } from "../../../../services/utils/findConflict.util";
-import { updateCurrentClassRequestAction } from "../../../../store/shedule";
 import { ScreenLoading } from "../../../../components/UI/ScreenLoading";
 import { WeekTable } from "./WeekTable";
 import { DaysOfWeek } from "./DaysOfWeek";
@@ -20,12 +19,6 @@ import { fetchSessionClassesByIdAction } from "../../../../store/classes/actions
 import { IClassesResponse } from "../../../../common/types/classes.types";
 
 function removeElementsFromArray(arr1: any[], arr2: any[]) {
-    console.log(
-        arr1,
-        "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%",
-        arr2,
-    );
-
     return arr1.filter(item1 => {
         return !arr2.some(item2 => {
             return JSON.stringify(item1) === JSON.stringify(item2);
@@ -73,7 +66,7 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
     const onSave = () => {
 
         //@ts-ignore
-        navigation.goBack()
+        navigation.navigate(NavigationEnum.CLASSES_TAB)
     }
 
     useEffect(() => {
@@ -81,8 +74,6 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
             setScreenLoading(false)
         };
     }, []);
-    console.log(removeElementsFromArray(CurrentScheduledEntries, currentSession), 'removeElementsFromArray\n\n\n\n\n\n\n\n\n\n\n\n');
-
 
 
     useEffect(() => {

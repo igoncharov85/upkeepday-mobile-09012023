@@ -28,7 +28,7 @@ const ClassesStudentScreen: React.FC<IAddStudentsScreen> = () => {
     const [searchText, setSearchText] = useState('');
     const [studentsList, setStudentsList] = useState(currentStudent);
     //@ts-ignore
-    const goNextStep = () => navigation.navigate(NavigationEnum.EDIT_CLASS_SCREEN);
+    const goNextStep = () => navigation.navigate(NavigationEnum.CLASSES_TAB);
 
     const onDeleteStudent = (studentId: number) => {
         dispatch(deleteUserAction({ StudentId: studentId, Classes: [item.ClassId] }));
@@ -98,7 +98,9 @@ const Student: React.FC<Student> = ({ name, onClick }) => {
         <>
             <View style={styles.student}>
                 <Text style={styles.studentName}>{name}</Text>
-                <CheckButton onPress={onClick} />
+                <TouchableOpacity onPress={onClick}>
+                    <CheckIcon />
+                </TouchableOpacity>
             </View>
             <DecorationLine />
         </>

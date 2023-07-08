@@ -16,6 +16,7 @@ import { SchedulePlus } from '../../screens/SheduleScreen/components/SchedulePlu
 import { SheduleHeader } from '../../screens/SheduleScreen/components/SheduleHeader';
 import { ClassesScreen } from '../../screens/ClassesScreen';
 import StudentsScreen from '../../screens/StudentsScreen';
+import MoreScreen from '../../screens/MoreScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -98,10 +99,11 @@ export const TabNavigator = () => {
           }
         />
         <Tab.Screen
-          name={'NavigationEnum.STUDENTS_TAB2'}
-          component={ScheduleScreen}
+          name={NavigationEnum.MORE_TAB}
+          component={MoreScreen}
           options={
             {
+              title: "More",
               tabBarLabel: 'More',
               tabBarIcon: ({ color, size }) => (
                 <More name="calendar" size={size} color={color} />

@@ -74,7 +74,7 @@ const ClassesEditPreviewScreen: React.FC<IDatePreviewScreen> = () => {
                     { id: item.ClassId, to: sendString, Sessions: slots }
                 ))
                 //@ts-ignore
-                navigation.navigate(NavigationEnum.EDIT_CLASS_SCREEN);
+                navigation.navigate(NavigationEnum.CLASSES_TAB);
             },
             nameAction: 'Confirm',
         })

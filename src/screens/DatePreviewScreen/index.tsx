@@ -33,7 +33,7 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
     const [startDateWeek, setStartDateWeek] = useState(new Date(weekDates.startDate));
     const [endDateWeek, setEndDateWeek] = useState(new Date(weekDates.endDate));
     const [screenLoading, setScreenLoading] = useState(false);
-    const { CurrentScheduledEntries, createCurrentClassRequest, WeekTimeSlots, GeneratedScheduleEntries, loading } = useAppSelector(state => state.schedule);
+    const { CurrentScheduledEntries, WeekTimeSlots, GeneratedScheduleEntries, loading } = useAppSelector(state => state.schedule);
 
 
 

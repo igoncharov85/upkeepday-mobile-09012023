@@ -1,11 +1,11 @@
 import React, { FC, memo, useEffect, useRef, useState } from 'react';
-import { StyleSheet, Text, View, StyleProp, ViewStyle, ScrollView } from 'react-native';
-import { WeekTableItem } from './WeekTableItem';
-import styles from './styles';
-import { createWeekStructure, generateTimeData, isToday } from '../../../services/utils/generateDate.util';
+import { Text, View, StyleProp, ViewStyle, ScrollView } from 'react-native';
 
+import { WeekTableItem } from './WeekTableItem';
+import { createWeekStructure, generateTimeData } from '../../../services/utils/generateDate.util';
 import { IWeekTimeSlot } from '../../../common/types/schedule.types';
-import { generateUUID } from '../../../services/utils/generateUUIDKey.util';
+import { useAppSelector } from '../../../store/hooks';
+import styles from './styles';
 
 
 interface ISheduleTable {
@@ -17,8 +17,8 @@ export const WeekTable: FC<ISheduleTable> = memo(
   ({ startOfWeek, endOfWeek, onHandleData }) => {
     const [slots, setSlots] = useState<IWeekTimeSlot[]>([]);
     const scrollViewRef = useRef<ScrollView>(null);
+    const { createCurrentClassRequest } = useAppSelector(state => state.schedule);
     const onSlotPress = (slot: IWeekTimeSlot) => {
-
       const index = slots.findIndex((event) => event.DayOfWeek === slot.DayOfWeek && event.StartTime === slot.StartTime && event.Duration === slot.Duration);
       if (index === -1) {
         setSlots([...slots, slot]);
@@ -42,9 +42,22 @@ export const WeekTable: FC<ISheduleTable> = memo(
       timeData,
     );
     useEffect(() => {
-
       scrollViewRef.current?.scrollTo({ x: 0, y: 64 * 8, animated: true });
     }, []);
+    useEffect(() => {
+
+      setSlots(
+        createCurrentClassRequest && createCurrentClassRequest.Slots.map(item => {
+          return {
+            Duration: 60,
+            DayOfWeek: item.DayOfWeek,
+            StartTime: item.StartTime,
+          }
+        })
+      )
+      console.log(createCurrentClassRequest.Slots);
+
+    }, [createCurrentClassRequest])
     return (
       <View style={styles.container}>
         <ScrollView ref={scrollViewRef}>
@@ -59,8 +72,8 @@ export const WeekTable: FC<ISheduleTable> = memo(
                 return (
                   <Column key={dayIndex}>
                     {dayEvents?.map((_, index) => {
-
-                      return <WeekTableItem dayOfWeek={dayIndex} timeIndex={index} onHandleClick={onSlotPress} />;
+                      const activeItem = createCurrentClassRequest.Slots.some(item => item.DayOfWeek == dayIndex && item.StartTime == `${index}:00:00`)
+                      return <WeekTableItem activeItem={activeItem} dayOfWeek={dayIndex} timeIndex={index} onHandleClick={onSlotPress} />;
                     })}
 
                   </Column>

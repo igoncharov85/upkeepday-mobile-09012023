@@ -15,6 +15,8 @@ export const EditClassScreen = () => {
     const navigation = useNavigation();
     const route = useRoute();
     const item: any = route.params;
+    console.log(item.item.Slots);
+
     const relloverClass = () => {
         const classLesson = item?.item;
 
@@ -39,7 +41,7 @@ export const EditClassScreen = () => {
 
                 },
                 Students: classLesson.Students,
-                Slots: [],
+                Slots: classLesson.Slots,
                 Sessions: [],
             })
         );
@@ -59,7 +61,12 @@ export const EditClassScreen = () => {
                 <ClassesEditButton title={'Archive Class'} navigationName={NavigationEnum.RESULT_CLASS_MODAL} data={
                     {
                         item: item?.item,
-                        actionBtn: () => dispatch(updatedStatusClassesAction({ id: item?.item.ClassId, Status: 'Archived' })),
+                        actionBtn: () => {
+                            dispatch(updatedStatusClassesAction({ id: item?.item.ClassId, Status: 'Archived' }))
+                            //@ts-ignore
+                            navigation.goBack();
+                        },
+
                         nameAction: 'Archive',
                     }
                 } />

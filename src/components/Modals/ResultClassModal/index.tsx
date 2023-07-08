@@ -62,6 +62,7 @@ const ResultClassModal = () => {
                                     </View>) : null}
                                 {item.Balance ?
                                     (<View>
+
                                         <Text style={[styles.title, { textAlign: 'center' }]}>{item.FirstName} {item.LastName}</Text>
                                         <Text style={[styles.text, { textAlign: 'center' }]}>{item.Phone}</Text>
                                         <Text style={[styles.text, { textAlign: 'center' }]}>{item.Email}</Text>

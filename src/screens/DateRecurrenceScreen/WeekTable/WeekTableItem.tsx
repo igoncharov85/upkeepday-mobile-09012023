@@ -22,6 +22,7 @@ interface IWeekTableItem {
   dayOfWeek: number;
   timeIndex: number;
   onHandleClick: (slot: IWeekTimeSlot) => void;
+  activeItem?: boolean
 }
 export const WeekTableItem: FC<IWeekTableItem> = memo(
   ({
@@ -30,14 +31,19 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
     timeIndex,
     dayOfWeek,
     onHandleClick,
+    activeItem = false
 
   }) => {
-    const [active, setActive] = useState(false)
+    const [active, setActive] = useState(activeItem)
     const colorsTrial = ['#F3AF2C', '#E9600D'];
     const colorsLesson = ['#EAAFC8', '#654EA3'];
-    const startDateTime = `${timeIndex}:00`
+    const startDateTime = `${timeIndex}:00:00`
 
     const onHandleSlot = () => {
+      console.log(
+        { DayOfWeek: dayOfWeek, StartTime: startDateTime as string }
+      );
+
       onHandleClick({ DayOfWeek: dayOfWeek, StartTime: startDateTime as string, Duration: timeDuration })
       setActive(!active)
     }

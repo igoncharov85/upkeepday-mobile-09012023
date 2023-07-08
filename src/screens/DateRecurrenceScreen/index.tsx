@@ -77,7 +77,9 @@ export const DateRecurrenceScreen: React.FC<IDateRecurrenceScreen> = () => {
             <View style={styles.header}>
                 <ScreenHeader text={"Day and Time Recurrence"} onBackPress={navigation.goBack} withBackButton={true} />
             </View>
-            <Text style={styles.title}>Populate a week and CP will replicate other recurrences</Text>
+            <View style={{ alignItems: 'center' }}>
+                <Text style={styles.title}>Populate a week and UpkeepDay will replicate other recurrences</Text>
+            </View>
             <View style={{ flexDirection: 'row', marginLeft: 56, marginRight: 20 }}>
                 {days.map(day => (
                     <View style={{ flex: 1, alignItems: 'center' }}>

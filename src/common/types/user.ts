@@ -11,7 +11,7 @@ export interface IUserStudent {
     LastName: string,
     Email: string,
     PhoneCountry: string | number,
-    PhoneNumber: string,
+    Phone: string,
     StudentId?: number,
     EnrolledClasses: Array<IEnrolledClass>
     Notes?: string
@@ -20,7 +20,7 @@ export interface IStudentsResponse {
     FirstName: string,
     LastName: string,
     Email: string,
-    PhoneNumber: string,
+    Phone: string,
     Notes: string
 }
 export interface IUserStudentResponse {
@@ -33,7 +33,7 @@ export interface IUserCreateRequest {
     FirstName: string,
     LastName: string,
     Email: string,
-    PhoneNumber: string,
+    Phone: string,
     Notes: string
 }
 export interface ICheckinsId {
@@ -87,7 +87,7 @@ export interface IStudentResponse {
     FirstName: string,
     LastName: string,
     Email: string,
-    PhoneNumber: string,
+    Phone: string,
     Notes: string,
     StudentId: number,
     EnrolledClasses: Array<any>,

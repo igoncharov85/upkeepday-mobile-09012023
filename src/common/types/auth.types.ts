@@ -8,7 +8,7 @@ export interface IRegistrationRequest {
     FirstName: string;
     LastName: string;
     PhoneCountry: string;
-    PhoneNumber: string;
+    Phone: string;
     AddressLine1: string;
     Country: string;
     State: string;

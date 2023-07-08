@@ -89,8 +89,9 @@ export const AddClassScreen: React.FC<IAddClassScreen> = memo(() => {
                 <>
                     <View style={{ marginTop: 12 }}>
                         <InputForm
+                            autoCapitalize="sentences"
                             onTouchStart={() => setTouch(true)}
-                            labelText="Name"
+                            labelText="Class Name"
                             value={values.name}
                             onChange={handleChange("name")}
                         />

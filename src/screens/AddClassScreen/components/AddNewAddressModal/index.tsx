@@ -46,12 +46,14 @@ export const AddNewAddressModal: React.FC<IAddNewAddressModal> = ({ visible, han
         return (
             <>
                 <InputForm
+                    autoCapitalize="words"
                     labelText="Address Line 1"
                     onChange={handleChange('addressLine')}
                     value={values.addressLine}
                     validationErrorText={errors.addressLine}
                 />
                 <InputForm
+                    autoCapitalize="words"
                     labelText="City"
                     onChange={handleChange('city')}
                     value={values.city}

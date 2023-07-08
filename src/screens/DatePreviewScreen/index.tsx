@@ -115,7 +115,7 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
             <Text style={{ opacity: 0.4 }}>{slots.length || 0}</Text>
         </Text>
         <View style={{ padding: 20, justifyContent: 'flex-end' }}>
-            <CustomButton text={"Save"} onPress={!conflict.length ? onSave : () => { }} disabled={!(conflict.length < 1)} />
+            <CustomButton text={"Next Step"} onPress={!conflict.length ? onSave : () => { }} disabled={!(conflict.length < 1)} />
         </View>
 
     </View>)

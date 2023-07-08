@@ -57,6 +57,7 @@ export const NewStudent: React.FC<INewStudentProps> = ({ handleTypeChange, onAdd
         return (
             <>
                 <InputForm
+                    autoCapitalize='words'
                     labelText='First Name'
                     onChange={handleChange('FirstName')}
                     value={values.FirstName}
@@ -65,6 +66,7 @@ export const NewStudent: React.FC<INewStudentProps> = ({ handleTypeChange, onAdd
                 />
 
                 <InputForm
+                    autoCapitalize='words'
                     labelText='Last Name'
                     onChange={handleChange('LastName')}
                     value={values.LastName}
@@ -86,6 +88,7 @@ export const NewStudent: React.FC<INewStudentProps> = ({ handleTypeChange, onAdd
                     validationErrorText={touched.Phone && errors.Phone}
                 />
                 <InputForm
+                    autoCapitalize='sentences'
                     labelText='Notes'
                     onChange={handleChange('Notes')}
                     value={values.Notes}

@@ -1,7 +1,8 @@
 import {FormikProps, withFormik} from 'formik';
 import React, {FC, memo, useState} from 'react';
-import {View} from 'react-native';
+import { KeyboardAvoidingView, ScrollView, Text, View } from 'react-native';
 import {formicDefaultProps} from '../../../common/constants/styles/form.config';
+import { keyboardSettings } from '../../../common/constants/styles/keyboard';
 import {EmailShape} from '../../../common/shemas/auth.shape';
 import {
   INavigationBase,
@@ -70,10 +71,18 @@ export const SendEmailScreen: FC<ISendEmailScreen> = memo(
     })(renderForm);
 
     return (
-      <View style={styles.container}>
-        <ScreenHeader text="Forgot Password" />
-        <EmailForm />
-      </View>
+      <KeyboardAvoidingView style={styles.container} {...keyboardSettings}>
+        <ScrollView
+          contentContainerStyle={styles.container}
+          style={styles.scroll}>
+          <ScreenHeader
+            text={'Forgot Password'}
+            withBackButton={true}
+            onBackPress={() => navigation.goBack()}
+          />
+          <EmailForm />
+        </ScrollView>
+      </KeyboardAvoidingView>
     );
   },
 );

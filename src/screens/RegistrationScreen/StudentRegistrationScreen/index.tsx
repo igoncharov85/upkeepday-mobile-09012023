@@ -29,7 +29,7 @@ const registrationProps = {
   password: '',
   lastName: '',
   firstName: '',
-  phoneNumber: '',
+  phone: '',
   address: '',
   postalCode: '',
   country: '',
@@ -82,6 +82,7 @@ export const StudentRegistrationScreen: FC<IStudentRegistrationScreen> = memo(
           </View>
           <View style={styles.inputWrapper}>
             <CustomInput
+              autoCapitalize='words'
               onChangeText={handleChange('firstName')}
               onBlur={handleBlur('firstName')}
               value={values.firstName}
@@ -93,6 +94,7 @@ export const StudentRegistrationScreen: FC<IStudentRegistrationScreen> = memo(
           </View>
           <View style={styles.inputWrapper}>
             <CustomInput
+              autoCapitalize='words'
               onChangeText={handleChange('lastName')}
               onBlur={handleBlur('lastName')}
               value={values.lastName}
@@ -104,17 +106,18 @@ export const StudentRegistrationScreen: FC<IStudentRegistrationScreen> = memo(
           </View>
           <View style={styles.inputWrapper}>
             <CustomInput
-              onChangeText={handleChange('phoneNumber')}
-              onBlur={handleBlur('phoneNumber')}
-              value={values.phoneNumber}
-              touched={!!touched.phoneNumber}
-              validationErrorText={errors.phoneNumber}
+              onChangeText={handleChange('phone')}
+              onBlur={handleBlur('phone')}
+              value={values.phone}
+              touched={!!touched.phone}
+              validationErrorText={errors.phone}
               placeholder={'Phone number'}
               labelText={'Phone number'}
             />
           </View>
           <View style={styles.inputWrapper}>
             <CustomInput
+              autoCapitalize='words'
               onChangeText={handleChange('address')}
               onBlur={handleBlur('address')}
               value={values.address}
@@ -179,7 +182,7 @@ export const StudentRegistrationScreen: FC<IStudentRegistrationScreen> = memo(
               LastName: values.lastName,
               Login: values.email,
               PhoneCountry: values.postalCode,
-              PhoneNumber: values.phoneNumber,
+              Phone: values.phone,
               PostalCode: values.postalCode,
               State: values.state,
             };

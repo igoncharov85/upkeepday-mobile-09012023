@@ -68,6 +68,14 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
         onMoveSlot(activeItem, gridCellX, gridCellY,)
 
         onHandleLongPress(false);
+        pan.setOffset({
+          x: 0,
+          y: 0,
+        });
+        pan.setValue({
+          x: 0,
+          y: 0,
+        });
       },
     });
 

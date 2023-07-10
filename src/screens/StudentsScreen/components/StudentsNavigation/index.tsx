@@ -1,11 +1,11 @@
 import React, { FC, memo, useEffect, useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import { useIsFocused } from '@react-navigation/native';
 
 import styles from './styles';
 import { dispatch } from '../../../../store/store';
 import { fetchStudentsAction } from '../../../../store/user/actions';
-import { useIsFocused } from '@react-navigation/native';
 
 interface NavigationButtonProps {
     active: boolean;
@@ -23,18 +23,12 @@ interface IStudentsNavigation {
 }
 export const StudentsNavigation: FC<IStudentsNavigation> = memo(() => {
     const [activeIndex, setActiveIndex] = useState(0);
-
     const isFocused = useIsFocused();
 
     useEffect(() => {
-        console.log(!!activeIndex);
+        dispatch(fetchStudentsAction({ status: STUDENTS_NAVIGATION[activeIndex].name }))
+    }, [activeIndex, isFocused],);
 
-        dispatch(fetchStudentsAction({ status: !!activeIndex ? 'archived' : 'scheduled' }))
-    }, [activeIndex],);
-
-    useEffect(() => {
-        dispatch(fetchStudentsAction({ status: !!activeIndex ? 'archived' : 'scheduled' }))
-    }, [isFocused]);
     return (
         <>
             <View style={styles.container}>

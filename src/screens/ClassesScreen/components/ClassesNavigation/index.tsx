@@ -1,6 +1,7 @@
 import React, { FC, memo, useEffect, useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import { useIsFocused } from '@react-navigation/native';
 
 import styles from './styles';
 import { dispatch } from '../../../../store/store';
@@ -23,11 +24,11 @@ interface IClassesNavigation {
 }
 export const ClassesNavigation: FC<IClassesNavigation> = memo(() => {
     const [activeIndex, setActiveIndex] = useState(0);
-
+    const isFocused = useIsFocused();
 
     useEffect(() => {
         dispatch(fetchClassesAction(activeIndex ? EClassesStatus.archived : EClassesStatus.scheduled))
-    }, [activeIndex],);
+    }, [activeIndex, isFocused],);
 
     return (
         <>

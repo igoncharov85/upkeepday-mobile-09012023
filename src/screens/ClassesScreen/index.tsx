@@ -10,7 +10,6 @@ import { ScreenLoading } from '../../components/UI/ScreenLoading';
 
 export const ClassesScreen = () => {
     const { classes, loading } = useAppSelector(state => state.classes);
-    const isFocused = useIsFocused();
 
     return (
         <View style={{ flex: 1 }}>

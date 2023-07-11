@@ -38,7 +38,7 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
 
   }) => {
     const [canMove, setCanMove] = useState(false);
-    const { createCurrentClassRequest } = useAppSelector(state => state.schedule);
+    const { currentSession } = useAppSelector(state => state.classes);
     const colorsLesson = ['#EAAFC8', '#654EA3'];
 
 
@@ -115,7 +115,7 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
                 <Text style={[styles.textItem,
                 conflict && { color: 'red' }
                 ]
-                }>{createCurrentClassRequest.Class?.Name}</Text>
+                }>{currentSession[0].ClassName}</Text>
               </LinearGradient>
 
             </Animated.View>

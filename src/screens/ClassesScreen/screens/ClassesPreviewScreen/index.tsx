@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import { ScreenHeader } from "../../../../components/ScreenHeader";
 import styles from "./styles";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useIsFocused, useNavigation, useRoute } from "@react-navigation/native";
 import { addDayAndHoursToDate } from "../../../../services/utils/generateDate.util";
 
 import { CustomButton } from "../../../../components/UI/CustomButton";
@@ -21,9 +21,11 @@ import { IClassesResponse } from "../../../../common/types/classes.types";
 function removeElementsFromArray(arr1: any[], arr2: any[]) {
     return arr1.filter(item1 => {
         return !arr2.some(item2 => {
-            return JSON.stringify(item1) === JSON.stringify(item2);
+            return item1.ClassName === item2.ClassName && item1.SessionId === item2.SessionId;
         });
     });
+
+
 }
 
 interface IDatePreviewScreen { }
@@ -32,24 +34,20 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
     const route = useRoute();
 
     const { item } = route.params as { item: IClassesResponse };
-
+    const isFocused = useIsFocused();
 
     const today = new Date();
     const weekDates = getWeekDates(today);
 
     const [startDateWeek, setStartDateWeek] = useState(new Date(weekDates.startDate));
     const [endDateWeek, setEndDateWeek] = useState(new Date(weekDates.endDate));
+    const { CurrentScheduledEntries, loading } = useAppSelector(state => state.schedule);
     const [screenLoading, setScreenLoading] = useState(false);
-    const { CurrentScheduledEntries, GeneratedScheduleEntries, loading } = useAppSelector(state => state.schedule);
-    const { currentSession } = useAppSelector(state => state.classes);
+    const { currentSession, loading: classesLoading }: any = useAppSelector(state => state.classes);
 
-    const [slots, setSlots] = useState<IGeneratedScheduleEntries[]>([]);
-    const [conflict, setConflict] = useState<IGeneratedScheduleEntries[]>(findScheduleConflicts(removeElementsFromArray(slots, currentSession), currentSession));
-
-
+    const [conflict, setConflict] = useState<IGeneratedScheduleEntries[]>(findScheduleConflicts(CurrentScheduledEntries, removeElementsFromArray(CurrentScheduledEntries, currentSession)));
 
     const handeScheduleSlots = (slots: IGeneratedScheduleEntries[]) => {
-        setSlots(slots)
         setConflict(findScheduleConflicts(slots, CurrentScheduledEntries))
     }
 
@@ -70,20 +68,17 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
     }
 
     useEffect(() => {
-        return () => {
-            setScreenLoading(false)
-        };
-    }, []);
+        console.log(item);
 
-
+        isFocused && dispatch(fetchSessionClassesByIdAction(item.ClassId))
+    }, [isFocused]);
     useEffect(() => {
-        if (GeneratedScheduleEntries.length > 0) {
+        if (classesLoading && loading) {
             setScreenLoading(true)
         }
-        dispatch(fetchSessionClassesByIdAction(item.ClassId))
-    }, [GeneratedScheduleEntries, CurrentScheduledEntries, loading])
+    }, [currentSession]);
 
-    return !screenLoading ? <ScreenLoading /> : (<View style={{ height: '100%' }}>
+    return screenLoading ? <ScreenLoading /> : (<View style={{ height: '100%' }}>
         <View style={styles.header}>
             <ScreenHeader text={"View and Reschedule"} onBackPress={navigation.goBack} withBackButton={true} />
         </View>

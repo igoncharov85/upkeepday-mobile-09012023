@@ -42,20 +42,27 @@ interface ISheduleTable {
   dryFields: IGeneratedScheduleEntries[];
 }
 
+function removeElementsFromArray(arr1: any[], arr2: any[]) {
+  return arr1.filter(item1 => {
+    return !arr2.some(item2 => {
+      return item1.ClassName === item2.ClassName && item1.SessionId === item2.SessionId;
+    });
+  });
 
+
+}
 
 export const startOfHour = 8;
 export const WeekTable: FC<ISheduleTable> = memo(
   ({ startOfWeek, endOfWeek, onHandleData, conflict, dryFields }) => {
-    const { GeneratedScheduleEntries, loading } = useAppSelector(state => state.schedule);
+    const { GeneratedScheduleEntries, CurrentScheduledEntries, loading } = useAppSelector(state => state.schedule);
     const { currentSession } = useAppSelector(state => state.classes);
     const [editMode, setEditMode] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
-    const [changeEdit, setChangeEdit] = useState(false);
     const [isVisibleEdit, setIsVisibleEdit] = useState(false);
     const [currentSessionId, setCurrentSessionId] = useState(0);
     const [currentSlotTime, setCurrentSlotTime] = useState('');
-    const [slots, setSlots] = useState<IGeneratedScheduleEntries[]>(currentSession as []);
+    const [slots, setSlots] = useState<IGeneratedScheduleEntries[]>(removeElementsFromArray(currentSession, CurrentScheduledEntries) as []);
 
     const onChangeEditMode = (value: boolean) => {
       setEditMode(value);
@@ -79,16 +86,14 @@ export const WeekTable: FC<ISheduleTable> = memo(
       setIsVisibleEdit(!isVisibleEdit);
     }
     const onMoveSlot = (slot: any, x: number, y: number) => {
-      const newTime = addDayAndHoursToDate(slot.StartDateTime, x, y);
       setCurrentSessionId(slot.SessionId);
-      setCurrentSlotTime(newTime);
+      const newTime = addDayAndHoursToDate(slot.StartDateTime, x, y);
       onHandleModalEdit();
       const newSlots = slots.filter(item => item.SlotUid !== slot.SlotUid);
       setSlots([...newSlots, { Duration: slot.Duration, StartDateTime: newTime, SlotUid: slot.SlotUid }]);
     }
     useEffect(() => {
       onHandleData(slots)
-
     }, [slots])
     useEffect(() => {
       dispatch(fetchScheduleByPeriodAction({ startDate: moment(startOfWeek).add(-1, 'days').toISOString(), endDate: endOfWeek.toISOString() }));
@@ -116,7 +121,7 @@ export const WeekTable: FC<ISheduleTable> = memo(
                   {dayEvents?.map((_, index) => {
                     const currentDate = new Date(addDayAndHoursToDate(date.toISOString(), dayIndex, 0))
 
-                    const activeItem = findScheduleEntries(slots as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
+                    const activeItem = findScheduleEntries(currentSession as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
                     const conflictItem = findScheduleEntries(conflict as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
                     const dryField = findScheduleEntries(dryFields as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
 

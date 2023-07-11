@@ -30,7 +30,7 @@ export class UserService {
         return await $axiosAuth.get(`/tutor/classes/${sessionId}/students`,)
     }
     static async fetchStudentsByStatus({ status }: IStudentsRequest) {
-        return await $axiosAuth.get(`/tutor/students/${status}`,)
+        return await $axiosAuth.get(`/tutor/students/${status.toLowerCase()}`,)
     }
     static async deleteStudent({ StudentId }: IStudentRequest) {
         return await $axiosAuth.delete(`/tutor/students/${StudentId}`,)

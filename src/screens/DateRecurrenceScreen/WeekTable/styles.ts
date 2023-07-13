@@ -6,8 +6,8 @@ export default StyleSheet.create({
     // flex: 1
   },
   containerItem: {
-    height: 64,
-    minWidth: '14.28571428571429%',
+    height: 100,
+    minWidth: 100,
     // maxWidth: '14.28571428571429%',
     // flex: 1,
     borderWidth: 1,
@@ -15,6 +15,16 @@ export default StyleSheet.create({
     borderStyle: 'solid',
     borderRadius: 3,
   },
+  // containerItem: {
+  //   height: 64,
+  //   minWidth: '14.28571428571429%',
+  //   // maxWidth: '14.28571428571429%',
+  //   // flex: 1,
+  //   borderWidth: 1,
+  //   borderColor: 'rgba(47,48,69,0.06)',
+  //   borderStyle: 'solid',
+  //   borderRadius: 3,
+  // },
   column: {
     flexDirection: 'column',
   },

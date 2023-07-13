@@ -13,7 +13,7 @@ import styles from './styles';
 interface ITimeData {
   hour: number;
   minute: number;
-  dayPart: string
+  dayPart?: string
 }
 
 interface ITimePicker {
@@ -22,19 +22,18 @@ interface ITimePicker {
   data: ITimeData;
 }
 const TimePicker: React.FC<ITimePicker> = ({ visible, data, onSetTime }) => {
-  const [hour, setHour] = useState(data.hour);
-  const [minute, setMinute] = useState(data.minute);
+  const [hour, setHour] = useState(data.hour || 0);
+  const [minute, setMinute] = useState(data.minute || 0);
   const [dayPart, setDayPart] = useState(data.dayPart);
 
   const onHourChange = (hourValue: number) =>
-    setHour(hourValue + 1)
+    setHour(hourValue)
 
   const onMinuteChange = (minuteValue: number) =>
     setMinute(minuteValue)
 
-  const onDayPartChange = (dayPartValue: number) =>
+  const onDayPartChange = (dayPartValue: number) => setDayPart(dayPartValue == 0 ? 'AM' : 'PM')
 
-    setDayPart(dayPartValue == 0 ? 'AM' : 'PM')
   useEffect(() => {
     onSetTime(`${hour}:${minute > 9 ? minute : `0${minute}`} ${dayPart}`);
 
@@ -54,11 +53,11 @@ const TimePicker: React.FC<ITimePicker> = ({ visible, data, onSetTime }) => {
         marginVertical: 20,
       }}>
       <TimeLineLeft />
-      <ItemPicker items={[...Array(12)].map((_, i) => i + 1)} activeIndex={hour} onChange={onHourChange} />
+      <ItemPicker items={[...Array(13)].map((_, i) => i)} activeIndex={hour} onChange={onHourChange} />
 
       <ItemPicker items={[...Array(60)].map((_, i) => i > 9 ? i : `0${i}`)} activeIndex={minute + 1} onChange={onMinuteChange} />
 
-      <ItemPicker items={['AM', 'PM']} activeIndex={dayPart == 'AM' ? 1 : 2} onChange={onDayPartChange} />
+      {data.dayPart && <ItemPicker items={['AM', 'PM']} activeIndex={dayPart == 'AM' ? 1 : 2} onChange={onDayPartChange} />}
       <TimeLineRight />
     </LinearGradient>
   ) : null;

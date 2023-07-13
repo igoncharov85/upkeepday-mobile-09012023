@@ -114,7 +114,7 @@ export const TabNavigator = () => {
       </Tab.Navigator>
       <SchedulePlus onButtonPress={() =>
         //@ts-ignore
-        navigation.navigate(NavigationEnum.ADD_CLASS_SCREEN
+        navigation.navigate(NavigationEnum.DATE_RECURRENCE_SCREEN
         )} />
     </>
 

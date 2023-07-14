@@ -7,7 +7,20 @@ import DurationSessionModal from '../../../components/Modals/DurationSessionModa
 import { useNavigation } from '@react-navigation/native';
 import { NavigationEnum } from '../../../common/constants/navigation';
 
+function subtractTime(time1: string, time2: string) {
+  let [hours1, minutes1] = time1.split(":");
+  let [hours2, minutes2] = time2.split(":");
+  const totalMinutes1 = parseInt(hours1) * 60 + parseInt(minutes1);
+  const totalMinutes2 = parseInt(hours2) * 60 + parseInt(minutes2);
 
+  var differenceInMinutes = totalMinutes1 - totalMinutes2;
+
+  return differenceInMinutes;
+}
+function toMinutes(time: string) {
+  let minutes = time.split(":")[1];
+  return parseInt(minutes);
+}
 enum TypeSession {
   lesson,
   trial,
@@ -66,18 +79,21 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
       setTimeStart(data)
     }
     const onCreateLesson = (lesson: any) => {
+      const hour = 60;
+      const startTime = `${timeIndex}:${lesson.startDateTime}`
+      const endTime = `${timeIndex + Math.floor((lesson.startDateTime + lesson.duration) / hour)}:${(lesson.startDateTime + lesson.duration) % hour}`;
+      console.log(startTime, endTime);
+
       setLessons([...lessons, {
-        start: lesson.startDateTime,
-        end: lesson.startDateTime + lesson.duration
+        start: startTime,
+        end: endTime
       }])
-      console.log('lesson', {
-        start: lesson.startDateTime,
-        end: lesson.startDateTime + lesson.duration
-      })
     }
+
+
     const onHandleSlot = () => {
       //@ts-ignore
-      !visible && navigation.navigate(NavigationEnum.SELECT_DURATION_CLASS_MODAL, {
+      navigation.navigate(NavigationEnum.SELECT_DURATION_CLASS_MODAL, {
         onSetDuration,
         onSetStartTime,
         timeDuration,
@@ -85,47 +101,55 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
         onCreateLesson,
       })
 
-      onHandleClick({ DayOfWeek: dayOfWeek, StartTime: startDateTime as string, Duration: timeDuration })
-      setActive(!active)
+      // onHandleClick({ DayOfWeek: dayOfWeek, StartTime: startDateTime as string, Duration: timeDuration })
     }
-    const onCreateMoreLesson = (item: any, type: string) => {
-      let nextLesson, prevLesson;
-      console.log('onCreateMoreLesson', item, type);
-      lessons.forEach((lesson, index) => {
-        if (lesson.start === item.start) {
 
-          prevLesson = index && lessons[index - 1]
-          nextLesson = lessons.length && lessons[index + 1]
+
+    const onCreateMoreLesson = (item: any, type: string) => {
+      let nextLesson: any, prevLesson: any, startTime;
+      lessons.sort((a, b) => {
+        const dateA = new Date(0, 0, 0, ...a.start.split(":").map(Number));
+        const dateB = new Date(0, 0, 0, ...b.start.split(":").map(Number));
+        const dateAEnd = new Date(0, 0, 0, ...a.end.split(":").map(Number));
+        const dateBEnd = new Date(0, 0, 0, ...b.end.split(":").map(Number));
+        //@ts-ignore
+        return dateA - dateB || dateAEnd - dateBEnd;
+      }).forEach((lesson, index) => {
+        if (lesson.start === item.start) {
+          prevLesson = item
+          nextLesson = lessons[index + 1]
+          console.log('prevLesson', prevLesson);
+          console.log('nextLesson', nextLesson);
+
+
+        } else {
           console.log(
-            'prevLesson',
-            prevLesson,
-            'nextLesson',
-            nextLesson,
+            'lesson.start',
+            lesson.start,
+            'item.start',
+            item.start,
           );
 
         }
       })
-      if (type === 'after') {
-
-        // @ts-ignore
-        navigation.navigate(NavigationEnum.SELECT_DURATION_CLASS_MODAL, {
-          onSetDuration,
-          onSetStartTime,
-          timeDuration,
-          startDateTime: `${timeIndex}:${item.end}`,
-          onCreateLesson,
-        })
-      } else if (type === 'before') {
-
-        // @ts-ignore
-        navigation.navigate(NavigationEnum.SELECT_DURATION_CLASS_MODAL, {
-          onSetDuration,
-          onSetStartTime,
-          timeDuration,
-          startDateTime: `${timeIndex}:00`,
-          onCreateLesson,
-        })
+      console.log('------------------------');
+      if (prevLesson) {
+        startTime = prevLesson.end
+      } else if (type === 'after') {
+        startTime = item.end
+      } else {
+        startTime = `${timeIndex}:00`
       }
+      console.log(nextLesson && subtractTime(nextLesson?.start, item.end));
+
+      // @ts-ignore
+      navigation.navigate(NavigationEnum.SELECT_DURATION_CLASS_MODAL, {
+        onSetDuration,
+        onSetStartTime,
+        startDateTime: startTime,
+        onCreateLesson,
+        maxDuration: nextLesson ? subtractTime(nextLesson?.start, item.end) : null
+      })
     }
     const onHandleMoreLesson = (item: any) => {
       const array = [...lessons]
@@ -133,23 +157,17 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
       if (index !== -1) {
         array.splice(index, 1);
       }
-      console.log('onHandleMoreLesson', array);
       setLessons(array)
     }
-    const getInfo = () => {
-      console.log('timeStart', timeStart);
-      console.log('duration', duration);
 
-    }
     useEffect(() => {
-
-    }, [timeStart, duration])
+      lessons.length > 0 ? setActive(true) : setActive(false)
+    }, [lessons])
 
     return (
       <>
-        <TouchableOpacity onPress={!active || lessons.length == 0 ? onHandleSlot : () => { }}>
+        <View >
           <View style={styles.containerItem}>
-
             {active ? (<View
               style={{
                 borderRadius: 4,
@@ -157,118 +175,82 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
                 position: 'relative',
               }}>
               {lessons.map((item, index) => {
-                return (<>
-                  <TouchableOpacity style={{
-                    zIndex: 10,
-                    top: index === 0 ? 0 : `${item.start / 60 * 100}%`,
-                    left: 0,
-                    right: 0,
-                    bottom: `${(60 - item.start - 10) / 60 * 100}%`,
-                    position: 'absolute',
-                    backgroundColor: 'yellow',
-                  }}
-                    onPress={() => onCreateMoreLesson(item, 'before')}
-                  // onPress={() => console.log(item, 'before')}
-                  />
 
-
-                  <LinearGradient
-                    colors={colorsLesson}
-                    start={{ x: 0.5, y: 0 }}
-                    end={{ x: 0.5, y: 1 }}
-                    style={{
-                      zIndex: 11,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      position: 'absolute',
-                      borderRadius: 4,
-                      top: `${item.start / 60 * 100}%`,
+                return (
+                  <>
+                    <TouchableOpacity style={{
+                      zIndex: 2,
+                      top: index === 0 ? 0 : `${toMinutes(item.start) / 60 * 100}%`,
                       left: 0,
                       right: 0,
-                      height: `${100 * ((item.end - item.start) / 60)}%`,
-                    }}>
+                      bottom: `${(60 - toMinutes(item.start)) / 60 * 100}%`,
+                      position: 'absolute',
+                    }}
+                      onPress={() => onCreateMoreLesson(item, 'before')}
+                    />
+
+
+                    <LinearGradient
+                      colors={colorsLesson}
+                      start={{ x: 0.5, y: 0 }}
+                      end={{ x: 0.5, y: 1 }}
+                      style={{
+                        zIndex: 1,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        position: 'absolute',
+                        borderRadius: 4,
+                        top: `${toMinutes(item.start) / 60 * 100}%`,
+                        left: 0,
+                        right: 0,
+                        height: `${100 * (subtractTime(item.end, item.start) / 60)}%`,
+                      }}>
+
+                      <TouchableOpacity style={{
+                        zIndex: 2,
+                        position: 'absolute',
+                        borderRadius: 4,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                      }}
+                        onPress={() => onHandleMoreLesson(item)}
+                      // onPress={() => console.log(`${toMinutes(item.end) == 0 ? 60 : toMinutes(item.end) / 60 * 100}%`, `${lessons[index + 1] ? (subtractTime(lessons[index + 1].start, item.end)) / 60 * 100 : 100 - ((60 - toMinutes(item.end) == 0 ? 60 : toMinutes(item.end)) / 60 * 100)}%`)}
+                      >
+                        <Text style={styles.textItem}>Class</Text>
+                      </TouchableOpacity>
+                    </LinearGradient >
+
 
                     <TouchableOpacity style={{
-                      zIndex: 10,
-                      position: 'absolute',
-                      borderRadius: 4,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      top: 0,
+                      zIndex: 1,
+                      top: `${toMinutes(item.end) > toMinutes(item.start) ? toMinutes(item.end) / 60 * 100 : toMinutes(item.end) == 0 ? 60 : toMinutes(item.end) + 120}%`,
                       left: 0,
                       right: 0,
-                      bottom: 0,
-                    }} onPress={() => onHandleMoreLesson(item)}>
-                      <Text style={styles.textItem}>Class</Text>
-                    </TouchableOpacity>
-                  </LinearGradient >
-
-
-                  <TouchableOpacity style={{
-                    zIndex: 12,
-                    top: `${item.end / 60 * 100}%`,
-                    left: 0,
-                    right: 0,
-                    height: `${lessons[index + 1] ? (lessons[index + 1].start - item.end) / 60 * 100 : ((60 - item.end) / 60 * 100)}%`,
-                    position: 'absolute',
-                    backgroundColor: 'red',
-                  }}
-                    onPress={() => onCreateMoreLesson(item, 'after')}
-                  // onPress={() => console.log(item, 'after', lessons[index + 1] ? (lessons[index + 1].start - item.end) : 0)}
-
-                  /></>
+                      height: `${lessons[index + 1] ? (subtractTime(lessons[index + 1].start, item.end)) / 60 * 100 : 100 - ((60 - toMinutes(item.end) == 0 ? 60 : toMinutes(item.end)) / 60 * 100)}%`,
+                      position: 'absolute',
+                      backgroundColor: 'red'
+                    }}
+                      onPress={() => onCreateMoreLesson(item, 'after')}
+                    // onPress={() => console.log(item, 'after', toMinutes(item.end) == 0 ? 60 : toMinutes(item.end))}
+                    />
+                  </>
                 )
               })}
-            </View>) : null}
-            {false ? (
-              <>
+            </View>) : <TouchableOpacity style={{
+              position: 'absolute',
+              zIndex: 10,
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+            }} onPress={onHandleSlot} />}
 
-                <View
-                  style={{
-                    borderRadius: 4,
-                    flex: 1,
-                    position: 'relative',
-                  }}>
-                  <TouchableOpacity style={{
-                    zIndex: 8,
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: `${timeStart / 60 * 100}%`,
-                    position: 'absolute',
-                    backgroundColor: 'yellow',
-                  }} onPress={() => console.log('top')} />
-                  <LinearGradient
-                    colors={colorsLesson}
-                    start={{ x: 0.5, y: 0 }}
-                    end={{ x: 0.5, y: 1 }}
-                    style={{
-                      zIndex: 10,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      position: 'absolute',
-                      borderRadius: 4,
-                      top: `${timeStart / 60 * 100}%`,
-                      left: 0,
-                      right: 0,
-                      height: `${100 * (duration / 60)}%`,
-                    }}>
-                    <Text style={styles.textItem}>Class</Text>
-                  </LinearGradient>
-                  <TouchableOpacity style={{
-                    zIndex: 8,
-                    top: `${100 * (duration / 60)}%`,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    position: 'absolute',
-                    backgroundColor: 'red',
-                  }} onPress={() => console.log('battom')} />
-                </View>
-              </>
-            ) : null}
           </View>
-        </TouchableOpacity >
+        </View >
       </>
     );
 

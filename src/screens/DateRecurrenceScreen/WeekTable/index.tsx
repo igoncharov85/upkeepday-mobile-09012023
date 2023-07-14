@@ -46,8 +46,8 @@ export const WeekTable: FC<ISheduleTable> = memo(
     }, []);
     useEffect(() => {
 
-      setSlots(
-        createCurrentClassRequest && createCurrentClassRequest.Slots.map(item => {
+      createCurrentClassRequest?.Slots && setSlots(
+        createCurrentClassRequest.Slots.map(item => {
           return {
             Duration: 60,
             DayOfWeek: item.DayOfWeek,
@@ -72,7 +72,7 @@ export const WeekTable: FC<ISheduleTable> = memo(
                 return (
                   <Column key={dayIndex}>
                     {dayEvents?.map((_, index) => {
-                      const activeItem = createCurrentClassRequest.Slots.some(item => item.DayOfWeek == dayIndex && item.StartTime == `${index}:00:00`)
+                      const activeItem = createCurrentClassRequest?.Slots && createCurrentClassRequest?.Slots.some(item => item.DayOfWeek == dayIndex && item.StartTime == `${index}:00:00`)
                       return <WeekTableItem activeItem={activeItem} dayOfWeek={dayIndex} timeIndex={index} onHandleClick={onSlotPress} />;
                     })}
 

@@ -3,28 +3,15 @@ import { StyleSheet } from 'react-native';
 export default StyleSheet.create({
   container: {
     marginTop: 10,
-    // flex: 1
   },
   containerItem: {
-    height: 100,
-    minWidth: 100,
-    // maxWidth: '14.28571428571429%',
-    // flex: 1,
+    height: 64,
+    minWidth: '14.28571428571429%',
     borderWidth: 1,
     borderColor: 'rgba(47,48,69,0.06)',
     borderStyle: 'solid',
     borderRadius: 3,
   },
-  // containerItem: {
-  //   height: 64,
-  //   minWidth: '14.28571428571429%',
-  //   // maxWidth: '14.28571428571429%',
-  //   // flex: 1,
-  //   borderWidth: 1,
-  //   borderColor: 'rgba(47,48,69,0.06)',
-  //   borderStyle: 'solid',
-  //   borderRadius: 3,
-  // },
   column: {
     flexDirection: 'column',
   },

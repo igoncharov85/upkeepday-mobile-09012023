@@ -24,7 +24,8 @@ interface ITimePicker {
   visible: boolean;
   onSetTime: (time: any) => void;
   data: ITimeData;
-  block: IItemPickerBlock
+  block: IItemPickerBlock;
+  maxDuration?: number
 }
 const CustomTimePicker: React.FC<ITimePicker> = ({ visible, data, onSetTime, block }) => {
   const [hour, setHour] = useState(data.hour || 0);
@@ -62,7 +63,7 @@ const CustomTimePicker: React.FC<ITimePicker> = ({ visible, data, onSetTime, blo
         marginVertical: 20,
       }}>
       <TimeLineLeft />
-      <ItemPicker block={block.hour} items={[...Array(13)].map((_, i) => i > 9 ? i : `0${i}`)} activeIndex={hour} onChange={onHourChange} />
+      <ItemPicker block={block.hour} items={[...Array(13)].map((_, i) => i > 9 ? i : `0${i}`)} activeIndex={hour + 1} onChange={onHourChange} />
 
       <ItemPicker block={block.minute} items={[...Array(60)].map((_, i) => i > 9 ? i : `0${i}`)} activeIndex={minute + 1} onChange={onMinuteChange} />
 

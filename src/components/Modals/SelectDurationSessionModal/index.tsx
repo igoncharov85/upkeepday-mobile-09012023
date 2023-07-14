@@ -17,7 +17,7 @@ const SelectDurationSessionModal = ({
 }: IDurationSessionModalModal) => {
   const navigation = useNavigation()
   const route = useRoute()
-  const { onSetDuration, timeDuration, startDateTime, onSetStartTime, onCreateLesson } = route.params as any
+  const { onSetDuration, maxDuration, startDateTime, onSetStartTime, onCreateLesson } = route.params as any
   //  { onSetDuration: (time: any) => void, onSetStartTime: (time: any) => void, timeDuration: number, startDateTime: string }
   const goBack = () => navigation.goBack();
   const [timeIsVisible, setTimeIsVisible] = useState(false);
@@ -36,7 +36,6 @@ const SelectDurationSessionModal = ({
 
   const onSelectDuration = (duration: string) => {
     const [hours, minutes] = duration.split(':');
-    console.log('duration', Number(hours), Number(minutes))
     onSetDuration(Number(hours) * 60 + Number(minutes))
 
     onCreateLesson(
@@ -87,11 +86,15 @@ const SelectDurationSessionModal = ({
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', flex: 1, marginTop: 24, marginBottom: 40 }}>
               <Text>Duration</Text>
               <View>
-                {durations.map((item) => (
-                  <TouchableOpacity onPress={() => onSelectDuration(item)} style={{ marginBottom: 20 }}>
-                    <DateItem dateValue={item} />
-                  </TouchableOpacity>
-                ))}
+                {durations.map((item) => {
+
+                  const disabled = maxDuration ? Number(item.split(':')[0]) * 60 + Number(item.split(':')[1]) > maxDuration : false
+                  return (
+                    <TouchableOpacity onPress={disabled ? undefined : () => onSelectDuration(item)} style={{ marginBottom: 20, opacity: disabled ? 0.5 : 1 }}>
+                      <DateItem dateValue={item} />
+                    </TouchableOpacity>
+                  )
+                })}
 
 
               </View>
@@ -124,15 +127,17 @@ const InteractivePartItem = ({
 const DateItem = ({ dateValue }: { dateValue: string }) => {
 
   return (
-    <LinearGradient
-      style={styles.dateContainer}
-      colors={['rgba(154, 128, 186,0.5)', 'rgba(109,123,152,0.5)']}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
-      angle={222.53}
-      locations={[0.4978, 1.1474]}>
-      <Text style={styles.dateText}>{dateValue}</Text>
-    </LinearGradient>
+    <>
+      <LinearGradient
+        style={styles.dateContainer}
+        colors={['rgba(154, 128, 186,0.5)', 'rgba(109,123,152,0.5)']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        angle={222.53}
+        locations={[0.4978, 1.1474]}>
+        <Text style={styles.dateText}>{dateValue}</Text>
+      </LinearGradient>
+    </>
   )
 };
 

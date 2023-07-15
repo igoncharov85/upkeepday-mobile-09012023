@@ -144,7 +144,7 @@ const DateItem = ({ dateValue }: { dateValue: string }) => {
     //   end={{ x: 1, y: 1 }}
     //   angle={222.53}
     //   locations={[0.4978, 1.1474]}>
-    <View style={{ backgroundColor: 'rgba(109,123,152,0.5)' }}>
+    <View style={[styles.dateContainer, { backgroundColor: 'rgba(109,123,152,0.5)' }]}>
       <Text style={styles.dateText}>{dateValue}</Text>
     </View>
     // </LinearGradient>

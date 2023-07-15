@@ -137,15 +137,17 @@ const InteractivePartItem = ({
 const DateItem = ({ dateValue }: { dateValue: string }) => {
 
   return (
-    <LinearGradient
-      style={styles.dateContainer}
-      colors={['rgba(154, 128, 186,0.5)', 'rgba(109,123,152,0.5)']}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
-      angle={222.53}
-      locations={[0.4978, 1.1474]}>
+    // <LinearGradient
+    //   style={styles.dateContainer}
+    //   colors={['rgba(154, 128, 186,0.5)', 'rgba(109,123,152,0.5)']}
+    //   start={{ x: 0, y: 0 }}
+    //   end={{ x: 1, y: 1 }}
+    //   angle={222.53}
+    //   locations={[0.4978, 1.1474]}>
+    <View style={{ backgroundColor: 'rgba(109,123,152,0.5)' }}>
       <Text style={styles.dateText}>{dateValue}</Text>
-    </LinearGradient>
+    </View>
+    // </LinearGradient>
   )
 };
 

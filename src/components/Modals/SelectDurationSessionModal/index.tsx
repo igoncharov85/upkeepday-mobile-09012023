@@ -1,5 +1,5 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
 import styles from './styles';
@@ -8,6 +8,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { formatDate } from '../../../services/utils/fullDateToValue.util';
 import CustomTimePicker from './CustomTimePicker';
 import { NavigationEnum } from '../../../common/constants/navigation';
+import { max } from 'date-fns';
 
 interface IDurationSessionModalModal {
 }
@@ -18,12 +19,14 @@ const SelectDurationSessionModal = ({
   const navigation = useNavigation()
   const route = useRoute()
   const { onSetDuration, maxDuration, startDateTime, onSetStartTime, onCreateLesson } = route.params as any
-  //  { onSetDuration: (time: any) => void, onSetStartTime: (time: any) => void, timeDuration: number, startDateTime: string }
   const goBack = () => navigation.goBack();
   const [timeIsVisible, setTimeIsVisible] = useState(false);
   const [time, setTime] = useState(startDateTime);
   const [startTime, setStartTime] = useState(0);
   const [durations, setDurations] = useState(durationItems);
+  const [duration, setDuration] = useState(maxDuration);
+
+  maxDuration && console.log('maxDuration:', duration)
   const onTimePress = () => setTimeIsVisible(!timeIsVisible);
 
   const onSetTime = (time: any) => {
@@ -47,7 +50,7 @@ const SelectDurationSessionModal = ({
   }
   const goToCreateDuration = () => {
     //@ts-ignore
-    navigation.navigate(NavigationEnum.EDIT_DURATION_CLASS_MODAL, { addDuration })
+    navigation.navigate(NavigationEnum.EDIT_DURATION_CLASS_MODAL, { addDuration, duration })
   }
   const addDuration = (duration: any) => {
     setDurations([...durations, `${duration.hour < 10 ? '0' + duration.hour : duration.hour}:${duration.minute < 10 ? '0' + duration.minute : duration.minute}`])
@@ -62,6 +65,13 @@ const SelectDurationSessionModal = ({
   const date = new Date();
   date.setHours(Number(numericHours));
   date.setMinutes(Number(minutes));
+
+
+  useEffect(() => {
+    console.log('start minutes:', minutes)
+    setDuration(maxDuration - (startTime - minutes));
+
+  }, [startTime])
   return (
     <>
       <View style={styles.modalWrapper}>
@@ -81,14 +91,14 @@ const SelectDurationSessionModal = ({
               { hour: false, minute: true, dayPart: false }
             }
           />
-          <ScrollView >
 
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', flex: 1, marginTop: 24, marginBottom: 40 }}>
-              <Text>Duration</Text>
-              <View>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', flex: 1, marginTop: 24, marginBottom: 10 }}>
+            <Text>Duration</Text>
+            <View>
+              <ScrollView showsVerticalScrollIndicator={false}>
                 {durations.map((item) => {
 
-                  const disabled = maxDuration ? Number(item.split(':')[0]) * 60 + Number(item.split(':')[1]) > maxDuration : false
+                  const disabled = duration ? Number(item.split(':')[0]) * 60 + Number(item.split(':')[1]) > duration : false
                   return (
                     <TouchableOpacity onPress={disabled ? undefined : () => onSelectDuration(item)} style={{ marginBottom: 20, opacity: disabled ? 0.5 : 1 }}>
                       <DateItem dateValue={item} />
@@ -97,13 +107,13 @@ const SelectDurationSessionModal = ({
                 })}
 
 
-              </View>
-              <View style={{ width: 50 }} />
+              </ScrollView>
             </View>
-            <TouchableOpacity onPress={goToCreateDuration}>
-              <Text style={{ fontSize: 14, textDecorationLine: 'underline', textAlign: 'center', }}>Set-up your own duration</Text>
-            </TouchableOpacity>
-          </ScrollView>
+            <View style={{ width: 50 }} />
+          </View>
+          <TouchableOpacity onPress={goToCreateDuration}>
+            <Text style={{ fontSize: 14, textDecorationLine: 'underline', textAlign: 'center', }}>Set-up your own duration</Text>
+          </TouchableOpacity>
         </View>
       </View >
     </>
@@ -127,17 +137,15 @@ const InteractivePartItem = ({
 const DateItem = ({ dateValue }: { dateValue: string }) => {
 
   return (
-    <>
-      <LinearGradient
-        style={styles.dateContainer}
-        colors={['rgba(154, 128, 186,0.5)', 'rgba(109,123,152,0.5)']}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        angle={222.53}
-        locations={[0.4978, 1.1474]}>
-        <Text style={styles.dateText}>{dateValue}</Text>
-      </LinearGradient>
-    </>
+    <LinearGradient
+      style={styles.dateContainer}
+      colors={['rgba(154, 128, 186,0.5)', 'rgba(109,123,152,0.5)']}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      angle={222.53}
+      locations={[0.4978, 1.1474]}>
+      <Text style={styles.dateText}>{dateValue}</Text>
+    </LinearGradient>
   )
 };
 

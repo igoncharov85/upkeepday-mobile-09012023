@@ -46,18 +46,20 @@ export const WeekTable: FC<ISheduleTable> = memo(
     }, []);
     useEffect(() => {
 
-      createCurrentClassRequest?.Slots && setSlots(
-        createCurrentClassRequest.Slots.map(item => {
-          return {
-            Duration: 60,
-            DayOfWeek: item.DayOfWeek,
-            StartTime: item.StartTime,
-          }
-        })
-      )
-      console.log(createCurrentClassRequest.Slots);
-
+      // createCurrentClassRequest?.Slots && setSlots(
+      //   createCurrentClassRequest.Slots.map(item => {
+      //     return {
+      //       Duration: 60,
+      //       DayOfWeek: item.DayOfWeek,
+      //       StartTime: item.StartTime,
+      //     }
+      //   })
+      // )
     }, [createCurrentClassRequest])
+    useEffect(() => {
+      console.log('new data:', slots);
+
+    }, [slots]);
     return (
       <View style={styles.container}>
         <ScrollView ref={scrollViewRef}>
@@ -69,15 +71,22 @@ export const WeekTable: FC<ISheduleTable> = memo(
             </Column>
             <Row style={{ flex: 1, paddingRight: 20, paddingBottom: 20 }}>
               {weekStructure?.map((dayEvents, dayIndex) => {
+                console.log('\n---------', dayIndex)
                 return (
                   <Column key={dayIndex}>
                     {dayEvents?.map((_, index) => {
+                      // console.log(dayIndex);
+                      const daySchedule = slots.filter(item => item.DayOfWeek == dayIndex)
+                      daySchedule.length && console.log(daySchedule);
+
+
                       const activeItem = createCurrentClassRequest?.Slots && createCurrentClassRequest?.Slots.some(item => item.DayOfWeek == dayIndex && item.StartTime == `${index}:00:00`)
-                      return <WeekTableItem activeItem={activeItem} dayOfWeek={dayIndex} timeIndex={index} onHandleClick={onSlotPress} />;
+                      return <WeekTableItem dayOfWeek={dayIndex} timeIndex={index} onHandleClick={onSlotPress} daySchedule={daySchedule} />;
                     })}
 
                   </Column>
                 );
+
               })}
             </Row>
           </Row>

@@ -12,13 +12,18 @@ import { max } from 'date-fns';
 
 interface IDurationSessionModalModal {
 }
+interface RouteParams {
+  maxDuration: number;
+  startDateTime: string;
+  onCreateLesson: ({ duration, startDateTime }: { duration: number, startDateTime: number }) => void;
+}
 const durationItems = ['00:30', '00:45', '01:00',]
 const SelectDurationSessionModal = ({
 
 }: IDurationSessionModalModal) => {
   const navigation = useNavigation()
   const route = useRoute()
-  const { onSetDuration, maxDuration, startDateTime, onSetStartTime, onCreateLesson } = route.params as any
+  const { maxDuration, startDateTime, onCreateLesson } = route.params as RouteParams
   const goBack = () => navigation.goBack();
   const [timeIsVisible, setTimeIsVisible] = useState(false);
   const [time, setTime] = useState(startDateTime);
@@ -34,12 +39,12 @@ const SelectDurationSessionModal = ({
       `${time.hour < 10 ? '0' + time.hour : time.hour}:${time.minute < 10 ? '0' + time.minute : time.minute} ${time.dayPart}`
     )
     setStartTime(time.minute)
-    onSetStartTime(time.minute)
+    setDuration(duration - startTime);
   }
 
   const onSelectDuration = (duration: string) => {
     const [hours, minutes] = duration.split(':');
-    onSetDuration(Number(hours) * 60 + Number(minutes))
+    // onSetDuration(Number(hours) * 60 + Number(minutes))
 
     onCreateLesson(
       {
@@ -68,8 +73,7 @@ const SelectDurationSessionModal = ({
 
 
   useEffect(() => {
-    console.log('start minutes:', minutes)
-    setDuration(maxDuration - (startTime - minutes));
+    console.log(`${duration} - (${startTime} - ${Number(minutes)})`);
 
   }, [startTime])
   return (
@@ -112,7 +116,7 @@ const SelectDurationSessionModal = ({
             <View style={{ width: 50 }} />
           </View>
           <TouchableOpacity onPress={goToCreateDuration}>
-            <Text style={{ fontSize: 14, textDecorationLine: 'underline', textAlign: 'center', }}>Set-up your own duration</Text>
+            <Text style={{ fontSize: 14, textDecorationLine: 'underline', textAlign: 'center' }}>Set-up your own duration</Text>
           </TouchableOpacity>
         </View>
       </View >

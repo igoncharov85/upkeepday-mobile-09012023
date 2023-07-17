@@ -111,7 +111,6 @@ const ItemPicker = memo(({ items, activeIndex, onChange, block, stipulation }: {
       animated: true,
     });
   }, [selectedIndex])
-  console.log(stipulation())
   return (
     <View style={styles.container}>
       <View style={styles.scrollContainer}>

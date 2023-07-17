@@ -22,8 +22,6 @@ const ResultClassModal = () => {
         navigation.goBack();
     }
     const { item, actionBtn, nameAction } = params;
-    console.log(item, 'modal\n\n\n');
-
     const handleAction = () => {
         actionBtn();
         closeModal();

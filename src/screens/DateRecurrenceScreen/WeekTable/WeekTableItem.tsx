@@ -1,5 +1,5 @@
 import React, { FC, memo, useEffect, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { LogBox, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import styles from './styles';
 import { IWeekTimeSlot } from '../../../common/types/schedule.types';
@@ -76,9 +76,7 @@ interface IWeekTableItem {
 
 function convertArray(inputArray: any[]) {
   const outputArray = [];
-  // console.log(inputArray)
   if (inputArray.length > 0) {
-    // console.log('inputArray', inputArray);
     for (let i = 0; i < inputArray.length; i++) {
       const item = inputArray[i];
       const startTime = item.StartTime?.split(':');
@@ -119,21 +117,17 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
     daySchedule
 
   }) => {
+
+    LogBox.ignoreAllLogs();
     const navigation = useNavigation()
     const [visible, setVisible] = useState(false)
     const [active, setActive] = useState(activeItem)
     const colorsLesson = ['#EAAFC8', '#654EA3'];
     const startDateTime = `${timeIndex}:00:00`
-    const [duration, setDuration] = useState(60);
-    const [timeStart, setTimeStart] = useState(0);
     const [lessons, setLessons] = useState(convertArray(daySchedule) as any[]);
 
-    const onSetDuration = (duration: number) => {
-      setDuration(duration);
-    }
-    const onSetStartTime = (data: any) => {
-      setTimeStart(data)
-    }
+
+
     const onCreateLesson = (lesson: any) => {
       const hour = 60;
       const startTime = `${timeIndex}:${lesson.startDateTime}`
@@ -152,12 +146,9 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
 
 
     const onHandleSlot = () => {
-      console.log(convertArray(daySchedule), findNextElement(convertArray(daySchedule), { start: `${timeIndex}:0`, end: `${timeIndex}:0` }))
       const nextLesson = findNextElement(convertArray(daySchedule), { start: `${timeIndex}:0`, end: `${timeIndex}:0` }) || { start: '23:59', end: '23:59' };
       //@ts-ignore
       navigation.navigate(NavigationEnum.SELECT_DURATION_CLASS_MODAL, {
-        onSetDuration,
-        onSetStartTime,
         timeDuration,
         startDateTime,
         onCreateLesson,
@@ -167,10 +158,8 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
 
 
     const onCreateMoreLesson = (item: any, type: string) => {
-      console.log(type, 'type')
+
       let nextLesson: any, prevLesson: any, startTime;
-      console.log(item, 'item');
-      console.log('next', findNextElement(convertArray(daySchedule), { start: `${item.start}`, end: `${item.end}` }))
       lessons.sort((a, b) => {
         const dateA = new Date(0, 0, 0, ...a.start.split(":").map(Number));
         const dateB = new Date(0, 0, 0, ...b.start.split(":").map(Number));
@@ -184,20 +173,20 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
           nextLesson = lessons[index + 1]
         }
       })
-      if (prevLesson) {
+      if (type == 'before') {
+        startTime = `${timeIndex}:00`
+      }
+      else if (prevLesson) {
         startTime = prevLesson.end
       } else if (type === 'after') {
         startTime = item.end
       } else {
         startTime = `${timeIndex}:00`
       }
-      // console.log(prevLesson, 'prevLesson');
       nextLesson = findNextElement(convertArray(daySchedule), { start: `${prevLesson.start}`, end: `${prevLesson.end}` }) || { start: '23:59', end: '23:59' };
-      // console.log(convertArray(daySchedule), 'nextLesson');
+      console.log('\n--------------\nnextLesson: \n', nextLesson)
       // @ts-ignore
       navigation.navigate(NavigationEnum.SELECT_DURATION_CLASS_MODAL, {
-        onSetDuration,
-        onSetStartTime,
         startDateTime: startTime,
         onCreateLesson,
         maxDuration: nextLesson ? subtractTime(nextLesson?.start, item.end) : null
@@ -214,11 +203,6 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
 
     useEffect(() => {
       lessons.length > 0 ? setActive(true) : setActive(false)
-      // Duration: number,
-      // DayOfWeek: number,
-      // StartTime: string,
-      // lessons.length > 0 && console.log(lessons);
-
     }, [lessons])
 
     return (
@@ -241,6 +225,7 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
                       right: 0,
                       bottom: `${(60 - toMinutes(item.start)) / 60 * 100}%`,
                       position: 'absolute',
+                      backgroundColor: 'red'
                     }}
                       onPress={() => onCreateMoreLesson(item, 'before')}
                     />
@@ -251,7 +236,7 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
                       start={{ x: 0.5, y: 0 }}
                       end={{ x: 0.5, y: 1 }}
                       style={{
-                        zIndex: 1,
+                        zIndex: 3,
                         justifyContent: 'center',
                         alignItems: 'center',
                         position: 'absolute',
@@ -263,7 +248,7 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
                       }}>
 
                       <TouchableOpacity style={{
-                        zIndex: 2,
+                        zIndex: 3,
                         position: 'absolute',
                         borderRadius: 4,
                         justifyContent: 'center',

@@ -23,7 +23,6 @@ function removeEmptyObjects(array: any[]) {
 const PreviewStudentScreen: React.FC<IAddStudentsScreen> = () => {
     const route = useRoute();
     const { item }: any = route.params;
-    console.log(item, 'item');
 
     const isFocused = useIsFocused();
     const { studentList, loading }: any = useAppSelector((state: any) => state.user);
@@ -35,9 +34,6 @@ const PreviewStudentScreen: React.FC<IAddStudentsScreen> = () => {
     const goNextStep = () => navigation.navigate(NavigationEnum.STUDENTS_TAB);
 
     function onDeleteStudent(ClassId: number, Name: string) {
-        console.log(item, '((((((((((((((((((((((((((((((((');
-        console.log(Name);
-
         //@ts-ignore
         navigation.navigate(NavigationEnum.RESULT_CLASS_MODAL, {
             item: {
@@ -56,8 +52,6 @@ const PreviewStudentScreen: React.FC<IAddStudentsScreen> = () => {
     const goBack = () => navigation.goBack()
 
     useEffect(() => {
-        console.log(isFocused);
-
         dispatch(fetchStudentsByIdAction({ StudentId: item.StudentId }));
     }, [isFocused]);
 

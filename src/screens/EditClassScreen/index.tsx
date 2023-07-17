@@ -15,7 +15,6 @@ export const EditClassScreen = () => {
     const navigation = useNavigation();
     const route = useRoute();
     const item: any = route.params;
-    console.log(item.item.Slots);
 
     const relloverClass = () => {
         const classLesson = item?.item;

@@ -68,8 +68,6 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
     }
 
     useEffect(() => {
-        console.log(item);
-
         isFocused && dispatch(fetchSessionClassesByIdAction(item.ClassId))
     }, [isFocused]);
     useEffect(() => {

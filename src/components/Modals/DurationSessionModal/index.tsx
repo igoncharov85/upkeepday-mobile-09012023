@@ -1,9 +1,8 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 
 import styles from './styles';
-import TimePicker from '../../../screens/SheduleScreen/components/TimePicker';
 import { CustomButton } from '../../UI/CustomButton';
 import { ScreenHeader } from '../../ScreenHeader';
 import CustomTimePicker from './CustomTimePicker';
@@ -21,9 +20,7 @@ const DurationSessionModal = ({
   const [time, setTime] = useState({});
 
   const onSetTime = (time: any) => {
-    console.log('time', time)
     setTime(time)
-
   }
   const onSave = () => {
     addDuration(time)

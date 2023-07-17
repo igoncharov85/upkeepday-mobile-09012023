@@ -128,8 +128,8 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
                 startTime = `${timeIndex}:${item.end}`
             } else {
                 startTime = `${timeIndex}:00`;
-                console.log(startTime);
-                console.log(lessons);
+                // console.log(startTime);
+                // console.log(lessons);
 
 
             }
@@ -153,7 +153,7 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
         }
 
         useEffect(() => {
-            console.log('lessons:', lessons);
+            // console.log('lessons:', lessons);
 
         }, [lessons])
 
@@ -169,7 +169,7 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
                                 position: 'relative',
                             }}>
                             {lessons.map((item, index) => {
-                                console.log('items:', item);
+                                // console.log('items:', item);
 
                                 return (<>
                                     <TouchableOpacity style={{

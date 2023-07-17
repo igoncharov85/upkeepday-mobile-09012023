@@ -91,9 +91,6 @@ export function* fetchGeneratedClassesWorker({
         );
         if (data) {
             yield put(setGenerateSessionAction(data.GeneratedSessions))
-            console.log(convertSessionsToLocalTime(data.CurrentSessions), "convertSessionsToLocalTime(data.CurrentSessions)\n\n");
-            console.log(data.CurrentSessions, "data.CurrentSessions\n\n------------------\n\n");
-
             yield put(setCurrentSessionAction(convertSessionsToLocalTime(data.CurrentSessions)))
 
         }

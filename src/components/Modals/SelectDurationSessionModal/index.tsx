@@ -81,9 +81,7 @@ const SelectDurationSessionModal = ({
         <View style={styles.container}>
           <ScreenHeader text="Add Session details" withBackButton={true} onBackPress={goBack} />
           <InteractivePartItem title="Start Time">
-            <TouchableOpacity onPress={onTimePress}>
-              <DateItem dateValue={time} />
-            </TouchableOpacity>
+            <DateItem dateValue={time} onSubmit={onTimePress} />
           </InteractivePartItem>
           <CustomTimePicker
             visible={timeIsVisible}
@@ -102,9 +100,10 @@ const SelectDurationSessionModal = ({
 
                   const disabled = duration ? Number(item.split(':')[0]) * 60 + Number(item.split(':')[1]) > duration : false
                   return (
-                    <TouchableOpacity onPress={disabled ? undefined : () => onSelectDuration(item)} style={{ marginBottom: 20, opacity: disabled ? 0.5 : 1 }}>
-                      <DateItem dateValue={item} />
-                    </TouchableOpacity>
+                    <View style={{ marginBottom: 20, opacity: disabled ? 0.5 : 1 }}>
+                      <DateItem dateValue={item} onSubmit={disabled ? undefined : () => onSelectDuration(item)} disabled={disabled} />
+                    </View>
+
                   )
                 })}
 
@@ -136,20 +135,22 @@ const InteractivePartItem = ({
   );
 };
 
-const DateItem = ({ dateValue }: { dateValue: string }) => {
+const DateItem = ({ dateValue, onSubmit, disabled }: { dateValue: string, onSubmit: any, disabled?: boolean }) => {
 
   return (
-    // <LinearGradient
-    //   style={styles.dateContainer}
-    //   colors={['rgba(154, 128, 186,0.5)', 'rgba(109,123,152,0.5)']}
-    //   start={{ x: 0, y: 0 }}
-    //   end={{ x: 1, y: 1 }}
-    //   angle={222.53}
-    //   locations={[0.4978, 1.1474]}>
-    <View style={[styles.dateContainer, { backgroundColor: 'rgba(109,123,152,0.5)' }]}>
-      <Text style={styles.dateText}>{dateValue}</Text>
-    </View>
-    // </LinearGradient>
+    <TouchableOpacity onPress={onSubmit} >
+      <LinearGradient
+        style={styles.dateContainer}
+        colors={['rgba(154, 128, 186,0.5)', 'rgba(109,123,152,0.5)']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        angle={222.53}
+        locations={[0.4978, 1.1474]}>
+        <View style={styles.dateContainer}>
+          <Text style={styles.dateText}>{dateValue}</Text>
+        </View>
+      </LinearGradient>
+    </TouchableOpacity>
   )
 };
 

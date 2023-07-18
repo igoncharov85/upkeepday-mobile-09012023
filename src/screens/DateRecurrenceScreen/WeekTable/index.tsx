@@ -71,13 +71,11 @@ export const WeekTable: FC<ISheduleTable> = memo(
             </Column>
             <Row style={{ flex: 1, paddingRight: 20, paddingBottom: 20 }}>
               {weekStructure?.map((dayEvents, dayIndex) => {
-                // console.log('\n---------', dayIndex)
                 return (
                   <Column key={dayIndex}>
                     {dayEvents?.map((_, index) => {
                       // console.log(dayIndex);
                       const daySchedule = slots.filter(item => item.DayOfWeek == dayIndex)
-                      // daySchedule.length && console.log(daySchedule);
 
 
                       const activeItem = createCurrentClassRequest?.Slots && createCurrentClassRequest?.Slots.some(item => item.DayOfWeek == dayIndex && item.StartTime == `${index}:00:00`)

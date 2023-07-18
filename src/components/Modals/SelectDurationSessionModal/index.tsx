@@ -31,7 +31,6 @@ const SelectDurationSessionModal = ({
   const [durations, setDurations] = useState(durationItems);
   const [duration, setDuration] = useState(maxDuration);
 
-  maxDuration && console.log('maxDuration:', duration)
   const onTimePress = () => setTimeIsVisible(!timeIsVisible);
 
   const onSetTime = (time: any) => {
@@ -39,7 +38,7 @@ const SelectDurationSessionModal = ({
       `${time.hour < 10 ? '0' + time.hour : time.hour}:${time.minute < 10 ? '0' + time.minute : time.minute} ${time.dayPart}`
     )
     setStartTime(time.minute)
-    setDuration(duration - startTime);
+    setDuration(maxDuration - (time.minute - +startDateTime.split(':')[1]));
   }
 
   const onSelectDuration = (duration: string) => {
@@ -73,9 +72,8 @@ const SelectDurationSessionModal = ({
 
 
   useEffect(() => {
-    console.log(`${duration} - (${startTime} - ${Number(minutes)})`);
 
-  }, [startTime])
+  }, [startTime, duration])
   return (
     <>
       <View style={styles.modalWrapper}>

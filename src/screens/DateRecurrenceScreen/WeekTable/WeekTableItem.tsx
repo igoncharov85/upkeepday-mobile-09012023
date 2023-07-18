@@ -10,7 +10,7 @@ type Interval = {
   start: string;
   end: string;
 };
-function findNextElement(array: Interval[], targetElement: Interval): Interval | null {
+function findNextElement(array: any[], targetElement: any) {
   array.sort((a, b) => {
     const timeA = a.start.split(':').map(Number);
     const timeB = b.start.split(':').map(Number);
@@ -22,19 +22,28 @@ function findNextElement(array: Interval[], targetElement: Interval): Interval |
     return timeA[0] - timeB[0];
   });
 
-  let nextElement: Interval | null = null;
+  let previousElement = null;
+  let nextElement = null;
 
   for (const currentElement of array) {
     const currentTime = currentElement.start.split(':').map(Number);
     const targetTime = targetElement.end.split(':').map(Number);
 
-    if (currentTime[0] > targetTime[0] || (currentTime[0] === targetTime[0] && currentTime[1] > targetTime[1])) {
+    if (
+      currentTime[0] > targetTime[0] ||
+      (currentTime[0] === targetTime[0] && currentTime[1] > targetTime[1])
+    ) {
       nextElement = currentElement;
       break;
     }
+
+    previousElement = currentElement;
   }
 
-  return nextElement;
+  return {
+    previousElement,
+    nextElement,
+  };
 }
 
 
@@ -130,7 +139,7 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
 
     const onCreateLesson = (lesson: any) => {
       const hour = 60;
-      const startTime = `${timeIndex}:${lesson.startDateTime}`
+      const startTime = `${timeIndex}:${lesson.startDateTime > 9 ? lesson.startDateTime : `0${lesson.startDateTime}`}`
       const endTime = `${timeIndex + Math.floor((lesson.startDateTime + lesson.duration) / hour)}:${(lesson.startDateTime + lesson.duration) % hour}`;
       setLessons([...lessons, {
         start: startTime,
@@ -145,19 +154,46 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
     }
 
 
-    const onHandleSlot = () => {
-      const nextLesson = findNextElement(convertArray(daySchedule), { start: `${timeIndex}:0`, end: `${timeIndex}:0` }) || { start: '23:59', end: '23:59' };
-      //@ts-ignore
-      navigation.navigate(NavigationEnum.SELECT_DURATION_CLASS_MODAL, {
-        timeDuration,
-        startDateTime,
-        onCreateLesson,
-        maxDuration: subtractTime(nextLesson?.start, `${timeIndex}:0`),
-      })
+    const onHandleSlot = (event: any) => {
+      const { locationX, locationY } = event.nativeEvent;
+
+      const prevLesson = findNextElement(convertArray(daySchedule), { start: `${timeIndex}:59`, end: `${timeIndex}:59` }).previousElement || { start: '00:00', end: '00:00' };
+      const nextLesson = findNextElement(convertArray(daySchedule), { start: `${timeIndex}:0`, end: `${timeIndex}:0` }).nextElement || { start: '23:59', end: '23:59' };
+
+      const prevLessonIsCurrentField = prevLesson.end.split(':')[0] == timeIndex
+      const clickInPrevLesson = prevLesson.end.split(':')[1] > locationY
+      if (clickInPrevLesson && prevLessonIsCurrentField) {
+        onHandleClick({
+          Duration: subtractTime(prevLesson.end, prevLesson.start),
+          DayOfWeek: dayOfWeek,
+          StartTime: prevLesson.start,
+        })
+      } else if (!clickInPrevLesson && prevLessonIsCurrentField) {
+        // @ts-ignore
+        navigation.navigate(NavigationEnum.SELECT_DURATION_CLASS_MODAL, {
+          timeDuration,
+          startDateTime: prevLesson.end,
+          onCreateLesson,
+          maxDuration: subtractTime(nextLesson?.start, `${timeIndex}:0`),
+        })
+
+      } else {
+        console.log('\nlesson on this day: \n', daySchedule)
+        // @ts-ignore
+        navigation.navigate(NavigationEnum.SELECT_DURATION_CLASS_MODAL, {
+          timeDuration,
+          startDateTime,
+          onCreateLesson,
+          maxDuration: subtractTime(nextLesson?.start, `${timeIndex}:0`),
+        })
+      }
     }
 
 
-    const onCreateMoreLesson = (item: any, type: string) => {
+    const onCreateMoreLesson = (event: any, item: any, type: string) => {
+      const { locationX, locationY } = event.nativeEvent;
+      ;
+
 
       let nextLesson: any, prevLesson: any, startTime;
       lessons.sort((a, b) => {
@@ -175,6 +211,8 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
       })
       if (type == 'before') {
         startTime = `${timeIndex}:00`
+        const prevLessonGlobal = findNextElement(convertArray(daySchedule), { start: item.start, end: item.end }).previousElement
+
       }
       else if (prevLesson) {
         startTime = prevLesson.end
@@ -183,13 +221,13 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
       } else {
         startTime = `${timeIndex}:00`
       }
-      nextLesson = findNextElement(convertArray(daySchedule), { start: `${prevLesson.start}`, end: `${prevLesson.end}` }) || { start: '23:59', end: '23:59' };
-      console.log('\n--------------\nnextLesson: \n', nextLesson)
+      nextLesson = findNextElement(convertArray(daySchedule), { start: `${prevLesson.start}`, end: `${prevLesson.end}` }).nextElement || { start: '23:59', end: '23:59' };
+
       // @ts-ignore
       navigation.navigate(NavigationEnum.SELECT_DURATION_CLASS_MODAL, {
         startDateTime: startTime,
         onCreateLesson,
-        maxDuration: nextLesson ? subtractTime(nextLesson?.start, item.end) : null
+        maxDuration: type == 'before' ? subtractTime(item.start, `${timeIndex}:00`) : subtractTime(nextLesson?.start, item.end)
       })
     }
     const onHandleMoreLesson = (item: any) => {
@@ -197,6 +235,11 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
       const index = array.findIndex(element => element.start === item.start);
       if (index !== -1) {
         array.splice(index, 1);
+        onHandleClick({
+          Duration: subtractTime(item.end, item.start),
+          DayOfWeek: dayOfWeek,
+          StartTime: item.start,
+        })
       }
       setLessons(array)
     }
@@ -204,7 +247,9 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
     useEffect(() => {
       lessons.length > 0 ? setActive(true) : setActive(false)
     }, [lessons])
+    useEffect(() => {
 
+    })
     return (
       <>
         <View >
@@ -219,15 +264,14 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
                 return (
                   <>
                     <TouchableOpacity style={{
-                      zIndex: 2,
+                      zIndex: 1,
                       top: index === 0 ? 0 : `${toMinutes(item.start) / 60 * 100}%`,
                       left: 0,
                       right: 0,
                       bottom: `${(60 - toMinutes(item.start)) / 60 * 100}%`,
                       position: 'absolute',
-                      backgroundColor: 'red'
                     }}
-                      onPress={() => onCreateMoreLesson(item, 'before')}
+                      onPress={(event) => onCreateMoreLesson(event, item, 'before')}
                     />
 
 
@@ -266,7 +310,7 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
 
 
                     <TouchableOpacity style={{
-                      zIndex: 1,
+                      zIndex: 2,
                       top: `${toMinutes(item.end) > toMinutes(item.start) ? toMinutes(item.end) / 60 * 100 : toMinutes(item.end) == 0 ? 60 : toMinutes(item.end) + 120}%`,
                       left: 0,
                       right: 0,
@@ -274,7 +318,7 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
                       height: `100%`,
                       position: 'absolute',
                     }}
-                      onPress={() => onCreateMoreLesson(item, 'after')}
+                      onPress={(event) => onCreateMoreLesson(event, item, 'after')}
                     />
                   </>
                 )

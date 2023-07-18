@@ -13,7 +13,7 @@ import styles from './styles';
 interface ITimeData {
   hour: number;
   minute: number;
-  dayPart?: string
+  dayPart: string
 }
 interface IItemPickerBlock {
   hour: boolean;
@@ -28,9 +28,9 @@ interface ITimePicker {
   maxDuration?: number
 }
 const CustomTimePicker: React.FC<ITimePicker> = ({ visible, data, onSetTime, block }) => {
-  const [hour, setHour] = useState(data.hour || 0);
-  const [minute, setMinute] = useState(data.minute || 0);
-  const [dayPart, setDayPart] = useState(data.dayPart || 0);
+  const [hour, setHour] = useState(0);
+  const [minute, setMinute] = useState(0);
+  const [dayPart, setDayPart] = useState('');
 
   const onHourChange = (hourValue: number) =>
     setHour(hourValue)
@@ -48,6 +48,11 @@ const CustomTimePicker: React.FC<ITimePicker> = ({ visible, data, onSetTime, blo
     });
 
   }, [hour, minute, dayPart])
+  useEffect(() => {
+    setHour(data.hour)
+    setMinute(data.minute)
+    setDayPart(data.dayPart)
+  }, [])
   return visible ? (
     <LinearGradient
       colors={['rgba(109,123,152,0.17)', 'rgba(109,123,152,0.17)']}

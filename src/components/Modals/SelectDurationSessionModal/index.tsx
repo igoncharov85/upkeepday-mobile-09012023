@@ -138,21 +138,17 @@ const InteractivePartItem = ({
 const DateItem = ({ dateValue, onSubmit, disabled }: { dateValue: string, onSubmit: any, disabled?: boolean }) => {
 
   return (
-    <TouchableOpacity onPress={onSubmit} style={{ zIndex: 9 }}>
       <LinearGradient
         style={styles.dateContainer}
         colors={['rgba(154, 128, 186,0.5)', 'rgba(109,123,152,0.5)']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         angle={222.53}
-        locations={[0.4978, 1.1474]}
-
-      >
+        locations={[0.0376, 0.9878]}>
         <View style={styles.dateContainer}>
           <Text style={styles.dateText}>{dateValue}</Text>
         </View>
       </LinearGradient>
-    </TouchableOpacity>
   )
 };
 

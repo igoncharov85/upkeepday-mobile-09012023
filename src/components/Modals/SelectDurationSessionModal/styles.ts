@@ -56,6 +56,7 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   dateContainer: {
+    zIndex: 10,
     height: 38,
     width: 105,
     borderRadius: 9,

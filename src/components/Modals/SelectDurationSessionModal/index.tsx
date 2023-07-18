@@ -138,6 +138,7 @@ const InteractivePartItem = ({
 const DateItem = ({ dateValue, onSubmit, disabled }: { dateValue: string, onSubmit: any, disabled?: boolean }) => {
 
   return (
+    <TouchableOpacity onPress={onSubmit} style={{ zIndex: 9 }}>
       <LinearGradient
         style={styles.dateContainer}
         colors={['rgba(154, 128, 186,0.5)', 'rgba(109,123,152,0.5)']}
@@ -149,6 +150,7 @@ const DateItem = ({ dateValue, onSubmit, disabled }: { dateValue: string, onSubm
           <Text style={styles.dateText}>{dateValue}</Text>
         </View>
       </LinearGradient>
+    </TouchableOpacity>
   )
 };
 

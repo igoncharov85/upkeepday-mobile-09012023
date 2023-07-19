@@ -44,16 +44,33 @@ interface ISheduleTable {
 }
 
 
+//find lesson on current hour
+function findLessonOnCurrentHour(lessonsOnDay: any[], currentHour: number) {
+  return lessonsOnDay.filter((lesson) => {
+    return lesson.StartDateTime.split('T')[1].split(':')[0] == currentHour
+  })
+}
 
 export const startOfHour = 8;
 export const WeekTable: FC<ISheduleTable> = memo(
   ({ startOfWeek, endOfWeek, onHandleData, conflict }) => {
-    const { GeneratedScheduleEntries, CurrentScheduledEntries, loading } = useAppSelector(state => state.schedule);
-    const [editMode, setEditMode] = useState(false);
-    const [slots, setSlots] = useState<IGeneratedScheduleEntries[]>(GeneratedScheduleEntries as []);
 
-    const [isVisible, setIsVisible] = useState(false);
-    const [isVisibleEdit, setIsVisibleEdit] = useState(false);
+    const { GeneratedScheduleEntries, CurrentScheduledEntries, loading } = useAppSelector(state => state.schedule);
+    console.log(GeneratedScheduleEntries, 'GeneratedScheduleEntries');
+
+    const [editMode, setEditMode] = useState(false);
+    const [slots, setSlots] = useState(GeneratedScheduleEntries);
+
+    function findActivitiesByDay(activities: IGeneratedScheduleEntries[], day: number) {
+
+
+      const activitiesByDay = activities.filter((activity: IGeneratedScheduleEntries) => {
+        const startDateTime = new Date(activity.StartDateTime);
+        return startDateTime.getDate() === day;
+      });
+
+      return activitiesByDay;
+    }
 
 
     const onChangeEditMode = (value: boolean) => {
@@ -61,30 +78,31 @@ export const WeekTable: FC<ISheduleTable> = memo(
     }
 
     const onDeleteSlot = (slot: any) => {
-      onHandleModal();
       const newSlots = slots.filter((item) => {
         return item.StartDateTime !== slot.StartDateTime
       });
-      if (JSON.stringify(slots) !== JSON.stringify(newSlots)) {
-        setSlots(newSlots);
-        onHandleData(slots)
-      }
+      // if (JSON.stringify(slots) !== JSON.stringify(newSlots)) {
+      //   setSlots(newSlots);
+      //   onHandleData(slots)
+      // }
     }
-    const onHandleModal = () => {
-      setIsVisible(!isVisible);
-    }
-    const onHandleModalEdit = () => {
-      setIsVisibleEdit(!isVisibleEdit);
-    }
-    const onMoveSlot = (slot: any, x: number, y: number) => {
+
+    const onMoveSlot = (slot: any, x: number, y: number, newStartTime: string) => {
       const newTime = addDayAndHoursToDate(slot.StartDateTime, x, y);
-      onHandleModalEdit();
+
       const newSlots = slots.filter(item => item.StartDateTime !== slot.StartDateTime);
-      setSlots([...newSlots, { Duration: slot.Duration, StartDateTime: newTime, SlotUid: '' }]);
+      setSlots([...newSlots, { Duration: slot.Duration, StartDateTime: newStartTime, SlotUid: '' }]);
+      onHandleData([...newSlots, { Duration: slot.Duration, StartDateTime: newStartTime, SlotUid: '' }])
     }
-    useEffect(() => {
-      onHandleData(slots)
-    }, [slots])
+
+    // useEffect(() => {
+    //   onHandleData(slots)
+    //   console.log('\n+\ndate will update\n')
+    //   slots.forEach((item, index) => {
+    //     console.log(index, ')', item)
+    //   })
+    //   setNewSlots(slots as any)
+    // }, [slots])
     const timeData = generateTimeData(`00:00`, '23:00');
 
     const weekStructure = createWeekStructure(
@@ -92,6 +110,9 @@ export const WeekTable: FC<ISheduleTable> = memo(
       endOfWeek,
       timeData,
     );
+    //find day lessons in all lesssons
+
+    // const newData = new Date(findActivitiesByDay(GeneratedScheduleEntries, 17))
     const date = (new Date(startOfWeek));
     return GeneratedScheduleEntries.length > 0 && !loading ? (<View style={styles.container}>
       <ScrollView contentOffset={{ x: 0, y: 64 * 8 }}>
@@ -103,27 +124,32 @@ export const WeekTable: FC<ISheduleTable> = memo(
           </Column>
           <Row style={{ flex: 1, paddingRight: 20, paddingBottom: 20 }}>
             {weekStructure?.map((dayEvents, dayIndex) => {
+              const currentDate = new Date(addDayAndHoursToDate(date.toISOString(), dayIndex, 0))
+              const allLessonOnThisDay = findActivitiesByDay(GeneratedScheduleEntries, currentDate.getDate())
 
               return (
                 <Column key={dayIndex}>
                   {dayEvents?.map((_, index) => {
-                    const currentDate = new Date(addDayAndHoursToDate(date.toISOString(), dayIndex, 0))
+
+                    const currentLessons = findLessonOnCurrentHour(allLessonOnThisDay, index)
                     const dryField = findScheduleEntries(CurrentScheduledEntries as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
 
-                    const activeItem = findScheduleEntries(slots as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
                     const conflictItem = findScheduleEntries(conflict as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
                     return <WeekTableItem
+
                       key={`${dayIndex}-${index}`}
+                      lessonOnThisTime={currentLessons}
                       timeIndex={index}
                       dayIndex={dayIndex}
                       startOfWeek={startOfWeek}
                       StartDateTime={addDayAndHoursToDate(date.toISOString(), dayIndex, index)}
-                      activeItem={activeItem && activeItem[0]}
+                      activeItem={currentLessons && currentLessons[0]}
                       conflict={!!conflictItem[0]}
                       onLongPress={onChangeEditMode}
                       editMode={editMode}
                       onDeleteSlot={onDeleteSlot}
                       onMoveSlot={onMoveSlot}
+                      currentDay={currentDate}
                       dryField={dryField && dryField[0]} />;
                   })}
 

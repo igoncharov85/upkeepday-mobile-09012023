@@ -6,7 +6,6 @@ export default StyleSheet.create({
     position: 'relative'
   },
   containerItem: {
-    position: 'relative',
     height: 64,
     minWidth: 48,
     borderWidth: 1,
@@ -56,7 +55,11 @@ export default StyleSheet.create({
     zIndex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
   },
-  cansel: { position: 'absolute', top: 0, right: 0 },
+  cansel: {
+    position: 'absolute',
+    top: 0,
+    right: 0
+  },
   wrapperItem: {
     zIndex: 10,
     justifyContent: 'center',

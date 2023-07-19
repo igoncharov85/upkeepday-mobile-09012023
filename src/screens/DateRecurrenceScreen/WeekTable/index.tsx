@@ -74,7 +74,6 @@ export const WeekTable: FC<ISheduleTable> = memo(
                 return (
                   <Column key={dayIndex}>
                     {dayEvents?.map((_, index) => {
-                      // console.log(dayIndex);
                       const daySchedule = slots.filter(item => item.DayOfWeek == dayIndex)
 
 

@@ -34,6 +34,7 @@ import PreviewStudentScreen from '../../screens/StudentsScreen/screens/PreviewSt
 import MoreScreen from '../../screens/MoreScreen';
 import DurationSessionModal from '../../components/Modals/DurationSessionModal';
 import SelectDurationSessionModal from '../../components/Modals/SelectDurationSessionModal';
+import EditTimeSessionModal from '../../components/Modals/EditTimeSessionModal';
 
 
 const Stack = createNativeStackNavigator();
@@ -185,6 +186,14 @@ export const StackNavigator = memo(() => {
         <Stack.Screen
           name={NavigationEnum.SELECT_DURATION_CLASS_MODAL}
           component={SelectDurationSessionModal}
+          options={{
+            presentation: 'transparentModal',
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name={NavigationEnum.EDIT_TIME_CLASS_MODAL}
+          component={EditTimeSessionModal}
           options={{
             presentation: 'transparentModal',
             headerShown: false,

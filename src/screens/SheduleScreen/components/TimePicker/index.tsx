@@ -94,7 +94,7 @@ const ItemPicker = memo(({ items, activeIndex, onChange }: { items: any[], activ
     <View style={styles.container}>
       <View style={styles.scrollContainer}>
         <ScrollView
-          ref={scrollViewRef}
+          contentOffset={{ x: 0, y: selectedIndex * 50 }}
           contentContainerStyle={styles.contentContainer}
           showsVerticalScrollIndicator={false}
           onScroll={handleScroll}>

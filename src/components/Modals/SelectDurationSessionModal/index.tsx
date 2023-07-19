@@ -17,7 +17,7 @@ interface RouteParams {
   startDateTime: string;
   onCreateLesson: ({ duration, startDateTime }: { duration: number, startDateTime: number }) => void;
 }
-const durationItems = ['00:30', '00:45', '01:00',]
+const durationItems = ['00:10', '00:15', '01:00',]
 const SelectDurationSessionModal = ({
 
 }: IDurationSessionModalModal) => {

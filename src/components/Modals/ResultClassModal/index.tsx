@@ -24,7 +24,6 @@ const ResultClassModal = () => {
     const { item, actionBtn, nameAction } = params;
     const handleAction = () => {
         actionBtn();
-        closeModal();
         item?.Status && dispatch(fetchClassesAction(item.Status.toLowerCase()))
     }
 

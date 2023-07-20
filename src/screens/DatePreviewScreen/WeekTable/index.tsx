@@ -95,14 +95,9 @@ export const WeekTable: FC<ISheduleTable> = memo(
       onHandleData([...newSlots, { Duration: slot.Duration, StartDateTime: newStartTime, SlotUid: '' }])
     }
 
-    // useEffect(() => {
-    //   onHandleData(slots)
-    //   console.log('\n+\ndate will update\n')
-    //   slots.forEach((item, index) => {
-    //     console.log(index, ')', item)
-    //   })
-    //   setNewSlots(slots as any)
-    // }, [slots])
+    useEffect(() => {
+      onHandleData(slots)
+    }, [slots])
     const timeData = generateTimeData(`00:00`, '23:00');
 
     const weekStructure = createWeekStructure(

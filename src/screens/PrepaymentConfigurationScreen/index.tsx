@@ -12,6 +12,7 @@ import { useAppSelector } from '../../store/hooks';
 import { IGeneratedScheduleEntries, IStudents, IWeekTimeSlot } from '../../common/types/schedule.types';
 import { updatedStatusClassesAction } from '../../store/classes/actions';
 import moment from 'moment';
+import { findLatestLessonWithDuration } from '../../services/utils/calculateNumberOfClasses';
 
 
 interface IPrepaymentConfigurationScreen { }
@@ -31,8 +32,7 @@ export const PrepaymentConfigurationScreen: React.FC<IPrepaymentConfigurationScr
 
     const goTextStep = () => {
         //@ts-ignore
-        const lastItem = createCurrentClassRequest?.Sessions[createCurrentClassRequest.Sessions?.length - 1]
-        const endDate = moment(lastItem.StartDateTime).add(lastItem.Duration, 'minute').format('YYYY-MM-DD');
+        const endDate = findLatestLessonWithDuration(createCurrentClassRequest?.Sessions);
         //@ts-ignore
         navigation.navigate(NavigationEnum.RESULT_CLASS_MODAL, {
             item: {
@@ -70,7 +70,7 @@ export const PrepaymentConfigurationScreen: React.FC<IPrepaymentConfigurationScr
                 //@ts-ignore
                 navigation.navigate(NavigationEnum.HOME_SCREEN, { key: Date.now() })
             },
-            nameAction: 'Delete  Permanently',
+            nameAction: 'Confirm',
         })
     };
 

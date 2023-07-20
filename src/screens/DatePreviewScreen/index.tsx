@@ -58,8 +58,11 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
     }
 
     const onSave = () => {
+        console.log(slots);
+
         dispatch(updateCurrentClassRequestAction({
-            Sessions: slots, Slots: WeekTimeSlots, Class: {
+            Sessions: slots,
+            Slots: WeekTimeSlots, Class: {
                 EndNumber: slots.length,
             }
         }))
@@ -109,7 +112,7 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
         </View>
         <Text style={{ textAlign: 'center' }}>
             <Text style={{ fontSize: 17, lineHeight: 34, fontWeight: '700', }}>Scheduled Classes: </Text>
-            <Text style={{ opacity: 0.4 }}>{slots.length || 0}</Text>
+            <Text style={{ opacity: 0.4 }}>{slots.length || GeneratedScheduleEntries.length || 0}</Text>
         </Text>
         <View style={{ padding: 20, justifyContent: 'flex-end' }}>
             <CustomButton text={"Next Step"} onPress={!conflict.length ? onSave : () => { }} disabled={!(conflict.length < 1)} />

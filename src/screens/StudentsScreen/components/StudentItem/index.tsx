@@ -46,9 +46,11 @@ const StudentsItem: React.FC<IStudentsItem> = ({ item }) => {
 
     return (
         <View style={styles.container}>
+            <View style={[styles.part]}>
+                <Text style={styles.title}>{item.FirstName} {item.LastName}</Text>
+            </View>
             <View style={[styles.part, styles.partTop]}>
                 <View>
-                    <Text style={styles.title}>{item.FirstName} {item.LastName}</Text>
                     <View style={styles.payment}>
                         <View style={styles.paymentItem}>
                             <PhoneIcon />

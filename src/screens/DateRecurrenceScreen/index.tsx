@@ -42,38 +42,38 @@ export const DateRecurrenceScreen: React.FC<IDateRecurrenceScreen> = () => {
 
 
     const goNextStep = async () => {
-        // const numberClass = createCurrentClassRequest.Class?.EndNumber;
+        const numberClass = createCurrentClassRequest.Class?.EndNumber;
         const endDate = finishDate;
 
-        // dispatch(
-        //     updateCurrentClassRequestAction({
-        //         Class: {
-        //             EndNumber: getNumber,
-        //             EndDate: endDate
-        //         }
-        //     })
-        // );
+        dispatch(
+            updateCurrentClassRequestAction({
+                Class: {
+                    EndNumber: getNumber,
+                    EndDate: endDate
+                }
+            })
+        );
         console.log(weekTimeSlots);
 
 
-        // dispatch(generateScheduleAction(
-        //     {
-        //         ScheduleType: createCurrentClassRequest.Class!.EndScheduleType as string,
-        //         StartDate: createCurrentClassRequest.Class!.StartDate as string,
-        //         Number: getNumber,
-        //         EndDate: endDate as string || '',
-        //         Slots: weekTimeSlots
-        //     }
-        // ))
         dispatch(generateScheduleAction(
             {
-                ScheduleType: "SpecificEndDate",
-                StartDate: "2023-07-16",
-                Number: 0,
-                EndDate: "2023-07-23",
+                ScheduleType: createCurrentClassRequest.Class!.EndScheduleType as string,
+                StartDate: createCurrentClassRequest.Class!.StartDate as string,
+                Number: getNumber,
+                EndDate: endDate as string || '',
                 Slots: weekTimeSlots
             }
         ))
+        // dispatch(generateScheduleAction(
+        //     {
+        //         ScheduleType: "SpecificEndDate",
+        //         StartDate: "2023-07-16",
+        //         Number: 0,
+        //         EndDate: "2023-07-23",
+        //         Slots: weekTimeSlots
+        //     }
+        // ))
 
 
 

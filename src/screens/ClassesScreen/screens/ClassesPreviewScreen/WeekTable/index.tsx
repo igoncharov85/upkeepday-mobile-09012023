@@ -95,9 +95,10 @@ export const WeekTable: FC<ISheduleTable> = memo(
     useEffect(() => {
       onHandleData(slots)
     }, [slots])
+
     useEffect(() => {
       dispatch(fetchScheduleByPeriodAction({ startDate: moment(startOfWeek).add(-1, 'days').toISOString(), endDate: endOfWeek.toISOString() }));
-    }, [startOfWeek]);
+    }, []);
     const timeData = generateTimeData('00:00', '23:00');
     const weekStructure = createWeekStructure(
       startOfWeek,

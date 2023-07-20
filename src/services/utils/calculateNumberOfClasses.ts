@@ -87,3 +87,20 @@ export function calculateEndTimeDate(
 
     return endDateTime;
 }
+export function findLatestLessonWithDuration(lessonsArray: any) {
+    let latestLesson = null;
+
+    for (let i = 0; i < lessonsArray.length; i++) {
+        const lessonDateTime = new Date(lessonsArray[i].StartDateTime);
+        const durationInMinutes = lessonsArray[i].Duration;
+
+        // Создаем новый объект Date, добавляя к StartDateTime Duration в минутах
+        const lessonEndDateTime = new Date(lessonDateTime.getTime() + durationInMinutes * 60000);
+
+        if (latestLesson === null || lessonEndDateTime > latestLesson) {
+            latestLesson = lessonEndDateTime;
+        }
+    }
+
+    return latestLesson;
+}

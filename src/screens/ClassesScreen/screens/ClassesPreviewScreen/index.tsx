@@ -69,14 +69,14 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
 
     useEffect(() => {
         isFocused && dispatch(fetchSessionClassesByIdAction(item.ClassId))
-    }, [isFocused]);
+    }, []);
     useEffect(() => {
-        if (classesLoading && loading) {
+        if (currentSession.lenght > 0 && !loading) {
             setScreenLoading(true)
         }
     }, [currentSession]);
 
-    return screenLoading ? <ScreenLoading /> : (<View style={{ height: '100%' }}>
+    return loading ? <ScreenLoading /> : (<View style={{ height: '100%' }}>
         <View style={styles.header}>
             <ScreenHeader text={"View and Reschedule"} onBackPress={navigation.goBack} withBackButton={true} />
         </View>

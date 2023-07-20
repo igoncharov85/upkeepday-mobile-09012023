@@ -186,6 +186,13 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
             })
         },
         handleSubmit: (values,) => {
+            console.log({
+                EndScheduleType: typeRef.current,
+                StartDate: values.startDate,
+                EndDate: values.finishDate,
+                EndNumber: +values.totalClasses as number,
+            });
+
             dispatch(
                 updateCurrentClassRequestAction({
                     Class: {

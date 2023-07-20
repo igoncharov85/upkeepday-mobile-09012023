@@ -105,21 +105,10 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
 
 
 
-    const getInfo = () => {
-      console.log(
-        'activeItem',
-        // activeItem,
-        'dryField',
-        dryField,
-        '\nlessonOnThisTime:\n',
-        lessonOnThisTime
-      );
 
-    }
 
     return (
       <TouchableOpacity
-        onPress={() => getInfo()}
         onLongPress={() => onHandleLongPress(true)}
 
         activeOpacity={editMode ? 0.5 : 1}
@@ -132,9 +121,6 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
           }}>
             {lessonOnThisTime.map((lesson, index) => {
               const lessonMinuteStart = Number(lesson.StartDateTime.split('T')[1].split(':')[1])
-              // console.log(lessonMinuteStart, 'lessonMinuteStart');
-              // console.log(lesson.Duration / 60 * 100);
-
               return (
                 <Animated.View
                   {...panResponders[index].panHandlers}

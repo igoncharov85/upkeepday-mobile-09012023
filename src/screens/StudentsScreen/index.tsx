@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, ScrollView } from 'react-native';
 import { StudentsNavigation } from './components/StudentsNavigation';
 import StudentItem from './components/StudentItem';
@@ -8,6 +8,9 @@ import { ScreenLoading } from '../../components/UI/ScreenLoading';
 
 const StudentsScreen = () => {
     const { users, loading } = useAppSelector(state => state.user);
+    useEffect(() => {
+        !loading && console.log(users)
+    }, [loading])
     return (
         <View style={{ flex: 1 }}>
             <StudentsNavigation />

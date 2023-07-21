@@ -31,6 +31,7 @@ export function* fetchUserByIdWorker(payload: IAction<ICheckinsId>): SagaIterato
             payload.payload
         );
         if (data) {
+            console.log('new current users data:', data, '&&&&&&&&&&&&&&&&&&&')
             yield put(setCurrentStudentAction(data))
         }
     } catch (error) {

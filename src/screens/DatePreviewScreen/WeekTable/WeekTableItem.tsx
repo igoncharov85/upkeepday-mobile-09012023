@@ -50,6 +50,7 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
 
     const onHandleLongPress = (active: boolean) => {
       setCanMove(true);
+      console.log('canMove:', canMove)
       onLongPress(active)
     }
 
@@ -83,6 +84,7 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
           const newTime = addDayAndHoursToDate(lessonOnThisTime[index].StartDateTime, gridCellX, gridCellY);
           const addDuration = (time: string) => {
             setCanMove(false)
+            console.log('canMove:', canMove)
             onHandleLongPress(false);
             console.log(newTime)
             // onMoveSlot(lessonOnThisTime[index], , , '2023-07-20T10:30:00')

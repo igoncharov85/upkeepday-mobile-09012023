@@ -8,9 +8,9 @@ import { ScreenLoading } from '../../components/UI/ScreenLoading';
 
 const StudentsScreen = () => {
     const { users, loading } = useAppSelector(state => state.user);
-    useEffect(() => {
-        !loading && console.log(users)
-    }, [loading])
+
+
+
     return (
         <View style={{ flex: 1 }}>
             <StudentsNavigation />

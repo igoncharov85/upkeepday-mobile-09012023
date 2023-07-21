@@ -128,6 +128,7 @@ export function* fetchStudentsWorker(payload: IAction<IStudentsRequest>): SagaIt
             payload.payload
         );
         if (data) {
+            console.log('new users data:\n\n\n', data, '**********************8')
             yield put(setUsersAction(data))
         }
     } catch (error) {

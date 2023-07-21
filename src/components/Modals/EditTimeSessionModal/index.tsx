@@ -15,7 +15,7 @@ const EditTimeSessionModal = ({
 }: IEditTimeSessionModalModal) => {
   const navigation = useNavigation()
   const route = useRoute()
-  const { addDuration, currentDay } = route.params as any
+  const { addDuration, newTime } = route.params as any
   const goBack = () => navigation.goBack();
   const [time, setTime] = useState({});
 
@@ -26,6 +26,7 @@ const EditTimeSessionModal = ({
     addDuration(time)
     goBack()
   }
+  const currentTime = new Date(newTime);
   return (
     <>
       <View style={styles.modalWrapper}>
@@ -34,7 +35,7 @@ const EditTimeSessionModal = ({
           <ScreenHeader text="Set start time" withBackButton={true} onBackPress={goBack} />
           <CustomTimePicker
             onSetTime={onSetTime}
-            data={{ hour: 0, minute: 0 }}
+            data={{ hour: currentTime.getHours() > 12 ? currentTime.getHours() - 12 : currentTime.getHours(), minute: currentTime.getMinutes(), dayPart: currentTime.getHours() > 12 ? "PM" : 'AM' }}
             maxDuration={1600}
           />
           <CustomButton text="Save" onPress={onSave} />

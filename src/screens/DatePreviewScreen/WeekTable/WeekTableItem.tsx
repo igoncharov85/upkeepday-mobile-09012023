@@ -8,6 +8,7 @@ import BusyField from '../../ClassesScreen/components/BusyField';
 import { IGeneratedScheduleEntries } from '../../../common/types/schedule.types';
 import { useNavigation } from '@react-navigation/native';
 import { NavigationEnum } from '../../../common/constants/navigation';
+import { addDayAndHoursToDate } from '../../../services/utils/generateDate.util';
 
 interface IWeekTableItem {
   StartDateTime: string;
@@ -79,16 +80,18 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
             };
           lessonOnThisTime[index] && pan[index]?.setOffset(moveCoords);
           lessonOnThisTime[index] && pan[index]?.setValue(moveCoords);
+          const newTime = addDayAndHoursToDate(lessonOnThisTime[index].StartDateTime, gridCellX, gridCellY);
           const addDuration = (time: string) => {
             setCanMove(false)
             onHandleLongPress(false);
-            onMoveSlot(lessonOnThisTime[index], gridCellX, gridCellY, '2023-07-20T10:30:00')
+            console.log(newTime)
+            // onMoveSlot(lessonOnThisTime[index], , , '2023-07-20T10:30:00')
           }
 
           //@ts-ignore
           navigation.navigate(NavigationEnum.EDIT_TIME_CLASS_MODAL, {
             addDuration,
-            currentDay: currentDay.getDate()
+            newTime
           })
 
           pan[index]?.setOffset({

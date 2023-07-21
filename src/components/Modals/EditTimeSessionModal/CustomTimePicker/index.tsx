@@ -13,7 +13,7 @@ import styles from './styles';
 interface ITimeData {
   hour: number;
   minute: number;
-  dayPart?: string
+  dayPart: string
 }
 interface IItemPickerBlock {
   hour: boolean;
@@ -76,12 +76,13 @@ const CustomTimePicker: React.FC<ITimePicker> = ({ data, onSetTime, maxDuration 
       <ItemPicker items={[...Array(13)].map((_, i) => i > 9 ? i : `0${i}`)} activeIndex={hour + 1} onChange={onHourChange} stipulation={stipulationForHour} />
 
       <ItemPicker items={[...Array(60)].map((_, i) => i > 9 ? i : `0${i}`)} activeIndex={minute + 1} onChange={onMinuteChange} stipulation={stipulationForMinute} />
+      <ItemPicker items={['AM', 'PM']} activeIndex={dayPart == 'AM' ? 1 : 2} onChange={onDayPartChange} />
 
       <TimeLineRight />
     </LinearGradient>
   );
 };
-const ItemPicker = memo(({ items, activeIndex, onChange, stipulation }: { items: any[], activeIndex?: number; onChange: (value: any) => void, stipulation: any }) => {
+const ItemPicker = memo(({ items, activeIndex, onChange, stipulation }: { items: any[], activeIndex?: number; onChange: (value: any) => void, stipulation?: any }) => {
 
   const [selectedIndex, setSelectedIndex] = useState(activeIndex ? activeIndex - 1 : 0);
   const scrollViewRef = useRef(null);
@@ -121,12 +122,12 @@ const ItemPicker = memo(({ items, activeIndex, onChange, stipulation }: { items:
             <TouchableOpacity
               key={index}
               style={styles.item}
-              onPress={() => index - 1 < stipulation() && handleItemPress(index)}>
+              onPress={() => handleItemPress(index)}>
               <Text
                 style={[
                   styles.itemText,
                   index === selectedIndex && styles.selectedItemText,
-                  index > stipulation() && styles.disableText,
+
                 ]}>
                 {item}
               </Text>

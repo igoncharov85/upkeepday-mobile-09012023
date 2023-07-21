@@ -53,7 +53,7 @@ const TimePicker: React.FC<ITimePicker> = ({ visible, data, onSetTime }) => {
         marginVertical: 20,
       }}>
       <TimeLineLeft />
-      <ItemPicker items={[...Array(13)].map((_, i) => i)} activeIndex={hour} onChange={onHourChange} />
+      <ItemPicker items={[...Array(13)].map((_, i) => i)} activeIndex={hour + 1} onChange={onHourChange} />
 
       <ItemPicker items={[...Array(60)].map((_, i) => i > 9 ? i : `0${i}`)} activeIndex={minute + 1} onChange={onMinuteChange} />
 

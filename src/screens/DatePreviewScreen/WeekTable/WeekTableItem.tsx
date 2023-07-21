@@ -56,6 +56,7 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
 
     const deleteSlot = () => {
       // onDeleteSlot(activeItem)
+      console.log('run in delete press')
       setCanMove(false);
       onLongPress(false)
     }

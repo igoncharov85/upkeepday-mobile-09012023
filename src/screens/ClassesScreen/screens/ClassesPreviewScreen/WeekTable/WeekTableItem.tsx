@@ -1,4 +1,4 @@
-import React, { FC, memo, useRef, useState } from 'react';
+import React, { FC, memo, useEffect, useRef, useState } from 'react';
 import { Animated, PanResponder, Text, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import styles from './styles';
@@ -43,7 +43,7 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
 
 
     const onHandleLongPress = (active: boolean) => {
-      setCanMove(active);
+      setCanMove(true);
       onLongPress(active)
     }
 
@@ -69,23 +69,17 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
         onMoveSlot(activeItem, gridCellX, gridCellY,)
 
         onHandleLongPress(false);
+        setCanMove(false);
       },
     });
 
 
-    const getInfo = () => {
-      console.log(
-        'activeItem',
-        activeItem,
-        'dryField',
-        dryField,
-      );
 
-    }
-
+    useEffect(() => {
+      console.log('canMove:', canMove)
+    }, [canMove])
     return (
       <TouchableOpacity
-        onPress={() => getInfo()}
         onLongPress={() => onHandleLongPress(true)}
 
         activeOpacity={editMode ? 0.5 : 1}

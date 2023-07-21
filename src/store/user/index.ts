@@ -7,6 +7,7 @@ interface IUserStore {
     checkins: Array<ICheckinUser>;
     users: Array<IStudentResponse>;
     studentList: Array<IStudentByIdResponse>;
+    loading: boolean;
 }
 
 const initialState: IUserStore = {
@@ -14,7 +15,8 @@ const initialState: IUserStore = {
     currentStudent: [],
     checkins: [],
     users: [],
-    studentList: []
+    studentList: [],
+    loading: false
 
 }
 
@@ -22,6 +24,9 @@ const userSlice = createSlice({
     initialState,
     name: 'user',
     reducers: {
+        setStudentLoading: (state, action: PayloadAction<boolean>) => {
+            state.loading = action.payload
+        },
         setStudentAction: (state, action: PayloadAction<Array<IUserStudent>>) => {
             state.students = action.payload
         },
@@ -44,5 +49,5 @@ const userSlice = createSlice({
 })
 
 
-export const { setStudentAction, addStudentAction, setCheckinStudentAction, setCurrentStudentAction, setUsersAction, setStudentListAction } = userSlice.actions
+export const { setStudentLoading, setStudentAction, addStudentAction, setCheckinStudentAction, setCurrentStudentAction, setUsersAction, setStudentListAction } = userSlice.actions
 export default userSlice.reducer

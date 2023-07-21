@@ -44,7 +44,7 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
   }) => {
     const navigation = useNavigation();
     const [canMove, setCanMove] = useState(false);
-    const { createCurrentClassRequest } = useAppSelector(state => state.schedule);
+    const { createCurrentClassRequest, loading } = useAppSelector(state => state.schedule);
     const colorsLesson = ['#EAAFC8', '#654EA3'];
 
 
@@ -110,7 +110,7 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
 
 
 
-    return (
+    return loading ? null : (
       <TouchableOpacity
         onLongPress={() => onHandleLongPress(true)}
 
@@ -155,14 +155,14 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
                       <Text style={[styles.textItem,
                       conflict && { color: 'red' }
                       ]
-                      }>{lesson.Duration / 60 * 100}</Text>
+                      }>{createCurrentClassRequest?.Class?.Name}</Text>
 
                     </LinearGradient>
                   </>
                 </Animated.View>
               )
             })}
-            {/* {dryField && activeItem?.StartDateTime !== dryField?.StartDateTime && <BusyField />} */}
+            {dryField && <BusyField />}
           </View>
         </View>
 

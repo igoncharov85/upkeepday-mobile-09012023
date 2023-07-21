@@ -42,7 +42,6 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
     const [startDateWeek, setStartDateWeek] = useState(new Date(weekDates.startDate));
     const [endDateWeek, setEndDateWeek] = useState(new Date(weekDates.endDate));
     const { CurrentScheduledEntries, loading } = useAppSelector(state => state.schedule);
-    const [screenLoading, setScreenLoading] = useState(false);
     const { currentSession, loading: classesLoading }: any = useAppSelector(state => state.classes);
 
     const [conflict, setConflict] = useState<IGeneratedScheduleEntries[]>(findScheduleConflicts(CurrentScheduledEntries, removeElementsFromArray(CurrentScheduledEntries, currentSession)));
@@ -70,13 +69,9 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
     useEffect(() => {
         isFocused && dispatch(fetchSessionClassesByIdAction(item.ClassId))
     }, []);
-    useEffect(() => {
-        if (currentSession.lenght > 0 && !loading) {
-            setScreenLoading(true)
-        }
-    }, [currentSession]);
 
-    return loading ? <ScreenLoading /> : (<View style={{ height: '100%' }}>
+
+    return (<View style={{ height: '100%' }}>
         <View style={styles.header}>
             <ScreenHeader text={"View and Reschedule"} onBackPress={navigation.goBack} withBackButton={true} />
         </View>
@@ -89,9 +84,9 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
             />
 
         </View>
-        <View style={{ flex: 1 }}>
+        {classesLoading ? <ScreenLoading /> : <View style={{ flex: 1 }}>
             <WeekTable startOfWeek={startDateWeek} endOfWeek={endDateWeek} onHandleData={handeScheduleSlots} conflict={conflict} dryFields={removeElementsFromArray(CurrentScheduledEntries, currentSession)} />
-        </View>
+        </View>}
         <View style={{ padding: 20, justifyContent: 'flex-end' }}>
             <CustomButton text={"Ok"} onPress={onSave} />
         </View>

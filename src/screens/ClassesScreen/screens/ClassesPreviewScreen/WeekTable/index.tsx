@@ -12,6 +12,7 @@ import { dispatch } from '../../../../../store/store';
 import { fetchScheduleByPeriodAction } from '../../../../../store/shedule/actions';
 import moment from 'moment';
 import PreviewModal from '../../../components/PreviewModal';
+import { ScreenLoading } from '../../../../../components/UI/ScreenLoading';
 
 
 
@@ -55,7 +56,7 @@ function removeElementsFromArray(arr1: any[], arr2: any[]) {
 export const startOfHour = 8;
 export const WeekTable: FC<ISheduleTable> = memo(
   ({ startOfWeek, endOfWeek, onHandleData, conflict, dryFields }) => {
-    const { GeneratedScheduleEntries, CurrentScheduledEntries, loading } = useAppSelector(state => state.schedule);
+    const { CurrentScheduledEntries, loading } = useAppSelector(state => state.schedule);
     const { currentSession } = useAppSelector(state => state.classes);
     const [editMode, setEditMode] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
@@ -88,6 +89,7 @@ export const WeekTable: FC<ISheduleTable> = memo(
     const onMoveSlot = (slot: any, x: number, y: number) => {
       setCurrentSessionId(slot.SessionId);
       const newTime = addDayAndHoursToDate(slot.StartDateTime, x, y);
+      setCurrentSlotTime(newTime)
       onHandleModalEdit();
       const newSlots = slots.filter(item => item.SlotUid !== slot.SlotUid);
       setSlots([...newSlots, { Duration: slot.Duration, StartDateTime: newTime, SlotUid: slot.SlotUid }]);
@@ -106,7 +108,7 @@ export const WeekTable: FC<ISheduleTable> = memo(
       timeData,
     );
     const date = (new Date(startOfWeek));
-    return GeneratedScheduleEntries.length > 0 && !loading ? (<View style={styles.container}>
+    return (<View style={styles.container}>
       <ScrollView contentOffset={{ x: 0, y: 64 * 8 }}>
         <Row style={{ justifyContent: 'space-between' }}>
           <Column style={{ width: 56 }}>
@@ -153,11 +155,7 @@ export const WeekTable: FC<ISheduleTable> = memo(
       <PreviewModal isVisible={isVisible} closeModal={onHandleModal} currentSessionId={currentSessionId} />
     </View>
 
-    ) : <ActivityIndicator
-      style={StyleSheet.absoluteFill}
-      color={'#9A80BA'}
-      size="large"
-    />;
+    );
   },
 );
 

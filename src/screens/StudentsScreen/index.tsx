@@ -4,13 +4,14 @@ import { StudentsNavigation } from './components/StudentsNavigation';
 import StudentItem from './components/StudentItem';
 import styles from './styles';
 import { useAppSelector } from '../../store/hooks';
+import { ScreenLoading } from '../../components/UI/ScreenLoading';
 
 const StudentsScreen = () => {
-    const { users } = useAppSelector(state => state.user);
+    const { users, loading } = useAppSelector(state => state.user);
     return (
         <View style={{ flex: 1 }}>
             <StudentsNavigation />
-            <ScrollView>
+            {loading ? <ScreenLoading /> : <ScrollView>
                 <View style={styles.container}>
                     {
                         users.map((item, index) => (
@@ -18,7 +19,7 @@ const StudentsScreen = () => {
                         ))
                     }
                 </View>
-            </ScrollView>
+            </ScrollView>}
 
         </View>
     )

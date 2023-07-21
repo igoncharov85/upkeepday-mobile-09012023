@@ -45,6 +45,8 @@ const PreviewModal = ({
 
   };
   const onEditSlit = (change: TClassesChange) => {
+    console.log('newTime', newTime);
+
     dispatch(updatedSessionClassesAction({ id: currentSessionId as number, change: change, StartDateTime: newTime as string }))
     handleHideModal();
   }

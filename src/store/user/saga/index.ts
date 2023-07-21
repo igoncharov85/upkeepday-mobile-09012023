@@ -1,7 +1,7 @@
 import { AxiosResponse } from "axios";
 import { SagaIterator } from "redux-saga";
 import { call, put, takeEvery } from "redux-saga/effects";
-import { addStudentAction, setCheckinStudentAction, setCurrentStudentAction, setStudentAction, setStudentListAction, setUsersAction } from "..";
+import { addStudentAction, setCheckinStudentAction, setCurrentStudentAction, setStudentAction, setStudentListAction, setStudentLoading, setUsersAction } from "..";
 import { IAction } from "../../../common/types/common.types";
 import { ICheckinUser, IUserCreateRequest, IUserStudent, ICheckinsId, IUserCheckinsRequest, IDeleteUserRequest, IUpdateStudent, IUserStudentResponse, IStudentRequest, IStudentResponse, IStudentsRequest, IStudentsResponse, IStudentByIdResponse } from "../../../common/types/user";
 import { UserService } from "../../../services/axios/user";
@@ -25,6 +25,7 @@ export function* fetchUserWorker(payload: IAction<null>): SagaIterator {
 }
 export function* fetchUserByIdWorker(payload: IAction<ICheckinsId>): SagaIterator {
     try {
+        yield put(setStudentLoading(true))
         const { data }: AxiosResponse<Array<IUserStudentResponse>, any> = yield call(
             UserService.fetchUsersById,
             payload.payload
@@ -36,6 +37,8 @@ export function* fetchUserByIdWorker(payload: IAction<ICheckinsId>): SagaIterato
         console.log('error', error);
 
         ErrorFilterService.validateError(error)
+    } finally {
+        yield put(setStudentLoading(false))
     }
 }
 export function* fetchCheckinUserWorker(payload: IAction<ICheckinsId>): SagaIterator {
@@ -119,6 +122,7 @@ export function* deleteStudentWorker(payload: IAction<IStudentRequest>): SagaIte
 // get student 
 export function* fetchStudentsWorker(payload: IAction<IStudentsRequest>): SagaIterator {
     try {
+        yield put(setStudentLoading(true))
         const { data }: AxiosResponse<Array<IStudentResponse>, any> = yield call(
             UserService.fetchStudentsByStatus,
             payload.payload
@@ -128,6 +132,8 @@ export function* fetchStudentsWorker(payload: IAction<IStudentsRequest>): SagaIt
         }
     } catch (error) {
         ErrorFilterService.validateError(error)
+    } finally {
+        yield put(setStudentLoading(false))
     }
 }
 export function* fetchStudentsByIdWorker(payload: IAction<IStudentRequest>): SagaIterator {

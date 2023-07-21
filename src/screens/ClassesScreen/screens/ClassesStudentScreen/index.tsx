@@ -11,6 +11,7 @@ import CheckIcon from '../../../../../assets/svg/classes/CheckIcon';
 import MinPlus from '../../../../../assets/svg/schedule/MinPlus';
 import { deleteUserAction, fetchUsersByIdAction } from '../../../../store/user/actions';
 import { useAppSelector } from '../../../../store/hooks';
+import { ScreenLoading } from '../../../../components/UI/ScreenLoading';
 
 interface IAddStudentsScreen { }
 
@@ -43,7 +44,7 @@ const ClassesStudentScreen: React.FC<IAddStudentsScreen> = () => {
     useEffect(() => {
         dispatch(fetchUsersByIdAction(item.ClassId));
     }, [isFocused]);
-    return loading ? <Text>loading...</Text> : (
+    return loading ? <ScreenLoading /> : (
         <View style={{ flex: 1, height: '100%' }}>
             <View style={{ padding: 20, paddingBottom: 0 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', zIndex: 1, maxWidth: '50%' }}>

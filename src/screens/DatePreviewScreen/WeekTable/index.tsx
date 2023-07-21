@@ -56,7 +56,6 @@ export const WeekTable: FC<ISheduleTable> = memo(
   ({ startOfWeek, endOfWeek, onHandleData, conflict }) => {
 
     const { GeneratedScheduleEntries, CurrentScheduledEntries, loading } = useAppSelector(state => state.schedule);
-    console.log(GeneratedScheduleEntries, 'GeneratedScheduleEntries');
 
     const [editMode, setEditMode] = useState(false);
     const [slots, setSlots] = useState(GeneratedScheduleEntries);
@@ -89,7 +88,6 @@ export const WeekTable: FC<ISheduleTable> = memo(
 
     const onMoveSlot = (slot: any, x: number, y: number, newStartTime: string) => {
       const newTime = addDayAndHoursToDate(slot.StartDateTime, x, y);
-
       const newSlots = slots.filter(item => item.StartDateTime !== slot.StartDateTime);
       setSlots([...newSlots, { Duration: slot.Duration, StartDateTime: newStartTime, SlotUid: '' }]);
       onHandleData([...newSlots, { Duration: slot.Duration, StartDateTime: newStartTime, SlotUid: '' }])
@@ -109,7 +107,7 @@ export const WeekTable: FC<ISheduleTable> = memo(
 
     // const newData = new Date(findActivitiesByDay(GeneratedScheduleEntries, 17))
     const date = (new Date(startOfWeek));
-    return GeneratedScheduleEntries.length > 0 && !loading ? (<View style={styles.container}>
+    return loading ? <ScreenLoading /> : (<View style={styles.container}>
       <ScrollView contentOffset={{ x: 0, y: 64 * 8 }}>
         <Row style={{ justifyContent: 'space-between' }}>
           <Column style={{ width: 56 }}>
@@ -156,11 +154,7 @@ export const WeekTable: FC<ISheduleTable> = memo(
       </ScrollView>
     </View>
 
-    ) : <ActivityIndicator
-      style={StyleSheet.absoluteFill}
-      color={'#9A80BA'}
-      size="large"
-    />;
+    );
   },
 );
 

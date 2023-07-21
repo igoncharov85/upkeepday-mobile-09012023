@@ -44,7 +44,8 @@ const ClassesStudentScreen: React.FC<IAddStudentsScreen> = () => {
     useEffect(() => {
         dispatch(fetchUsersByIdAction(item.ClassId));
     }, [isFocused]);
-    return loading ? <ScreenLoading /> : (
+
+    return (
         <View style={{ flex: 1, height: '100%' }}>
             <View style={{ padding: 20, paddingBottom: 0 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', zIndex: 1, maxWidth: '50%' }}>
@@ -67,7 +68,7 @@ const ClassesStudentScreen: React.FC<IAddStudentsScreen> = () => {
                             <TextInput style={styles.input} value={searchText} onChangeText={setSearchText} />
                         </View>
                         <DecorationLine />
-                        <ScrollView style={{ overflow: 'scroll', height: '80%' }} showsVerticalScrollIndicator={false}>
+                        {loading ? <ScreenLoading /> : <ScrollView style={{ overflow: 'scroll', height: '80%' }} showsVerticalScrollIndicator={false}>
                             <View style={styles.container}>
 
                                 <View >
@@ -79,7 +80,7 @@ const ClassesStudentScreen: React.FC<IAddStudentsScreen> = () => {
                                     })}
                                 </View>
                             </View >
-                        </ScrollView>
+                        </ScrollView>}
                         <View style={{ padding: 20, height: 92, flex: 1, justifyContent: 'flex-end' }}>
                             <CustomButton text={'Finish'} onPress={goNextStep} />
                         </View>

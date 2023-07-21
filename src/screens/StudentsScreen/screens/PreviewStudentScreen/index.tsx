@@ -45,6 +45,15 @@ const PreviewStudentScreen: React.FC<IAddStudentsScreen> = () => {
         })
 
     }
+    const filterStudents = (studentList: any[], searchText: string, status: string) => {
+        return studentList.filter((user: any) => {
+            const fullName = `${user.FirstName} ${user.LastName}`.toLowerCase();
+            const searchQuery = searchText?.toLowerCase();
+            return user.FirstName.toLowerCase().startsWith(searchQuery) ||
+                user.LastName.toLowerCase().startsWith(searchQuery) ||
+                fullName.startsWith(searchQuery);
+        });
+    }
     const onHandleNavigation = (type: any) => {
         setStatus(type);
     }
@@ -54,6 +63,7 @@ const PreviewStudentScreen: React.FC<IAddStudentsScreen> = () => {
     useEffect(() => {
         dispatch(fetchStudentsByIdAction({ StudentId: item.StudentId }));
     }, [isFocused]);
+    const filteredStudents = filterStudents(studentList, searchText, status);
 
     return loading ? <Text>loading...</Text> : (
         <View style={{ flex: 1, height: '100%' }}>
@@ -81,16 +91,14 @@ const PreviewStudentScreen: React.FC<IAddStudentsScreen> = () => {
                         <DecorationLine />
                         <ScrollView style={{ overflow: 'scroll', height: '72%' }} showsVerticalScrollIndicator={false}>
                             <View style={styles.container}>
-
-                                <View >
-                                    {studentList?.filter((user: any) => user.Name?.toLowerCase().includes(searchText?.toLowerCase()) && status == user?.Status?.toLowerCase()).map((user: any) => {
+                                <View>
+                                    {filteredStudents.map((user: any) => {
                                         return (
-                                            //@ts-ignore
                                             <Student item={user} onDeleteClass={onDeleteStudent} key={user.ClassId} />
                                         )
                                     })}
                                 </View>
-                            </View >
+                            </View>
                         </ScrollView>
                         <View style={{ padding: 20, height: 92, flex: 1, justifyContent: 'flex-end' }}>
                             <CustomButton text={'Ok'} onPress={goNextStep} />

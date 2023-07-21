@@ -31,6 +31,17 @@ export const ExistingStudent: React.FC<IExistingStudentProps> = ({ students, onC
         }
         return fullName;
     }
+    const filterStudents = (students: any[], searchText: string) => {
+        return students.filter((user) => {
+            const fullName = `${user.FirstName} ${user.LastName}`.toLowerCase();
+            const searchQuery = searchText?.toLowerCase();
+            return user.FirstName.toLowerCase().startsWith(searchQuery) ||
+                user.LastName.toLowerCase().startsWith(searchQuery) ||
+                fullName.startsWith(searchQuery);
+        });
+    };
+
+    const filteredStudents = filterStudents(students, searchText);
     useEffect(() => {
         dispatch(fetchUsersAction());
     }, []);
@@ -46,15 +57,13 @@ export const ExistingStudent: React.FC<IExistingStudentProps> = ({ students, onC
             <DecorationLine />
             <ScrollView style={{ overflow: 'scroll', height: '80%' }} showsVerticalScrollIndicator={false}>
                 <View style={styles.container}>
-
                     <View style={{ marginBottom: 60 }}>
-                        {students?.filter((user) => user.FirstName?.toLowerCase().includes(searchText?.toLowerCase())).map((user) => {
+                        {filteredStudents.map((user) => {
                             //@ts-ignore
                             let active = selectedUsers.every(selectedUser => {
                                 //@ts-ignore
                                 if (user?.FirstName === selectedUser?.FirstName || user?.StudentId === selectedUser?.StudentId) {
                                     return false;
-
                                 }
                                 return true;
                             });

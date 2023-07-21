@@ -42,9 +42,11 @@ const ClassesStudentScreen: React.FC<IAddStudentsScreen> = () => {
     }
     const goBack = () => navigation.goBack()
     useEffect(() => {
-        dispatch(fetchUsersByIdAction(item.ClassId));
+        isFocused && dispatch(fetchUsersByIdAction(item.ClassId));
     }, [isFocused]);
-
+    useEffect(() => {
+        setStudentsList(currentStudent)
+    }, [currentStudent])
     return (
         <View style={{ flex: 1, height: '100%' }}>
             <View style={{ padding: 20, paddingBottom: 0 }}>

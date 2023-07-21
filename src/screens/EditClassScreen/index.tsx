@@ -63,7 +63,7 @@ export const EditClassScreen = () => {
                         actionBtn: () => {
                             dispatch(updatedStatusClassesAction({ id: item?.item.ClassId, Status: 'Archived' }))
                             //@ts-ignore
-                            navigation.goBack();
+                            navigation.navigate(NavigationEnum.CLASSES_TAB);
                         },
 
                         nameAction: 'Archive',

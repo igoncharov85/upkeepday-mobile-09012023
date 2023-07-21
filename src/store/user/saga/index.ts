@@ -26,6 +26,7 @@ export function* fetchUserWorker(payload: IAction<null>): SagaIterator {
 export function* fetchUserByIdWorker(payload: IAction<ICheckinsId>): SagaIterator {
     try {
         yield put(setStudentLoading(true))
+        yield put(setCurrentStudentAction([]))
         const { data }: AxiosResponse<Array<IUserStudentResponse>, any> = yield call(
             UserService.fetchUsersById,
             payload.payload

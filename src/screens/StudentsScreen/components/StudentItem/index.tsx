@@ -34,8 +34,6 @@ const StudentsItem: React.FC<IStudentsItem> = ({ item }) => {
     }
 
     const handleDelete = () => {
-        console.log(item, 'delete student -------------------------------------------');
-
         //@ts-ignore
         navigation.navigate(NavigationEnum.RESULT_CLASS_MODAL, {
             item: item,

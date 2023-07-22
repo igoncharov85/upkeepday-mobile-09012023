@@ -62,8 +62,8 @@ if (Platform.OS === 'ios') {
 }
 export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
     const { createCurrentClassRequest } = useAppSelector(state => state.schedule)
-    const [numberOf, setNumberOf] = useState(createCurrentClassRequest.Class?.EndNumber ? createCurrentClassRequest.Class?.EndNumber : 0);
-    const [totalClasses, setTotalClasses] = useState(createCurrentClassRequest.Class?.EndNumber ? createCurrentClassRequest.Class?.EndNumber : 0);
+    const [numberOf, setNumberOf] = useState(createCurrentClassRequest.Class?.EndNumber ? createCurrentClassRequest.Class?.EndNumber : '');
+    const [totalClasses, setTotalClasses] = useState(createCurrentClassRequest.Class?.EndNumber ? createCurrentClassRequest.Class?.EndNumber : '');
 
     const [startDate, setStartDate] = useState(createCurrentClassRequest.Class?.StartDate ? createCurrentClassRequest.Class?.StartDate : '');
     const [finishDate, setFinishDate] = useState(createCurrentClassRequest.Class?.EndDate ? createCurrentClassRequest.Class?.EndDate : '');
@@ -71,9 +71,9 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
         typeLocation: 0,
         endScheduleType: "",
         startDate: startDate,
-        totalClasses: totalClasses,
+        totalClasses: totalClasses || '',
         finishDate: finishDate,
-        numberOf: numberOf,
+        numberOf: numberOf || '',
     };
     const navigation = useNavigation();
 

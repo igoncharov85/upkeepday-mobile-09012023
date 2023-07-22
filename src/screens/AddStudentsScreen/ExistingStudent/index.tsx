@@ -31,18 +31,19 @@ export const ExistingStudent: React.FC<IExistingStudentProps> = ({ students, onC
 
     const getName = (student: any) => {
         let fullName = student.FirstName + ' ' + student.LastName;
-        if (fullName.length > 15) {
-            fullName = fullName.slice(0, 15).concat("...");
+        if (fullName.length > 25) {
+            fullName = fullName.slice(0, 25).concat("...");
         }
         return fullName;
     }
-    const filteredStudents = students?.filter((user: any) => {
+    const studentFilterLogic = (user: any) => {
         const fullName = `${user.FirstName} ${user.LastName}`.toLowerCase();
         const searchQuery = searchText?.toLowerCase();
         return user.FirstName.toLowerCase().startsWith(searchQuery) ||
             user.LastName.toLowerCase().startsWith(searchQuery) ||
             fullName.startsWith(searchQuery);
-    });
+    };
+    const filteredStudents = students?.filter(studentFilterLogic);
 
     useEffect(() => {
         dispatch(fetchUsersAction());
@@ -61,7 +62,7 @@ export const ExistingStudent: React.FC<IExistingStudentProps> = ({ students, onC
                 <View style={styles.container}>
 
                     <View >
-                        {filteredStudents?.filter((user) => user.FirstName?.toLowerCase().includes(searchText?.toLowerCase())).map((user) => {
+                        {filteredStudents?.filter(studentFilterLogic).map((user) => {
                             //@ts-ignore
                             let active = selectedUsers.some((selectedUser) => (user?.EnrolledClasses ? selectedUser?.StudentId === user?.StudentId : selectedUser?.Email === user?.Email));
 

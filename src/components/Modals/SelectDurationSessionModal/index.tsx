@@ -79,7 +79,7 @@ const SelectDurationSessionModal = ({
       <View style={styles.modalWrapper}>
         <TouchableOpacity style={styles.background} onPress={goBack} activeOpacity={1} />
         <View style={styles.container}>
-          <ScreenHeader text="Add Session details" withBackButton={true} onBackPress={goBack} />
+          <ScreenHeader text="Start Time and Duration" withBackButton={true} onBackPress={goBack} />
           <InteractivePartItem title="Start Time">
             <DateItem dateValue={time} onSubmit={onTimePress} />
           </InteractivePartItem>
@@ -113,7 +113,7 @@ const SelectDurationSessionModal = ({
             <View style={{ width: 50 }} />
           </View>
           <TouchableOpacity onPress={goToCreateDuration}>
-            <Text style={{ fontSize: 14, textDecorationLine: 'underline', textAlign: 'center' }}>Set-up your own duration</Text>
+            <Text style={{ fontSize: 14, textDecorationLine: 'underline', textAlign: 'center' , marginBottom: 20}}>Set-up your own duration</Text>
           </TouchableOpacity>
         </View>
       </View >

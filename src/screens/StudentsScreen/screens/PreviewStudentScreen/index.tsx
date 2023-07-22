@@ -49,8 +49,8 @@ const PreviewStudentScreen: React.FC<IAddStudentsScreen> = () => {
         return studentList.filter((user: any) => {
             const fullName = `${user.FirstName} ${user.LastName}`.toLowerCase();
             const searchQuery = searchText?.toLowerCase();
-            return user.FirstName.toLowerCase().startsWith(searchQuery) ||
-                user.LastName.toLowerCase().startsWith(searchQuery) ||
+            return user.FirstName?.toLowerCase().startsWith(searchQuery) ||
+                user.LastName?.toLowerCase().startsWith(searchQuery) ||
                 fullName.startsWith(searchQuery);
         });
     }

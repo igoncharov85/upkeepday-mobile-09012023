@@ -35,8 +35,8 @@ export const ExistingStudent: React.FC<IExistingStudentProps> = ({ students, onC
         return students.filter((user) => {
             const fullName = `${user.FirstName} ${user.LastName}`.toLowerCase();
             const searchQuery = searchText?.toLowerCase();
-            return user.FirstName.toLowerCase().startsWith(searchQuery) ||
-                user.LastName.toLowerCase().startsWith(searchQuery) ||
+            return user.FirstName?.toLowerCase().startsWith(searchQuery) ||
+                user.LastName?.toLowerCase().startsWith(searchQuery) ||
                 fullName.startsWith(searchQuery);
         });
     };

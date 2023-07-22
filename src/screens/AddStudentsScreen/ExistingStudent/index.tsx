@@ -36,14 +36,13 @@ export const ExistingStudent: React.FC<IExistingStudentProps> = ({ students, onC
         }
         return fullName;
     }
-    const studentFilterLogic = (user: any) => {
+    const filteredStudents = students?.filter((user: any) => {
         const fullName = `${user.FirstName} ${user.LastName}`.toLowerCase();
         const searchQuery = searchText?.toLowerCase();
-        return user.FirstName.toLowerCase().startsWith(searchQuery) ||
-            user.LastName.toLowerCase().startsWith(searchQuery) ||
+        return user.FirstName?.toLowerCase().startsWith(searchQuery) ||
+            user.LastName?.toLowerCase().startsWith(searchQuery) ||
             fullName.startsWith(searchQuery);
-    };
-    const filteredStudents = students?.filter(studentFilterLogic);
+    });
 
     useEffect(() => {
         dispatch(fetchUsersAction());
@@ -62,7 +61,10 @@ export const ExistingStudent: React.FC<IExistingStudentProps> = ({ students, onC
                 <View style={styles.container}>
 
                     <View >
-                        {filteredStudents?.filter(studentFilterLogic).map((user) => {
+                        {filteredStudents?.filter((user) => 
+                        user.FirstName?.toLowerCase().startsWith(searchText?.toLowerCase()) || 
+                        user.LastName?.toLowerCase().startsWith(searchText?.toLowerCase()) ||
+                        `${user.FirstName} ${user.LastName}`.toLowerCase().startsWith(searchText?.toLowerCase())).map((user) => {
                             //@ts-ignore
                             let active = selectedUsers.some((selectedUser) => (user?.EnrolledClasses ? selectedUser?.StudentId === user?.StudentId : selectedUser?.Email === user?.Email));
 

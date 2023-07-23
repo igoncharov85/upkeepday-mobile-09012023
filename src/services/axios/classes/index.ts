@@ -29,10 +29,10 @@ export class ClassesService {
     }
 
     static async updatedSessionClasses({ id, change, StartDateTime }: IClassesUpdateSession) {
-        return $axiosAuth.put(`/tutor/schedules/${id}/${change}`, { StartDateTime })
+        return $axiosAuth.put(`/tutor/sessions/${id}/${change}`, { StartDateTime })
     }
     static async deleteSessionClasses(id: TClassesId) {
-        return $axiosAuth.delete(`/tutor/schedules/${id}`)
+        return $axiosAuth.delete(`/tutor/sessions/${id}`)
     }
     static async editNameClasses(data: IClassesEditName) {
         const { Class, Location } = data;

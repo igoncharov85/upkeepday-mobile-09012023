@@ -17,7 +17,7 @@ export function* fetchSchedulesWorker({
   try {
     yield put(setScheduleLoading(true));
     const { data }: AxiosResponse<Array<IScheduleItem>, any> = yield call(
-      ScheduleService.fetchSchedule,
+      ScheduleService.fetchSessions,
       payload
     );
     if (data) {
@@ -41,7 +41,7 @@ export function* generateScheduleWorker({
     yield put(setGeneratedScheduleEntriesAction([]))
 
     const { data }: AxiosResponse<IGeneratedScheduleResponse, any> = yield call(
-      ScheduleService.generateScheduleEntry,
+      ScheduleService.generateSessions,
       payload
     );
     if (data) {
@@ -65,7 +65,7 @@ export function* deleteScheduleByPeriodWorker({
   try {
     yield put(setScheduleLoading(true));
     const { data }: AxiosResponse<Array<IGeneratedScheduleResponse>, any> = yield call(
-      ScheduleService.deleteSchedules,
+      ScheduleService.deleteSessions,
       payload
     );
   } catch (error) {

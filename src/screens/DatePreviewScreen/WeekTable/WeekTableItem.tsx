@@ -25,7 +25,7 @@ function findActivitiesByDay(activities: IGeneratedScheduleEntries[], day: numbe
 }
 
 
-function findLessonOnCurrentHour(lessonsOnDay: any[], currentHour: number, currentDay: number) {
+export function findLessonOnCurrentHour(lessonsOnDay: any[], currentHour: number, currentDay: number) {
   return findActivitiesByDay(lessonsOnDay, currentDay).filter((lesson) => {
     return +lesson.StartDateTime.split('T')[1].split(':')[0] == currentHour
   })

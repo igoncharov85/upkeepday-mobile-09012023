@@ -44,13 +44,6 @@ interface ISheduleTable {
 }
 
 
-//find lesson on current hour
-function findLessonOnCurrentHour(lessonsOnDay: any[], currentHour: number) {
-  return lessonsOnDay.filter((lesson) => {
-    return lesson.StartDateTime.split('T')[1].split(':')[0] == currentHour
-  })
-}
-
 export const startOfHour = 8;
 export const WeekTable: FC<ISheduleTable> = memo(
   ({ startOfWeek, endOfWeek, onHandleData, conflict }) => {
@@ -60,34 +53,25 @@ export const WeekTable: FC<ISheduleTable> = memo(
     const [editMode, setEditMode] = useState(false);
     const [slots, setSlots] = useState(GeneratedScheduleEntries);
 
-    function findActivitiesByDay(activities: IGeneratedScheduleEntries[], day: number) {
-
-
-      const activitiesByDay = activities.filter((activity: IGeneratedScheduleEntries) => {
-        const startDateTime = new Date(activity.StartDateTime);
-        return startDateTime.getDate() === day;
-      });
-
-      return activitiesByDay;
-    }
-
 
     const onChangeEditMode = (value: boolean) => {
       setEditMode(value)
     }
 
     const onDeleteSlot = (slot: any) => {
+      console.log('delete')
       const newSlots = slots.filter((item) => {
+        item.StartDateTime === slot.StartDateTime && console.log(item)
         return item.StartDateTime !== slot.StartDateTime
       });
-      // if (JSON.stringify(slots) !== JSON.stringify(newSlots)) {
-      //   setSlots(newSlots);
-      //   onHandleData(slots)
-      // }
-    }
+      setSlots(newSlots);
+      onHandleData(newSlots)
 
-    const onMoveSlot = (slot: any, x: number, y: number, newStartTime: string) => {
-      const newTime = addDayAndHoursToDate(slot.StartDateTime, x, y);
+    }
+    const getSlots = () => {
+      return slots
+    }
+    const onMoveSlot = (slot: any, newStartTime: string) => {
       const newSlots = slots.filter(item => item.StartDateTime !== slot.StartDateTime);
       setSlots([...newSlots, { Duration: slot.Duration, StartDateTime: newStartTime, SlotUid: '' }]);
       onHandleData([...newSlots, { Duration: slot.Duration, StartDateTime: newStartTime, SlotUid: '' }])
@@ -95,6 +79,7 @@ export const WeekTable: FC<ISheduleTable> = memo(
 
     useEffect(() => {
       onHandleData(slots)
+      console.log('slots:\n', slots)
     }, [slots])
     const timeData = generateTimeData(`00:00`, '23:00');
 
@@ -103,11 +88,8 @@ export const WeekTable: FC<ISheduleTable> = memo(
       endOfWeek,
       timeData,
     );
-    //find day lessons in all lesssons
-
-    // const newData = new Date(findActivitiesByDay(GeneratedScheduleEntries, 17))
     const date = (new Date(startOfWeek));
-    return loading ? <ScreenLoading /> : (<View style={styles.container}>
+    return false ? <ScreenLoading /> : (<View style={styles.container}>
       <ScrollView contentOffset={{ x: 0, y: 64 * 8 }}>
         <Row style={{ justifyContent: 'space-between' }}>
           <Column style={{ width: 56 }}>
@@ -118,25 +100,18 @@ export const WeekTable: FC<ISheduleTable> = memo(
           <Row style={{ flex: 1, paddingRight: 20, paddingBottom: 20 }}>
             {weekStructure?.map((dayEvents, dayIndex) => {
               const currentDate = new Date(addDayAndHoursToDate(date.toISOString(), dayIndex, 0))
-              const allLessonOnThisDay = findActivitiesByDay(GeneratedScheduleEntries, currentDate.getDate())
-
               return (
                 <Column key={dayIndex}>
                   {dayEvents?.map((_, index) => {
-
-                    const currentLessons = findLessonOnCurrentHour(allLessonOnThisDay, index)
                     const dryField = findScheduleEntries(CurrentScheduledEntries as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
-
                     const conflictItem = findScheduleEntries(conflict as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
                     return <WeekTableItem
-
                       key={`${dayIndex}-${index}`}
-                      lessonOnThisTime={currentLessons}
                       timeIndex={index}
                       dayIndex={dayIndex}
+                      slots={getSlots}
                       startOfWeek={startOfWeek}
                       StartDateTime={addDayAndHoursToDate(date.toISOString(), dayIndex, index)}
-                      activeItem={currentLessons && currentLessons[0]}
                       conflict={!!conflictItem[0]}
                       onLongPress={onChangeEditMode}
                       editMode={editMode}

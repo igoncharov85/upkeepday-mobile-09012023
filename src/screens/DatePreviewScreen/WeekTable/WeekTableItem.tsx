@@ -1,4 +1,4 @@
-import React, { FC, memo, useRef, useState } from 'react';
+import React, { FC, memo, useEffect, useMemo, useRef, useState } from 'react';
 import { Animated, PanResponder, Text, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import styles from './styles';
@@ -10,27 +10,50 @@ import { useNavigation } from '@react-navigation/native';
 import { NavigationEnum } from '../../../common/constants/navigation';
 import { addDayAndHoursToDate } from '../../../services/utils/generateDate.util';
 
+
+
+
+function findActivitiesByDay(activities: IGeneratedScheduleEntries[], day: number) {
+
+
+  const activitiesByDay = activities.filter((activity: IGeneratedScheduleEntries) => {
+    const startDateTime = new Date(activity.StartDateTime);
+    return startDateTime.getDate() === day;
+  });
+
+  return activitiesByDay;
+}
+
+
+function findLessonOnCurrentHour(lessonsOnDay: any[], currentHour: number, currentDay: number) {
+  return findActivitiesByDay(lessonsOnDay, currentDay).filter((lesson) => {
+    return +lesson.StartDateTime.split('T')[1].split(':')[0] == currentHour
+  })
+}
+
+
+
 interface IWeekTableItem {
   StartDateTime: string;
   timeIndex: number;
   onLongPress: (value: boolean) => void;
   editMode: boolean;
-  activeItem?: IGeneratedScheduleEntries;
-  onMoveSlot: (slot: IGeneratedScheduleEntries, x: number, y: number, newStartTime: string) => void;
+  onMoveSlot: (slot: IGeneratedScheduleEntries, newStartTime: string) => void;
   conflict: boolean;
   onDeleteSlot: (slot: IGeneratedScheduleEntries) => void;
   dayIndex: number;
   startOfWeek: Date;
   dryField: IGeneratedScheduleEntries;
-  lessonOnThisTime: Array<IGeneratedScheduleEntries>;
   currentDay: Date;
+  slots: () => any
 }
 
 const CELL_SIZE = {
   width: 48,
   height: 64,
 };
-export const WeekTableItem: FC<IWeekTableItem> = memo(
+
+export const WeekTableItem: FC<IWeekTableItem> =
   ({
     onLongPress,
     editMode,
@@ -38,86 +61,29 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
     onMoveSlot,
     onDeleteSlot,
     dryField,
-    lessonOnThisTime,
-    currentDay
+    currentDay,
+    slots,
+    timeIndex
 
   }) => {
-    const navigation = useNavigation();
     const [canMove, setCanMove] = useState(false);
-    const { createCurrentClassRequest, loading } = useAppSelector(state => state.schedule);
-    const colorsLesson = ['#EAAFC8', '#654EA3'];
-
+    const lessonOnThisTime: IGeneratedScheduleEntries[] = findLessonOnCurrentHour(slots(), timeIndex, currentDay.getDate())
 
     const onHandleLongPress = (active: boolean) => {
-      setCanMove(true);
-      console.log('canMove:', canMove)
+      setCanMove(active);
       onLongPress(active)
     }
 
-    const deleteSlot = () => {
-      // onDeleteSlot(activeItem)
-      console.log('run in delete press')
+    const deleteSlot = (item: any) => {
+      onDeleteSlot(item)
       setCanMove(false);
       onLongPress(false)
     }
 
-    const pan = lessonOnThisTime.map(() => useRef(new Animated.ValueXY()).current);
-
-    // const pan = useRef(Array(lessonOnThisTime.length).map(() => new Animated.ValueXY())).current;
-    const panResponders = lessonOnThisTime.map((_, index) =>
-      PanResponder.create({
-        onStartShouldSetPanResponder: () => canMove,
-        onPanResponderMove: Animated.event(
-          [null, { dx: pan[index]?.x, dy: pan[index]?.y }],
-          { useNativeDriver: false }
-        ),
-        onPanResponderRelease: (_, gestureState) => {
-
-          const
-            gridCellX = Math.floor((gestureState.dx + CELL_SIZE.width / 2) / CELL_SIZE.width),
-            gridCellY = Math.floor((gestureState.dy + CELL_SIZE.height / 2) / CELL_SIZE.height),
-            moveCoords = {
-              x: (CELL_SIZE.width / 2) * gridCellX,
-              y: (CELL_SIZE.height / 2) * gridCellY,
-            };
-          lessonOnThisTime[index] && pan[index]?.setOffset(moveCoords);
-          lessonOnThisTime[index] && pan[index]?.setValue(moveCoords);
-          const newTime = addDayAndHoursToDate(lessonOnThisTime[index].StartDateTime, gridCellX, gridCellY);
-          const addDuration = (time: string) => {
-            setCanMove(false)
-            console.log('canMove:', canMove)
-            onHandleLongPress(false);
-            console.log(newTime)
-            // onMoveSlot(lessonOnThisTime[index], , , '2023-07-20T10:30:00')
-          }
-
-          //@ts-ignore
-          navigation.navigate(NavigationEnum.EDIT_TIME_CLASS_MODAL, {
-            addDuration,
-            newTime
-          })
-
-          pan[index]?.setOffset({
-            x: 0,
-            y: 0,
-          });
-          pan[index]?.setValue({
-            x: 0,
-            y: 0,
-          });
-        },
-      })
-    );
-
-
-
-
-
-    return loading ? null : (
+    return (
       <TouchableOpacity
         onLongPress={() => onHandleLongPress(true)}
-
-        activeOpacity={editMode ? 0.5 : 1}
+        activeOpacity={1}
       >
         <View style={styles.containerItem}>
           <View style={{
@@ -126,44 +92,7 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
             position: 'relative',
           }}>
             {lessonOnThisTime.map((lesson, index) => {
-              const lessonMinuteStart = Number(lesson.StartDateTime.split('T')[1].split(':')[1])
-              return (
-                <Animated.View
-                  {...panResponders[index].panHandlers}
-
-                  style={
-                    [pan[index]?.getLayout(), {
-                      height: `${lesson.Duration / 60 * 100}%`,
-                      width: '100%'
-
-                    }]
-                  }>
-
-                  <>
-
-                    <LinearGradient
-                      colors={colorsLesson}
-                      start={{ x: 0.5, y: 0 }}
-                      end={{ x: 0.5, y: 1 }}
-                      style={[styles.wrapperItem,
-                      {
-                        top: `${lessonMinuteStart / 60 * 100}%`,
-                        height: `100%`,
-                      }
-                      ]}>
-                      {editMode && (
-                        <TouchableOpacity style={styles.cansel} onPress={deleteSlot}>
-                          <Cancel />
-                        </TouchableOpacity>)}
-                      <Text style={[styles.textItem,
-                      conflict && { color: 'red' }
-                      ]
-                      }>{createCurrentClassRequest?.Class?.Name}</Text>
-
-                    </LinearGradient>
-                  </>
-                </Animated.View>
-              )
+              return (<LessonItem lesson={lesson} onMoveSlot={onMoveSlot} canMove={canMove} editMode={editMode} deleteSlot={deleteSlot} onHandleLongPress={onHandleLongPress} />)
             })}
             {dryField && <BusyField />}
           </View>
@@ -172,5 +101,87 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
       </TouchableOpacity >
     );
 
-  },
-);
+  };
+
+
+const LessonItem = ({ lesson, onMoveSlot, canMove, editMode, deleteSlot, onHandleLongPress }: { lesson: any, onMoveSlot: any, canMove: boolean, editMode: boolean, deleteSlot: any, onHandleLongPress: any }) => {
+  const colorsLesson = ['#EAAFC8', '#654EA3'];
+
+  const navigation = useNavigation();
+  const pan = useRef(new Animated.ValueXY()).current;
+  const panResponders = PanResponder.create({
+    onStartShouldSetPanResponder: () => canMove,
+    onPanResponderMove: Animated.event(
+      [null, { dx: pan.x, dy: pan.y }],
+      { useNativeDriver: false }
+    ),
+    onPanResponderRelease: (_, gestureState) => {
+      const
+        gridCellX = Math.floor((gestureState.dx + CELL_SIZE.width / 2) / CELL_SIZE.width),
+        gridCellY = Math.floor((gestureState.dy + CELL_SIZE.height / 2) / CELL_SIZE.height),
+        moveCoords = {
+          x: (CELL_SIZE.width / 2) * gridCellX,
+          y: (CELL_SIZE.height / 2) * gridCellY,
+        };
+      pan.setOffset(moveCoords);
+      pan.setValue(moveCoords);
+      let newTime = new Date(addDayAndHoursToDate(lesson.StartDateTime, gridCellX, gridCellY));
+      const addDuration = (time: any) => {
+
+        newTime.setMinutes(time.minute)
+        newTime.setHours(time.dayPart == "AM" ? time.hour : time.hour + 12)
+        onHandleLongPress(false)
+        onMoveSlot(lesson, newTime.toISOString())
+      }
+
+      //@ts-ignore
+      navigation.navigate(NavigationEnum.EDIT_TIME_CLASS_MODAL, {
+        addDuration,
+        newTime
+      })
+
+      pan.setOffset({
+        x: 0,
+        y: 0,
+      });
+      pan.setValue({
+        x: 0,
+        y: 0,
+      });
+    },
+  })
+
+
+  const lessonMinuteStart = Number(lesson.StartDateTime.split('T')[1].split(':')[1])
+  return (
+    <Animated.View
+      {...panResponders.panHandlers}
+      style={
+        [
+          pan.getLayout(), {
+            height: `${lesson.Duration / 60 * 100}%`,
+            width: '100%'
+          }
+        ]
+      }>
+      <>
+        <LinearGradient
+          colors={colorsLesson}
+          start={{ x: 0.5, y: 0 }}
+          end={{ x: 0.5, y: 1 }}
+          style={[styles.wrapperItem,
+          { top: `${lessonMinuteStart / 60 * 100}%`, height: `100%`, }
+          ]}>
+          {editMode && (
+            <TouchableOpacity style={styles.cansel} onPress={() => deleteSlot(lesson)}>
+              <Cancel />
+            </TouchableOpacity>)}
+          <Text style={[styles.textItem,
+          ]
+          }>Class</Text>
+        </LinearGradient>
+      </>
+    </Animated.View>
+  )
+
+}

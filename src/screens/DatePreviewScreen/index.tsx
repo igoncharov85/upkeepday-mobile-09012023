@@ -32,7 +32,7 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
 
     const [startDateWeek, setStartDateWeek] = useState(new Date(weekDates.startDate));
     const [endDateWeek, setEndDateWeek] = useState(new Date(weekDates.endDate));
-    const [screenLoading, setScreenLoading] = useState(false);
+    const [screenLoading, setScreenLoading] = useState(true);
     const { CurrentScheduledEntries, WeekTimeSlots, GeneratedScheduleEntries, loading } = useAppSelector(state => state.schedule);
 
 
@@ -71,11 +71,7 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
         navigation.navigate(NavigationEnum.ADD_STUDENTS_SCREEN)
     }
 
-    useEffect(() => {
-        return () => {
-            setScreenLoading(false)
-        };
-    }, []);
+
 
 
 
@@ -83,12 +79,12 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
         if (GeneratedScheduleEntries.length > 0) {
 
             const now = new Date();
-            setScreenLoading(true)
+            setScreenLoading(false)
         }
 
     }, [GeneratedScheduleEntries, loading])
 
-    return !screenLoading ? <ScreenLoading /> : (<View style={{ height: '100%' }}>
+    return screenLoading ? <ScreenLoading /> : (<View style={{ height: '100%' }}>
         <View style={styles.header}>
             <ScreenHeader text={"Preview Day and Time"} onBackPress={navigation.goBack} withBackButton={true} />
         </View>

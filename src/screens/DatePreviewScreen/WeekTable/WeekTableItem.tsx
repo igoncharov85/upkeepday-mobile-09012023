@@ -9,6 +9,7 @@ import { IGeneratedScheduleEntries } from '../../../common/types/schedule.types'
 import { useNavigation } from '@react-navigation/native';
 import { NavigationEnum } from '../../../common/constants/navigation';
 import { addDayAndHoursToDate } from '../../../services/utils/generateDate.util';
+import moment from 'moment';
 
 
 
@@ -129,9 +130,10 @@ const LessonItem = ({ lesson, onMoveSlot, canMove, editMode, deleteSlot, onHandl
       const addDuration = (time: any) => {
 
         newTime.setMinutes(time.minute)
+        console.log('newTime', newTime)
         newTime.setHours(time.dayPart == "AM" ? time.hour : time.hour + 12)
         onHandleLongPress(false)
-        onMoveSlot(lesson, newTime.toISOString())
+        onMoveSlot(lesson, moment(newTime).format('YYYY-MM-DDTHH:mm:ss'))
       }
 
       //@ts-ignore

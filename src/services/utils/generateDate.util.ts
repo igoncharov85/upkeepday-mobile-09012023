@@ -1,3 +1,4 @@
+import moment from "moment";
 
 export const isToday = (dayIndex: number) => {
     const currentDate = new Date();
@@ -62,5 +63,5 @@ export function addDayAndHoursToDate(dateStr: string, day: number, hour: number)
     const date = new Date(dateStr);
     date.setDate(date.getDate() + day);
     date.setHours(date.getHours() + hour);
-    return date.toISOString();
+    return moment(date).format('YYYY-MM-DDTHH:mm:ss');;
 }

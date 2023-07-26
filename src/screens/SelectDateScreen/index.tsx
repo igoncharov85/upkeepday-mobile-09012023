@@ -100,7 +100,9 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
                 return EndScheduleType.FixedMonthNumber;
         }
     }
-
+    const getType = () => {
+        return createCurrentClassRequest.Class?.EndScheduleType == 'FixedWeekNumber' ? 0 : 1
+    }
 
     const SelectDateForm = ({
         values,
@@ -151,7 +153,7 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
                                 value={values.numberOf.toString()}
                                 style={{ width: 180, marginRight: 24 }}
                             />
-                            <ListGradientCircleButtons onPress={onFixedPeriodTime} buttons={['Weeks', 'Months']} index={createCurrentClassRequest.Class?.EndScheduleType && createCurrentClassRequest.Class?.EndScheduleType == 'FixedWeekNumber' ? 0 : 1} />
+                            <ListGradientCircleButtons onPress={onFixedPeriodTime} buttons={['Weeks', 'Months']} index={createCurrentClassRequest.Class?.EndScheduleType ? getType() : 0} />
                         </View>}
 
 
@@ -192,6 +194,7 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
                 EndDate: values.finishDate,
                 EndNumber: +values.totalClasses as number,
             });
+            console.log('select type', typeRef.current);
 
             dispatch(
                 updateCurrentClassRequestAction({

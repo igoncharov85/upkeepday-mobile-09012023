@@ -11,11 +11,12 @@ import styles from "./styles";
 import { IStudentResponse } from "../../../../common/types/user";
 import PhoneIcon from "../../../../../assets/svg/students/PhoneIcon";
 import { dispatch } from "../../../../store/store";
-import { deleteStudentAction } from "../../../../store/user/actions";
+import { deleteStudentAction, updateStudentStatus } from "../../../../store/user/actions";
 import CheckIcon from "../../../../../assets/svg/classes/CheckIcon";
+import OrangeCrossIcon from "../../../../../assets/svg/students/OrangeCrossIcon";
 
 interface IStudentsItem {
-    item: IStudentResponse
+    item: IStudentResponse | any
 }
 
 
@@ -23,6 +24,7 @@ interface IStudentsItem {
 const StudentsItem: React.FC<IStudentsItem> = ({ item }) => {
     const navigation = useNavigation();
 
+    const studentStatus = item.Status;
     const handleEdit = () => {
         //@ts-ignore
         navigation.navigate(NavigationEnum.EDIT_STUDENTS_SCREEN, { item });
@@ -32,16 +34,28 @@ const StudentsItem: React.FC<IStudentsItem> = ({ item }) => {
         //@ts-ignore
         navigation.navigate(NavigationEnum.PREVIEW_STUDENTS_SCREEN, { item });
     }
-
+    const onArchived = () => {
+        //@ts-ignore
+        navigation.navigate(NavigationEnum.RESULT_CLASS_MODAL, {
+            item: item,
+            actionBtn: () => {
+                dispatch(updateStudentStatus({ status: 'Archived', StudentId: item.StudentId }))
+                navigation.goBack()
+            },
+            nameAction: 'Archive Student',
+        })
+    }
     const handleDelete = () => {
         //@ts-ignore
         navigation.navigate(NavigationEnum.RESULT_CLASS_MODAL, {
             item: item,
-            actionBtn: () => { dispatch(deleteStudentAction({ StudentId: item.StudentId })) },
+            actionBtn: () => {
+                dispatch(deleteStudentAction({ StudentId: item.StudentId }))
+                navigation.goBack()
+            },
             nameAction: 'Delete  Permanently',
         })
     };
-
     return (
         <View style={styles.container}>
             <View style={[styles.part]}>
@@ -85,7 +99,7 @@ const StudentsItem: React.FC<IStudentsItem> = ({ item }) => {
 
             <View style={styles.part}>
                 <View style={styles.link}>
-                    {item.EnrolledClasses[0] && item.EnrolledClasses[0].Status?.toLocaleLowerCase() === EClassesStatus.scheduled ? (
+                    {studentStatus === EClassesStatus.scheduled && (
                         <>
                             <TouchableOpacity
                                 style={styles.linkItem}
@@ -93,7 +107,24 @@ const StudentsItem: React.FC<IStudentsItem> = ({ item }) => {
                                 <EditIcon />
                             </TouchableOpacity>
                         </>
-                    ) : (
+                    )}
+                    {studentStatus === EClassesStatus.nonScheduled && (
+                        <>
+                            <TouchableOpacity
+                                style={styles.linkItem}
+                                onPress={handleEdit}
+                            >
+                                <EditIcon />
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={styles.linkItem}
+                                onPress={onArchived}
+                            >
+                                <OrangeCrossIcon />
+                            </TouchableOpacity>
+                        </>
+                    )}
+                    {studentStatus === EClassesStatus.archived && (
                         <TouchableOpacity
                             style={styles.linkItem}
                             onPress={handleDelete}

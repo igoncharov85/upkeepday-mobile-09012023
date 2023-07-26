@@ -166,6 +166,17 @@ export function* updateStudentWorker(payload: IAction<IStudentRequest & IUserCre
         ErrorFilterService.validateError(error)
     }
 }
+export function* updateStudentStatusWorker(payload: IAction<IStudentRequest & IStudentsRequest>): SagaIterator {
+    try {
+        yield call(
+            UserService.updateStudentStatus,
+            payload.payload
+        );
+
+    } catch (error) {
+        ErrorFilterService.validateError(error)
+    }
+}
 
 export function* userWatcher() {
     yield takeEvery(UserContactsEnum.FETCH_ALL_USERS, fetchUserWorker)
@@ -179,4 +190,5 @@ export function* userWatcher() {
     yield takeEvery(UserContactsEnum.FETCH_STUDENTS_BY_STATUS, fetchStudentsWorker)
     yield takeEvery(UserContactsEnum.FETCH_STUDENTS_BY_ID, fetchStudentsByIdWorker)
     yield takeEvery(UserContactsEnum.UPDATE_STUDENTS, updateStudentWorker)
+    yield takeEvery(UserContactsEnum.UPDATE_STUDENTS_STATUS, updateStudentStatusWorker)
 }

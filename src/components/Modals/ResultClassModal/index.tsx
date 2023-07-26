@@ -57,7 +57,7 @@ const ResultClassModal = () => {
                                             <Text style={styles.underlineText}>Payment Tracking</Text>
                                         </View>
                                     </View>) : null}
-                                {item.Balance ?
+                                {item.EnrolledClasses ?
                                     (<View>
 
                                         <Text style={[styles.title, { textAlign: 'center' }]}>{item.FirstName} {item.LastName}</Text>

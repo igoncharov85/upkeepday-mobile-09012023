@@ -65,15 +65,7 @@ export const DateRecurrenceScreen: React.FC<IDateRecurrenceScreen> = () => {
                 Slots: weekTimeSlots
             }
         ))
-        // dispatch(generateScheduleAction(
-        //     {
-        //         ScheduleType: "SpecificEndDate",
-        //         StartDate: "2023-07-16",
-        //         Number: 0,
-        //         EndDate: "2023-07-23",
-        //         Slots: weekTimeSlots
-        //     }
-        // ))
+
 
 
 

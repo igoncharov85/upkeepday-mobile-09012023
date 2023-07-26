@@ -14,19 +14,19 @@ import moment from 'moment';
 
 
 
-function findActivitiesByDay(activities: IGeneratedScheduleEntries[], day: number) {
+function findActivitiesByDay(activities: IGeneratedScheduleEntries[], date: Date) {
 
 
   const activitiesByDay = activities.filter((activity: IGeneratedScheduleEntries) => {
     const startDateTime = new Date(activity.StartDateTime);
-    return startDateTime.getDate() === day;
+    return startDateTime.getDate() === date.getDate() && startDateTime.getMonth() === date.getMonth();
   });
 
   return activitiesByDay;
 }
 
 
-export function findLessonOnCurrentHour(lessonsOnDay: any[], currentHour: number, currentDay: number) {
+export function findLessonOnCurrentHour(lessonsOnDay: any[], currentHour: number, currentDay: Date) {
   return findActivitiesByDay(lessonsOnDay, currentDay).filter((lesson) => {
     return +lesson.StartDateTime.split('T')[1].split(':')[0] == currentHour
   })
@@ -68,7 +68,7 @@ export const WeekTableItem: FC<IWeekTableItem> =
 
   }) => {
     const [canMove, setCanMove] = useState(false);
-    const lessonOnThisTime: IGeneratedScheduleEntries[] = findLessonOnCurrentHour(slots(), timeIndex, currentDay.getDate())
+    const lessonOnThisTime: IGeneratedScheduleEntries[] = findLessonOnCurrentHour(slots(), timeIndex, currentDay)
 
     const onHandleLongPress = (active: boolean) => {
       setCanMove(active);

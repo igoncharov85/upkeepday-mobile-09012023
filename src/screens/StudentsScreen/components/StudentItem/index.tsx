@@ -88,10 +88,8 @@ const StudentsItem: React.FC<IStudentsItem> = ({ item }) => {
                 </View>
                 <View>
                     <TouchableOpacity
-                        style={styles.linkItem}
                         onPress={handleInfo}>
                         <Text style={[styles.underlineText, styles.textRight]}>Enrolled Classes: {item.EnrolledClasses.length}</Text>
-
                     </TouchableOpacity>
                     <Text style={[styles.underlineText, styles.textRight]}>Balance: <Text style={{ color: '#169861' }}>
                         {item.Balance}

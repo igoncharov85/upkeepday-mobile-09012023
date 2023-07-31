@@ -12,6 +12,7 @@ import MinPlus from '../../../../../assets/svg/schedule/MinPlus';
 import { deleteStudentAction, deleteUserAction, fetchStudentsByIdAction, fetchUsersByIdAction } from '../../../../store/user/actions';
 import { useAppSelector } from '../../../../store/hooks';
 import { EditStudentsNavigation } from './StudentsNavigation';
+import { ScreenLoading } from '../../../../components/UI/ScreenLoading';
 
 interface IAddStudentsScreen { }
 
@@ -47,7 +48,7 @@ const PreviewStudentScreen: React.FC<IAddStudentsScreen> = () => {
     }
     const filterStudents = (studentList: any[], searchText: string, status: string) => {
         return studentList.filter((user: any) => {
-            const fullName = `${user.FirstName} ${user.LastName}`.toLowerCase();
+            const fullName = user.Name.toLowerCase();
             const searchQuery = searchText?.toLowerCase();
             return user.FirstName?.toLowerCase().startsWith(searchQuery) ||
                 user.LastName?.toLowerCase().startsWith(searchQuery) ||
@@ -64,8 +65,8 @@ const PreviewStudentScreen: React.FC<IAddStudentsScreen> = () => {
         dispatch(fetchStudentsByIdAction({ StudentId: item.StudentId }));
     }, [isFocused]);
     const filteredStudents = filterStudents(studentList, searchText, status);
-
-    return loading ? <Text>loading...</Text> : (
+    console.log(studentList, 'studentList')
+    return loading ? <ScreenLoading /> : (
         <View style={{ flex: 1, height: '100%' }}>
             <View style={{ padding: 20, paddingBottom: 0 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', zIndex: 1, maxWidth: '50%' }}>

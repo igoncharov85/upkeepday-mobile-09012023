@@ -53,9 +53,8 @@ export type IClassesUpdateSession = {
     StartDateTime: string;
 }
 export enum EClassesStatus {
-    scheduled = 'Scheduled',
-    archived = 'Archived',
-    nonScheduled = 'NonScheduled'
+    scheduled = 'scheduled',
+    archived = 'archived',
 }
 export enum EClassesChange {
     current = 'current',

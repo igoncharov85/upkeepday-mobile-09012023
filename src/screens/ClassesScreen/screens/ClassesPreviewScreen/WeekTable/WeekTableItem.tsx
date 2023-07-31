@@ -70,6 +70,14 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
 
         onHandleLongPress(false);
         setCanMove(false);
+        pan.setOffset({
+          x: 0,
+          y: 0,
+        });
+        pan.setValue({
+          x: 0,
+          y: 0,
+        });
       },
     });
 

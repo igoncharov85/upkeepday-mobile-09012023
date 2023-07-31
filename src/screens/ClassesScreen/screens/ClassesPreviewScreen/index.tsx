@@ -84,7 +84,7 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
             />
 
         </View>
-        {classesLoading ? <ScreenLoading /> : <View style={{ flex: 1 }}>
+        {<View style={{ flex: 1 }}>
             <WeekTable startOfWeek={startDateWeek} endOfWeek={endDateWeek} onHandleData={handeScheduleSlots} conflict={conflict} dryFields={removeElementsFromArray(CurrentScheduledEntries, currentSession)} />
         </View>}
         <View style={{ padding: 20, justifyContent: 'flex-end' }}>

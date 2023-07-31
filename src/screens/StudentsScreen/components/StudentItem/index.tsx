@@ -5,7 +5,6 @@ import { useNavigation } from "@react-navigation/native";
 import EditIcon from "../../../../../assets/svg/classes/EditIcon";
 import MailIcon from "../../../../../assets/svg/students/MailIcon";
 import { NavigationEnum } from "../../../../common/constants/navigation";
-import { EClassesStatus } from "../../../../common/types/classes.types";
 
 import styles from "./styles";
 import { IStudentResponse } from "../../../../common/types/user";
@@ -19,7 +18,11 @@ interface IStudentsItem {
     item: IStudentResponse | any
 }
 
-
+export enum EClassesStatus {
+    scheduled = 'Scheduled',
+    archived = 'Archived',
+    nonScheduled = 'NonScheduled'
+}
 
 const StudentsItem: React.FC<IStudentsItem> = ({ item }) => {
     const navigation = useNavigation();

@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { ICreateClassRequest, IGeneratedScheduleEntries, IScheduleItem, IWeekTimeSlot } from '../../common/types/schedule.types';
+import moment from 'moment';
 
 export interface ScheduleState {
     loading: boolean;
@@ -27,6 +28,9 @@ export const scheduleSlice = createSlice({
     initialState,
     reducers: {
         setScheduleLoading: (state, action: PayloadAction<boolean>) => {
+            const time = Date.now();
+            console.log('\n----loading----\n', action.payload, ' - loading status\n', moment(time).format('HH:mm:ss.SSS'), ' - time set loading')
+
             state.loading = action.payload
         },
         setTimeSlotsAction: (state, action: PayloadAction<Array<IWeekTimeSlot>>) => {

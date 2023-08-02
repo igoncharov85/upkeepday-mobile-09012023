@@ -8,6 +8,7 @@ import { UserService } from "../../../services/axios/user";
 import { ErrorFilterService } from "../../../services/error-filter/error-filter.service";
 import { UserContactsEnum } from "../constants";
 import { IStudent } from "../../../common/types/classes.types";
+import moment from "moment";
 
 export function* fetchUserWorker(payload: IAction<null>): SagaIterator {
     try {
@@ -125,12 +126,17 @@ export function* deleteStudentWorker(payload: IAction<IStudentRequest>): SagaIte
 export function* fetchStudentsWorker(payload: IAction<IStudentsRequest>): SagaIterator {
     try {
         yield put(setStudentLoading(true))
+        const startDate = Date.now();
         const { data }: AxiosResponse<Array<IStudentResponse>, any> = yield call(
             UserService.fetchStudentsByStatus,
             payload.payload
         );
         if (data) {
-            console.log('new users data:\n\n\n', data, '**********************8')
+            const endDate = Date.now();
+            const timeDifference = endDate - startDate;
+            console.log('\n start request time: ', moment(startDate).format('HH:mm:ss.SSS'), '\n get response time: ', moment(endDate).format('HH:mm:ss.SSS'))
+            console.log(timeDifference, 'timeDifference ssss');
+
             yield put(setUsersAction(data))
         }
     } catch (error) {

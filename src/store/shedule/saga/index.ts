@@ -8,6 +8,7 @@ import { ScheduleService } from "../../../services/axios/schedule";
 import { ErrorFilterService } from "../../../services/error-filter/error-filter.service";
 import { ScheduleConstantsEnum } from "../constants";
 import { convertToLocaleTime } from "../../../services/utils/convertToUTC"
+import moment from "moment";
 
 //TODO
 export function* fetchSchedulesWorker({
@@ -16,11 +17,18 @@ export function* fetchSchedulesWorker({
 }: IAction<IScheduleRequest>): SagaIterator {
   try {
     yield put(setScheduleLoading(true));
+    const startDate = Date.now();
     const { data }: AxiosResponse<Array<IScheduleItem>, any> = yield call(
       ScheduleService.fetchSessions,
       payload
     );
     if (data) {
+      const endDate = Date.now();
+      const timeDifference = endDate - startDate;
+      console.log('\n start request time: ', moment(startDate).format('HH:mm:ss.SSS'), '\n get response time: ', moment(endDate).format('HH:mm:ss.SSS'))
+      console.log(timeDifference, 'timeDifference ssss');
+
+
       //@ts-ignore
       yield put(setCurrentScheduleEntries(convertToLocaleTime(data)))
     }

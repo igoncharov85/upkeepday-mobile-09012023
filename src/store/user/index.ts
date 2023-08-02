@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ICheckinUser, IStudentByIdResponse, IStudentResponse, IStudentsResponse, IUserStudent, IUserStudentResponse } from "../../common/types/user";
+import moment from "moment";
 
 interface IUserStore {
     students: Array<IUserStudent>;
@@ -25,6 +26,8 @@ const userSlice = createSlice({
     name: 'user',
     reducers: {
         setStudentLoading: (state, action: PayloadAction<boolean>) => {
+            const time = Date.now();
+            console.log('\n----loading----\n', action.payload, ' - loading status\n', moment(time).format('HH:mm:ss.SSS'), ' - time set loading')
             state.loading = action.payload
         },
         setStudentAction: (state, action: PayloadAction<Array<IUserStudent>>) => {

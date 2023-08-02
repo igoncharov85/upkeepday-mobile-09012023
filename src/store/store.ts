@@ -1,15 +1,16 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
-import { persistStore, persistReducer } from "redux-persist";
-import createSagaMiddleware from 'redux-saga';
-import authReducer from './auth'
+import { persistReducer, persistStore } from 'redux-persist'
+import createSagaMiddleware from 'redux-saga'
 import appReducer from './app'
-import locationReducer from './location'
-import userReducer from './user'
+import authReducer from './auth'
 import cacheReducer from './cached'
-import rootSaga from './saga/rootSaga';
-import scheduleReducer from './shedule';
-import classesReducer from './classes';
+import classesReducer from './classes'
+import { durationReducer } from './duration/durationSlice'
+import locationReducer from './location'
+import rootSaga from './saga/rootSaga'
+import scheduleReducer from './shedule'
+import userReducer from './user'
 
 const persistConfig = {
     key: "root",
@@ -24,7 +25,8 @@ const reducer = combineReducers({
     schedule: scheduleReducer,
     location: locationReducer,
     user: userReducer,
-    classes: classesReducer
+    classes: classesReducer,
+    duration: durationReducer
 })
 
 const sagaMiddleware = createSagaMiddleware();

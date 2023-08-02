@@ -1,11 +1,10 @@
-import { useNavigation, useRoute } from '@react-navigation/native';
-import React, { useState } from 'react';
-import { TouchableOpacity, View } from 'react-native';
-
-import styles from './styles';
-import { CustomButton } from '../../UI/CustomButton';
-import { ScreenHeader } from '../../ScreenHeader';
-import CustomTimePicker from './CustomTimePicker';
+import { useNavigation, useRoute } from '@react-navigation/native'
+import React, { useState } from 'react'
+import { TouchableOpacity, View } from 'react-native'
+import { ScreenHeader } from '../../ScreenHeader'
+import { CustomButton } from '../../UI/CustomButton'
+import CustomTimePicker from './CustomTimePicker'
+import styles from './styles'
 
 interface IDurationSessionModalModal {
 }
@@ -17,7 +16,11 @@ const DurationSessionModal = ({
   const route = useRoute()
   const { addDuration, duration } = route.params as any
   const goBack = () => navigation.goBack();
-  const [time, setTime] = useState({});
+  const [time, setTime] = useState({
+    hour: 0,
+    minute: 0,
+    dayPart: 0
+  });
 
   const onSetTime = (time: any) => {
     setTime(time)
@@ -39,7 +42,11 @@ const DurationSessionModal = ({
             data={{ hour: 0, minute: 0 }}
             maxDuration={duration}
           />
-          <CustomButton text="Save" onPress={onSave} />
+          <CustomButton text="Save" disabled={
+          time.hour === 0 && time.minute === 0
+  } onPress={
+          time.hour === 0 && time.minute === 0 ? () => {}  : onSave
+          } />
         </View>
       </View>
     </>

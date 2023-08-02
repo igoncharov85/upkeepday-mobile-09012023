@@ -1,14 +1,15 @@
-import { useNavigation, useRoute } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native'
+import React, { useEffect, useState } from 'react'
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import LinearGradient from 'react-native-linear-gradient'
+import { useDispatch, useSelector } from 'react-redux'
+import { NavigationEnum } from '../../../common/constants/navigation'
+import { formatDate } from '../../../services/utils/fullDateToValue.util'
+import { durationAction } from '../../../store/duration/durationSlice'
+import { ScreenHeader } from '../../ScreenHeader'
+import CustomTimePicker from './CustomTimePicker'
 
-import styles from './styles';
-import { ScreenHeader } from '../../ScreenHeader';
-import LinearGradient from 'react-native-linear-gradient';
-import { formatDate } from '../../../services/utils/fullDateToValue.util';
-import CustomTimePicker from './CustomTimePicker';
-import { NavigationEnum } from '../../../common/constants/navigation';
-import { max } from 'date-fns';
+import styles from './styles'
 
 interface IDurationSessionModalModal {
 }
@@ -17,12 +18,13 @@ interface RouteParams {
   startDateTime: string;
   onCreateLesson: ({ duration, startDateTime }: { duration: number, startDateTime: number }) => void;
 }
-const durationItems = ['00:10', '00:15', '01:00',]
 const SelectDurationSessionModal = ({
 
 }: IDurationSessionModalModal) => {
   const navigation = useNavigation()
   const route = useRoute()
+const durationItems = useSelector((state: any) => state.duration) as string[]
+  console.log(durationItems)
   const { maxDuration, startDateTime, onCreateLesson } = route.params as RouteParams
   const goBack = () => navigation.goBack();
   const [timeIsVisible, setTimeIsVisible] = useState(false);
@@ -30,7 +32,7 @@ const SelectDurationSessionModal = ({
   const [startTime, setStartTime] = useState(0);
   const [durations, setDurations] = useState(durationItems);
   const [duration, setDuration] = useState(maxDuration);
-
+const dispatch = useDispatch()
   const onTimePress = () => setTimeIsVisible(!timeIsVisible);
 
   const onSetTime = (time: any) => {
@@ -57,6 +59,9 @@ const SelectDurationSessionModal = ({
     navigation.navigate(NavigationEnum.EDIT_DURATION_CLASS_MODAL, { addDuration, duration })
   }
   const addDuration = (duration: any) => {
+    dispatch(durationAction.setDuration(
+      [...durations, `${duration.hour < 10 ? '0' + duration.hour : duration.hour}:${duration.minute < 10 ? '0' + duration.minute : duration.minute}`]
+    ))
     setDurations([...durations, `${duration.hour < 10 ? '0' + duration.hour : duration.hour}:${duration.minute < 10 ? '0' + duration.minute : duration.minute}`])
   }
 
@@ -96,7 +101,11 @@ const SelectDurationSessionModal = ({
             <Text>Duration</Text>
             <View>
               <ScrollView showsVerticalScrollIndicator={false}>
-                {durations.map((item) => {
+                {durations.slice()
+                  .sort(
+                    (a, b) => Number(a.split(':')[0]) * 60 + Number(a.split(':')[1]) - (Number(b.split(':')[0]) * 60 + Number(b.split(':')[1]))
+                  )
+                  .map((item) => {
 
                   const disabled = duration ? Number(item.split(':')[0]) * 60 + Number(item.split(':')[1]) > duration : false
                   return (

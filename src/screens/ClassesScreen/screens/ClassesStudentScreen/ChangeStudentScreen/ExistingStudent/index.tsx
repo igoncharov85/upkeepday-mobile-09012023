@@ -4,11 +4,12 @@ import { Text, View, TextInput, TouchableOpacity, ScrollView } from 'react-nativ
 import { dispatch } from '../../../../../../store/store';
 import { fetchUsersAction } from '../../../../../../store/user/actions';
 import SearchIcon from '../../../../../../../assets/svg/SearchIcon';
-import styles from './styles';
 import SelectedUser from '../../../../../../../assets/svg/SelectedUser';
 import { IExistingStudent } from '../../../../../../common/types/schedule.types';
 import { CustomButton } from '../../../../../../components/UI/CustomButton';
 import { useNavigation } from '@react-navigation/native';
+
+import styles from './styles';
 
 interface IExistingStudentProps {
     students: IExistingStudent[],

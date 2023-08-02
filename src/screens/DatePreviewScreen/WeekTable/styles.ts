@@ -7,7 +7,8 @@ export default StyleSheet.create({
   },
   containerItem: {
     height: 64,
-    minWidth: 48,
+
+    minWidth: '14.28571428571429%',
     borderWidth: 1,
     borderColor: 'rgba(47,48,69,0.06)',
     borderStyle: 'solid',

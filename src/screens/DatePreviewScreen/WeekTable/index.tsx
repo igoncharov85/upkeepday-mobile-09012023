@@ -105,6 +105,8 @@ export const WeekTable: FC<ISheduleTable> = memo(
                   {dayEvents?.map((_, index) => {
                     const dryField = findScheduleEntries(CurrentScheduledEntries as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
                     const conflictItem = findScheduleEntries(conflict as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
+                    console.log(dryField, 'dryField')
+                    console.log('----------------')
                     return <WeekTableItem
                       key={`${dayIndex}-${index}`}
                       timeIndex={index}

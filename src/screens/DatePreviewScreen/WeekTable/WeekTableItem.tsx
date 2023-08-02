@@ -93,9 +93,21 @@ export const WeekTableItem: FC<IWeekTableItem> =
             position: 'relative',
           }}>
             {lessonOnThisTime.map((lesson, index) => {
-              return (<LessonItem lesson={lesson} onMoveSlot={onMoveSlot} canMove={canMove} editMode={editMode} deleteSlot={deleteSlot} onHandleLongPress={onHandleLongPress} />)
+
+              return (
+                <LessonItem lesson={lesson} onMoveSlot={onMoveSlot} canMove={canMove} editMode={editMode} deleteSlot={deleteSlot} onHandleLongPress={onHandleLongPress} />)
             })}
-            {dryField && <BusyField />}
+            {dryField &&
+              <TouchableOpacity onPress={() => console.log(dryField)} style={{
+                height: '100%', width: '100%'
+              }}>
+                <BusyField
+                  // start={Number(dryField.StartDateTime.split('T')[1].split(':')[1])}
+                  start={Number(dryField.StartDateTime.split('T')[1].split(':')[1])}
+                  duration={dryField.Duration} />
+              </TouchableOpacity>
+
+            }
           </View>
         </View>
 
@@ -162,7 +174,8 @@ const LessonItem = ({ lesson, onMoveSlot, canMove, editMode, deleteSlot, onHandl
         [
           pan.getLayout(), {
             height: `${lesson.Duration / 60 * 100}%`,
-            width: '100%'
+            width: '100%',
+            top: `${lessonMinuteStart / 60 * 100}%`
           }
         ]
       }>
@@ -172,7 +185,6 @@ const LessonItem = ({ lesson, onMoveSlot, canMove, editMode, deleteSlot, onHandl
           start={{ x: 0.5, y: 0 }}
           end={{ x: 0.5, y: 1 }}
           style={[styles.wrapperItem,
-          { top: `${lessonMinuteStart / 60 * 100}%`, height: `100%`, }
           ]}>
           {editMode && (
             <TouchableOpacity style={styles.cansel} onPress={() => deleteSlot(lesson)}>

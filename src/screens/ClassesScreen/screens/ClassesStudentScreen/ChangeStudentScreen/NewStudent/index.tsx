@@ -33,7 +33,7 @@ export const NewStudent: React.FC<INewStudentProps> = ({ handleTypeChange, onAdd
     const [newUser, setNewUser] = useState<IExistingStudent>();
 
     useEffect(() => {
-        onAddNewStudent(newUser || {});
+        newUser && onAddNewStudent(newUser);
     }, [newUser]);
 
     const renderForm = ({
@@ -49,7 +49,7 @@ export const NewStudent: React.FC<INewStudentProps> = ({ handleTypeChange, onAdd
             handleSubmit();
             if (isValid) {
                 setTimeout(() => {
-                    handleTypeChange(); // Вызываем функцию handleTypeChange после 2 секунд
+                    handleTypeChange();
                 }, 1000);
             }
         };

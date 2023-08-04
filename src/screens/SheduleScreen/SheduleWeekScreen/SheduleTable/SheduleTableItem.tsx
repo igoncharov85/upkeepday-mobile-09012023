@@ -29,14 +29,15 @@ export const SheduleTableItem: FC<ISheduleTableItem> = memo(
 
     return (
       <>
-        <CancellationModal data={item}>
-          <View style={styles.containerItem}>
+        <View style={styles.containerItem}>
 
-            {lessonOnThisHour.length > 0 ? lessonOnThisHour.map((lesson) => {
+          {lessonOnThisHour.length > 0 ? lessonOnThisHour.map((lesson) => {
 
-              const lessonMinuteStart = Number(lesson.StartDateTime.split('T')[1].split(':')[1])
-              return (
-                <TouchableOpacity style={{ position: 'relative', height: `${lesson.Duration / 60 * 100}%` }} >
+            const lessonMinuteStart = Number(lesson.StartDateTime.split('T')[1].split(':')[1])
+            return (
+
+              <CancellationModal data={item}>
+                <View style={{ position: 'relative', height: `${lesson.Duration / 60 * 100}%` }} >
                   {item?.ClassName ? (
                     <View
                       style={{
@@ -63,14 +64,13 @@ export const SheduleTableItem: FC<ISheduleTableItem> = memo(
                       </LinearGradient>
                     </View>
                   ) : null}
-                </TouchableOpacity>
-              )
-            }) :
-              <TouchableOpacity style={styles.containerItem} onPress={() => console.log(lessonOnThisHour)} />
+                </View></CancellationModal>
+            )
+          }) :
+            <TouchableOpacity style={styles.containerItem} onPress={() => console.log(lessonOnThisHour)} />
 
-            }
-          </View>
-        </CancellationModal >
+          }
+        </View>
       </>
     )
     return (

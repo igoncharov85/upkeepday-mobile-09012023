@@ -134,8 +134,8 @@ export function* fetchStudentsWorker(payload: IAction<IStudentsRequest>): SagaIt
         if (data) {
             const endDate = Date.now();
             const timeDifference = endDate - startDate;
-            console.log('\n start request time: ', moment(startDate).format('HH:mm:ss.SSS'), '\n get response time: ', moment(endDate).format('HH:mm:ss.SSS'))
-            console.log(timeDifference, 'timeDifference ssss');
+            // console.log('\n start request time: ', moment(startDate).format('HH:mm:ss.SSS'), '\n get response time: ', moment(endDate).format('HH:mm:ss.SSS'))
+            // console.log(timeDifference, 'timeDifference ssss');
 
             yield put(setUsersAction(data))
         }

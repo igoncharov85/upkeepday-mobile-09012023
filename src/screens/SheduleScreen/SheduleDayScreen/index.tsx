@@ -79,7 +79,7 @@ export const ScheduleDayScreen: React.FC<IScheduleDayScreen> = memo(() => {
 
 	useEffect(() => {
 		const time = Date.now();
-		console.log('\n----SheduleDay Screen----\n', loading, ' - loading status\n', moment(time).format('HH:mm:ss.SSS'), ' - time set loading')
+		// console.log('\n----SheduleDay Screen----\n', loading, ' - loading status\n', moment(time).format('HH:mm:ss.SSS'), ' - time set loading')
 
 
 	}, [loading])

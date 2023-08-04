@@ -75,6 +75,10 @@ const CustomTimePicker: React.FC<ITimePicker> = ({ visible, data, onSetTime, blo
         marginVertical: 20,
       }}>
       <TimeLineLeft />
+      <View style={{ position: 'absolute', top: 24, width: '100%', flexDirection: 'row', justifyContent: 'space-evenly' }}>
+        <Text>Hour(s)</Text>
+        <Text>Minute(s)</Text>
+      </View>
       <ItemPicker block={block.hour} items={[...Array(13)].map((_, i) => i > 9 ? i : `0${i}`)} activeIndex={hour + 1} onChange={onHourChange} stipulation={stipulationForHour} />
 
       <ItemPicker block={block.minute} items={[...Array(60)].map((_, i) => i > 9 ? i : `0${i}`)} activeIndex={minute + 1} onChange={onMinuteChange} stipulation={stipulationForMinute} />

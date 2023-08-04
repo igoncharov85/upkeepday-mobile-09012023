@@ -28,8 +28,8 @@ export const scheduleSlice = createSlice({
     initialState,
     reducers: {
         setScheduleLoading: (state, action: PayloadAction<boolean>) => {
-            const time = Date.now();
-            console.log('\n----loading----\n', action.payload, ' - loading status\n', moment(time).format('HH:mm:ss.SSS'), ' - time set loading')
+            // const time = Date.now();
+            // console.log('\n----loading----\n', action.payload, ' - loading status\n', moment(time).format('HH:mm:ss.SSS'), ' - time set loading')
 
             state.loading = action.payload
         },

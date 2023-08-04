@@ -13,7 +13,7 @@ const StudentsScreen = () => {
 
     useEffect(() => {
         const time = Date.now();
-        console.log('\n----Screen Student----\n', loading, ' - loading status\n', moment(time).format('HH:mm:ss.SSS'), ' - time set loading')
+        // console.log('\n----Screen Student----\n', loading, ' - loading status\n', moment(time).format('HH:mm:ss.SSS'), ' - time set loading')
 
     }, [loading])
     return (

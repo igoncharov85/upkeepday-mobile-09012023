@@ -34,7 +34,7 @@ const DurationSessionModal = ({
       <View style={styles.modalWrapper}>
         <TouchableOpacity style={styles.background} onPress={goBack} activeOpacity={1} />
         <View style={styles.container}>
-          <ScreenHeader text="Duration set-up" withBackButton={true} onBackPress={goBack} />
+          <ScreenHeader text="Duration Set-up" withBackButton={true} onBackPress={goBack} />
           <CustomTimePicker
             block={{ hour: true, minute: true, dayPart: true }}
             visible={true}
@@ -43,9 +43,9 @@ const DurationSessionModal = ({
             maxDuration={duration}
           />
           <CustomButton text="Save" disabled={
-          time.hour === 0 && time.minute === 0
-  } onPress={
-          time.hour === 0 && time.minute === 0 ? () => {}  : onSave
+            time.hour === 0 && time.minute === 0
+          } onPress={
+            time.hour === 0 && time.minute === 0 ? () => { } : onSave
           } />
         </View>
       </View>

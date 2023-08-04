@@ -55,6 +55,7 @@ const StudentsItem: React.FC<IStudentsItem> = ({ item }) => {
             actionBtn: () => {
                 dispatch(deleteStudentAction({ StudentId: item.StudentId }))
                 navigation.goBack()
+                navigation.goBack()
             },
             nameAction: 'Delete  Permanently',
         })

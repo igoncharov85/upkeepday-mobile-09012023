@@ -27,7 +27,7 @@ const userSlice = createSlice({
     reducers: {
         setStudentLoading: (state, action: PayloadAction<boolean>) => {
             const time = Date.now();
-            console.log('\n----loading----\n', action.payload, ' - loading status\n', moment(time).format('HH:mm:ss.SSS'), ' - time set loading')
+            // console.log('\n----loading----\n', action.payload, ' - loading status\n', moment(time).format('HH:mm:ss.SSS'), ' - time set loading')
             state.loading = action.payload
         },
         setStudentAction: (state, action: PayloadAction<Array<IUserStudent>>) => {

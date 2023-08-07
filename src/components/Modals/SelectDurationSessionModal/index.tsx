@@ -24,7 +24,6 @@ const SelectDurationSessionModal = ({
   const navigation = useNavigation()
   const route = useRoute()
   const durationItems = useSelector((state: any) => state.duration) as string[]
-  console.log(durationItems)
   const { maxDuration, startDateTime, onCreateLesson } = route.params as RouteParams
   const goBack = () => navigation.goBack();
   const [timeIsVisible, setTimeIsVisible] = useState(false);

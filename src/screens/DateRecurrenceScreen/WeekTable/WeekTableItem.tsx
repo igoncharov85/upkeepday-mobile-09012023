@@ -115,7 +115,7 @@ function convertArray(inputArray: any[]) {
   return outputArray;
 }
 
-export const WeekTableItem: FC<IWeekTableItem> = memo(
+export const WeekTableItem: FC<IWeekTableItem> =
   ({
     timeDuration = TimeDuration.OneHour,
     typeSession = TypeSession.lesson,
@@ -152,14 +152,28 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
         StartTime: startTime,
       })
     }
-
+    useEffect(() => {
+      daySchedule.length && console.log(daySchedule)
+    }, [daySchedule])
 
     const onHandleSlot = (event: any) => {
       const { locationX, locationY } = event.nativeEvent;
 
+      const userTouchMinute = locationY / 64 * 60
       const prevLesson = findNextElement(convertArray(daySchedule), { start: `${timeIndex}:59`, end: `${timeIndex}:59` }).previousElement || { start: '00:00', end: '00:00' };
       const nextLesson = findNextElement(convertArray(daySchedule), { start: `${timeIndex}:0`, end: `${timeIndex}:0` }).nextElement || { start: '23:59', end: '23:59' };
 
+      const partiallyOccupied = prevLesson.end.split(':')[0] >= timeIndex && +prevLesson.end.split(':')[1] > userTouchMinute
+      const fullyOccupied = prevLesson.end.split(':')[0] > timeIndex
+      if (fullyOccupied) {
+        console.log('delete')
+        onHandleClick({
+          Duration: subtractTime(prevLesson.end, prevLesson.start),
+          DayOfWeek: dayOfWeek,
+          StartTime: prevLesson.start,
+        })
+        return
+      }
       const prevLessonIsCurrentField = prevLesson.end.split(':')[0] == timeIndex
       const clickInPrevLesson = prevLesson.end.split(':')[1] > locationY
       if (clickInPrevLesson && prevLessonIsCurrentField) {
@@ -179,6 +193,7 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
 
       } else {
         console.log('\nlesson on this day: \n', daySchedule)
+        console.log('\nprev slot: \n', prevLesson)
         // @ts-ignore
         navigation.navigate(NavigationEnum.SELECT_DURATION_CLASS_MODAL, {
           timeDuration,
@@ -248,8 +263,8 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
       lessons.length > 0 ? setActive(true) : setActive(false)
     }, [lessons])
     useEffect(() => {
-
-    })
+      setLessons(convertArray(daySchedule))
+    }, [daySchedule])
     return (
       <>
         <View >
@@ -263,14 +278,11 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
               {lessons.filter(item => item.start.split(':')[0] == timeIndex).map((item, index) => {
                 return (
                   <>
-                    <TouchableOpacity style={{
-                      zIndex: 1,
+                    <TouchableOpacity style={[styles.lessonTop, {
                       top: index === 0 ? 0 : `${toMinutes(item.start) / 60 * 100}%`,
-                      left: 0,
-                      right: 0,
                       bottom: `${(60 - toMinutes(item.start)) / 60 * 100}%`,
-                      position: 'absolute',
-                    }}
+                    }
+                    ]}
                       onPress={(event) => onCreateMoreLesson(event, item, 'before')}
                     />
 
@@ -279,63 +291,35 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
                       colors={colorsLesson}
                       start={{ x: 0.5, y: 0 }}
                       end={{ x: 0.5, y: 1 }}
-                      style={{
-                        zIndex: 3,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        position: 'absolute',
-                        borderRadius: 4,
+                      style={[styles.lessonContainer, {
                         top: `${toMinutes(item.start) / 60 * 100}%`,
-                        left: 0,
-                        right: 0,
                         height: `${100 * (subtractTime(item.end, item.start) / 60)}%`,
-                      }}>
+                      }]}>
 
-                      <TouchableOpacity style={{
-                        zIndex: 3,
-                        position: 'absolute',
-                        borderRadius: 4,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                      }}
-                        onPress={() => onHandleMoreLesson(item)}
+                      <TouchableOpacity style={styles.lesson}
+                        onPress={() => {
+                          console.log(item, 'item')
+                          onHandleMoreLesson(item)
+                        }}
                       >
                         <Text style={styles.textItem}>Class</Text>
                       </TouchableOpacity>
                     </LinearGradient >
 
 
-                    <TouchableOpacity style={{
-                      zIndex: 2,
+                    <TouchableOpacity style={[styles.lessonBottom, {
                       top: `${toMinutes(item.end) > toMinutes(item.start) ? toMinutes(item.end) / 60 * 100 : toMinutes(item.end) == 0 ? 60 : toMinutes(item.end) + 120}%`,
-                      left: 0,
-                      right: 0,
-                      // height: `${lessons[index + 1] ? (subtractTime(lessons[index + 1].start, item.end)) / 60 * 100 : 100 - ((60 - toMinutes(item.end) == 0 ? 60 : toMinutes(item.end)) / 60 * 100)}%`,
-                      height: `100%`,
-                      position: 'absolute',
-                    }}
+                    }]}
                       onPress={(event) => onCreateMoreLesson(event, item, 'after')}
                     />
                   </>
                 )
               })}
-            </View>) : <TouchableOpacity style={{
-              position: 'absolute',
-              zIndex: 10,
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-            }} onPress={onHandleSlot} />}
+            </View>) : <TouchableOpacity style={styles.emptySlot} onPress={onHandleSlot} />}
 
           </View>
         </View >
       </>
     );
 
-  },
-);
+  };

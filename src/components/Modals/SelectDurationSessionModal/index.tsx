@@ -23,7 +23,7 @@ const SelectDurationSessionModal = ({
 }: IDurationSessionModalModal) => {
   const navigation = useNavigation()
   const route = useRoute()
-const durationItems = useSelector((state: any) => state.duration) as string[]
+  const durationItems = useSelector((state: any) => state.duration) as string[]
   console.log(durationItems)
   const { maxDuration, startDateTime, onCreateLesson } = route.params as RouteParams
   const goBack = () => navigation.goBack();
@@ -32,7 +32,7 @@ const durationItems = useSelector((state: any) => state.duration) as string[]
   const [startTime, setStartTime] = useState(0);
   const [durations, setDurations] = useState(durationItems);
   const [duration, setDuration] = useState(maxDuration);
-const dispatch = useDispatch()
+  const dispatch = useDispatch()
   const onTimePress = () => setTimeIsVisible(!timeIsVisible);
 
   const onSetTime = (time: any) => {
@@ -59,10 +59,14 @@ const dispatch = useDispatch()
     navigation.navigate(NavigationEnum.EDIT_DURATION_CLASS_MODAL, { addDuration, duration })
   }
   const addDuration = (duration: any) => {
-    dispatch(durationAction.setDuration(
-      [...durations, `${duration.hour < 10 ? '0' + duration.hour : duration.hour}:${duration.minute < 10 ? '0' + duration.minute : duration.minute}`]
-    ))
-    setDurations([...durations, `${duration.hour < 10 ? '0' + duration.hour : duration.hour}:${duration.minute < 10 ? '0' + duration.minute : duration.minute}`])
+    const newDuration = `${duration.hour < 10 ? '0' + duration.hour : duration.hour}:${duration.minute < 10 ? '0' + duration.minute : duration.minute}`
+    durations.includes(newDuration)
+    if (!durations.includes(newDuration)) {
+      dispatch(durationAction.setDuration(
+        [...durations, newDuration]
+      ))
+      setDurations([...durations, `${duration.hour < 10 ? '0' + duration.hour : duration.hour}:${duration.minute < 10 ? '0' + duration.minute : duration.minute}`])
+    }
   }
 
 
@@ -107,14 +111,14 @@ const dispatch = useDispatch()
                   )
                   .map((item) => {
 
-                  const disabled = duration ? Number(item.split(':')[0]) * 60 + Number(item.split(':')[1]) > duration : false
-                  return (
-                    <View style={{ marginBottom: 20, opacity: disabled ? 0.5 : 1 }}>
-                      <DateItem dateValue={item} onSubmit={disabled ? undefined : () => onSelectDuration(item)} disabled={disabled} />
-                    </View>
+                    const disabled = duration ? Number(item.split(':')[0]) * 60 + Number(item.split(':')[1]) > duration : false
+                    return (
+                      <View style={{ marginBottom: 20, opacity: disabled ? 0.5 : 1 }}>
+                        <DateItem dateValue={item} onSubmit={disabled ? undefined : () => onSelectDuration(item)} disabled={disabled} />
+                      </View>
 
-                  )
-                })}
+                    )
+                  })}
 
 
               </ScrollView>
@@ -122,7 +126,7 @@ const dispatch = useDispatch()
             <View style={{ width: 50 }} />
           </View>
           <TouchableOpacity onPress={goToCreateDuration}>
-            <Text style={{ fontSize: 14, textDecorationLine: 'underline', textAlign: 'center' , marginBottom: 20}}>Set-up your own duration</Text>
+            <Text style={{ fontSize: 14, textDecorationLine: 'underline', textAlign: 'center', marginBottom: 20 }}>Set-up your own duration</Text>
           </TouchableOpacity>
         </View>
       </View >

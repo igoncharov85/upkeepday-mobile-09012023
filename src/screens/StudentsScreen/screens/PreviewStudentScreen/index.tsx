@@ -41,7 +41,10 @@ const PreviewStudentScreen: React.FC<IAddStudentsScreen> = () => {
                 StudentName: `${item.FirstName} ${item.LastName}`,
                 ClassName: Name
             },
-            actionBtn: () => { dispatch(deleteUserAction({ StudentId: item.StudentId, Classes: [ClassId] })) },
+            actionBtn: () => {
+                dispatch(deleteUserAction({ StudentId: item.StudentId, Classes: [ClassId] }))
+                navigation.goBack()
+            },
             nameAction: 'Confirm',
         })
 

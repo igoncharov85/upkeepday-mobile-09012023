@@ -43,7 +43,8 @@ const StudentsItem: React.FC<IStudentsItem> = ({ item }) => {
             item: item,
             actionBtn: () => {
                 dispatch(updateStudentStatus({ status: 'Archived', StudentId: item.StudentId }))
-                navigation.goBack()
+                //@ts-ignore
+                navigation.navigate(NavigationEnum.STUDENTS_TAB)
             },
             nameAction: 'Archive Student',
         })
@@ -54,8 +55,8 @@ const StudentsItem: React.FC<IStudentsItem> = ({ item }) => {
             item: item,
             actionBtn: () => {
                 dispatch(deleteStudentAction({ StudentId: item.StudentId }))
-                navigation.goBack()
-                navigation.goBack()
+                //@ts-ignore
+                navigation.navigate(NavigationEnum.STUDENTS_TAB)
             },
             nameAction: 'Delete  Permanently',
         })

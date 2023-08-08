@@ -192,8 +192,6 @@ export const WeekTableItem: FC<IWeekTableItem> =
         })
 
       } else {
-        console.log('\nlesson on this day: \n', daySchedule)
-        console.log('\nprev slot: \n', prevLesson)
         // @ts-ignore
         navigation.navigate(NavigationEnum.SELECT_DURATION_CLASS_MODAL, {
           timeDuration,
@@ -298,7 +296,6 @@ export const WeekTableItem: FC<IWeekTableItem> =
 
                       <TouchableOpacity style={styles.lesson}
                         onPress={() => {
-                          console.log(item, 'item')
                           onHandleMoreLesson(item)
                         }}
                       >

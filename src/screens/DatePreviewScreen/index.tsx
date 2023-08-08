@@ -58,8 +58,6 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
     }
 
     const onSave = () => {
-        console.log(slots);
-
         dispatch(updateCurrentClassRequestAction({
             Sessions: slots,
             Slots: WeekTimeSlots, Class: {

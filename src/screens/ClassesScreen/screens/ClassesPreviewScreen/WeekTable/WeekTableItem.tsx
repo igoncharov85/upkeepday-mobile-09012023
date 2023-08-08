@@ -1,84 +1,100 @@
-import React, { FC, memo, useEffect, useMemo, useRef, useState } from 'react';
+import React, { FC, memo, useRef, useState } from 'react';
 import { Animated, PanResponder, Text, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import styles from './styles';
-import { useAppSelector } from '../../../../../store/hooks';
-import BusyField from '../../../../ClassesScreen/components/BusyField';
 import { IGeneratedScheduleEntries } from '../../../../../common/types/schedule.types';
-import { useNavigation } from '@react-navigation/native';
-import { NavigationEnum } from '../../../../../common/constants/navigation';
+import Cancel from '../../../../../../assets/svg/Cancel';
+import { useAppSelector } from '../../../../../store/hooks';
+import BusyField from '../../../components/BusyField';
 import { addDayAndHoursToDate } from '../../../../../services/utils/generateDate.util';
 import moment from 'moment';
-import Cancel from '../../../../../../assets/svg/Cancel';
+import { useNavigation } from '@react-navigation/native';
+import { findLessonOnCurrentHour } from '../../../../DatePreviewScreen/WeekTable/WeekTableItem';
 
-
-
-
-function findActivitiesByDay(activities: IGeneratedScheduleEntries[], date: Date) {
-
-
-  const activitiesByDay = activities.filter((activity: IGeneratedScheduleEntries) => {
-    const startDateTime = new Date(activity.StartDateTime);
-    return startDateTime.getDate() === date.getDate() && startDateTime.getMonth() === date.getMonth();
-  });
-
-  return activitiesByDay;
-}
-
-
-export function findLessonOnCurrentHour(lessonsOnDay: any[], currentHour: number, currentDay: Date) {
-  return findActivitiesByDay(lessonsOnDay, currentDay).filter((lesson) => {
-    return +lesson.StartDateTime.split('T')[1].split(':')[0] == currentHour
-  })
-}
-
+import { NavigationEnum } from '../../../../../common/constants/navigation';
 
 
 interface IWeekTableItem {
   StartDateTime: string;
-  timeIndex: number;
   onLongPress: (value: boolean) => void;
   editMode: boolean;
-  onMoveSlot: (slot: IGeneratedScheduleEntries, newStartTime: string) => void;
+  activeItem: IGeneratedScheduleEntries;
+  onMoveSlot: (slot: IGeneratedScheduleEntries, x: number, y: number) => void;
   conflict: boolean;
   onDeleteSlot: (slot: IGeneratedScheduleEntries) => void;
   dayIndex: number;
   startOfWeek: Date;
   dryField: IGeneratedScheduleEntries;
-  currentDay: Date;
-  slots: () => any
+
+  currentDate: Date;
+  timeIndex: number;
+  slots: IGeneratedScheduleEntries[];
 }
 
 const CELL_SIZE = {
   width: 48,
   height: 64,
 };
-
-export const WeekTableItem: FC<IWeekTableItem> =
+export const WeekTableItem: FC<IWeekTableItem> = memo(
   ({
     onLongPress,
+    activeItem,
     editMode,
     conflict,
     onMoveSlot,
     onDeleteSlot,
     dryField,
-    currentDay,
+
+    timeIndex,
     slots,
-    timeIndex
+    currentDate
 
   }) => {
     const [canMove, setCanMove] = useState(false);
-    const lessonOnThisTime: IGeneratedScheduleEntries[] = findLessonOnCurrentHour(slots(), timeIndex, currentDay)
+    const { currentSession } = useAppSelector(state => state.classes);
+    const colorsLesson = ['#EAAFC8', '#654EA3'];
+
+    const lessonOnThisTime: IGeneratedScheduleEntries[] = findLessonOnCurrentHour(slots, timeIndex, currentDate)
 
     const onHandleLongPress = (active: boolean) => {
       setCanMove(active);
       onLongPress(active)
     }
 
-    const deleteSlot = (item: any) => {
-      onDeleteSlot(item)
-      setCanMove(false);
+    const deleteSlot = () => {
+      onDeleteSlot(activeItem)
       onLongPress(false)
+    }
+    const pan = useRef(new Animated.ValueXY()).current;
+
+    const panResponder = PanResponder.create({
+      onStartShouldSetPanResponder: () => canMove,
+      onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y, },], { useNativeDriver: false }),
+      onPanResponderRelease: (_, gestureState) => {
+        const
+          gridCellX = Math.floor((gestureState.dx + CELL_SIZE.width / 2) / CELL_SIZE.width),
+          gridCellY = Math.floor((gestureState.dy + CELL_SIZE.height / 2) / CELL_SIZE.height),
+          moveCoords = {
+            x: (CELL_SIZE.width / 2) * gridCellX,
+            y: (CELL_SIZE.height / 2) * gridCellY,
+          };
+        pan.setOffset(moveCoords);
+        pan.setValue(moveCoords);
+        onMoveSlot(activeItem, gridCellX, gridCellY,)
+
+        onHandleLongPress(false);
+      },
+    });
+
+
+    const getInfo = () => {
+      console.log(
+        'activeItem',
+        activeItem,
+        'dryField',
+        dryField,
+      );
+
     }
 
     return (
@@ -102,7 +118,6 @@ export const WeekTableItem: FC<IWeekTableItem> =
                 height: '100%', width: '100%'
               }}>
                 <BusyField
-                  // start={Number(dryField.StartDateTime.split('T')[1].split(':')[1])}
                   start={Number(dryField.StartDateTime.split('T')[1].split(':')[1])}
                   duration={dryField.Duration} />
               </TouchableOpacity>
@@ -110,16 +125,16 @@ export const WeekTableItem: FC<IWeekTableItem> =
             }
           </View>
         </View>
-
-      </TouchableOpacity >
+      </TouchableOpacity>
     );
 
-  };
+  },
+);
+
 
 
 const LessonItem = ({ lesson, onMoveSlot, canMove, editMode, deleteSlot, onHandleLongPress }: { lesson: any, onMoveSlot: any, canMove: boolean, editMode: boolean, deleteSlot: any, onHandleLongPress: any }) => {
   const colorsLesson = ['#EAAFC8', '#654EA3'];
-
   const navigation = useNavigation();
   const pan = useRef(new Animated.ValueXY()).current;
   const panResponders = PanResponder.create({

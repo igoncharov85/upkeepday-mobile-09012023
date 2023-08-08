@@ -42,7 +42,7 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
     const [startDateWeek, setStartDateWeek] = useState(new Date(weekDates.startDate));
     const [endDateWeek, setEndDateWeek] = useState(new Date(weekDates.endDate));
     const { CurrentScheduledEntries, loading } = useAppSelector(state => state.schedule);
-    const { currentSession, loading: classesLoading }: any = useAppSelector(state => state.classes);
+    const { currentSession }: any = useAppSelector(state => state.classes);
 
     const [conflict, setConflict] = useState<IGeneratedScheduleEntries[]>(findScheduleConflicts(CurrentScheduledEntries, removeElementsFromArray(CurrentScheduledEntries, currentSession)));
 
@@ -67,11 +67,11 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
     }
 
     useEffect(() => {
-        isFocused && dispatch(fetchSessionClassesByIdAction(item.ClassId))
+        dispatch(fetchSessionClassesByIdAction(item.ClassId))
     }, []);
 
 
-    return (<View style={{ height: '100%' }}>
+    return loading ? <ScreenLoading /> : (<View style={{ height: '100%' }}>
         <View style={styles.header}>
             <ScreenHeader text={"View and Reschedule"} onBackPress={navigation.goBack} withBackButton={true} />
         </View>

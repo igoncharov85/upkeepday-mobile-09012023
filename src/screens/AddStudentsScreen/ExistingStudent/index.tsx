@@ -46,6 +46,8 @@ export const ExistingStudent: React.FC<IExistingStudentProps> = ({ students, onC
 
     useEffect(() => {
         dispatch(fetchUsersAction());
+        console.log(filteredStudents, 'filteredStudents')
+        console.log(students, 'students filteredStudents')
     }, []);
     return (
         <View style={{}}>
@@ -61,18 +63,18 @@ export const ExistingStudent: React.FC<IExistingStudentProps> = ({ students, onC
                 <View style={styles.container}>
 
                     <View >
-                        {filteredStudents?.filter((user) => 
-                        user.FirstName?.toLowerCase().startsWith(searchText?.toLowerCase()) || 
-                        user.LastName?.toLowerCase().startsWith(searchText?.toLowerCase()) ||
-                        `${user.FirstName} ${user.LastName}`.toLowerCase().startsWith(searchText?.toLowerCase())).map((user) => {
-                            //@ts-ignore
-                            let active = selectedUsers.some((selectedUser) => (user?.EnrolledClasses ? selectedUser?.StudentId === user?.StudentId : selectedUser?.Email === user?.Email));
-
-                            return (
+                        {filteredStudents?.filter((user) =>
+                            user.FirstName?.toLowerCase().startsWith(searchText?.toLowerCase()) ||
+                            user.LastName?.toLowerCase().startsWith(searchText?.toLowerCase()) ||
+                            `${user.FirstName} ${user.LastName}`.toLowerCase().startsWith(searchText?.toLowerCase())).map((user) => {
                                 //@ts-ignore
-                                <Student name={getName(user)} onClick={onChancheUsers} user={user} key={user?.Email || user.Id} selectedUser={active} />
-                            )
-                        })}
+                                let active = selectedUsers.some((selectedUser) => (user?.EnrolledClasses ? selectedUser?.StudentId === user?.StudentId : selectedUser?.Email === user?.Email));
+
+                                return (
+                                    //@ts-ignore
+                                    <Student name={getName(user)} onClick={onChancheUsers} user={user} key={user?.Email || user.Id} selectedUser={active} />
+                                )
+                            })}
                     </View>
                 </View >
             </ScrollView>

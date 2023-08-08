@@ -276,7 +276,7 @@ export const WeekTableItem: FC<IWeekTableItem> =
               {lessons.filter(item => item.start.split(':')[0] == timeIndex).map((item, index) => {
                 return (
                   <>
-                    <TouchableOpacity style={[styles.lessonTop, {
+                    <TouchableOpacity key={`${item.start} ${dayOfWeek}`} style={[styles.lessonTop, {
                       top: index === 0 ? 0 : `${toMinutes(item.start) / 60 * 100}%`,
                       bottom: `${(60 - toMinutes(item.start)) / 60 * 100}%`,
                     }

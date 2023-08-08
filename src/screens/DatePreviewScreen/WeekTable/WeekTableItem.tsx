@@ -95,7 +95,7 @@ export const WeekTableItem: FC<IWeekTableItem> =
             {lessonOnThisTime.map((lesson, index) => {
 
               return (
-                <LessonItem lesson={lesson} onMoveSlot={onMoveSlot} canMove={canMove} editMode={editMode} deleteSlot={deleteSlot} onHandleLongPress={onHandleLongPress} />)
+                <LessonItem key={`${lesson.StartDateTime} ${index}`} lesson={lesson} onMoveSlot={onMoveSlot} canMove={canMove} editMode={editMode} deleteSlot={deleteSlot} onHandleLongPress={onHandleLongPress} />)
             })}
             {dryField &&
               <TouchableOpacity onPress={() => console.log(dryField)} style={{

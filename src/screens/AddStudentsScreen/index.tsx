@@ -10,7 +10,7 @@ import { NewStudent } from './NewStudent';
 import { IExistingStudent } from '../../common/types/schedule.types';
 import { useAppSelector } from '../../store/hooks';
 import { IUserStudent } from '../../common/types/user';
-import { updateCurrentClassRequestAction } from '../../store/shedule';
+import { setLocalStudentData, updateCurrentClassRequestAction } from '../../store/shedule';
 import { dispatch } from '../../store/store';
 
 interface IAddStudentsScreen {
@@ -31,9 +31,10 @@ export const AddStudentsScreen: React.FC<IAddStudentsScreen> = () => {
     const { students } = useAppSelector(state => state.user)
     const [typeAction, setTypeAction] = useState(0);
     const navigation = useNavigation();
-    const { createCurrentClassRequest } = useAppSelector(state => state.schedule);
+    const { createCurrentClassRequest, localStudentData } = useAppSelector(state => state.schedule);
+    console.log('localStudentData', localStudentData)
     const [selectedStudents, setSelectedStudents] = useState<Array<IExistingStudent | any>>(createCurrentClassRequest.Students || []);
-    const [existingStudent, setExistingStudent] = useState<Array<any>>(students || []);
+    const [existingStudent, setExistingStudent] = useState<Array<any>>(localStudentData);
     const [newStudents, setNewStudents] = useState<Array<IExistingStudent>>([]);
     //@ts-ignore
     const goNextStep = () => navigation.navigate(NavigationEnum.PREPAYMENT_CONFIGURATION_SCREEN);
@@ -83,17 +84,33 @@ export const AddStudentsScreen: React.FC<IAddStudentsScreen> = () => {
         setSelectedStudents([...selectedStudents, students])
     }
     useEffect(() => {
-        setExistingStudent([...students, ...newStudents]);
+        newStudents && setExistingStudent([...students, ...newStudents, ...localStudentData]);
     }, [newStudents]);
 
     useEffect(() => {
         dispatch(updateCurrentClassRequestAction({
             Students: removeEmptyObjects(selectedStudents) || []
         }));
+        // existingStudent && dispatch(setLocalStudentData(existingStudent))
+    }, [selectedStudents, newStudents, existingStudent]);
+    // useEffect(() => {
+    //     console.log('mount')
+    //     console.log(localStudentData, 'localStudentData', existingStudent, 'existingStudent')
+    //     return () => {
+    //         console.log(localStudentData, 'localStudentData', existingStudent, 'existingStudent')
+    //         existingStudent && dispatch(setLocalStudentData(existingStudent))
+    //     }
+    // }, [])
 
-    }, [selectedStudents, newStudents]);
-
-    const goBack = () => navigation.goBack()
+    useEffect(() => {
+        console.log('set localStudentData', localStudentData)
+        setExistingStudent(localStudentData)
+    }, [])
+    const goBack = () => {
+        navigation.goBack()
+        console.log(localStudentData, 'localStudentData', existingStudent, 'existingStudent')
+        dispatch(setLocalStudentData(existingStudent))
+    }
 
     return (
         <View style={{ flex: 1, height: '100%' }}>

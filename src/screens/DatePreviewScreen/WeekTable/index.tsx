@@ -58,7 +58,6 @@ export const WeekTable: FC<ISheduleTable> = memo(
 
     const onDeleteSlot = (slot: any) => {
       const newSlots = slots.filter((item) => {
-        item.StartDateTime === slot.StartDateTime && console.log(item)
         return item.StartDateTime !== slot.StartDateTime
       });
       setSlots(newSlots);
@@ -86,45 +85,45 @@ export const WeekTable: FC<ISheduleTable> = memo(
     );
     const date = (new Date(startOfWeek));
     return (<View style={styles.container}>
-        <ScrollView contentOffset={{x: 0, y: 64 * 8}}>
-          <Row style={{justifyContent: 'space-between'}}>
-            <Column style={{width: 56}}>
-              {timeData.map((item, index) => (
-                <TimeLineItem key={index} time={item}/>
-              ))}
-            </Column>
-            <Row style={{flex: 1, paddingRight: 20, paddingBottom: 20}}>
-              {weekStructure?.map((dayEvents, dayIndex) => {
-                const currentDate = new Date(addDayAndHoursToDate(date.toISOString(), dayIndex, 0))
-                return (
-                  <Column key={dayIndex}>
-                    {dayEvents?.map((_, index) => {
-                      const dryField = findScheduleEntries(CurrentScheduledEntries as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
-                      const conflictItem = findScheduleEntries(conflict as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
-                      return <WeekTableItem
-                        key={`${dayIndex}-${index}`}
-                        timeIndex={index}
-                        dayIndex={dayIndex}
-                        slots={getSlots}
-                        startOfWeek={startOfWeek}
-                        StartDateTime={addDayAndHoursToDate(date.toISOString(), dayIndex, index)}
-                        conflict={!!conflictItem[0]}
-                        onLongPress={onChangeEditMode}
-                        editMode={editMode}
-                        onDeleteSlot={onDeleteSlot}
-                        onMoveSlot={onMoveSlot}
-                        currentDay={currentDate}
-                        dryField={dryField && dryField[0]}/>;
-                    })}
-                  
-                  </Column>
-                );
-              })}
-            </Row>
+      <ScrollView contentOffset={{ x: 0, y: 64 * 8 }}>
+        <Row style={{ justifyContent: 'space-between' }}>
+          <Column style={{ width: 56 }}>
+            {timeData.map((item, index) => (
+              <TimeLineItem key={index} time={item} />
+            ))}
+          </Column>
+          <Row style={{ flex: 1, paddingRight: 20, paddingBottom: 20 }}>
+            {weekStructure?.map((dayEvents, dayIndex) => {
+              const currentDate = new Date(addDayAndHoursToDate(date.toISOString(), dayIndex, 0))
+              return (
+                <Column key={dayIndex}>
+                  {dayEvents?.map((_, index) => {
+                    const dryField = findScheduleEntries(CurrentScheduledEntries as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
+                    const conflictItem = findScheduleEntries(conflict as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
+                    return <WeekTableItem
+                      key={`${dayIndex}-${index}`}
+                      timeIndex={index}
+                      dayIndex={dayIndex}
+                      slots={getSlots}
+                      startOfWeek={startOfWeek}
+                      StartDateTime={addDayAndHoursToDate(date.toISOString(), dayIndex, index)}
+                      conflict={!!conflictItem[0]}
+                      onLongPress={onChangeEditMode}
+                      editMode={editMode}
+                      onDeleteSlot={onDeleteSlot}
+                      onMoveSlot={onMoveSlot}
+                      currentDay={currentDate}
+                      dryField={dryField && dryField[0]} />;
+                  })}
+
+                </Column>
+              );
+            })}
           </Row>
-        </ScrollView>
-      </View>
-    
+        </Row>
+      </ScrollView>
+    </View>
+
     );
   },
 );

@@ -27,8 +27,6 @@ export function* fetchSchedulesWorker({
       const timeDifference = endDate - startDate;
       // console.log('\n start request time: ', moment(startDate).format('HH:mm:ss.SSS'), '\n get response time: ', moment(endDate).format('HH:mm:ss.SSS'))
       // console.log(timeDifference, 'timeDifference ssss');
-
-
       //@ts-ignore
       yield put(setCurrentScheduleEntries(convertToLocaleTime(data)))
     }

@@ -53,9 +53,6 @@ export const DateRecurrenceScreen: React.FC<IDateRecurrenceScreen> = () => {
                 }
             })
         );
-        console.log(weekTimeSlots);
-
-
         dispatch(generateScheduleAction(
             {
                 ScheduleType: createCurrentClassRequest.Class!.EndScheduleType as string,

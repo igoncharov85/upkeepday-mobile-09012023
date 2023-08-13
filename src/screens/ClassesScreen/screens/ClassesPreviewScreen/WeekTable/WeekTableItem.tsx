@@ -89,16 +89,20 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
 
     const getInfo = () => {
       console.log(
-        'activeItem',
-        activeItem,
-        'dryField',
-        dryField,
+        // 'activeItem',
+        // activeItem,
+        // 'dryField',
+        // dryField,
+        'lessonOnThisTime',
+        lessonOnThisTime,
+        slots
       );
 
     }
 
     return (
       <TouchableOpacity
+        onPress={getInfo}
         onLongPress={() => onHandleLongPress(true)}
         activeOpacity={1}
       >
@@ -109,9 +113,8 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
             position: 'relative',
           }}>
             {lessonOnThisTime.map((lesson, index) => {
-
               return (
-                <LessonItem conflict={conflict} lesson={lesson} onMoveSlot={onMoveSlot} canMove={canMove} editMode={editMode} deleteSlot={deleteSlot} onHandleLongPress={onHandleLongPress} />)
+                <LessonItem key={`${index}-${lesson.Duration}-${lesson.StartDateTime}`} conflict={conflict} lesson={lesson} onMoveSlot={onMoveSlot} canMove={canMove} editMode={editMode} deleteSlot={deleteSlot} onHandleLongPress={onHandleLongPress} />)
             })}
             {dryField &&
               <TouchableOpacity onPress={() => console.log(dryField)} style={{
@@ -133,9 +136,8 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
 
 
 
-const LessonItem = ({ lesson, conflict, onMoveSlot, canMove, editMode, deleteSlot, onHandleLongPress }: { lesson: any, onMoveSlot: any, canMove: boolean, editMode: boolean,conflict: any, deleteSlot: any, onHandleLongPress: any }) => {
-  
-  console.log(conflict, 'ads');
+const LessonItem = ({ lesson, conflict, onMoveSlot, canMove, editMode, deleteSlot, onHandleLongPress }: { lesson: any, onMoveSlot: any, canMove: boolean, editMode: boolean, conflict: any, deleteSlot: any, onHandleLongPress: any }) => {
+
   const colorsLesson = ['#EAAFC8', '#654EA3'];
   const navigation = useNavigation();
   const pan = useRef(new Animated.ValueXY()).current;
@@ -159,7 +161,6 @@ const LessonItem = ({ lesson, conflict, onMoveSlot, canMove, editMode, deleteSlo
       const addDuration = (time: any) => {
 
         newTime.setMinutes(time.minute)
-        console.log('newTime', newTime)
         newTime.setHours(time.dayPart == "AM" ? time.hour : time.hour + 12)
         onHandleLongPress(false)
         onMoveSlot(lesson, moment(newTime).format('YYYY-MM-DDTHH:mm:ss'))

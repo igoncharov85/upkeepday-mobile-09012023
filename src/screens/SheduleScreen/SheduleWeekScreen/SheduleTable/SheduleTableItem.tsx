@@ -76,38 +76,5 @@ export const SheduleTableItem: FC<ISheduleTableItem> = memo(
         </View>
       </>
     )
-    return (
-      <CancellationModal data={item}>
-        <TouchableOpacity style={styles.containerItem} onPress={() => console.log(lessonOnThisHour)}>
-          {item?.ClassName ? (
-            <View
-              style={{
-                borderRadius: 4,
-                flex: 1,
-                position: 'relative',
-              }}>
-              <LinearGradient
-                colors={colorsLesson}
-                start={{ x: 0.5, y: 0 }}
-                end={{ x: 0.5, y: 1 }}
-                style={{
-                  zIndex: 10,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  position: 'absolute',
-                  borderRadius: 4,
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  height: `100%`,
-                }}>
-                <Text style={styles.textItem}>{item.ClassName}</Text>
-              </LinearGradient>
-            </View>
-          ) : null}
-        </TouchableOpacity>
-      </CancellationModal>
-    );
-
   },
 );

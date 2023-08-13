@@ -46,8 +46,6 @@ export const ExistingStudent: React.FC<IExistingStudentProps> = ({ students, onC
 
     useEffect(() => {
         dispatch(fetchUsersAction());
-        console.log(filteredStudents, 'filteredStudents')
-        console.log(students, 'students filteredStudents')
     }, []);
     return (
         <View style={{}}>

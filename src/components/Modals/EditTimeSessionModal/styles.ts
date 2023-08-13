@@ -24,5 +24,10 @@ export default StyleSheet.create({
 
 
     backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  textConflict: {
+    color: 'red',
+    fontSize: 24,
+    textAlign: 'center'
   }
 });

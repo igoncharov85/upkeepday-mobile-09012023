@@ -64,9 +64,7 @@ export const WeekTable: FC<ISheduleTable> = memo(
       onHandleData(newSlots)
 
     }
-    const getSlots = () => {
-      return slots
-    }
+
     const onMoveSlot = (slot: any, newStartTime: string) => {
       const newSlots = slots.filter(item => item.StartDateTime !== slot.StartDateTime);
       setSlots([...newSlots, { Duration: slot.Duration, StartDateTime: newStartTime, SlotUid: '' }]);
@@ -104,7 +102,7 @@ export const WeekTable: FC<ISheduleTable> = memo(
                       key={`${dayIndex}-${index}`}
                       timeIndex={index}
                       dayIndex={dayIndex}
-                      slots={getSlots}
+                      slots={slots}
                       startOfWeek={startOfWeek}
                       StartDateTime={addDayAndHoursToDate(date.toISOString(), dayIndex, index)}
                       conflict={!!conflictItem[0]}

@@ -46,7 +46,7 @@ interface IWeekTableItem {
   startOfWeek: Date;
   dryField: IGeneratedScheduleEntries;
   currentDay: Date;
-  slots: () => any
+  slots: IGeneratedScheduleEntries[]
 }
 
 const CELL_SIZE = {
@@ -68,7 +68,7 @@ export const WeekTableItem: FC<IWeekTableItem> =
 
   }) => {
     const [canMove, setCanMove] = useState(false);
-    const lessonOnThisTime: IGeneratedScheduleEntries[] = findLessonOnCurrentHour(slots(), timeIndex, currentDay)
+    const lessonOnThisTime: IGeneratedScheduleEntries[] = findLessonOnCurrentHour(slots, timeIndex, currentDay)
 
     const onHandleLongPress = (active: boolean) => {
       setCanMove(active);
@@ -135,23 +135,23 @@ const LessonItem = ({ lesson, onMoveSlot, canMove, editMode, deleteSlot, onHandl
         x: (CELL_SIZE.width / 2) * gridCellX,
         y: (CELL_SIZE.height / 2) * gridCellY,
       };
-      
+
       // Update the pan Animated value to the final position
       pan.setOffset(moveCoords);
       pan.setValue(moveCoords);
       let newTime = new Date(addDayAndHoursToDate(lesson.StartDateTime, gridCellX, gridCellY));
       const addDuration = (time: any) => {
-
         newTime.setMinutes(time.minute)
         newTime.setHours(time.dayPart == "AM" ? time.hour : time.hour + 12)
         onHandleLongPress(false)
         onMoveSlot(lesson, moment(newTime).format('YYYY-MM-DDTHH:mm:ss'))
       }
-
+      console.log(newTime, 'newTime')
       //@ts-ignore
       navigation.navigate(NavigationEnum.EDIT_TIME_CLASS_MODAL, {
         addDuration,
-        newTime
+        newTime,
+        lesson
       })
 
       pan.setOffset({

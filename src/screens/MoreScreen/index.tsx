@@ -1,5 +1,6 @@
 import React from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
+import {PaymentTrackingSetUp} from "../PaymentTrackingSetUp";
 import styles from './styles'
 import ArrowRight from '../../../assets/svg/schedule/ArrowRight'
 import { dispatch } from '../../store/store'

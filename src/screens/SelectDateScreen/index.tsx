@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import { FormikProps, withFormik } from "formik";
 import moment from "moment";
 import * as Yup from "yup";
-
+import {useEffect} from "react";
 import { ScreenHeader } from "../../components/ScreenHeader";
 import { InputForm } from "../AddClassScreen/components/InputForm";
 import { ListButtons } from "../AddClassScreen/components/ListButtons";
@@ -111,18 +111,18 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
         handleSubmit,
         setFieldValue,
         errors,
-        isValid,
+        isValid = false,
     }: FormikProps<typeof formInitialValues>) => {
-
         const [typeLocation, setTypeLocation] = useState(typeNumberRef.current);
+        console.log('typeLocation', typeLocation, values)
         const handleTypeLocation = (index: number) => {
             setTypeLocation(index)
             setFieldValue('typeLocation', index)
+            setFieldValue('endScheduleType', getTypeDate(index))
         }
 
         const onFixedPeriodTime = (number: number) => {
             setFieldValue('endScheduleType', getTypeDate(number == 0 ? 2 : 3))
-
         }
         return (
             <View style={[styles.container, { minHeight: windowHeight, justifyContent: 'flex-start' }]}>
@@ -159,7 +159,10 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
                 </View>
 
                 <View style={{ flex: 1, width: '100%', justifyContent: 'flex-end' }} >
-                    <CustomButton text={"Next Step"} onPress={handleSubmit} disabled={!isValid} />
+                    
+                    <CustomButton text={"Next Step"} onPress={handleSubmit} disabled={
+                      !isValid
+                    } />
                 </View>
 
             </View>
@@ -172,7 +175,7 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
             return formInitialValues
         },
         validationSchema: () => {
-
+            
             return Yup.object().shape({
                 startDate: Yup.string().required(''),
                 totalClasses: typeRef.current == EndScheduleType.FixedClassesNumber ? Yup.number().min(1, "Number of totalClasses should be greater than 0").required('') : Yup.number(),
@@ -183,7 +186,7 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
                     return new Date(value) > new Date(startDate);
                 }).required('55555')
                     : Yup.string(),
-                numberOf: typeRef.current == EndScheduleType.FixedWeekNumber || typeRef.current == EndScheduleType.FixedMonthNumber ? Yup.number().min(1, "NumberOf ").required('') : Yup.number(),
+                numberOf: typeRef.current == EndScheduleType.FixedWeekNumber || typeRef.current == EndScheduleType.FixedMonthNumber ? Yup.number().min(1, "NumberOf").required('') : Yup.number(),
             })
         },
         handleSubmit: (values,) => {

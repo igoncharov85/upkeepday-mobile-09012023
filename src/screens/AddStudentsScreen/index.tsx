@@ -32,7 +32,6 @@ export const AddStudentsScreen: React.FC<IAddStudentsScreen> = () => {
     const [typeAction, setTypeAction] = useState(0);
     const navigation = useNavigation();
     const { createCurrentClassRequest, localStudentData } = useAppSelector(state => state.schedule);
-    console.log('localStudentData', localStudentData)
     const [selectedStudents, setSelectedStudents] = useState<Array<IExistingStudent | any>>(createCurrentClassRequest.Students || []);
     const [existingStudent, setExistingStudent] = useState<Array<any>>(localStudentData);
     const [newStudents, setNewStudents] = useState<Array<IExistingStudent>>([]);
@@ -84,14 +83,13 @@ export const AddStudentsScreen: React.FC<IAddStudentsScreen> = () => {
         setSelectedStudents([...selectedStudents, students])
     }
     useEffect(() => {
-        newStudents && setExistingStudent([...students, ...newStudents, ...localStudentData]);
-    }, [newStudents]);
+       setExistingStudent([...students || [], ...newStudents || [], ...localStudentData || []]);
+    }, [newStudents, students]);
 
     useEffect(() => {
         dispatch(updateCurrentClassRequestAction({
             Students: removeEmptyObjects(selectedStudents) || []
         }));
-        // existingStudent && dispatch(setLocalStudentData(existingStudent))
     }, [selectedStudents, newStudents, existingStudent]);
     // useEffect(() => {
     //     console.log('mount')
@@ -116,14 +114,13 @@ export const AddStudentsScreen: React.FC<IAddStudentsScreen> = () => {
         <View style={{ flex: 1, height: '100%' }}>
             <View style={{ padding: 20, paddingBottom: 0 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', zIndex: 1, maxWidth: '50%' }}>
-                    <ScreenHeader text={'Add Students'} onBackPress={goBack} withBackButton={true} />
 
 
                 </View>
                 <TouchableOpacity style={{ position: 'absolute', top: 24, right: 20, zIndex: 1 }} onPress={goNextStep}>
                     <Text style={{ color: '#171930', fontSize: 14, lineHeight: 19, opacity: 0.4 }}>Add Later</Text>
                 </TouchableOpacity>
-
+            
                 <View style={{ marginTop: -30 }}>
                     <ListButtons buttons={['Existing student', 'New Student']} onPress={handleTypeChange} index={typeAction} />
                 </View>
@@ -131,11 +128,11 @@ export const AddStudentsScreen: React.FC<IAddStudentsScreen> = () => {
             <View style={{ flex: 1 }}>
                 <View style={{ flex: 1 }}>
                     {typeAction === TypeAction.ExistingStudent ?
-                        <ExistingStudent students={existingStudent} onChancheUsers={handleChancheUsers} selectedUsers={removeEmptyObjects(selectedStudents)} /> :
+                        <ExistingStudent students={existingStudent}  onChancheUsers={handleChancheUsers} selectedUsers={removeEmptyObjects(selectedStudents)} /> :
                         <NewStudent handleTypeChange={setThisScreen} onAddNewStudent={handleAddNewStudent} />
                     }
                 </View>
-
+            
             </View >
         </View>
     )

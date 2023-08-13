@@ -129,20 +129,20 @@ const LessonItem = ({ lesson, onMoveSlot, canMove, editMode, deleteSlot, onHandl
       { useNativeDriver: false }
     ),
     onPanResponderRelease: (_, gestureState) => {
-      const
-        gridCellX = Math.floor((gestureState.dx + CELL_SIZE.width / 2) / CELL_SIZE.width),
-        gridCellY = Math.floor((gestureState.dy + CELL_SIZE.height / 2) / CELL_SIZE.height),
-        moveCoords = {
-          x: (CELL_SIZE.width / 2) * gridCellX,
-          y: (CELL_SIZE.height / 2) * gridCellY,
-        };
+      const gridCellX = Math.floor((gestureState.dx + CELL_SIZE.width / 2) / CELL_SIZE.width);
+      const gridCellY = Math.floor((gestureState.dy + CELL_SIZE.height / 2) / CELL_SIZE.height);
+      const moveCoords = {
+        x: (CELL_SIZE.width / 2) * gridCellX,
+        y: (CELL_SIZE.height / 2) * gridCellY,
+      };
+      
+      // Update the pan Animated value to the final position
       pan.setOffset(moveCoords);
       pan.setValue(moveCoords);
       let newTime = new Date(addDayAndHoursToDate(lesson.StartDateTime, gridCellX, gridCellY));
       const addDuration = (time: any) => {
 
         newTime.setMinutes(time.minute)
-        console.log('newTime', newTime)
         newTime.setHours(time.dayPart == "AM" ? time.hour : time.hour + 12)
         onHandleLongPress(false)
         onMoveSlot(lesson, moment(newTime).format('YYYY-MM-DDTHH:mm:ss'))

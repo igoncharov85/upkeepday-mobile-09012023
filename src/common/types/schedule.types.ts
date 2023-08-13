@@ -25,7 +25,8 @@ export interface ICreateClassRequest {
     Students: Array<IStudents>,
     Slots: Array<IWeekTimeSlot>,
     Sessions: Array<IGeneratedScheduleEntries>
-
+    PaymentAmount: number,
+    PaymentType: string,
 }
 
 export interface IClass {

@@ -15,7 +15,8 @@ const EditTimeSessionModal = ({
 }: IEditTimeSessionModalModal) => {
   const navigation = useNavigation()
   const route = useRoute()
-  const { addDuration, newTime } = route.params as any
+  const { addDuration, newTime, conflict } = route.params as any
+  console.log('conflict', conflict)
   const goBack = () => navigation.goBack();
   const [time, setTime] = useState({});
 

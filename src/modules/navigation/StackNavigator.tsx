@@ -2,7 +2,10 @@
 import React, { memo, useEffect, useState } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationEnum } from '../../common/constants/navigation';
+import {AddBusinessAccountScreen} from "../../screens/AddBusinessAccountScreen";
+import {AddNewTeacherScreen} from "../../screens/AddNewTeacher";
 import { LoginScreen } from '../../screens/LoginScreen';
+import {PaymentTrackingSetUp} from "../../screens/PaymentTrackingSetUp";
 import { RegistrationScreen } from '../../screens/RegistrationScreen';
 import { FinalRegistrationScreen } from '../../screens/RegistrationScreen/FinalRegistrtionScreen';
 import { SendEmailScreen } from '../../screens/ForgotPassScreen/SendEmailScreen';
@@ -55,6 +58,14 @@ export const StackNavigator = memo(() => {
           component={RegistrationScreen}
         />
         <Stack.Screen
+          name={NavigationEnum.ADD_NEW_TEACHER_SCREEN}
+          component={AddNewTeacherScreen}
+        />
+        <Stack.Screen
+          name={NavigationEnum.ADD_BUSINESS_ACCOUNT_SCREEN}
+          component={AddBusinessAccountScreen}
+        />
+        <Stack.Screen
           name={NavigationEnum.FORGOT_PASSWORD_SEND_EMAIL}
           //@ts-ignore
           component={SendEmailScreen}
@@ -63,6 +74,11 @@ export const StackNavigator = memo(() => {
           name={NavigationEnum.FORGOT_PASSWORD_SEND_PASSWORD}
           //@ts-ignore
           component={SetPasswordScreen}
+        />
+        <Stack.Screen
+          name={NavigationEnum.PAYMENT_TRACKING_SET_UP}
+          //@ts-ignore
+          component={PaymentTrackingSetUp}
         />
         <Stack.Screen
           name={NavigationEnum.REGISTRATION_FINAL}

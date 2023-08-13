@@ -111,7 +111,7 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
             {lessonOnThisTime.map((lesson, index) => {
 
               return (
-                <LessonItem lesson={lesson} onMoveSlot={onMoveSlot} canMove={canMove} editMode={editMode} deleteSlot={deleteSlot} onHandleLongPress={onHandleLongPress} />)
+                <LessonItem conflict={conflict} lesson={lesson} onMoveSlot={onMoveSlot} canMove={canMove} editMode={editMode} deleteSlot={deleteSlot} onHandleLongPress={onHandleLongPress} />)
             })}
             {dryField &&
               <TouchableOpacity onPress={() => console.log(dryField)} style={{
@@ -133,7 +133,9 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
 
 
 
-const LessonItem = ({ lesson, onMoveSlot, canMove, editMode, deleteSlot, onHandleLongPress }: { lesson: any, onMoveSlot: any, canMove: boolean, editMode: boolean, deleteSlot: any, onHandleLongPress: any }) => {
+const LessonItem = ({ lesson, conflict, onMoveSlot, canMove, editMode, deleteSlot, onHandleLongPress }: { lesson: any, onMoveSlot: any, canMove: boolean, editMode: boolean,conflict: any, deleteSlot: any, onHandleLongPress: any }) => {
+  
+  console.log(conflict, 'ads');
   const colorsLesson = ['#EAAFC8', '#654EA3'];
   const navigation = useNavigation();
   const pan = useRef(new Animated.ValueXY()).current;
@@ -166,7 +168,8 @@ const LessonItem = ({ lesson, onMoveSlot, canMove, editMode, deleteSlot, onHandl
       //@ts-ignore
       navigation.navigate(NavigationEnum.EDIT_TIME_CLASS_MODAL, {
         addDuration,
-        newTime
+        newTime,
+        conflict,
       })
 
       pan.setOffset({

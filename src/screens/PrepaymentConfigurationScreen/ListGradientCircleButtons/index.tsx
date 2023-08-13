@@ -14,8 +14,10 @@ interface IListButtons {
     onPress?: (agreement: number) => void,
     label?: string,
     twoLines?: boolean,
+    noLineDescription?: boolean
+     noMarginTop?: boolean
 }
-export const ListGradientCircleButtons: React.FC<IListButtons> = ({ buttons, onPress, label, twoLines }) => {
+export const ListGradientCircleButtons: React.FC<IListButtons> = ({ buttons, onPress, label, twoLines, noLineDescription,noMarginTop}) => {
     const [activeIndex, setActiveIndex] = useState(0);
 
     const handlePress = (index: number) => {
@@ -24,7 +26,9 @@ export const ListGradientCircleButtons: React.FC<IListButtons> = ({ buttons, onP
     };
 
     return (
-        <View style={{ marginTop: 20, marginHorizontal: 20 }}>
+        <View style={ [{ marginHorizontal: 20 }, noMarginTop ? {} : {
+            marginTop: 20
+        }]}>
             <Text style={{
                 color: '#171930',
                 fontSize: 14,
@@ -32,14 +36,14 @@ export const ListGradientCircleButtons: React.FC<IListButtons> = ({ buttons, onP
             }}>{label && label}</Text>
             <View style={{ flexDirection: 'column' }}>
                 {buttons.map((item, index) => (
-                    <CircleButton key={index} index={index} activeIndex={activeIndex} buttonTitle={item} handlePress={handlePress} twoLines={twoLines && twoLines} />
+                    <CircleButton key={index} noLineDescription={noLineDescription} index={index} activeIndex={activeIndex} buttonTitle={item} handlePress={handlePress} twoLines={twoLines && twoLines} />
                 ))}
             </View>
         </View>
     );
 }
 
-const CircleButton = ({ index, activeIndex, buttonTitle, handlePress, twoLines }: { index: number, activeIndex: number, buttonTitle: IButton, handlePress: (number: number) => void, twoLines?: boolean }) => {
+export const CircleButton = ({ index, activeIndex, buttonTitle, handlePress, twoLines, noLineDescription }: { index: number, activeIndex: number, buttonTitle: IButton, handlePress: (number: number) => void, twoLines?: boolean, noLineDescription?: boolean }) => {
     const activeItem = activeIndex === index;
     return (
         <TouchableOpacity
@@ -71,11 +75,12 @@ const CircleButton = ({ index, activeIndex, buttonTitle, handlePress, twoLines }
                     start={{ x: 0, y: 0 }}
                     end={{ x: 0, y: 1 }} style={[{ borderWidth: 6, borderColor: '#F2F2F2', borderRadius: 100, height: 26, width: 26, backgroundColor: '#F2F2F2', }]} />
             </LinearGradient>
-            <View style={{ flexDirection: 'row', alignItems: 'center', paddingRight: 20, }}>
+            <View style={noLineDescription ? {} : { flexDirection: 'row', alignItems: 'center', paddingRight: 20, }}>
                 <Text style={{ color: '#171930', fontWeight: '600', fontSize: 20 }}>
                     {buttonTitle.title}
                 </Text>
-                <Text numberOfLines={2} style={{ color: '#171930', fontSize: 14, lineHeight: 19, opacity: 0.4, flexWrap: 'wrap', maxWidth: '85%', marginLeft: 10, marginTop: twoLines ? 0 : 20 }}>
+                <Text numberOfLines={2} style={[{ color: '#171930', fontSize: 14,  opacity: 0.4, flexWrap: 'wrap',
+                    },noLineDescription ? {} : {lineHeight: 19, maxWidth: '85%', marginLeft: 10, marginTop: twoLines ? 0 : 20}]}>
                     {buttonTitle.subtitle}
                 </Text>
             </View>

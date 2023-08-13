@@ -29,7 +29,11 @@ export const DateRecurrenceScreen: React.FC<IDateRecurrenceScreen> = () => {
     const today = new Date();
     const weekDates = getWeekDates(today);
     //@ts-ignore
-    const { endScheduleType, finishDate, numberOf } = route?.params;
+    let { endScheduleType, finishDate, numberOf } = route?.params || {
+        endScheduleType: EndScheduleType.FixedClassesNumber,
+        finishDate: "",
+        numberOf: 0
+    };
     const { createCurrentClassRequest } = useAppSelector(state => state.schedule);
 
 
@@ -49,6 +53,9 @@ export const DateRecurrenceScreen: React.FC<IDateRecurrenceScreen> = () => {
                 }
             })
         );
+        console.log(weekTimeSlots);
+
+
         dispatch(generateScheduleAction(
             {
                 ScheduleType: createCurrentClassRequest.Class!.EndScheduleType as string,
@@ -57,8 +64,8 @@ export const DateRecurrenceScreen: React.FC<IDateRecurrenceScreen> = () => {
                 EndDate: endDate as string || '',
                 Slots: weekTimeSlots
             }
-
         ))
+
 
 
 

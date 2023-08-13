@@ -54,7 +54,7 @@ export type IClassesUpdateSession = {
 }
 export enum EClassesStatus {
     scheduled = 'scheduled',
-    archived = 'archived'
+    archived = 'archived',
 }
 export enum EClassesChange {
     current = 'current',

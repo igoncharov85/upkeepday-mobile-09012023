@@ -62,13 +62,13 @@ export function* fetchSessionClassesByIdWorker({
 }: IAction<TClassesId>): SagaIterator {
     try {
         yield put(setClassesLoading(true));
-        const data: AxiosResponse<Array<ISession>, any> = yield call(
+        const { data }: AxiosResponse<Array<ISession>, any> = yield call(
             ClassesService.fetchSessionClassesById,
             payload,
         );
 
-        if (data?.data) {
-            yield put(setSessinAction(convertSessionsToLocalTime(data?.data)))
+        if (data) {
+            yield put(setSessinAction(convertSessionsToLocalTime(data)))
 
         }
 
@@ -91,9 +91,6 @@ export function* fetchGeneratedClassesWorker({
         );
         if (data) {
             yield put(setGenerateSessionAction(data.GeneratedSessions))
-            console.log(convertSessionsToLocalTime(data.CurrentSessions), "convertSessionsToLocalTime(data.CurrentSessions)\n\n");
-            console.log(data.CurrentSessions, "data.CurrentSessions\n\n------------------\n\n");
-
             yield put(setCurrentSessionAction(convertSessionsToLocalTime(data.CurrentSessions)))
 
         }

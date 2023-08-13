@@ -12,6 +12,7 @@ import MinPlus from '../../../../../assets/svg/schedule/MinPlus';
 import { deleteStudentAction, deleteUserAction, fetchStudentsByIdAction, fetchUsersByIdAction } from '../../../../store/user/actions';
 import { useAppSelector } from '../../../../store/hooks';
 import { EditStudentsNavigation } from './StudentsNavigation';
+import { ScreenLoading } from '../../../../components/UI/ScreenLoading';
 
 interface IAddStudentsScreen { }
 
@@ -23,7 +24,6 @@ function removeEmptyObjects(array: any[]) {
 const PreviewStudentScreen: React.FC<IAddStudentsScreen> = () => {
     const route = useRoute();
     const { item }: any = route.params;
-    console.log(item, 'item');
 
     const isFocused = useIsFocused();
     const { studentList, loading }: any = useAppSelector((state: any) => state.user);
@@ -35,19 +35,28 @@ const PreviewStudentScreen: React.FC<IAddStudentsScreen> = () => {
     const goNextStep = () => navigation.navigate(NavigationEnum.STUDENTS_TAB);
 
     function onDeleteStudent(ClassId: number, Name: string) {
-        console.log(item, '((((((((((((((((((((((((((((((((');
-        console.log(Name);
-
         //@ts-ignore
         navigation.navigate(NavigationEnum.RESULT_CLASS_MODAL, {
             item: {
                 StudentName: `${item.FirstName} ${item.LastName}`,
                 ClassName: Name
             },
-            actionBtn: () => { dispatch(deleteUserAction({ StudentId: item.StudentId, Classes: [ClassId] })) },
+            actionBtn: () => {
+                dispatch(deleteUserAction({ StudentId: item.StudentId, Classes: [ClassId] }))
+                navigation.goBack()
+            },
             nameAction: 'Confirm',
         })
 
+    }
+    const filterStudents = (studentList: any[], searchText: string, status: string) => {
+        return studentList.filter((user: any) => {
+            const fullName = user.Name.toLowerCase();
+            const searchQuery = searchText?.toLowerCase();
+            return user.FirstName?.toLowerCase().startsWith(searchQuery) ||
+                user.LastName?.toLowerCase().startsWith(searchQuery) ||
+                fullName.startsWith(searchQuery);
+        });
     }
     const onHandleNavigation = (type: any) => {
         setStatus(type);
@@ -56,12 +65,11 @@ const PreviewStudentScreen: React.FC<IAddStudentsScreen> = () => {
     const goBack = () => navigation.goBack()
 
     useEffect(() => {
-        console.log(isFocused);
-
         dispatch(fetchStudentsByIdAction({ StudentId: item.StudentId }));
     }, [isFocused]);
-
-    return loading ? <Text>loading...</Text> : (
+    const filteredStudents = filterStudents(studentList, searchText, status);
+    console.log(studentList, 'studentList')
+    return loading ? <ScreenLoading /> : (
         <View style={{ flex: 1, height: '100%' }}>
             <View style={{ padding: 20, paddingBottom: 0 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', zIndex: 1, maxWidth: '50%' }}>
@@ -87,16 +95,14 @@ const PreviewStudentScreen: React.FC<IAddStudentsScreen> = () => {
                         <DecorationLine />
                         <ScrollView style={{ overflow: 'scroll', height: '72%' }} showsVerticalScrollIndicator={false}>
                             <View style={styles.container}>
-
-                                <View >
-                                    {studentList?.filter((user: any) => user.Name?.toLowerCase().includes(searchText?.toLowerCase()) && status == user?.Status?.toLowerCase()).map((user: any) => {
+                                <View>
+                                    {filteredStudents.map((user: any) => {
                                         return (
-                                            //@ts-ignore
                                             <Student item={user} onDeleteClass={onDeleteStudent} key={user.ClassId} />
                                         )
                                     })}
                                 </View>
-                            </View >
+                            </View>
                         </ScrollView>
                         <View style={{ padding: 20, height: 92, flex: 1, justifyContent: 'flex-end' }}>
                             <CustomButton text={'Ok'} onPress={goNextStep} />

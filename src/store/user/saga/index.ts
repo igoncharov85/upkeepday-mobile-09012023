@@ -1,13 +1,14 @@
 import { AxiosResponse } from "axios";
 import { SagaIterator } from "redux-saga";
 import { call, put, takeEvery } from "redux-saga/effects";
-import { addStudentAction, setCheckinStudentAction, setCurrentStudentAction, setStudentAction, setStudentListAction, setUsersAction } from "..";
+import { addStudentAction, setCheckinStudentAction, setCurrentStudentAction, setStudentAction, setStudentListAction, setStudentLoading, setUsersAction } from "..";
 import { IAction } from "../../../common/types/common.types";
 import { ICheckinUser, IUserCreateRequest, IUserStudent, ICheckinsId, IUserCheckinsRequest, IDeleteUserRequest, IUpdateStudent, IUserStudentResponse, IStudentRequest, IStudentResponse, IStudentsRequest, IStudentsResponse, IStudentByIdResponse } from "../../../common/types/user";
 import { UserService } from "../../../services/axios/user";
 import { ErrorFilterService } from "../../../services/error-filter/error-filter.service";
 import { UserContactsEnum } from "../constants";
 import { IStudent } from "../../../common/types/classes.types";
+import moment from "moment";
 
 export function* fetchUserWorker(payload: IAction<null>): SagaIterator {
     try {
@@ -25,17 +26,22 @@ export function* fetchUserWorker(payload: IAction<null>): SagaIterator {
 }
 export function* fetchUserByIdWorker(payload: IAction<ICheckinsId>): SagaIterator {
     try {
+        yield put(setStudentLoading(true))
+        yield put(setCurrentStudentAction([]))
         const { data }: AxiosResponse<Array<IUserStudentResponse>, any> = yield call(
             UserService.fetchUsersById,
             payload.payload
         );
         if (data) {
+            console.log('new current users data:', data, '&&&&&&&&&&&&&&&&&&&')
             yield put(setCurrentStudentAction(data))
         }
     } catch (error) {
         console.log('error', error);
 
         ErrorFilterService.validateError(error)
+    } finally {
+        yield put(setStudentLoading(false))
     }
 }
 export function* fetchCheckinUserWorker(payload: IAction<ICheckinsId>): SagaIterator {
@@ -119,15 +125,24 @@ export function* deleteStudentWorker(payload: IAction<IStudentRequest>): SagaIte
 // get student 
 export function* fetchStudentsWorker(payload: IAction<IStudentsRequest>): SagaIterator {
     try {
+        yield put(setStudentLoading(true))
+        const startDate = Date.now();
         const { data }: AxiosResponse<Array<IStudentResponse>, any> = yield call(
             UserService.fetchStudentsByStatus,
             payload.payload
         );
         if (data) {
+            const endDate = Date.now();
+            const timeDifference = endDate - startDate;
+            // console.log('\n start request time: ', moment(startDate).format('HH:mm:ss.SSS'), '\n get response time: ', moment(endDate).format('HH:mm:ss.SSS'))
+            // console.log(timeDifference, 'timeDifference ssss');
+
             yield put(setUsersAction(data))
         }
     } catch (error) {
         ErrorFilterService.validateError(error)
+    } finally {
+        yield put(setStudentLoading(false))
     }
 }
 export function* fetchStudentsByIdWorker(payload: IAction<IStudentRequest>): SagaIterator {
@@ -157,6 +172,17 @@ export function* updateStudentWorker(payload: IAction<IStudentRequest & IUserCre
         ErrorFilterService.validateError(error)
     }
 }
+export function* updateStudentStatusWorker(payload: IAction<IStudentRequest & IStudentsRequest>): SagaIterator {
+    try {
+        yield call(
+            UserService.updateStudentStatus,
+            payload.payload
+        );
+
+    } catch (error) {
+        ErrorFilterService.validateError(error)
+    }
+}
 
 export function* userWatcher() {
     yield takeEvery(UserContactsEnum.FETCH_ALL_USERS, fetchUserWorker)
@@ -170,4 +196,5 @@ export function* userWatcher() {
     yield takeEvery(UserContactsEnum.FETCH_STUDENTS_BY_STATUS, fetchStudentsWorker)
     yield takeEvery(UserContactsEnum.FETCH_STUDENTS_BY_ID, fetchStudentsByIdWorker)
     yield takeEvery(UserContactsEnum.UPDATE_STUDENTS, updateStudentWorker)
+    yield takeEvery(UserContactsEnum.UPDATE_STUDENTS_STATUS, updateStudentStatusWorker)
 }

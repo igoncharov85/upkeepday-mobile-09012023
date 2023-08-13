@@ -7,11 +7,14 @@ import styles from './styles';
 interface IInputForm extends ICustomInputProps {
     labelText?: string;
     style?: {};
+    noMarginTop?: boolean
 }
 
 export const InputForm: React.FC<IInputForm> = ({ labelText, style, ...props }) => {
     return (
-        <View style={styles.container} >
+        <View style={{
+            marginTop: props.noMarginTop ? 0 : 20
+        }} >
             <Text style={styles.label}>{labelText && labelText}</Text>
             <CustomInput
                 style={style && style}

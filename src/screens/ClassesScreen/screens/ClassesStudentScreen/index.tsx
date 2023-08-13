@@ -11,6 +11,7 @@ import CheckIcon from '../../../../../assets/svg/classes/CheckIcon';
 import MinPlus from '../../../../../assets/svg/schedule/MinPlus';
 import { deleteUserAction, fetchUsersByIdAction } from '../../../../store/user/actions';
 import { useAppSelector } from '../../../../store/hooks';
+import { ScreenLoading } from '../../../../components/UI/ScreenLoading';
 
 interface IAddStudentsScreen { }
 
@@ -31,6 +32,7 @@ const ClassesStudentScreen: React.FC<IAddStudentsScreen> = () => {
     const goNextStep = () => navigation.navigate(NavigationEnum.CLASSES_TAB);
 
     const onDeleteStudent = (studentId: number) => {
+
         dispatch(deleteUserAction({ StudentId: studentId, Classes: [item.ClassId] }));
         setStudentsList(studentsList.filter((student: any) => student.StudentId !== studentId));
     }
@@ -39,11 +41,21 @@ const ClassesStudentScreen: React.FC<IAddStudentsScreen> = () => {
         //@ts-ignore
         navigation.navigate(NavigationEnum.CHANGE_STUDENT_SCREEN, { item, currentStudent });
     }
+    const filteredStudents = studentsList?.filter((user: any) => {
+        const fullName = `${user.FirstName} ${user.LastName}`.toLowerCase();
+        const searchQuery = searchText?.toLowerCase();
+        return user.FirstName.toLowerCase().startsWith(searchQuery) ||
+            user.LastName.toLowerCase().startsWith(searchQuery) ||
+            fullName.startsWith(searchQuery);
+    });
     const goBack = () => navigation.goBack()
     useEffect(() => {
-        dispatch(fetchUsersByIdAction(item.ClassId));
+        isFocused && dispatch(fetchUsersByIdAction(item.ClassId));
     }, [isFocused]);
-    return loading ? <Text>loading...</Text> : (
+    useEffect(() => {
+        setStudentsList(currentStudent)
+    }, [currentStudent])
+    return (
         <View style={{ flex: 1, height: '100%' }}>
             <View style={{ padding: 20, paddingBottom: 0 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', zIndex: 1, maxWidth: '50%' }}>
@@ -66,19 +78,19 @@ const ClassesStudentScreen: React.FC<IAddStudentsScreen> = () => {
                             <TextInput style={styles.input} value={searchText} onChangeText={setSearchText} />
                         </View>
                         <DecorationLine />
-                        <ScrollView style={{ overflow: 'scroll', height: '80%' }} showsVerticalScrollIndicator={false}>
-                            <View style={styles.container}>
-
-                                <View >
-                                    {studentsList?.filter((user: any) => `${user.FirstName} ${user.LastName}`.toLowerCase().includes(searchText?.toLowerCase())).map((user: any) => {
-                                        return (
-                                            //@ts-ignore
-                                            <Student name={`${user.FirstName} ${user.LastName}`} onClick={() => onDeleteStudent(user.StudentId)} key={user.StudentId} />
-                                        )
-                                    })}
+                        {loading ? <ScreenLoading /> :
+                            <ScrollView style={{ overflow: 'scroll', height: '80%' }} showsVerticalScrollIndicator={false}>
+                                <View style={styles.container}>
+                                    <View>
+                                        {/* Используем filteredStudents вместо studentsList */}
+                                        {filteredStudents.map((user: any) => {
+                                            return (
+                                                <Student name={`${user.FirstName} ${user.LastName}`} onClick={() => onDeleteStudent(user.StudentId)} key={user.StudentId} />
+                                            );
+                                        })}
+                                    </View>
                                 </View>
-                            </View >
-                        </ScrollView>
+                            </ScrollView>}
                         <View style={{ padding: 20, height: 92, flex: 1, justifyContent: 'flex-end' }}>
                             <CustomButton text={'Finish'} onPress={goNextStep} />
                         </View>

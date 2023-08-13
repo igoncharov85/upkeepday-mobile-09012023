@@ -18,3 +18,4 @@ export const deleteStudentAction = createAction<IStudentRequest>(UserContactsEnu
 export const fetchStudentsAction = createAction<IStudentsRequest>(UserContactsEnum.FETCH_STUDENTS_BY_STATUS)
 export const fetchStudentsByIdAction = createAction<IStudentRequest>(UserContactsEnum.FETCH_STUDENTS_BY_ID)
 export const updateStudentAction = createAction<(IStudentRequest & IStudent)>(UserContactsEnum.UPDATE_STUDENTS)
+export const updateStudentStatus = createAction<(IStudentRequest & IStudentsRequest)>(UserContactsEnum.UPDATE_STUDENTS_STATUS)

@@ -12,6 +12,7 @@ import { dispatch } from '../../../../../store/store';
 import { fetchScheduleByPeriodAction } from '../../../../../store/shedule/actions';
 import moment from 'moment';
 import PreviewModal from '../../../components/PreviewModal';
+import { ScreenLoading } from '../../../../../components/UI/ScreenLoading';
 
 
 
@@ -25,7 +26,7 @@ function findScheduleEntries(
   const filteredEntries = entries?.filter((entry) => {
     const startDate = new Date(entry.StartDateTime);
     return (
-      startDate.getDate() === day &&
+      startDate.getDate() - 1 === day &&
       startDate.getMonth() + 1 === month &&
       startDate.getHours() === hour
     );
@@ -55,8 +56,8 @@ function removeElementsFromArray(arr1: any[], arr2: any[]) {
 export const startOfHour = 8;
 export const WeekTable: FC<ISheduleTable> = memo(
   ({ startOfWeek, endOfWeek, onHandleData, conflict, dryFields }) => {
-    const { GeneratedScheduleEntries, CurrentScheduledEntries, loading } = useAppSelector(state => state.schedule);
-    const { currentSession } = useAppSelector(state => state.classes);
+    const { GeneratedScheduleEntries, CurrentScheduledEntries } = useAppSelector(state => state.schedule);
+    const { currentSession, loading } = useAppSelector(state => state.classes);
     const [editMode, setEditMode] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
     const [isVisibleEdit, setIsVisibleEdit] = useState(false);
@@ -95,9 +96,9 @@ export const WeekTable: FC<ISheduleTable> = memo(
     useEffect(() => {
       onHandleData(slots)
     }, [slots])
-    useEffect(() => {
-      dispatch(fetchScheduleByPeriodAction({ startDate: moment(startOfWeek).add(-1, 'days').toISOString(), endDate: endOfWeek.toISOString() }));
-    }, [startOfWeek]);
+    // dispatch(fetchScheduleByPeriodAction({ startDate: moment(startOfWeek).add(-1, 'days').toISOString(), endDate: endOfWeek.toISOString() }));
+    // useEffect(() => {
+    // }, []);
     const timeData = generateTimeData('00:00', '23:00');
     const weekStructure = createWeekStructure(
       startOfWeek,
@@ -105,58 +106,58 @@ export const WeekTable: FC<ISheduleTable> = memo(
       timeData,
     );
     const date = (new Date(startOfWeek));
-    return GeneratedScheduleEntries.length > 0 && !loading ? (<View style={styles.container}>
-      <ScrollView contentOffset={{ x: 0, y: 64 * 8 }}>
-        <Row style={{ justifyContent: 'space-between' }}>
-          <Column style={{ width: 56 }}>
-            {timeData.map((item, index) => (
-              <TimeLineItem key={index} time={item} />
-            ))}
-          </Column>
-          <Row style={{ flex: 1, paddingRight: 20, paddingBottom: 20 }}>
-            {weekStructure?.map((dayEvents, dayIndex) => {
+    return (
+      <View style={styles.container}>
+        <ScrollView contentOffset={{ x: 0, y: 64 * 8 }}>
+          <Row style={{ justifyContent: 'space-between' }}>
+            <Column style={{ width: 56 }}>
+              {timeData.map((item, index) => (
+                <TimeLineItem key={index} time={item} />
+              ))}
+            </Column>
+            <Row style={{ flex: 1, paddingRight: 20, paddingBottom: 20 }}>
+              {loading ? <ScreenLoading /> : weekStructure?.map((dayEvents, dayIndex) => {
 
-              return (
-                <Column key={dayIndex}>
-                  {dayEvents?.map((_, index) => {
-                    const currentDate = new Date(addDayAndHoursToDate(date.toISOString(), dayIndex, 0))
+                return (
+                  <Column key={dayIndex}>
+                    {dayEvents?.map((_, index) => {
+                      const currentDate = new Date(addDayAndHoursToDate(date.toISOString(), dayIndex, 0))
 
-                    const activeItem = findScheduleEntries(currentSession as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
-                    const conflictItem = findScheduleEntries(conflict as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
-                    const dryField = findScheduleEntries(dryFields as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
+                      const activeItem = findScheduleEntries(currentSession as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
+                      const conflictItem = findScheduleEntries(conflict as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
 
-                    return <WeekTableItem
-                      key={`${dayIndex}-${index}`}
-                      timeIndex={index}
-                      dayIndex={dayIndex}
-                      startOfWeek={startOfWeek}
-                      StartDateTime={addDayAndHoursToDate(date.toISOString(), dayIndex, index)}
-                      activeItem={activeItem[0] && activeItem[0]}
-                      conflict={!!conflictItem[0]}
-                      onLongPress={onChangeEditMode}
-                      editMode={editMode}
-                      onDeleteSlot={onDeleteSlot}
-                      onMoveSlot={onMoveSlot}
-                      dryField={dryField && dryField[0]}
-                    />;
-                  })}
+                      const dryField = findScheduleEntries(dryFields as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
 
-                </Column>
-              );
-            })}
+                      return <WeekTableItem
+                        slots={slots}
+                        currentDate={currentDate}
+                        key={`${dayIndex}-${index}`}
+                        timeIndex={index}
+                        dayIndex={dayIndex}
+                        startOfWeek={startOfWeek}
+                        StartDateTime={addDayAndHoursToDate(date.toISOString(), dayIndex, index)}
+                        activeItem={activeItem[0] && activeItem[0]}
+                        conflict={!!conflictItem[0]}
+                        onLongPress={onChangeEditMode}
+                        editMode={editMode}
+                        onDeleteSlot={onDeleteSlot}
+                        onMoveSlot={onMoveSlot}
+                        dryField={dryField && dryField[0]}
+                      />;
+                    })}
+
+                  </Column>
+                );
+              })}
+            </Row>
           </Row>
-        </Row>
-      </ScrollView>
+        </ScrollView>
 
-      <PreviewModal editMode isVisible={isVisibleEdit} closeModal={onHandleModalEdit} currentSessionId={currentSessionId} newTime={currentSlotTime} />
-      <PreviewModal isVisible={isVisible} closeModal={onHandleModal} currentSessionId={currentSessionId} />
-    </View>
+        <PreviewModal editMode isVisible={isVisibleEdit} closeModal={onHandleModalEdit} currentSessionId={currentSessionId} newTime={currentSlotTime} />
+        <PreviewModal isVisible={isVisible} closeModal={onHandleModal} currentSessionId={currentSessionId} />
+      </View>
 
-    ) : <ActivityIndicator
-      style={StyleSheet.absoluteFill}
-      color={'#9A80BA'}
-      size="large"
-    />;
+    )
   },
 );
 
@@ -170,6 +171,11 @@ const Row = ({
   return <View style={[styles.row, style && style]}>{children}</View>;
 };
 
+
+
+
+
+
 const Column = ({ children, style }: { children: React.ReactNode; style?: StyleProp<ViewStyle>; }) => {
   return <View style={[styles.column, style && style]}>{children}</View>;
 };
@@ -181,3 +187,5 @@ const TimeLineItem = ({ time }: { time: string }) => {
     </View>
   );
 };
+
+

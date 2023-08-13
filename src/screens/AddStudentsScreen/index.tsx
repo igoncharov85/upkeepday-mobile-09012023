@@ -10,7 +10,7 @@ import { NewStudent } from './NewStudent';
 import { IExistingStudent } from '../../common/types/schedule.types';
 import { useAppSelector } from '../../store/hooks';
 import { IUserStudent } from '../../common/types/user';
-import { updateCurrentClassRequestAction } from '../../store/shedule';
+import { setLocalStudentData, updateCurrentClassRequestAction } from '../../store/shedule';
 import { dispatch } from '../../store/store';
 
 interface IAddStudentsScreen {
@@ -31,9 +31,9 @@ export const AddStudentsScreen: React.FC<IAddStudentsScreen> = () => {
     const { students } = useAppSelector(state => state.user)
     const [typeAction, setTypeAction] = useState(0);
     const navigation = useNavigation();
-    const { createCurrentClassRequest } = useAppSelector(state => state.schedule);
+    const { createCurrentClassRequest, localStudentData } = useAppSelector(state => state.schedule);
     const [selectedStudents, setSelectedStudents] = useState<Array<IExistingStudent | any>>(createCurrentClassRequest.Students || []);
-    const [existingStudent, setExistingStudent] = useState<Array<any>>(students || []);
+    const [existingStudent, setExistingStudent] = useState<Array<any>>(localStudentData);
     const [newStudents, setNewStudents] = useState<Array<IExistingStudent>>([]);
     //@ts-ignore
     const goNextStep = () => navigation.navigate(NavigationEnum.PREPAYMENT_CONFIGURATION_SCREEN);
@@ -83,30 +83,44 @@ export const AddStudentsScreen: React.FC<IAddStudentsScreen> = () => {
         setSelectedStudents([...selectedStudents, students])
     }
     useEffect(() => {
-        setExistingStudent([...students, ...newStudents]);
-    }, [newStudents]);
+       setExistingStudent([...students || [], ...newStudents || [], ...localStudentData || []]);
+    }, [newStudents, students]);
 
     useEffect(() => {
         dispatch(updateCurrentClassRequestAction({
             Students: removeEmptyObjects(selectedStudents) || []
         }));
+    }, [selectedStudents, newStudents, existingStudent]);
+    // useEffect(() => {
+    //     console.log('mount')
+    //     console.log(localStudentData, 'localStudentData', existingStudent, 'existingStudent')
+    //     return () => {
+    //         console.log(localStudentData, 'localStudentData', existingStudent, 'existingStudent')
+    //         existingStudent && dispatch(setLocalStudentData(existingStudent))
+    //     }
+    // }, [])
 
-    }, [selectedStudents, newStudents]);
-
-    const goBack = () => navigation.goBack()
+    useEffect(() => {
+        console.log('set localStudentData', localStudentData)
+        setExistingStudent(localStudentData)
+    }, [])
+    const goBack = () => {
+        navigation.goBack()
+        console.log(localStudentData, 'localStudentData', existingStudent, 'existingStudent')
+        dispatch(setLocalStudentData(existingStudent))
+    }
 
     return (
         <View style={{ flex: 1, height: '100%' }}>
             <View style={{ padding: 20, paddingBottom: 0 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', zIndex: 1, maxWidth: '50%' }}>
-                    <ScreenHeader text={'Add Students'} onBackPress={goBack} withBackButton={true} />
 
 
                 </View>
                 <TouchableOpacity style={{ position: 'absolute', top: 24, right: 20, zIndex: 1 }} onPress={goNextStep}>
                     <Text style={{ color: '#171930', fontSize: 14, lineHeight: 19, opacity: 0.4 }}>Add Later</Text>
                 </TouchableOpacity>
-
+            
                 <View style={{ marginTop: -30 }}>
                     <ListButtons buttons={['Existing student', 'New Student']} onPress={handleTypeChange} index={typeAction} />
                 </View>
@@ -114,11 +128,11 @@ export const AddStudentsScreen: React.FC<IAddStudentsScreen> = () => {
             <View style={{ flex: 1 }}>
                 <View style={{ flex: 1 }}>
                     {typeAction === TypeAction.ExistingStudent ?
-                        <ExistingStudent students={existingStudent} onChancheUsers={handleChancheUsers} selectedUsers={removeEmptyObjects(selectedStudents)} /> :
+                        <ExistingStudent students={existingStudent}  onChancheUsers={handleChancheUsers} selectedUsers={removeEmptyObjects(selectedStudents)} /> :
                         <NewStudent handleTypeChange={setThisScreen} onAddNewStudent={handleAddNewStudent} />
                     }
                 </View>
-
+            
             </View >
         </View>
     )

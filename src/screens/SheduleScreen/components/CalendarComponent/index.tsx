@@ -2,7 +2,7 @@ import React, { memo, useState } from 'react';
 import { View, TouchableOpacity, Text } from 'react-native';
 import { Calendar, DateData } from 'react-native-calendars';
 import LinearGradient from 'react-native-linear-gradient';
-import moment from 'moment'; // Импортируем библиотеку moment для работы с датами
+import moment from 'moment';
 
 import ArrowLeft from '../../../../../assets/svg/schedule/ArrowLeft';
 import ArrowRight from '../../../../../assets/svg/schedule/ArrowRight';
@@ -28,13 +28,13 @@ const CalendarComponent: React.FC<Props> = memo(
     const dayComponent = ({ date, state }: { date: DateData; state: string }) => {
       const isSelected = date.dateString === selectedDate;
       const isDisabled = state === 'disabled';
-      const isToday = moment().isSame(date.dateString, 'day'); // Проверяем, является ли день сегодняшним
+      const isToday = moment().isSame(date.dateString, 'day');
 
       return (
         <TouchableOpacity onPress={() => !isDisabled && handleDayPress(date)}>
           <LinearGradient
             style={[
-              styles.dayContainer,// Применяем оранжевый цвет, если день сегодняшний
+              styles.dayContainer,
             ]}
             colors={
               isSelected
@@ -48,7 +48,7 @@ const CalendarComponent: React.FC<Props> = memo(
                 styles.dayText,
                 isDisabled && styles.disabledText,
                 isSelected && styles.dayTextSelected,
-                isToday && { color: '#FFFFFF' }, // Применяем белый цвет текста, если день сегодняшний
+                isToday && { color: '#FFFFFF' },
               ]}>
               {date.day}
             </Text>

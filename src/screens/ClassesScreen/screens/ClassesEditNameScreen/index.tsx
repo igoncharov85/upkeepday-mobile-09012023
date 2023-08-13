@@ -155,7 +155,9 @@ const ClassesEditNameScreen: React.FC<IAddClassScreen> = memo(() => {
                         { id: item.ClassId, Class: { Name: values.name }, Location: Location }
                     ));
                     //@ts-ignore
-                    navigation.navigate(NavigationEnum.EDIT_CLASS_SCREEN);
+                    navigation.goBack();
+                    //@ts-ignore
+                    navigation.navigate(NavigationEnum.CLASSES_TAB);
                 },
                 nameAction: 'Confirm',
             });

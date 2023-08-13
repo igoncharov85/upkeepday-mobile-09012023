@@ -1,9 +1,12 @@
+import {PaymentTrackingSetUp} from "../../../screens/PaymentTrackingSetUp";
+
 export enum NavigationEnum {
   LOGIN = 'navigation/LOGIN',
   REGISTRATION = 'navigation/REGISTRATION',
   REGISTRATION_FINAL = 'navigation/REGISTRATION_FINAL',
   FORGOT_PASSWORD_SEND_EMAIL = 'navigation/FORGOT_PASSWORD_SEND_EMAIL',
   FORGOT_PASSWORD_SEND_PASSWORD = 'navigation/FORGOT_PASSWORD_SEND_PASSWORD',
+  PAYMENT_TRACKING_SET_UP = 'navigation/PAYMENT_TRACKING_SET_UP',
   //SHEDULE
   SHEDULE_DAY = 'navigation/SHEDULE_DAY',
   SHEDULE_WEEK = 'navigation/SHEDULE_WEEK',
@@ -13,6 +16,8 @@ export enum NavigationEnum {
   CANCELLATION_MODAL = 'navigation/CancellationModalWrapper',
   //ADD CLASS
   ADD_CLASS_SCREEN = 'navigation/AddClassScreen',
+  ADD_NEW_TEACHER_SCREEN = 'navigation/AddNewTeacherScreen',
+  ADD_BUSINESS_ACCOUNT_SCREEN = 'navigation/AddBusinessAccountScreen',
   SELECT_DATE_SCREEN = 'navigation/SelectDateScreen',
   DATE_RECURRENCE_SCREEN = 'navigation/DateRecurrenceScreen',
   DATE_PREVIEW_SCREEN = 'navigation/DatePreviewScreen',
@@ -40,6 +45,9 @@ export enum NavigationEnum {
   PREVIEW_STUDENTS_SCREEN = 'navigation/PREVIEW_STUDENTS_SCREEN',
   //MORE
   MORE_SCREEN = 'navigation/MORE_SCREEN',
-
-  RESULT_CLASS_MODAL = 'navigation/RESULT_CLASS_MODAL'
+  //MODALS
+  RESULT_CLASS_MODAL = 'navigation/RESULT_CLASS_MODAL',
+  SELECT_DURATION_CLASS_MODAL = 'navigation/SELECT_DURATION_CLASS_MODAL',
+  EDIT_DURATION_CLASS_MODAL = 'navigation/EDIT_DURATION_CLASS_MODAL',
+  EDIT_TIME_CLASS_MODAL = 'navigation/EDIT_TIME_CLASS_MODAL'
 }

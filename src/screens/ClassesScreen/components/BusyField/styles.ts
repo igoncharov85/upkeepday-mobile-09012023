@@ -11,7 +11,7 @@ export default StyleSheet.create({
     wrapper: {
         position: 'absolute',
         height: 62,
-        width: 46,
+        minWidth: '100%',
         overflow: 'hidden',
         borderRadius: 4,
     },

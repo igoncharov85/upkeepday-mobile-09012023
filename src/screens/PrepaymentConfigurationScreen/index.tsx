@@ -10,8 +10,7 @@ import { dispatch } from '../../store/store';
 import { createScheduleAction } from '../../store/shedule/actions';
 import { useAppSelector } from '../../store/hooks';
 import { IGeneratedScheduleEntries, IStudents, IWeekTimeSlot } from '../../common/types/schedule.types';
-import { updatedStatusClassesAction } from '../../store/classes/actions';
-import moment from 'moment';
+import { findLatestLessonWithDuration } from '../../services/utils/calculateNumberOfClasses';
 
 
 interface IPrepaymentConfigurationScreen { }
@@ -22,56 +21,13 @@ export const PrepaymentConfigurationScreen: React.FC<IPrepaymentConfigurationScr
     const [trackPrepayment, setTrackPrepayment] = useState(createCurrentClassRequest.Class?.TrackPrepayment ? 1 : 0)
     const navigation = useNavigation();
 
-    const location = createCurrentClassRequest.Location?.LocationType === "Online" ? {
-        LocationType: createCurrentClassRequest.Location?.LocationType,
-        Url: createCurrentClassRequest.Location?.Url
-    } : {
-        LocationId: createCurrentClassRequest.Location?.LocationId,
-    }
-
     const goTextStep = () => {
-        //@ts-ignore
-        const lastItem = createCurrentClassRequest?.Sessions[createCurrentClassRequest.Sessions?.length - 1]
-        const endDate = moment(lastItem.StartDateTime).add(lastItem.Duration, 'minute').format('YYYY-MM-DD');
-        //@ts-ignore
-        navigation.navigate(NavigationEnum.RESULT_CLASS_MODAL, {
-            item: {
-                Name: createCurrentClassRequest.Class?.Name,
-                StartDate: createCurrentClassRequest.Class?.StartDate,
-                EndDate: endDate,
-                ScheduledClasses: createCurrentClassRequest.Sessions?.length,
-                TotalClassesHeld: 0,
-                Students: createCurrentClassRequest.Students,
-                Location: {
-                    Address: createCurrentClassRequest.Location?.AddressLine,
-                },
-                TrackPrepayment: !trackPrepayment as boolean,
-
-
-            },
-            actionBtn: () => {
-                dispatch(createScheduleAction(
-                    {
-                        Class: {
-                            Name: createCurrentClassRequest.Class?.Name,
-                            StartDate: createCurrentClassRequest.Class?.StartDate,
-                            EndDate: createCurrentClassRequest.Class?.EndScheduleType == 'SpecificEndDate' ? createCurrentClassRequest.Class?.EndDate : undefined,
-                            EndNumber: createCurrentClassRequest.Class?.EndScheduleType != 'SpecificEndDate' ? createCurrentClassRequest.Class?.EndNumber : undefined,
-                            EndScheduleType: createCurrentClassRequest.Class?.EndScheduleType,
-                            MakeupRequired: !makeupRequired as boolean,
-                            TrackPrepayment: !trackPrepayment as boolean
-                        },
-                        Location: location,
-                        Students: createCurrentClassRequest.Students as IStudents[],
-                        Slots: createCurrentClassRequest.Slots as IWeekTimeSlot[],
-                        Sessions: createCurrentClassRequest.Sessions as IGeneratedScheduleEntries[]
-                    }
-                ))
-                //@ts-ignore
-                navigation.navigate(NavigationEnum.HOME_SCREEN, { key: Date.now() })
-            },
-            nameAction: 'Delete  Permanently',
-        })
+      console.log('makeupRequired', makeupRequired, 'trackPrepayment', trackPrepayment)
+      // @ts-ignore
+      navigation.navigate(NavigationEnum.PAYMENT_TRACKING_SET_UP, {
+        makeupRequired: makeupRequired,
+        trackPrepayment: trackPrepayment,
+      })
     };
 
 
@@ -95,7 +51,7 @@ export const PrepaymentConfigurationScreen: React.FC<IPrepaymentConfigurationScr
                 <ListGradientCircleButtons onPress={HandleTrackPrepayment} twoLines={true} label='Do you receive Prepayment for this Class?' buttons={[{ title: 'Yes', subtitle: ' - Track my prepayments' }, { title: 'No', subtitle: ' ' }]} />
             </View>
             <View style={{ flex: 1, padding: 20, justifyContent: 'flex-end' }}>
-                <CustomButton text={'Save'} onPress={goTextStep} />
+                <CustomButton text={'Next step'} onPress={goTextStep} />
             </View>
         </View >
     )

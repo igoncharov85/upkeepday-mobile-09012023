@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { ICreateClassRequest, IGeneratedScheduleEntries, IScheduleItem, IWeekTimeSlot } from '../../common/types/schedule.types';
+import moment from 'moment';
 
 export interface ScheduleState {
     loading: boolean;
@@ -12,6 +13,8 @@ export interface ScheduleState {
     CurrentScheduledEntries: Array<IGeneratedScheduleEntries>,
     //for data collection
     createCurrentClassRequest: Partial<ICreateClassRequest>,
+
+    localStudentData: Array<any>,
 }
 
 const initialState: ScheduleState = {
@@ -20,6 +23,7 @@ const initialState: ScheduleState = {
     CurrentScheduledEntries: [],
     WeekTimeSlots: [],
     createCurrentClassRequest: {},
+    localStudentData: []
 }
 
 export const scheduleSlice = createSlice({
@@ -27,10 +31,17 @@ export const scheduleSlice = createSlice({
     initialState,
     reducers: {
         setScheduleLoading: (state, action: PayloadAction<boolean>) => {
+            // const time = Date.now();
+            // console.log('\n----loading----\n', action.payload, ' - loading status\n', moment(time).format('HH:mm:ss.SSS'), ' - time set loading')
+
             state.loading = action.payload
         },
         setTimeSlotsAction: (state, action: PayloadAction<Array<IWeekTimeSlot>>) => {
             state.WeekTimeSlots = action.payload
+        },
+        setLocalStudentData: (state, action: PayloadAction<Array<any>>) => {
+            console.log('student redux\n&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&n\n\n\nn\n\n9999999999999999999', action.payload)
+            state.localStudentData = action.payload
         },
         setGeneratedScheduleEntriesAction: (state, action: PayloadAction<Array<IGeneratedScheduleEntries>>) => {
             state.GeneratedScheduleEntries = action.payload
@@ -57,6 +68,6 @@ export const scheduleSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setScheduleLoading, setGeneratedScheduleEntriesAction, setCurrentScheduleEntries, setTimeSlotsAction, updateCurrentClassRequestAction } = scheduleSlice.actions
+export const { setScheduleLoading, setGeneratedScheduleEntriesAction, setCurrentScheduleEntries, setTimeSlotsAction, updateCurrentClassRequestAction, setLocalStudentData } = scheduleSlice.actions
 
 export default scheduleSlice.reducer

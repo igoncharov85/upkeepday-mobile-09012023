@@ -15,9 +15,7 @@ export default StyleSheet.create({
   },
   sessionBlock: {
     borderRadius: 8,
-    marginTop: 10,
     minWidth: '80%',
-    backgroundColor: '#fff',
     paddingHorizontal: 20,
     paddingVertical: 16,
   },

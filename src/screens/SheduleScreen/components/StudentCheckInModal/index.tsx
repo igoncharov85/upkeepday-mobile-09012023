@@ -40,8 +40,7 @@ const getStatus = ({
 export const StudentCheckInModal: FC<AddSessionModalProps> = memo(
   ({ visible, visibleHandler, data, hideOwnModal }) => {
     const navigation = useNavigation();
-    const sessionId = data.ScheduleEntryId;
-
+    const sessionId = data.SessionId;
     const name = data.ClassName;
     const { checkins } = useAppSelector((state) => state.user);
     const [checkinsStudent, setCheckinsStudent] = useState([]);

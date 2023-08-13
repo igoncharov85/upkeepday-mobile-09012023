@@ -33,7 +33,7 @@ export const NewStudent: React.FC<INewStudentProps> = ({ handleTypeChange, onAdd
     const [newUser, setNewUser] = useState<IExistingStudent>();
 
     useEffect(() => {
-        onAddNewStudent(newUser || {});
+        newUser && onAddNewStudent(newUser);
     }, [newUser]);
 
     const renderForm = ({

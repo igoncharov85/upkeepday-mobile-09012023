@@ -13,7 +13,7 @@ interface IListButtons {
     index?: number,
 }
 export const ListGradientCircleButtons: React.FC<IListButtons> = ({ buttons, onPress, label, index }) => {
-    const [activeIndex, setActiveIndex] = useState(index ? index : 0);
+    const [activeIndex, setActiveIndex] = useState(index);
 
     const handlePress = (index: number) => {
         setActiveIndex(index);

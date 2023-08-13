@@ -1,24 +1,24 @@
-import React, { memo, useCallback, useEffect, useRef, useState } from "react";
-import { View, ScrollView, Dimensions, KeyboardAvoidingView, Platform } from "react-native";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from '@react-navigation/native'
+import { Formik, FormikProps } from 'formik'
+import React, { memo, useCallback, useEffect, useState } from 'react'
+import { Dimensions, KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native'
+import { useDispatch } from 'react-redux'
+import { NavigationEnum } from '../../common/constants/navigation'
+import { formicDefaultProps } from '../../common/constants/styles/form.config'
+import { AddClassNameSchema } from '../../common/shemas/addClass.shape'
+import { ScreenHeader } from '../../components/ScreenHeader'
+import { CustomButton } from '../../components/UI/CustomButton'
+import { durationAction } from '../../store/duration/durationSlice'
+import { useAppSelector } from '../../store/hooks'
+import { fetchLocationAction } from '../../store/location/actions'
+import { updateCurrentClassRequestAction } from '../../store/shedule'
+import { fetchUsersAction } from '../../store/user/actions'
+import { ChooseAddressModal } from './components/ChooseAddressModal'
+import { InputForm } from './components/InputForm'
+import { ListButtons } from './components/ListButtons'
 
-import { LocationSelect } from "./components/LocationSelect";
-import { ScreenHeader } from "../../components/ScreenHeader";
-import { ListButtons } from "./components/ListButtons";
-import styles from "./styles";
-import { InputForm } from "./components/InputForm";
-import { CustomButton } from "../../components/UI/CustomButton";
-import { CustomModal } from "../../components/UI/CustomModal";
-import { ChooseAddressModal } from "./components/ChooseAddressModal";
-import { NavigationEnum } from "../../common/constants/navigation";
-import { Formik, FormikProps } from "formik";
-import { useDispatch } from "react-redux";
-import { updateCurrentClassRequestAction } from "../../store/shedule";
-import { AddClassNameSchema, AddClassSchema } from "../../common/shemas/addClass.shape";
-import { formicDefaultProps } from "../../common/constants/styles/form.config";
-import { fetchUsersAction } from "../../store/user/actions";
-import { fetchLocationAction } from "../../store/location/actions";
-import { useAppSelector } from "../../store/hooks";
+import { LocationSelect } from './components/LocationSelect'
+import styles from './styles'
 
 interface IAddClassScreen { }
 
@@ -138,6 +138,7 @@ export const AddClassScreen: React.FC<IAddClassScreen> = memo(() => {
 
     const handleSubmit = useCallback(
         (values: any) => {
+            dispatch(durationAction.clearDuration())
             dispatch(
                 updateCurrentClassRequestAction({
                     Class: { Name: values.name },

@@ -22,11 +22,8 @@ const ResultClassModal = () => {
         navigation.goBack();
     }
     const { item, actionBtn, nameAction } = params;
-    console.log(item, 'modal\n\n\n');
-
     const handleAction = () => {
         actionBtn();
-        closeModal();
         item?.Status && dispatch(fetchClassesAction(item.Status.toLowerCase()))
     }
 
@@ -60,7 +57,7 @@ const ResultClassModal = () => {
                                             <Text style={styles.underlineText}>Payment Tracking</Text>
                                         </View>
                                     </View>) : null}
-                                {item.Balance ?
+                                {item.EnrolledClasses ?
                                     (<View>
 
                                         <Text style={[styles.title, { textAlign: 'center' }]}>{item.FirstName} {item.LastName}</Text>

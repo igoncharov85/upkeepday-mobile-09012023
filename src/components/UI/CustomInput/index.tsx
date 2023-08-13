@@ -18,6 +18,7 @@ export interface ICustomInputProps extends TextInputProps {
   touched?: boolean;
   disabled?: boolean;
   style?: {};
+  wrapperStyle?: {};
 }
 
 export const CustomInput: FC<ICustomInputProps> = memo(
@@ -28,6 +29,7 @@ export const CustomInput: FC<ICustomInputProps> = memo(
     touched,
     secureTextEntry,
     disabled,
+   wrapperStyle,
     style,
     ...props
   }) => {
@@ -53,9 +55,9 @@ export const CustomInput: FC<ICustomInputProps> = memo(
       return <></>;
     };
     return (
-      <>
+      <View style={wrapperStyle}>
         <Text style={styles.labelText}>{labelText}</Text>
-        <View style={styles.container}>
+        <View style={[styles.container]}>
           <TextInput
             autoCapitalize="none"
             {...props}
@@ -76,7 +78,7 @@ export const CustomInput: FC<ICustomInputProps> = memo(
         {validationErrorText && touched && (
           <Text style={styles.errorText}>{validationErrorText}</Text>
         )}
-      </>
+      </View>
     );
   },
 );

@@ -14,6 +14,7 @@ import { addDayAndHoursToDate, getToday } from '../../../services/utils/generate
 import { ScreenLoading } from '../../../components/UI/ScreenLoading';
 import { IGeneratedScheduleEntries } from '../../../common/types/schedule.types';
 import { useIsFocused } from '@react-navigation/native';
+import moment from 'moment';
 
 
 function getNextDate(dateString: string, daysToAdd: number): string {
@@ -75,6 +76,13 @@ export const ScheduleDayScreen: React.FC<IScheduleDayScreen> = memo(() => {
 		let localCurrentDay = new Date(currentDay);
 		isFocused && dispatch(fetchScheduleByPeriodAction({ startDate: localCurrentDay.toISOString(), endDate: addDayAndHoursToDate(currentDay, 1, 0) }));
 	}, [isFocused]);
+
+	useEffect(() => {
+		const time = Date.now();
+		// console.log('\n----SheduleDay Screen----\n', loading, ' - loading status\n', moment(time).format('HH:mm:ss.SSS'), ' - time set loading')
+
+
+	}, [loading])
 	return loading ? <ScreenLoading /> : (
 		<View>
 			<ScheduleScroller

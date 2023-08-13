@@ -27,7 +27,7 @@ function findScheduleEntries(
   const filteredEntries = entries?.filter((entry) => {
     const startDate = new Date(entry.StartDateTime);
     return (
-      startDate.getDate() === day &&
+      startDate.getDate() === day + 1 &&
       startDate.getMonth() + 1 === month &&
       startDate.getHours() === hour
     );
@@ -44,16 +44,12 @@ interface ISheduleTable {
 }
 
 
-
 export const startOfHour = 8;
 export const WeekTable: FC<ISheduleTable> = memo(
   ({ startOfWeek, endOfWeek, onHandleData, conflict }) => {
     const { GeneratedScheduleEntries, CurrentScheduledEntries, loading } = useAppSelector(state => state.schedule);
     const [editMode, setEditMode] = useState(false);
-    const [slots, setSlots] = useState<IGeneratedScheduleEntries[]>(GeneratedScheduleEntries as []);
-
-    const [isVisible, setIsVisible] = useState(false);
-    const [isVisibleEdit, setIsVisibleEdit] = useState(false);
+    const [slots, setSlots] = useState(GeneratedScheduleEntries);
 
 
     const onChangeEditMode = (value: boolean) => {
@@ -61,27 +57,23 @@ export const WeekTable: FC<ISheduleTable> = memo(
     }
 
     const onDeleteSlot = (slot: any) => {
-      onHandleModal();
       const newSlots = slots.filter((item) => {
+        item.StartDateTime === slot.StartDateTime && console.log(item)
         return item.StartDateTime !== slot.StartDateTime
       });
-      if (JSON.stringify(slots) !== JSON.stringify(newSlots)) {
-        setSlots(newSlots);
-        onHandleData(slots)
-      }
+      setSlots(newSlots);
+      onHandleData(newSlots)
+
     }
-    const onHandleModal = () => {
-      setIsVisible(!isVisible);
+    const getSlots = () => {
+      return slots
     }
-    const onHandleModalEdit = () => {
-      setIsVisibleEdit(!isVisibleEdit);
-    }
-    const onMoveSlot = (slot: any, x: number, y: number) => {
-      const newTime = addDayAndHoursToDate(slot.StartDateTime, x, y);
-      onHandleModalEdit();
+    const onMoveSlot = (slot: any, newStartTime: string) => {
       const newSlots = slots.filter(item => item.StartDateTime !== slot.StartDateTime);
-      setSlots([...newSlots, { Duration: slot.Duration, StartDateTime: newTime, SlotUid: '' }]);
+      setSlots([...newSlots, { Duration: slot.Duration, StartDateTime: newStartTime, SlotUid: '' }]);
+      onHandleData([...newSlots, { Duration: slot.Duration, StartDateTime: newStartTime, SlotUid: '' }])
     }
+
     useEffect(() => {
       onHandleData(slots)
     }, [slots])
@@ -93,53 +85,47 @@ export const WeekTable: FC<ISheduleTable> = memo(
       timeData,
     );
     const date = (new Date(startOfWeek));
-    return GeneratedScheduleEntries.length > 0 && !loading ? (<View style={styles.container}>
-      <ScrollView contentOffset={{ x: 0, y: 64 * 8 }}>
-        <Row style={{ justifyContent: 'space-between' }}>
-          <Column style={{ width: 56 }}>
-            {timeData.map((item, index) => (
-              <TimeLineItem key={index} time={item} />
-            ))}
-          </Column>
-          <Row style={{ flex: 1, paddingRight: 20, paddingBottom: 20 }}>
-            {weekStructure?.map((dayEvents, dayIndex) => {
-
-              return (
-                <Column key={dayIndex}>
-                  {dayEvents?.map((_, index) => {
-                    const currentDate = new Date(addDayAndHoursToDate(date.toISOString(), dayIndex, 0))
-                    const dryField = findScheduleEntries(CurrentScheduledEntries as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
-
-                    const activeItem = findScheduleEntries(slots as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
-                    const conflictItem = findScheduleEntries(conflict as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
-                    return <WeekTableItem
-                      key={`${dayIndex}-${index}`}
-                      timeIndex={index}
-                      dayIndex={dayIndex}
-                      startOfWeek={startOfWeek}
-                      StartDateTime={addDayAndHoursToDate(date.toISOString(), dayIndex, index)}
-                      activeItem={activeItem && activeItem[0]}
-                      conflict={!!conflictItem[0]}
-                      onLongPress={onChangeEditMode}
-                      editMode={editMode}
-                      onDeleteSlot={onDeleteSlot}
-                      onMoveSlot={onMoveSlot}
-                      dryField={dryField && dryField[0]} />;
-                  })}
-
-                </Column>
-              );
-            })}
+    return (<View style={styles.container}>
+        <ScrollView contentOffset={{x: 0, y: 64 * 8}}>
+          <Row style={{justifyContent: 'space-between'}}>
+            <Column style={{width: 56}}>
+              {timeData.map((item, index) => (
+                <TimeLineItem key={index} time={item}/>
+              ))}
+            </Column>
+            <Row style={{flex: 1, paddingRight: 20, paddingBottom: 20}}>
+              {weekStructure?.map((dayEvents, dayIndex) => {
+                const currentDate = new Date(addDayAndHoursToDate(date.toISOString(), dayIndex, 0))
+                return (
+                  <Column key={dayIndex}>
+                    {dayEvents?.map((_, index) => {
+                      const dryField = findScheduleEntries(CurrentScheduledEntries as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
+                      const conflictItem = findScheduleEntries(conflict as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
+                      return <WeekTableItem
+                        key={`${dayIndex}-${index}`}
+                        timeIndex={index}
+                        dayIndex={dayIndex}
+                        slots={getSlots}
+                        startOfWeek={startOfWeek}
+                        StartDateTime={addDayAndHoursToDate(date.toISOString(), dayIndex, index)}
+                        conflict={!!conflictItem[0]}
+                        onLongPress={onChangeEditMode}
+                        editMode={editMode}
+                        onDeleteSlot={onDeleteSlot}
+                        onMoveSlot={onMoveSlot}
+                        currentDay={currentDate}
+                        dryField={dryField && dryField[0]}/>;
+                    })}
+                  
+                  </Column>
+                );
+              })}
+            </Row>
           </Row>
-        </Row>
-      </ScrollView>
-    </View>
-
-    ) : <ActivityIndicator
-      style={StyleSheet.absoluteFill}
-      color={'#9A80BA'}
-      size="large"
-    />;
+        </ScrollView>
+      </View>
+    
+    );
   },
 );
 

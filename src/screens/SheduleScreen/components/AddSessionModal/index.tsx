@@ -1,27 +1,58 @@
+import {getFocusedRouteNameFromRoute, useNavigation, useRoute} from "@react-navigation/native";
 import React, { FC, memo } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-
+import {NavigationEnum} from "../../../../common/constants/navigation";
+import {updateCurrentClassRequestAction} from "../../../../store/shedule";
+import { dispatch } from '../../../../store/store';
 import styles from './styles';
 
 interface AddSessionProps {
   title: string;
   onPress?: () => void;
   disabled?: boolean;
+  rainbow?: boolean;
 }
 
 interface AddSessionModalProps {
   visible: boolean;
   visibleHandler: () => void;
-  onPress: () => void;
 }
 
 export const AddSessionModal: FC<AddSessionModalProps> = memo(
-  ({ visible, visibleHandler, onPress }) => {
-    const onCreateLesson = () => {
+  ({ visible, visibleHandler }) => {
+    const route = useRoute();
+    const routeName = getFocusedRouteNameFromRoute(route);
+    const studentTab = routeName === 'navigation/STUDENTS_TAB';
+    const addClass = () => {
       visibleHandler();
-      onPress && onPress();
+      dispatch(
+        updateCurrentClassRequestAction({
+          Class: {
+            Name: '',
+            StartDate: '',
+            EndDate: '',
+            EndNumber: 0,
+            EndScheduleType: '',
+            MakeupRequired: false,
+            TrackPrepayment: false,
+            
+          },
+          Location: {
+            LocationId: 0,
+            LocationType: '',
+            Url: '',
+            AddressLine: '',
+          },
+          Students: [],
+          Slots: [],
+          Sessions: [],
+        })
+      );
+      // @ts-ignore
+      navigate(NavigationEnum.ADD_CLASS_SCREEN);
     }
+    const {navigate} = useNavigation();
     return visible ? (
       <TouchableOpacity onPress={visibleHandler} style={{ position: 'absolute', height: '100%', width: '100%', zIndex: 100 }} activeOpacity={1}>
         <LinearGradient
@@ -33,8 +64,21 @@ export const AddSessionModal: FC<AddSessionModalProps> = memo(
           style={styles.container}>
           <View />
           <View style={{ width: '100%', alignItems: 'center' }}>
-            <SessionButton title={'Add Class'} onPress={onCreateLesson} />
-            {/* <SessionButton title={'Add Trial'} disabled={true} /> */}
+            {
+            // @ts-ignore
+              studentTab ? <SessionButton title={'Add Student'} onPress={() => {
+                visibleHandler();
+                // @ts-ignore
+                navigate(NavigationEnum.ADD_STUDENTS_SCREEN)
+              }} /> : <>
+                <SessionButton title={'Add Class'} onPress={addClass} />
+                <SessionButton rainbow title={'Add Business Account  💎'} onPress={() => {
+                  visibleHandler();
+                  // @ts-ignore
+                  navigate(NavigationEnum.ADD_BUSINESS_ACCOUNT_SCREEN)
+                }} />
+              </>
+            }
           </View>
         </LinearGradient>
       </TouchableOpacity>
@@ -42,12 +86,31 @@ export const AddSessionModal: FC<AddSessionModalProps> = memo(
   },
 );
 
-const SessionButton: FC<AddSessionProps> = ({ title, onPress, disabled }) => {
+const SessionButton: FC<AddSessionProps> = ({ title, onPress, disabled, rainbow }) => {
   return (
+    <LinearGradient
+      colors={rainbow ? [
+      '#EAAFC8', '#654EA3'
+    ] : ['#FFF', '#FFF']}
+      start={{ x: 0.0, y: 1.0 }}
+      end={{ x: 0.0, y: 0.0 }}
+      style={{
+      marginVertical:0,
+      borderRadius: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+         height: 60,
+         minWidth: '82%',
+        marginTop: 10,
+      }}
+    >
     <TouchableOpacity onPress={onPress && onPress} disabled={disabled && disabled}>
-      <View style={[styles.sessionBlock, disabled ? styles.sessionBlockDisabled : null]}>
-        <Text style={[styles.sessionText, , disabled ? styles.sessionTextDisabled : null]}>{title}</Text>
+      <View style={[{
+        backgroundColor: rainbow ? '#FFEDF4' : '#FFF',
+      }, styles.sessionBlock, disabled ? styles.sessionBlockDisabled : null]}>
+        <Text style={[ styles.sessionText, , disabled ? styles.sessionTextDisabled : null]}>{title}</Text>
       </View>
     </TouchableOpacity>
-  );
+    </LinearGradient>
+      );
 };

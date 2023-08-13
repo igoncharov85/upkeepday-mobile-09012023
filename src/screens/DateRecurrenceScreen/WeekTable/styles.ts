@@ -3,13 +3,10 @@ import { StyleSheet } from 'react-native';
 export default StyleSheet.create({
   container: {
     marginTop: 10,
-    // flex: 1
   },
   containerItem: {
     height: 64,
     minWidth: '14.28571428571429%',
-    // maxWidth: '14.28571428571429%',
-    // flex: 1,
     borderWidth: 1,
     borderColor: 'rgba(47,48,69,0.06)',
     borderStyle: 'solid',
@@ -57,4 +54,45 @@ export default StyleSheet.create({
     zIndex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
   },
+  lessonTop: {
+    zIndex: 1,
+    left: 0,
+    right: 0,
+    position: 'absolute',
+  },
+  lessonContainer: {
+    zIndex: 3,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    borderRadius: 4,
+    left: 0,
+    right: 0,
+  },
+  lesson: {
+    zIndex: 3,
+    position: 'absolute',
+    borderRadius: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  lessonBottom: {
+    zIndex: 2,
+    left: 0,
+    right: 0,
+    height: `100%`,
+    position: 'absolute',
+  },
+  emptySlot: {
+    position: 'absolute',
+    zIndex: 10,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  }
 });

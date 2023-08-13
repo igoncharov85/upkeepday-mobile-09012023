@@ -44,20 +44,7 @@ export const WeekTable: FC<ISheduleTable> = memo(
     useEffect(() => {
       scrollViewRef.current?.scrollTo({ x: 0, y: 64 * 8, animated: true });
     }, []);
-    useEffect(() => {
 
-      setSlots(
-        createCurrentClassRequest && createCurrentClassRequest.Slots.map(item => {
-          return {
-            Duration: 60,
-            DayOfWeek: item.DayOfWeek,
-            StartTime: item.StartTime,
-          }
-        })
-      )
-      console.log(createCurrentClassRequest.Slots);
-
-    }, [createCurrentClassRequest])
     return (
       <View style={styles.container}>
         <ScrollView ref={scrollViewRef}>
@@ -72,12 +59,16 @@ export const WeekTable: FC<ISheduleTable> = memo(
                 return (
                   <Column key={dayIndex}>
                     {dayEvents?.map((_, index) => {
-                      const activeItem = createCurrentClassRequest.Slots.some(item => item.DayOfWeek == dayIndex && item.StartTime == `${index}:00:00`)
-                      return <WeekTableItem activeItem={activeItem} dayOfWeek={dayIndex} timeIndex={index} onHandleClick={onSlotPress} />;
+                      const daySchedule = slots.filter(item => item.DayOfWeek == dayIndex)
+
+                      const key = Date.now()
+                      const activeItem = createCurrentClassRequest?.Slots && createCurrentClassRequest?.Slots.some(item => item.DayOfWeek == dayIndex && item.StartTime == `${index}:00:00`)
+                      return <WeekTableItem dayOfWeek={dayIndex} timeIndex={index} onHandleClick={onSlotPress} daySchedule={daySchedule} key={`${dayIndex}-${index}`} />;
                     })}
 
                   </Column>
                 );
+
               })}
             </Row>
           </Row>

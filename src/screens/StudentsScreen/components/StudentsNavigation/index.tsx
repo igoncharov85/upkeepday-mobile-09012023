@@ -14,8 +14,9 @@ interface NavigationButtonProps {
 }
 
 const STUDENTS_NAVIGATION = [
-    { active: false, name: 'Scheduled', component: '' },
-    { active: false, name: 'Archived', component: '' },
+    { active: false, name: 'Scheduled', status: 'scheduled' },
+    { active: false, name: 'Non-Scheduled', status: 'nonscheduled' },
+    { active: false, name: 'Archived', status: 'archived' },
 ];
 
 interface IStudentsNavigation {
@@ -26,7 +27,7 @@ export const StudentsNavigation: FC<IStudentsNavigation> = memo(() => {
     const isFocused = useIsFocused();
 
     useEffect(() => {
-        dispatch(fetchStudentsAction({ status: STUDENTS_NAVIGATION[activeIndex].name }))
+        dispatch(fetchStudentsAction({ status: STUDENTS_NAVIGATION[activeIndex].status }))
     }, [activeIndex, isFocused],);
 
     return (

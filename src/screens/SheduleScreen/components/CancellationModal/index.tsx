@@ -46,7 +46,6 @@ const CancellationModalConainer = ({
       closeModal();
     }, 300);
   };
-
   return (
     <>
       <Modal visible={isVisible} transparent onRequestClose={handleHideModal}>

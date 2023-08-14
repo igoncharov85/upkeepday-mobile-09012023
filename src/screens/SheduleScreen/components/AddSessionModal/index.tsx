@@ -5,6 +5,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import {NavigationEnum} from "../../../../common/constants/navigation";
 import {updateCurrentClassRequestAction} from "../../../../store/shedule";
 import { dispatch } from '../../../../store/store';
+import { NewStudentScreen } from '../../../NewStudentScreen'
 import styles from './styles';
 
 interface AddSessionProps {
@@ -22,6 +23,7 @@ interface AddSessionModalProps {
 export const AddSessionModal: FC<AddSessionModalProps> = memo(
   ({ visible, visibleHandler }) => {
     const route = useRoute();
+    console.log(1)
     const routeName = getFocusedRouteNameFromRoute(route);
     const studentTab = routeName === 'navigation/STUDENTS_TAB';
     const addClass = () => {
@@ -69,7 +71,7 @@ export const AddSessionModal: FC<AddSessionModalProps> = memo(
               studentTab ? <SessionButton title={'Add Student'} onPress={() => {
                 visibleHandler();
                 // @ts-ignore
-                navigate(NavigationEnum.ADD_STUDENTS_SCREEN)
+                navigate(NavigationEnum.NEW_STUDENT_SCREEN)
               }} /> : <>
                 <SessionButton title={'Add Class'} onPress={addClass} />
                 <SessionButton rainbow title={'Add Business Account  💎'} onPress={() => {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, Text, View, TouchableOpacity } from 'react-native';
 import { ScreenHeader } from '../../components/ScreenHeader';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native'
 import { NavigationEnum } from '../../common/constants/navigation';
 import { ListButtons } from '../AddClassScreen/components/ListButtons';
 import { CustomButton } from '../../components/UI/CustomButton';
@@ -22,13 +22,14 @@ enum TypeAction {
     NewStudent = 1,
 }
 
-function removeEmptyObjects(array: any[]) {
+export function removeEmptyObjects(array: any[]) {
     return array.filter(obj => Object.keys(obj).length !== 0);
 }
 
 export const AddStudentsScreen: React.FC<IAddStudentsScreen> = () => {
 
     const { students } = useAppSelector(state => state.user)
+    
     const [typeAction, setTypeAction] = useState(0);
     const navigation = useNavigation();
     const { createCurrentClassRequest, localStudentData } = useAppSelector(state => state.schedule);
@@ -105,8 +106,7 @@ export const AddStudentsScreen: React.FC<IAddStudentsScreen> = () => {
         <View style={{ flex: 1, height: '100%' }}>
             <View style={{ padding: 20, paddingBottom: 0 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', zIndex: 1, maxWidth: '50%' }}>
-
-
+                    <ScreenHeader text={'Add Students'} onBackPress={() => goBack()} withBackButton={true} />
                 </View>
                 <TouchableOpacity style={{ position: 'absolute', top: 24, right: 20, zIndex: 1 }} onPress={goNextStep}>
                     <Text style={{ color: '#171930', fontSize: 14, lineHeight: 19, opacity: 0.4 }}>Add Later</Text>
@@ -123,7 +123,6 @@ export const AddStudentsScreen: React.FC<IAddStudentsScreen> = () => {
                         <NewStudent handleTypeChange={setThisScreen} onAddNewStudent={handleAddNewStudent} />
                     }
                 </View>
-
             </View >
         </View>
     )

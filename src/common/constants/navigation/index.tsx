@@ -11,7 +11,7 @@ export enum NavigationEnum {
   SHEDULE_DAY = 'navigation/SHEDULE_DAY',
   SHEDULE_WEEK = 'navigation/SHEDULE_WEEK',
   SHEDULE_MONTH = 'navigation/SHEDULE_MONTH',
-  //CANCELLATION 
+  //CANCELLATION
   CANCELLATION_SCREEN = 'navigation/CancellationScreen',
   CANCELLATION_MODAL = 'navigation/CancellationModalWrapper',
   //ADD CLASS
@@ -22,6 +22,7 @@ export enum NavigationEnum {
   DATE_RECURRENCE_SCREEN = 'navigation/DateRecurrenceScreen',
   DATE_PREVIEW_SCREEN = 'navigation/DatePreviewScreen',
   ADD_STUDENTS_SCREEN = 'navigation/AddStudentsScreen',
+  NEW_STUDENT_SCREEN = 'navigation/NewStudentScreen',
   PREPAYMENT_CONFIGURATION_SCREEN = 'navigation/PrepaymentConfigurationScreen',
   //TABS
   HOME_SCREEN = 'navigation/HOME_SCREEN',

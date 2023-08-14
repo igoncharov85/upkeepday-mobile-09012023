@@ -5,11 +5,9 @@ import { createUserAction } from '../../../store/user/actions';
 import { InputForm } from '../../AddClassScreen/components/InputForm';
 import styles from './styles';
 import { FormikProps, withFormik } from 'formik';
-import { IUserCreateRequest, IUserStudent } from '../../../common/types/user';
 import { NewStudentSchema } from '../../../common/shemas/addClass.shape';
 import { formicDefaultProps } from '../../../common/constants/styles/form.config';
 import { useAppSelector } from '../../../store/hooks';
-import { updateCurrentClassRequestAction } from '../../../store/shedule';
 import { CustomButton } from '../../../components/UI/CustomButton';
 import { IExistingStudent } from '../../../common/types/schedule.types';
 

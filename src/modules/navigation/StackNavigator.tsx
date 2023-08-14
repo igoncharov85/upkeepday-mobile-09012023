@@ -4,7 +4,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationEnum } from '../../common/constants/navigation';
 import { AddBusinessAccountScreen } from "../../screens/AddBusinessAccountScreen";
 import { AddNewTeacherScreen } from "../../screens/AddNewTeacher";
+import { NewStudent } from '../../screens/AddStudentsScreen/NewStudent'
 import { LoginScreen } from '../../screens/LoginScreen';
+import { NewStudentScreen } from '../../screens/NewStudentScreen'
 import { PaymentTrackingSetUp } from "../../screens/PaymentTrackingSetUp";
 import { RegistrationScreen } from '../../screens/RegistrationScreen';
 import { FinalRegistrationScreen } from '../../screens/RegistrationScreen/FinalRegistrtionScreen';
@@ -126,6 +128,10 @@ export const StackNavigator = memo(() => {
         <Stack.Screen
           name={NavigationEnum.ADD_STUDENTS_SCREEN}
           component={AddStudentsScreen}
+        />
+        <Stack.Screen
+          name={NavigationEnum.NEW_STUDENT_SCREEN}
+          component={NewStudentScreen}
         />
         <Stack.Screen
           name={NavigationEnum.PREPAYMENT_CONFIGURATION_SCREEN}

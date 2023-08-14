@@ -68,7 +68,7 @@ const PreviewStudentScreen: React.FC<IAddStudentsScreen> = () => {
         dispatch(fetchStudentsByIdAction({ StudentId: item.StudentId }));
     }, [isFocused]);
     const filteredStudents = filterStudents(studentList, searchText, status);
-    console.log(studentList, 'studentList')
+
     return loading ? <ScreenLoading /> : (
         <View style={{ flex: 1, height: '100%' }}>
             <View style={{ padding: 20, paddingBottom: 0 }}>

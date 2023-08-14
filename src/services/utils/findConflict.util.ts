@@ -6,7 +6,6 @@ interface ScheduleEntry {
 
 export function findScheduleConflicts(currentScheduledEntries: ScheduleEntry[], generatedScheduleEntries: ScheduleEntry[]): ScheduleEntry[] {
     const conflicts: ScheduleEntry[] = [];
-
     generatedScheduleEntries && generatedScheduleEntries.forEach((generatedEntry) => {
         currentScheduledEntries && currentScheduledEntries.forEach((currentEntry) => {
             const generatedStart = new Date(generatedEntry.StartDateTime).getTime();
@@ -23,7 +22,6 @@ export function findScheduleConflicts(currentScheduledEntries: ScheduleEntry[], 
             }
         });
     });
-
 
     return conflicts;
 }

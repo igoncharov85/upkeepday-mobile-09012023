@@ -62,17 +62,12 @@ export const SheduleTable: FC<ISheduleTable> = memo(
     const startWeekOfDay = getToday(startOfWeek)[1];
     const timeData = generateTimeData('00:00', '23:00');
     const weekStructure = createWeekStructure(startOfWeek, endOfWeek, timeData);
-
-
-
-
     const { CurrentScheduledEntries, loading } = useAppSelector(state => state.schedule);
+
     useEffect(() => {
-      dispatch(fetchScheduleByPeriodAction({ startDate: moment(startOfWeek).add(-1, 'days').toISOString(), endDate: endOfWeek.toISOString() }));
-    }, [startOfWeek])
-    useEffect(() => {
-      dispatch(fetchScheduleByPeriodAction({ startDate: moment(startOfWeek).add(-1, 'days').toISOString(), endDate: endOfWeek.toISOString() }));
-    }, [isFocused]);
+      dispatch(fetchScheduleByPeriodAction({ startDate: moment(startOfWeek).toISOString(), endDate: endOfWeek.toISOString() }));
+      console.log('current: ', CurrentScheduledEntries)
+    }, [isFocused, startOfWeek]);
     return loading ? <ScreenLoading /> : (
       <View style={styles.container} >
         <ScrollView contentOffset={{ x: 0, y: 64 * 8 }} >
@@ -100,13 +95,13 @@ export const SheduleTable: FC<ISheduleTable> = memo(
                         return (
                           <SheduleTableItem
                             lessonOnThisHour={items}
-                            key={index}
+                            key={`${index}-${dayNumber}`}
                             item={item}
                             currentDate={currentDate}
                           />
                         );
                       }
-                      return <SheduleTableItem key={index} currentDate={currentDate} />;
+                      return <SheduleTableItem key={`${index}-${dayNumber}`} currentDate={currentDate} />;
                     })}
                     {isToday(dayIndex) && isTodayInWeekRange(startOfWeek, endOfWeek) && (
                       <View style={[styles.absoluteFill, styles.mask]} />

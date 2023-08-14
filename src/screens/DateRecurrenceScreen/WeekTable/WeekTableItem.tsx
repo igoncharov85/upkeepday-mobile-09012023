@@ -10,7 +10,7 @@ type Interval = {
   start: string;
   end: string;
 };
-function findNextElement(array: any[], targetElement: any) {
+export function findNextElement(array: any[], targetElement: any) {
   array.sort((a, b) => {
     const timeA = a.start.split(':').map(Number);
     const timeB = b.start.split(':').map(Number);

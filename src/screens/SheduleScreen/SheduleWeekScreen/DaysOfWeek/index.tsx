@@ -40,7 +40,7 @@ export const DaysOfWeek: FC<IDaysOfWeek> = memo(({ startOfWeek, endOfWeek, goToP
     <View style={styles.containerWekk} {...panResponder.panHandlers}>
       {daysWeek.map((item, index) => (
         <DaysOfWeekItem
-          key={`${item.dayOfMonth}`}
+          key={`${item.dayOfMonth}-${item.dayOfWeek}-${index}`}
           daysOfWeek={item.dayOfWeek}
           number={item.dayOfMonth}
           isToday={item.isToday}

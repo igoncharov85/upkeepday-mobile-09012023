@@ -9,13 +9,6 @@ import moment from 'moment';
 
 const StudentsScreen = () => {
     const { users, loading } = useAppSelector(state => state.user);
-
-
-    useEffect(() => {
-        const time = Date.now();
-        // console.log('\n----Screen Student----\n', loading, ' - loading status\n', moment(time).format('HH:mm:ss.SSS'), ' - time set loading')
-
-    }, [loading])
     return (
         <View style={{ flex: 1 }}>
             <StudentsNavigation />

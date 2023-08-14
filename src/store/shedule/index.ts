@@ -40,8 +40,7 @@ export const scheduleSlice = createSlice({
             state.WeekTimeSlots = action.payload
         },
         setLocalStudentData: (state, action: PayloadAction<Array<any>>) => {
-            console.log('student redux\n&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&n\n\n\nn\n\n9999999999999999999', action.payload)
-            state.localStudentData = action.payload
+           state.localStudentData = action.payload
         },
         setGeneratedScheduleEntriesAction: (state, action: PayloadAction<Array<IGeneratedScheduleEntries>>) => {
             state.GeneratedScheduleEntries = action.payload

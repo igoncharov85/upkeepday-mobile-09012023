@@ -37,8 +37,6 @@ export class UserService {
     }
     static async updateStudent(data: IStudentRequest & IUserCreateRequest) {
         const { StudentId, ...student } = data
-        console.log('student', student);
-
         return await $axiosAuth.put(`/tutor/students/${StudentId}`, student)
     }
     static async fetchStudentById({ StudentId }: (IStudentRequest)) {

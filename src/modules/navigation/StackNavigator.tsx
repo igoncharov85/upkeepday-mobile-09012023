@@ -2,10 +2,10 @@
 import React, { memo, useEffect, useState } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationEnum } from '../../common/constants/navigation';
-import {AddBusinessAccountScreen} from "../../screens/AddBusinessAccountScreen";
-import {AddNewTeacherScreen} from "../../screens/AddNewTeacher";
+import { AddBusinessAccountScreen } from "../../screens/AddBusinessAccountScreen";
+import { AddNewTeacherScreen } from "../../screens/AddNewTeacher";
 import { LoginScreen } from '../../screens/LoginScreen';
-import {PaymentTrackingSetUp} from "../../screens/PaymentTrackingSetUp";
+import { PaymentTrackingSetUp } from "../../screens/PaymentTrackingSetUp";
 import { RegistrationScreen } from '../../screens/RegistrationScreen';
 import { FinalRegistrationScreen } from '../../screens/RegistrationScreen/FinalRegistrtionScreen';
 import { SendEmailScreen } from '../../screens/ForgotPassScreen/SendEmailScreen';
@@ -42,6 +42,7 @@ import EditTimeSessionModal from '../../components/Modals/EditTimeSessionModal';
 
 const Stack = createNativeStackNavigator();
 export const StackNavigator = memo(() => {
+
   const { isAuth } = useAppSelector((store) => store.auth)
   useEffect(() => {
 

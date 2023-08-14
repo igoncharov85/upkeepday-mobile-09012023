@@ -63,7 +63,7 @@ export const WeekTable: FC<ISheduleTable> = memo(
     const [isVisibleEdit, setIsVisibleEdit] = useState(false);
     const [currentSessionId, setCurrentSessionId] = useState(0);
     const [currentSlotTime, setCurrentSlotTime] = useState('');
-    const [slots, setSlots] = useState<IGeneratedScheduleEntries[]>(removeElementsFromArray(currentSession, CurrentScheduledEntries) as []);
+    const [slots, setSlots] = useState<IGeneratedScheduleEntries[]>(currentSession as []);
 
     const onChangeEditMode = (value: boolean) => {
       setEditMode(value);
@@ -96,9 +96,8 @@ export const WeekTable: FC<ISheduleTable> = memo(
     useEffect(() => {
       onHandleData(slots)
     }, [slots])
-    // dispatch(fetchScheduleByPeriodAction({ startDate: moment(startOfWeek).add(-1, 'days').toISOString(), endDate: endOfWeek.toISOString() }));
-    // useEffect(() => {
-    // }, []);
+    useEffect(() => {
+    }, []);
     const timeData = generateTimeData('00:00', '23:00');
     const weekStructure = createWeekStructure(
       startOfWeek,

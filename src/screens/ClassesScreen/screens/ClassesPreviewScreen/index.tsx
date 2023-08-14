@@ -17,6 +17,8 @@ import { WeekTable } from "./WeekTable";
 import { DaysOfWeek } from "./DaysOfWeek";
 import { fetchSessionClassesByIdAction } from "../../../../store/classes/actions";
 import { IClassesResponse } from "../../../../common/types/classes.types";
+import { fetchScheduleByPeriodAction } from "../../../../store/shedule/actions";
+import moment from "moment";
 
 function removeElementsFromArray(arr1: any[], arr2: any[]) {
     return arr1.filter(item1 => {
@@ -44,7 +46,7 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
     const { CurrentScheduledEntries, loading } = useAppSelector(state => state.schedule);
     const { currentSession }: any = useAppSelector(state => state.classes);
 
-    const [conflict, setConflict] = useState<IGeneratedScheduleEntries[]>(findScheduleConflicts(CurrentScheduledEntries, removeElementsFromArray(CurrentScheduledEntries, currentSession)));
+    const [conflict, setConflict] = useState<IGeneratedScheduleEntries[]>(findScheduleConflicts(CurrentScheduledEntries, currentSession));
 
     const handeScheduleSlots = (slots: IGeneratedScheduleEntries[]) => {
         setConflict(findScheduleConflicts(slots, CurrentScheduledEntries))
@@ -53,7 +55,6 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
     const goToNextWeek = () => {
         setStartDateWeek(new Date(addDayAndHoursToDate(startDateWeek.toISOString(), 7, 0)))
         setEndDateWeek(new Date(addDayAndHoursToDate(endDateWeek.toISOString(), 7, 0)))
-
     }
     const goToPrevWeek = () => {
         setStartDateWeek(new Date(addDayAndHoursToDate(startDateWeek.toISOString(), -7, 0)))
@@ -67,7 +68,12 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
     }
 
     useEffect(() => {
+        const startOfYear = new Date(new Date().getFullYear(), 0, 1);
+        const endOfYear = new Date(new Date().getFullYear(), 11, 31, 23, 59, 59, 999);
+
         dispatch(fetchSessionClassesByIdAction(item.ClassId))
+        dispatch(fetchScheduleByPeriodAction({ startDate: moment(startOfYear).format('YYYY-MM-DDTHH:mm:ss'), endDate: moment(endOfYear).format('YYYY-MM-DDTHH:mm:ss') }));
+        console.log('current: ', CurrentScheduledEntries)
     }, []);
 
 

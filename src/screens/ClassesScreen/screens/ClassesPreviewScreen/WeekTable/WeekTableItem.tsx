@@ -50,14 +50,12 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
     currentDate
 
   }) => {
-    const [canMove, setCanMove] = useState(false);
     const { currentSession } = useAppSelector(state => state.classes);
     const colorsLesson = ['#EAAFC8', '#654EA3'];
 
     const lessonOnThisTime: IGeneratedScheduleEntries[] = findLessonOnCurrentHour(slots, timeIndex, currentDate)
 
     const onHandleLongPress = (active: boolean) => {
-      setCanMove(active);
       onLongPress(active)
     }
 
@@ -65,27 +63,6 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
       onDeleteSlot(activeItem)
       onLongPress(false)
     }
-    const pan = useRef(new Animated.ValueXY()).current;
-
-    const panResponder = PanResponder.create({
-      onStartShouldSetPanResponder: () => canMove,
-      onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y, },], { useNativeDriver: false }),
-      onPanResponderRelease: (_, gestureState) => {
-        const
-          gridCellX = Math.floor((gestureState.dx + CELL_SIZE.width / 2) / CELL_SIZE.width),
-          gridCellY = Math.floor((gestureState.dy + CELL_SIZE.height / 2) / CELL_SIZE.height),
-          moveCoords = {
-            x: (CELL_SIZE.width / 2) * gridCellX,
-            y: (CELL_SIZE.height / 2) * gridCellY,
-          };
-        pan.setOffset(moveCoords);
-        pan.setValue(moveCoords);
-        onMoveSlot(activeItem, gridCellX, gridCellY,)
-
-        onHandleLongPress(false);
-      },
-    });
-
 
     const getInfo = () => {
       console.log(
@@ -114,7 +91,7 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
           }}>
             {lessonOnThisTime.map((lesson, index) => {
               return (
-                <LessonItem key={`${index}-${lesson.Duration}-${lesson.StartDateTime}`} conflict={conflict} lesson={lesson} onMoveSlot={onMoveSlot} canMove={canMove} editMode={editMode} deleteSlot={deleteSlot} onHandleLongPress={onHandleLongPress} />)
+                <LessonItem key={`${index}-${lesson.Duration}-${lesson.StartDateTime}`} conflict={conflict} lesson={lesson} onMoveSlot={onMoveSlot} editMode={editMode} deleteSlot={deleteSlot} onHandleLongPress={onHandleLongPress} />)
             })}
             {dryField &&
               <TouchableOpacity onPress={() => console.log(dryField)} style={{
@@ -136,13 +113,13 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
 
 
 
-const LessonItem = ({ lesson, conflict, onMoveSlot, canMove, editMode, deleteSlot, onHandleLongPress }: { lesson: any, onMoveSlot: any, canMove: boolean, editMode: boolean, conflict: any, deleteSlot: any, onHandleLongPress: any }) => {
+const LessonItem = ({ lesson, conflict, onMoveSlot, editMode, deleteSlot, onHandleLongPress }: { lesson: any, onMoveSlot: any, editMode: boolean, conflict: any, deleteSlot: any, onHandleLongPress: any }) => {
 
   const colorsLesson = ['#EAAFC8', '#654EA3'];
   const navigation = useNavigation();
-  const pan = useRef(new Animated.ValueXY()).current;
+  const pan = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
   const panResponders = PanResponder.create({
-    onStartShouldSetPanResponder: () => canMove,
+    onStartShouldSetPanResponder: () => editMode,
     onPanResponderMove: Animated.event(
       [null, { dx: pan.x, dy: pan.y }],
       { useNativeDriver: false }
@@ -194,7 +171,7 @@ const LessonItem = ({ lesson, conflict, onMoveSlot, canMove, editMode, deleteSlo
           pan.getLayout(), {
             height: `${lesson.Duration / 60 * 100}%`,
             width: '100%',
-            top: `${lessonMinuteStart / 60 * 100}%`
+            top: pan.y
           }
         ]
       }>
@@ -203,7 +180,7 @@ const LessonItem = ({ lesson, conflict, onMoveSlot, canMove, editMode, deleteSlo
           colors={colorsLesson}
           start={{ x: 0.5, y: 0 }}
           end={{ x: 0.5, y: 1 }}
-          style={[styles.wrapperItem,
+          style={[styles.wrapperItem, { top: `${lessonMinuteStart / 60 * 100}%` }
           ]}>
           {editMode && (
             <TouchableOpacity style={styles.cansel} onPress={() => deleteSlot(lesson)}>

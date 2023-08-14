@@ -67,17 +67,15 @@ export const WeekTableItem: FC<IWeekTableItem> =
     timeIndex
 
   }) => {
-    const [canMove, setCanMove] = useState(false);
     const lessonOnThisTime: IGeneratedScheduleEntries[] = findLessonOnCurrentHour(slots, timeIndex, currentDay)
 
     const onHandleLongPress = (active: boolean) => {
-      setCanMove(active);
+
       onLongPress(active)
     }
 
     const deleteSlot = (item: any) => {
       onDeleteSlot(item)
-      setCanMove(false);
       onLongPress(false)
     }
 
@@ -93,16 +91,14 @@ export const WeekTableItem: FC<IWeekTableItem> =
             position: 'relative',
           }}>
             {lessonOnThisTime.map((lesson, index) => {
-
               return (
-                <LessonItem key={`${lesson.StartDateTime} ${index}`} lesson={lesson} onMoveSlot={onMoveSlot} canMove={canMove} editMode={editMode} deleteSlot={deleteSlot} onHandleLongPress={onHandleLongPress} />)
+                <LessonItem key={`${lesson.StartDateTime} ${index}`} lesson={lesson} onMoveSlot={onMoveSlot} editMode={editMode} deleteSlot={deleteSlot} onHandleLongPress={onHandleLongPress} />)
             })}
             {dryField &&
               <TouchableOpacity onPress={() => console.log(dryField)} style={{
                 height: '100%', width: '100%'
               }}>
                 <BusyField
-                  // start={Number(dryField.StartDateTime.split('T')[1].split(':')[1])}
                   start={Number(dryField.StartDateTime.split('T')[1].split(':')[1])}
                   duration={dryField.Duration} />
               </TouchableOpacity>
@@ -117,13 +113,13 @@ export const WeekTableItem: FC<IWeekTableItem> =
   };
 
 
-const LessonItem = ({ lesson, onMoveSlot, canMove, editMode, deleteSlot, onHandleLongPress }: { lesson: any, onMoveSlot: any, canMove: boolean, editMode: boolean, deleteSlot: any, onHandleLongPress: any }) => {
+const LessonItem = ({ lesson, onMoveSlot, editMode, deleteSlot, onHandleLongPress }: { lesson: any, onMoveSlot: any, editMode: boolean, deleteSlot: any, onHandleLongPress: any }) => {
   const colorsLesson = ['#EAAFC8', '#654EA3'];
 
   const navigation = useNavigation();
-  const pan = useRef(new Animated.ValueXY()).current;
+  const pan = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
   const panResponders = PanResponder.create({
-    onStartShouldSetPanResponder: () => canMove,
+    onStartShouldSetPanResponder: () => editMode,
     onPanResponderMove: Animated.event(
       [null, { dx: pan.x, dy: pan.y }],
       { useNativeDriver: false }
@@ -175,7 +171,7 @@ const LessonItem = ({ lesson, onMoveSlot, canMove, editMode, deleteSlot, onHandl
           pan.getLayout(), {
             height: `${lesson.Duration / 60 * 100}%`,
             width: '100%',
-            top: `${lessonMinuteStart / 60 * 100}%`
+            top: pan.y,
           }
         ]
       }>
@@ -184,7 +180,7 @@ const LessonItem = ({ lesson, onMoveSlot, canMove, editMode, deleteSlot, onHandl
           colors={colorsLesson}
           start={{ x: 0.5, y: 0 }}
           end={{ x: 0.5, y: 1 }}
-          style={[styles.wrapperItem,
+          style={[styles.wrapperItem, { top: `${lessonMinuteStart / 60 * 100}%` }
           ]}>
           {editMode && (
             <TouchableOpacity style={styles.cansel} onPress={() => deleteSlot(lesson)}>

@@ -133,7 +133,7 @@ export const WeekTable: FC<ISheduleTable> = memo(
                         editMode={editMode}
                         onDeleteSlot={onDeleteSlot}
                         onMoveSlot={onMoveSlot}
-                        dryField={dryField && dryField}
+                        dryField={dryField}
                       />;
                     })}
 

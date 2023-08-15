@@ -111,7 +111,7 @@ export const WeekTable: FC<ISheduleTable> = memo(
                       onDeleteSlot={onDeleteSlot}
                       onMoveSlot={onMoveSlot}
                       currentDay={currentDate}
-                      dryField={dryField && dryField[0]} />;
+                      dryField={dryField} />;
                   })}
 
                 </Column>

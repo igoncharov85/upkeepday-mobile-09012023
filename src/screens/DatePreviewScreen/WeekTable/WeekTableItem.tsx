@@ -68,7 +68,8 @@ export const WeekTableItem: FC<IWeekTableItem> =
 
   }) => {
     const lessonOnThisTime: IGeneratedScheduleEntries[] = findLessonOnCurrentHour(slots, timeIndex, currentDay)
-
+    const { createCurrentClassRequest } = useAppSelector(state => state.schedule);
+    console.log('createCurrentClassRequest', createCurrentClassRequest.Class?.Name)
     const onHandleLongPress = (active: boolean) => {
 
       onLongPress(active)
@@ -89,20 +90,22 @@ export const WeekTableItem: FC<IWeekTableItem> =
             {lessonOnThisTime.map((lesson, index) => {
               return (
                 //remove TouchableOpacity to display cells correctly, added for testing purposes 
-                <TouchableOpacity onPress={() => console.log('touch lesson', lesson)}>
-                  <LessonItem key={`${lesson.StartDateTime} ${index}`} lesson={lesson} onMoveSlot={onMoveSlot} editMode={editMode} deleteSlot={deleteSlot} onHandleLongPress={onHandleLongPress} />
-                </TouchableOpacity>
+                // <TouchableOpacity onPress={() => console.log('touch lesson', lesson)}>
+                <LessonItem name={createCurrentClassRequest.Class?.Name || ''} key={`${lesson.StartDateTime} ${index}`} lesson={lesson} onMoveSlot={onMoveSlot} editMode={editMode} deleteSlot={deleteSlot} onHandleLongPress={onHandleLongPress} />
+                // </TouchableOpacity>
               )
             })}
             {/* Must doing */}
-            {dryField.map((dryFieldItem) =>
-              <TouchableOpacity onPress={() => console.log(dryField)} style={{
-                height: '100%', width: '100%'
-              }}>
+            {dryField &&
+              dryField.map((dryFieldItem) =>
+                // <TouchableOpacity onPress={() => console.log(dryField)} style={{
+                //   height: '100%', width: '100%'
+                // }}>
                 <BusyField
                   start={Number(dryFieldItem.StartDateTime.split('T')[1].split(':')[1])}
                   duration={dryFieldItem.Duration} />
-              </TouchableOpacity>)
+                // </TouchableOpacity>
+              )
 
             }
           </View>
@@ -114,7 +117,7 @@ export const WeekTableItem: FC<IWeekTableItem> =
   };
 
 
-const LessonItem = ({ lesson, onMoveSlot, editMode, deleteSlot, onHandleLongPress }: { lesson: any, onMoveSlot: any, editMode: boolean, deleteSlot: any, onHandleLongPress: any }) => {
+const LessonItem = ({ lesson, onMoveSlot, editMode, deleteSlot, onHandleLongPress, name }: { lesson: any, onMoveSlot: any, editMode: boolean, deleteSlot: any, onHandleLongPress: any, name: string }) => {
   const colorsLesson = ['#EAAFC8', '#654EA3'];
 
   const navigation = useNavigation();
@@ -182,12 +185,15 @@ const LessonItem = ({ lesson, onMoveSlot, editMode, deleteSlot, onHandleLongPres
           style={[styles.wrapperItem, { top: `${lessonMinuteStart / 60 * 100}%` }
           ]}>
           {editMode && (
-            <TouchableOpacity style={styles.cansel} onPress={() => deleteSlot(lesson)}>
+            <TouchableOpacity style={styles.cansel} onPress={() => {
+              console.log(lesson)
+              deleteSlot(lesson)
+            }}>
               <Cancel />
             </TouchableOpacity>)}
           <Text style={[styles.textItem,
           ]
-          }>Class</Text>
+          }>{name}</Text>
         </LinearGradient>
       </>
     </Animated.View>

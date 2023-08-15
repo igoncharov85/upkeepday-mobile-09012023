@@ -14,7 +14,7 @@ import styles from "./styles";
 import DeleteIcon from "../../../../../assets/svg/classes/DeleteIcon";
 import { formatDateForPeriod } from "../../../../services/utils/fullDateToValue.util";
 import { dispatch } from "../../../../store/store";
-import { deleteClassesAction } from "../../../../store/classes/actions";
+import { deleteClassesAction, fetchClassesSchedule } from "../../../../store/classes/actions";
 
 interface IClassesItem {
     item: IClassesResponse
@@ -31,6 +31,8 @@ const ClassesItem: React.FC<IClassesItem> = ({ item }) => {
     };
 
     const navigateToLessonView = () => {
+        const ClassId = item.ClassId
+        dispatch(fetchClassesSchedule({ classId: ClassId }))
         //@ts-ignore
         navigation.navigate(NavigationEnum.CLASSES_PREVIEW_SCREEN, { item });
     }

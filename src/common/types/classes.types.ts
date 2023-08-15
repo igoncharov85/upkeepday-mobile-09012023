@@ -1,3 +1,5 @@
+import { string } from "yup";
+
 export interface IStudent {
     StudentId: number;
     FullName: string;
@@ -37,6 +39,12 @@ export interface IClassesResponse {
     TrackPrepayment: boolean;
 }
 
+export interface IclassesScheduleResponse {
+    StartDate: string;
+    EndDate: string;
+    Sessions: ISession[];
+    OtherSessions: ISession[];
+}
 
 export type TClassesStatus = 'scheduled' | 'archived';
 export type TClassesChange = 'current' | 'future';
@@ -61,7 +69,9 @@ export enum EClassesChange {
     future = 'future'
 }
 
-
+export interface IClassId {
+    classId: number;
+}
 export interface IGeneratedClasses {
     id: TClassesId;
     to: string;

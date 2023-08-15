@@ -39,6 +39,7 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
     const isFocused = useIsFocused();
 
     const today = new Date();
+
     const weekDates = getWeekDates(today);
 
     const [startDateWeek, setStartDateWeek] = useState(new Date(weekDates.startDate));
@@ -91,7 +92,7 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
 
         </View>
         {<View style={{ flex: 1 }}>
-            <WeekTable startOfWeek={startDateWeek} endOfWeek={endDateWeek} onHandleData={handeScheduleSlots} conflict={conflict} dryFields={removeElementsFromArray(CurrentScheduledEntries, currentSession)} />
+            <WeekTable classId={item.ClassId} startOfWeek={startDateWeek} endOfWeek={endDateWeek} onHandleData={handeScheduleSlots} conflict={conflict} dryFields={removeElementsFromArray(CurrentScheduledEntries, currentSession)} />
         </View>}
         <View style={{ padding: 20, justifyContent: 'flex-end' }}>
             <CustomButton text={"Ok"} onPress={onSave} />

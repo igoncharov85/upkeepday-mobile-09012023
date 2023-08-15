@@ -13,6 +13,7 @@ import { fetchScheduleByPeriodAction } from '../../../../../store/shedule/action
 import moment from 'moment';
 import PreviewModal from '../../../components/PreviewModal';
 import { ScreenLoading } from '../../../../../components/UI/ScreenLoading';
+import { fetchClassesSchedule } from '../../../../../store/classes/actions';
 
 
 
@@ -41,17 +42,18 @@ interface ISheduleTable {
   onHandleData: (data: IGeneratedScheduleEntries[]) => void;
   conflict: IGeneratedScheduleEntries[];
   dryFields: IGeneratedScheduleEntries[];
+  classId: number;
 }
 
 
 
 export const startOfHour = 8;
 export const WeekTable: FC<ISheduleTable> = memo(
-  ({ startOfWeek, endOfWeek, onHandleData, conflict, dryFields }) => {
+  ({ startOfWeek, endOfWeek, onHandleData, conflict, dryFields, classId }) => {
     const { GeneratedScheduleEntries, CurrentScheduledEntries } = useAppSelector(state => state.schedule);
-    const { currentSession, loading } = useAppSelector(state => state.classes);
+    const { currentSession, loading, classesSchedule } = useAppSelector(state => state.classes);
     const [editMode, setEditMode] = useState(false);
-
+    console.log('classId\n\n\n\n\n\n\n', classId)
 
     const [slots, setSlots] = useState<IGeneratedScheduleEntries[]>(currentSession as []);
 
@@ -76,15 +78,22 @@ export const WeekTable: FC<ISheduleTable> = memo(
     }
 
     useEffect(() => {
+
       onHandleData(slots)
     }, [slots])
-
+    // useEffect(() => {
+    //   dispatch(fetchClassesSchedule({ classId }))
+    // }, [])
     const timeData = generateTimeData('00:00', '23:00');
+
     const weekStructure = createWeekStructure(
       startOfWeek,
       endOfWeek,
       timeData,
     );
+    useEffect(() => {
+      console.log('loading:', loading)
+    }, [loading])
     const date = (new Date(startOfWeek));
     return (
       <View style={styles.container}>
@@ -96,7 +105,7 @@ export const WeekTable: FC<ISheduleTable> = memo(
               ))}
             </Column>
             <Row style={styles.rowLessons}>
-              {loading ? <ScreenLoading /> : weekStructure?.map((dayEvents, dayIndex) => {
+              {weekStructure?.map((dayEvents, dayIndex) => {
 
                 return (
                   <Column key={dayIndex}>

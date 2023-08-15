@@ -12,6 +12,8 @@ import { useNavigation } from '@react-navigation/native';
 import { findLessonOnCurrentHour } from '../../../../DatePreviewScreen/WeekTable/WeekTableItem';
 
 import { NavigationEnum } from '../../../../../common/constants/navigation';
+import { dispatch } from '../../../../../store/store';
+import { fetchClassesSchedule } from '../../../../../store/classes/actions';
 
 
 interface IWeekTableItem {
@@ -50,19 +52,13 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
     currentDate
 
   }) => {
-    const { currentSession } = useAppSelector(state => state.classes);
-    const colorsLesson = ['#EAAFC8', '#654EA3'];
-
+    // const { currentSession, loading, classesSchedule } = useAppSelector(state => state.classes);
     const lessonOnThisTime: IGeneratedScheduleEntries[] = findLessonOnCurrentHour(slots, timeIndex, currentDate)
 
     const onHandleLongPress = (active: boolean) => {
       onLongPress(active)
     }
 
-    const deleteSlot = () => {
-      onDeleteSlot(activeItem)
-      onLongPress(false)
-    }
 
     const getInfo = () => {
       console.log(
@@ -83,25 +79,21 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
         onLongPress={() => onHandleLongPress(true)}
         activeOpacity={1}
       >
-        <View style={styles.containerItem}>
-          <View style={{
-            borderRadius: 4,
-            flex: 1,
-            position: 'relative',
-          }}>
+        <View style={styles.wrapperCell}>
+          <View style={styles.containerCell}>
             {lessonOnThisTime.map((lesson, index) => {
               return (
-                <LessonItem key={`${index}-${lesson.Duration}-${lesson.StartDateTime}`} conflict={conflict} lesson={lesson} onMoveSlot={onMoveSlot} editMode={editMode} deleteSlot={deleteSlot} onHandleLongPress={onHandleLongPress} />)
+                <LessonItem
+                  key={`${index}-${lesson.Duration}-${lesson.StartDateTime}`}
+                  editMode={editMode}
+                  lesson={lesson}
+                  onHandleLongPress={onHandleLongPress} />)
             })}
             {dryField &&
               dryField.map((dryFieldItem) =>
-                // <TouchableOpacity onPress={() => console.log(dryField)} style={{
-                //   height: '100%', width: '100%'
-                // }}>
                 <BusyField
                   start={Number(dryFieldItem.StartDateTime.split('T')[1].split(':')[1])}
                   duration={dryFieldItem.Duration} />
-                // </TouchableOpacity>
               )
 
             }
@@ -115,12 +107,14 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
 
 
 
-const LessonItem = ({ lesson, conflict, onMoveSlot, editMode, deleteSlot, onHandleLongPress }: { lesson: any, onMoveSlot: any, editMode: boolean, conflict: any, deleteSlot: any, onHandleLongPress: any }) => {
+const LessonItem = ({ lesson, editMode, onHandleLongPress }: { lesson: any, editMode: boolean, onHandleLongPress: any }) => {
 
   const colorsLesson = ['#EAAFC8', '#654EA3'];
   const navigation = useNavigation();
   const pan = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
   const completeAction = () => {
+    // dispatch(fetchClassesSchedule())
+    console.log(lesson)
     onHandleLongPress(false)
   }
   const onDeleteSlot = () => {
@@ -150,8 +144,6 @@ const LessonItem = ({ lesson, conflict, onMoveSlot, editMode, deleteSlot, onHand
       let newTime = new Date(addDayAndHoursToDate(lesson.StartDateTime, gridCellX, gridCellY));
 
 
-
-      console.log('lesson: \n\n', lesson)
       //@ts-ignore
       navigation.navigate(NavigationEnum.PREVIEW_MODAL, {
         SessionId: lesson?.SessionId,
@@ -159,11 +151,6 @@ const LessonItem = ({ lesson, conflict, onMoveSlot, editMode, deleteSlot, onHand
         completeAction,
         deleteItem: true
       })
-      // navigation.navigate(NavigationEnum.EDIT_TIME_CLASS_MODAL, {
-      //   addDuration,
-      //   newTime,
-      //   conflict,
-      // })
 
       pan.setOffset({
         x: 0,

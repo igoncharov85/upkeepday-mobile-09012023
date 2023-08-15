@@ -40,6 +40,9 @@ import MoreScreen from '../../screens/MoreScreen';
 import DurationSessionModal from '../../components/Modals/DurationSessionModal';
 import SelectDurationSessionModal from '../../components/Modals/SelectDurationSessionModal';
 import EditTimeSessionModal from '../../components/Modals/EditTimeSessionModal';
+import { StudentPayments } from '../../screens/StudentsScreen/screens/StudentPayments';
+import { PaymentsTable } from '../../screens/StudentsScreen/screens/PaymentsTable';
+import { PaymentTracking } from '../../screens/StudentsScreen/screens/PaymentTracking';
 
 
 const Stack = createNativeStackNavigator();
@@ -178,6 +181,18 @@ export const StackNavigator = memo(() => {
           name={NavigationEnum.EDIT_STUDENTS_SCREEN}
           //@ts-ignore
           component={EditStudentScreen}
+        />
+        <Stack.Screen
+          name={NavigationEnum.STUDENT_PAYMENTS_SCREEN}
+          component={StudentPayments}
+        />
+        <Stack.Screen
+          name={NavigationEnum.PAYMENTS_TABLE_SCREEN}
+          component={PaymentsTable}
+        />
+        <Stack.Screen
+          name={NavigationEnum.PAYMENT_STUDENT_TRACKING}
+          component={PaymentTracking}
         />
         <Stack.Screen
           name={NavigationEnum.PREVIEW_STUDENTS_SCREEN}

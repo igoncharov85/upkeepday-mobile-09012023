@@ -13,6 +13,7 @@ import { dispatch } from "../../../../store/store";
 import { deleteStudentAction, updateStudentStatus } from "../../../../store/user/actions";
 import CheckIcon from "../../../../../assets/svg/classes/CheckIcon";
 import OrangeCrossIcon from "../../../../../assets/svg/students/OrangeCrossIcon";
+import BankCardIcon from "../../../../../assets/svg/classes/BankCardIcon";
 
 interface IStudentsItem {
     item: IStudentResponse | any
@@ -31,6 +32,11 @@ const StudentsItem: React.FC<IStudentsItem> = ({ item }) => {
     const handleEdit = () => {
         //@ts-ignore
         navigation.navigate(NavigationEnum.EDIT_STUDENTS_SCREEN, { item });
+    };
+
+    const handlePayment = () => {
+        //@ts-ignore
+        navigation.navigate(NavigationEnum.STUDENT_PAYMENTS_SCREEN, {item});
     };
 
     const handleInfo = () => {
@@ -93,10 +99,13 @@ const StudentsItem: React.FC<IStudentsItem> = ({ item }) => {
                         onPress={handleInfo}>
                         <Text style={[styles.underlineText, styles.textRight]}>Enrolled Classes: {item.EnrolledClasses.length}</Text>
                     </TouchableOpacity>
-                    <Text style={[styles.underlineText, styles.textRight]}>Balance: <Text style={{ color: '#169861' }}>
-                        {item.Balance}
-                    </Text>
-                    </Text>
+                    <TouchableOpacity
+                        onPress={handlePayment}>
+                        <Text style={[styles.underlineText, styles.textRight]}>Total Balance: <Text style={{color: item.Balance >= 0 ? '#169861' : "#F00"}}>
+                            {item.Balance}
+                            </Text>
+                        </Text>
+                    </TouchableOpacity>
                 </View>
             </View>
 
@@ -135,6 +144,12 @@ const StudentsItem: React.FC<IStudentsItem> = ({ item }) => {
                             <CheckIcon />
                         </TouchableOpacity>
                     )}
+                    <TouchableOpacity
+                        style={[ styles.buttonIcon]}
+                        onPress={handlePayment}
+                    >
+                        <BankCardIcon />
+                    </TouchableOpacity>
                 </View>
             </View>
         </View>

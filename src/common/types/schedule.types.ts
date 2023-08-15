@@ -19,14 +19,11 @@ export interface IExistingStudent {
     Notes?: string
 }
 export interface ICreateClassRequest {
-
     Class: IClass
     Location: ILocation,
     Students: Array<IStudents>,
     Slots: Array<IWeekTimeSlot>,
     Sessions: Array<IGeneratedScheduleEntries>
-    PaymentAmount: number,
-    PaymentType: string,
 }
 
 export interface IClass {
@@ -37,7 +34,8 @@ export interface IClass {
     EndScheduleType?: string,
     MakeupRequired?: boolean,
     TrackPrepayment?: boolean,
-
+    PaymentAmount: number,
+    PaymentType: string,
 }
 export interface ILocation {
     Name?: string

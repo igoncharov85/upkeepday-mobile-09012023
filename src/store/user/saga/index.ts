@@ -1,14 +1,15 @@
 import { AxiosResponse } from "axios";
 import { SagaIterator } from "redux-saga";
 import { call, put, takeEvery } from "redux-saga/effects";
-import { addStudentAction, setCheckinStudentAction, setCurrentStudentAction, setStudentAction, setStudentListAction, setStudentLoading, setUsersAction } from "..";
+import { addStudentAction, setCheckinStudentAction, setCurrentStudentAction, setStudentAction, setStudentListAction, setStudentLoading, setStudentPayments, setUsersAction } from "..";
 import { IAction } from "../../../common/types/common.types";
-import { ICheckinUser, IUserCreateRequest, IUserStudent, ICheckinsId, IUserCheckinsRequest, IDeleteUserRequest, IUpdateStudent, IUserStudentResponse, IStudentRequest, IStudentResponse, IStudentsRequest, IStudentsResponse, IStudentByIdResponse } from "../../../common/types/user";
+import { ICheckinUser, IUserCreateRequest, IUserStudent, ICheckinsId, IUserCheckinsRequest, IDeleteUserRequest, IUpdateStudent, IUserStudentResponse, IStudentRequest, IStudentResponse, IStudentsRequest, IStudentsResponse, IStudentByIdResponse, IPaymentsTableParams, IPaymentsTableResponse, IStudentPaymentRequest } from "../../../common/types/user";
 import { UserService } from "../../../services/axios/user";
 import { ErrorFilterService } from "../../../services/error-filter/error-filter.service";
 import { UserContactsEnum } from "../constants";
 import { IStudent } from "../../../common/types/classes.types";
 import moment from "moment";
+import Toast from 'react-native-toast-message';
 
 export function* fetchUserWorker(payload: IAction<null>): SagaIterator {
     try {
@@ -160,6 +161,47 @@ export function* fetchStudentsByIdWorker(payload: IAction<IStudentRequest>): Sag
         ErrorFilterService.validateError(error)
     }
 }
+export function* fetchStudentPaymentsSaga(payload: IAction<IPaymentsTableParams>): SagaIterator {
+    try {
+        yield put(setStudentLoading(true))
+        const { data }: AxiosResponse<IPaymentsTableResponse, any> = yield call(
+            UserService.fetchStudentPayments,
+            payload.payload
+        );
+        if (data) {
+            console.log(data);
+
+            yield put(setStudentPayments(data))
+        }
+    } catch (error) {
+        ErrorFilterService.validateError(error)
+    } finally {
+        yield put(setStudentLoading(false))
+    }
+}
+export function* sendStudentPaymentSaga(payload: IAction<IStudentPaymentRequest>): SagaIterator {
+    try {
+        yield call(
+            UserService.sendStudentPayment,
+            payload.payload
+        );
+        Toast.show({
+            text1: 'Payment Successful',
+            text2: 'The payment has been processed successfully.',
+            position: 'top',
+            type: "info"
+        });
+    } catch (error) {
+        ErrorFilterService.validateError(error)
+        Toast.show({
+            text1: 'Error',
+            text2: 'Try again later...',
+            position: 'top',
+            type: "error"
+        });
+    }
+}
+
 // update student 
 export function* updateStudentWorker(payload: IAction<IStudentRequest & IUserCreateRequest>): SagaIterator {
     try {
@@ -197,4 +239,6 @@ export function* userWatcher() {
     yield takeEvery(UserContactsEnum.FETCH_STUDENTS_BY_ID, fetchStudentsByIdWorker)
     yield takeEvery(UserContactsEnum.UPDATE_STUDENTS, updateStudentWorker)
     yield takeEvery(UserContactsEnum.UPDATE_STUDENTS_STATUS, updateStudentStatusWorker)
+    yield takeEvery(UserContactsEnum.FETCH_STUDENT_PAYMENTS, fetchStudentPaymentsSaga)
+    yield takeEvery(UserContactsEnum.SEND_STUDENT_PAYMENT, sendStudentPaymentSaga)
 }

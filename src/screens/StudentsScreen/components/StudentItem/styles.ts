@@ -65,9 +65,16 @@ export default StyleSheet.create({
         marginBottom: 8,
     },
     textRight: {
-
         textAlign: 'right'
     },
-
-
+    buttonIcon: {
+        width: 40,
+        height: 40,
+        display: 'flex',
+        justifyContent: 'center', 
+        alignItems: 'center',
+        borderRadius: 4,
+        paddingLeft: 1,
+        paddingTop: 2
+    }
 })

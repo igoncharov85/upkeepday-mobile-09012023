@@ -51,10 +51,8 @@ export const WeekTable: FC<ISheduleTable> = memo(
     const { GeneratedScheduleEntries, CurrentScheduledEntries } = useAppSelector(state => state.schedule);
     const { currentSession, loading } = useAppSelector(state => state.classes);
     const [editMode, setEditMode] = useState(false);
-    const [isVisible, setIsVisible] = useState(false);
-    const [isVisibleEdit, setIsVisibleEdit] = useState(false);
-    const [currentSessionId, setCurrentSessionId] = useState(0);
-    const [currentSlotTime, setCurrentSlotTime] = useState('');
+
+
     const [slots, setSlots] = useState<IGeneratedScheduleEntries[]>(currentSession as []);
 
     const onChangeEditMode = (value: boolean) => {
@@ -62,8 +60,6 @@ export const WeekTable: FC<ISheduleTable> = memo(
     }
 
     const onDeleteSlot = (slot: any) => {
-      setCurrentSessionId(slot.SessionId);
-      onHandleModal();
       const newSlots = slots.filter((item) => {
         return item.StartDateTime !== slot.StartDateTime
       });
@@ -72,24 +68,17 @@ export const WeekTable: FC<ISheduleTable> = memo(
         onHandleData(slots)
       }
     }
-    const onHandleModal = () => {
-      setIsVisible(!isVisible);
-    }
-    const onHandleModalEdit = () => {
-      setIsVisibleEdit(!isVisibleEdit);
-    }
+
     const onMoveSlot = (slot: any, x: number, y: number) => {
-      setCurrentSessionId(slot.SessionId);
       const newTime = addDayAndHoursToDate(slot.StartDateTime, x, y);
-      onHandleModalEdit();
       const newSlots = slots.filter(item => item.SlotUid !== slot.SlotUid);
       setSlots([...newSlots, { Duration: slot.Duration, StartDateTime: newTime, SlotUid: slot.SlotUid }]);
     }
+
     useEffect(() => {
       onHandleData(slots)
     }, [slots])
-    useEffect(() => {
-    }, []);
+
     const timeData = generateTimeData('00:00', '23:00');
     const weekStructure = createWeekStructure(
       startOfWeek,
@@ -113,10 +102,8 @@ export const WeekTable: FC<ISheduleTable> = memo(
                   <Column key={dayIndex}>
                     {dayEvents?.map((_, index) => {
                       const currentDate = new Date(addDayAndHoursToDate(date.toISOString(), dayIndex, 0))
-
                       const activeItem = findScheduleEntries(currentSession as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
                       const conflictItem = findScheduleEntries(conflict as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
-
                       const dryField = findScheduleEntries(dryFields as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
 
                       return <WeekTableItem
@@ -144,8 +131,6 @@ export const WeekTable: FC<ISheduleTable> = memo(
           </Row>
         </ScrollView>
 
-        <PreviewModal editMode isVisible={isVisibleEdit} closeModal={onHandleModalEdit} currentSessionId={currentSessionId} newTime={currentSlotTime} />
-        <PreviewModal isVisible={isVisible} closeModal={onHandleModal} currentSessionId={currentSessionId} />
       </View>
 
     )

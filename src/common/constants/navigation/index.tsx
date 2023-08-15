@@ -1,4 +1,4 @@
-import {PaymentTrackingSetUp} from "../../../screens/PaymentTrackingSetUp";
+import { PaymentTrackingSetUp } from "../../../screens/PaymentTrackingSetUp";
 
 export enum NavigationEnum {
   LOGIN = 'navigation/LOGIN',
@@ -50,5 +50,6 @@ export enum NavigationEnum {
   RESULT_CLASS_MODAL = 'navigation/RESULT_CLASS_MODAL',
   SELECT_DURATION_CLASS_MODAL = 'navigation/SELECT_DURATION_CLASS_MODAL',
   EDIT_DURATION_CLASS_MODAL = 'navigation/EDIT_DURATION_CLASS_MODAL',
-  EDIT_TIME_CLASS_MODAL = 'navigation/EDIT_TIME_CLASS_MODAL'
+  EDIT_TIME_CLASS_MODAL = 'navigation/EDIT_TIME_CLASS_MODAL',
+  PREVIEW_MODAL = 'navigation/PREVIEW_MODAL'
 }

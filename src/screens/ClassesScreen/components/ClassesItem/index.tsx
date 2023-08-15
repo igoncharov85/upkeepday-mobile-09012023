@@ -25,12 +25,12 @@ interface IClassesItem {
 const ClassesItem: React.FC<IClassesItem> = ({ item }) => {
     const navigation = useNavigation();
 
-    const handleEdit = () => {
+    const navigateToEditLesson = () => {
         //@ts-ignore
         navigation.navigate(NavigationEnum.EDIT_CLASS_SCREEN, { item });
     };
 
-    const handleDocument = () => {
+    const navigateToLessonView = () => {
         //@ts-ignore
         navigation.navigate(NavigationEnum.CLASSES_PREVIEW_SCREEN, { item });
     }
@@ -72,14 +72,14 @@ const ClassesItem: React.FC<IClassesItem> = ({ item }) => {
                         <>
                             <TouchableOpacity
                                 style={styles.linkItem}
-                                onPress={handleDocument}
+                                onPress={navigateToLessonView}
                             >
-                                <DocumentIcon />
+                                <ScheduledIcon />
                             </TouchableOpacity>
 
                             <TouchableOpacity
                                 style={styles.linkItem}
-                                onPress={handleEdit}>
+                                onPress={navigateToEditLesson}>
                                 <EditIcon />
                             </TouchableOpacity>
 
@@ -88,7 +88,7 @@ const ClassesItem: React.FC<IClassesItem> = ({ item }) => {
                             </TouchableOpacity>
 
                             <TouchableOpacity onPress={() => { }} style={styles.linkItem}>
-                                <ScheduledIcon />
+                                <DocumentIcon />
                             </TouchableOpacity>
                         </>
                     ) : (

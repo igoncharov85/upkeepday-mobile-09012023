@@ -120,6 +120,17 @@ const LessonItem = ({ lesson, conflict, onMoveSlot, editMode, deleteSlot, onHand
   const colorsLesson = ['#EAAFC8', '#654EA3'];
   const navigation = useNavigation();
   const pan = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
+  const completeAction = () => {
+    onHandleLongPress(false)
+  }
+  const onDeleteSlot = () => {
+    //@ts-ignore
+    navigation.navigate(NavigationEnum.PREVIEW_MODAL, {
+      SessionId: lesson?.SessionId,
+      completeAction,
+      deleteItem: false
+    })
+  }
   const panResponders = PanResponder.create({
     onStartShouldSetPanResponder: () => editMode,
     onPanResponderMove: Animated.event(
@@ -137,20 +148,22 @@ const LessonItem = ({ lesson, conflict, onMoveSlot, editMode, deleteSlot, onHand
       pan.setOffset(moveCoords);
       pan.setValue(moveCoords);
       let newTime = new Date(addDayAndHoursToDate(lesson.StartDateTime, gridCellX, gridCellY));
-      const addDuration = (time: any) => {
 
-        newTime.setMinutes(time.minute)
-        newTime.setHours(time.dayPart == "AM" ? time.hour : time.hour + 12)
-        onHandleLongPress(false)
-        onMoveSlot(lesson, moment(newTime).format('YYYY-MM-DDTHH:mm:ss'))
-      }
 
+
+      console.log('lesson: \n\n', lesson)
       //@ts-ignore
-      navigation.navigate(NavigationEnum.EDIT_TIME_CLASS_MODAL, {
-        addDuration,
+      navigation.navigate(NavigationEnum.PREVIEW_MODAL, {
+        SessionId: lesson?.SessionId,
         newTime,
-        conflict,
+        completeAction,
+        deleteItem: true
       })
+      // navigation.navigate(NavigationEnum.EDIT_TIME_CLASS_MODAL, {
+      //   addDuration,
+      //   newTime,
+      //   conflict,
+      // })
 
       pan.setOffset({
         x: 0,
@@ -185,7 +198,7 @@ const LessonItem = ({ lesson, conflict, onMoveSlot, editMode, deleteSlot, onHand
           style={[styles.wrapperItem, { top: `${lessonMinuteStart / 60 * 100}%` }
           ]}>
           {editMode && (
-            <TouchableOpacity style={styles.cansel} onPress={() => console.log('lesson: \n\n\n', lesson)}>
+            <TouchableOpacity style={styles.cansel} onPress={onDeleteSlot}>
               <Cancel />
             </TouchableOpacity>)}
           <Text style={[styles.textItem,

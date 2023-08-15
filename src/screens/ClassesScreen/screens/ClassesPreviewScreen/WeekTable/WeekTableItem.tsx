@@ -24,7 +24,7 @@ interface IWeekTableItem {
   onDeleteSlot: (slot: IGeneratedScheduleEntries) => void;
   dayIndex: number;
   startOfWeek: Date;
-  dryField: IGeneratedScheduleEntries;
+  dryField: IGeneratedScheduleEntries[];
 
   currentDate: Date;
   timeIndex: number;
@@ -94,13 +94,15 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
                 <LessonItem key={`${index}-${lesson.Duration}-${lesson.StartDateTime}`} conflict={conflict} lesson={lesson} onMoveSlot={onMoveSlot} editMode={editMode} deleteSlot={deleteSlot} onHandleLongPress={onHandleLongPress} />)
             })}
             {dryField &&
-              <TouchableOpacity onPress={() => console.log(dryField)} style={{
-                height: '100%', width: '100%'
-              }}>
+              dryField.map((dryFieldItem) =>
+                // <TouchableOpacity onPress={() => console.log(dryField)} style={{
+                //   height: '100%', width: '100%'
+                // }}>
                 <BusyField
-                  start={Number(dryField.StartDateTime.split('T')[1].split(':')[1])}
-                  duration={dryField.Duration} />
-              </TouchableOpacity>
+                  start={Number(dryFieldItem.StartDateTime.split('T')[1].split(':')[1])}
+                  duration={dryFieldItem.Duration} />
+                // </TouchableOpacity>
+              )
 
             }
           </View>
@@ -183,12 +185,12 @@ const LessonItem = ({ lesson, conflict, onMoveSlot, editMode, deleteSlot, onHand
           style={[styles.wrapperItem, { top: `${lessonMinuteStart / 60 * 100}%` }
           ]}>
           {editMode && (
-            <TouchableOpacity style={styles.cansel} onPress={() => deleteSlot(lesson)}>
+            <TouchableOpacity style={styles.cansel} onPress={() => console.log('lesson: \n\n\n', lesson)}>
               <Cancel />
             </TouchableOpacity>)}
           <Text style={[styles.textItem,
           ]
-          }>Class</Text>
+          }>{lesson.ClassName}</Text>
         </LinearGradient>
       </>
     </Animated.View>

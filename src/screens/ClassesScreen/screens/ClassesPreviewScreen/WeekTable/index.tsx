@@ -26,7 +26,7 @@ function findScheduleEntries(
   const filteredEntries = entries?.filter((entry) => {
     const startDate = new Date(entry.StartDateTime);
     return (
-      startDate.getDate() - 1 === day &&
+      startDate.getDate() === day &&
       startDate.getMonth() + 1 === month &&
       startDate.getHours() === hour
     );
@@ -43,15 +43,7 @@ interface ISheduleTable {
   dryFields: IGeneratedScheduleEntries[];
 }
 
-function removeElementsFromArray(arr1: any[], arr2: any[]) {
-  return arr1.filter(item1 => {
-    return !arr2.some(item2 => {
-      return item1.ClassName === item2.ClassName && item1.SessionId === item2.SessionId;
-    });
-  });
 
-
-}
 
 export const startOfHour = 8;
 export const WeekTable: FC<ISheduleTable> = memo(
@@ -114,7 +106,7 @@ export const WeekTable: FC<ISheduleTable> = memo(
                 <TimeLineItem key={index} time={item} />
               ))}
             </Column>
-            <Row style={{ flex: 1, paddingRight: 20, paddingBottom: 20 }}>
+            <Row style={styles.rowLessons}>
               {loading ? <ScreenLoading /> : weekStructure?.map((dayEvents, dayIndex) => {
 
                 return (
@@ -141,7 +133,7 @@ export const WeekTable: FC<ISheduleTable> = memo(
                         editMode={editMode}
                         onDeleteSlot={onDeleteSlot}
                         onMoveSlot={onMoveSlot}
-                        dryField={dryField && dryField[0]}
+                        dryField={dryField && dryField}
                       />;
                     })}
 

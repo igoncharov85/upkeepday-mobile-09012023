@@ -13,6 +13,7 @@ export default StyleSheet.create({
     borderStyle: 'solid',
     borderRadius: 3,
   },
+  rowLessons: { flex: 1, paddingRight: 20, paddingBottom: 20 },
   column: {
     flexDirection: 'column',
   },

@@ -27,7 +27,7 @@ function findScheduleEntries(
   const filteredEntries = entries?.filter((entry) => {
     const startDate = new Date(entry.StartDateTime);
     return (
-      startDate.getDate() === day + 1 &&
+      startDate.getDate() === day &&
       startDate.getMonth() + 1 === month &&
       startDate.getHours() === hour
     );

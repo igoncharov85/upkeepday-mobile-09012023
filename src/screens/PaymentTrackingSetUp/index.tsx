@@ -58,14 +58,14 @@ export const PaymentTrackingSetUp: React.FC = () => {
 							EndNumber: createCurrentClassRequest.Class?.EndScheduleType != 'SpecificEndDate' ? createCurrentClassRequest.Class?.EndNumber : undefined,
 							EndScheduleType: createCurrentClassRequest.Class?.EndScheduleType,
 							MakeupRequired: !makeupRequired as boolean,
-							TrackPrepayment: !trackPrepayment as boolean
+							TrackPrepayment: !trackPrepayment as boolean,
+							PaymentAmount: Number(activeAmount),
+							PaymentType: activeIndex == 0 ? 'FixedAmount' : 'PayPerSession'
 						},
 						Location: location,
 						Students: createCurrentClassRequest.Students as IStudents[],
 						Slots: createCurrentClassRequest.Slots as IWeekTimeSlot[],
 						Sessions: createCurrentClassRequest.Sessions as IGeneratedScheduleEntries[],
-						PaymentAmount: Number(activeAmount),
-						PaymentType: activeIndex == 0 ? 'FixedAmount' : 'PayPerSession',
 					}
 				))
 				//@ts-ignore

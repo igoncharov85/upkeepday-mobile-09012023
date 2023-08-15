@@ -102,10 +102,42 @@ export interface ISlot {
 export interface IStudentByIdResponse {
     Status: string;
     ClassId: number;
+    PastSessions: number;
     Name: string;
     StartDate: string;
     EndDate: string;
     Attended: number;
     Scheduled: number;
     Slots: ISlot[];
+    Balance: number;
+    PaymentType: string;
+}
+
+export interface IPaymentsTableParams {
+    StudentId: string;
+    ClassId: number;
+}
+
+export interface IPaymentsTableTransaction {
+    TransactionId: number,
+    Amount: number,
+    Date: string,
+    TimeStamp: Date
+}
+
+export interface IPaymentsTableResponse {
+    Total: number,
+    ClassId: number,
+    Name: string,
+    TransactionUid: string,
+    Transactions: Array<IPaymentsTableTransaction>
+}
+
+export interface IStudentPaymentRequest {
+    StudentId: number;
+    ClassId: number;
+    TransactionUid: string;
+    TransactionType: string;
+    Amount: number;
+    Date: string;
 }

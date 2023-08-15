@@ -1,5 +1,5 @@
 import { IStudent } from "../../../common/types/classes.types";
-import { IUserCheckins, IUserCheckinsRequest, IUserCreateRequest, ICheckinsId, IDeleteUserRequest, IUpdateStudent, IStudentRequest, IStudentsRequest, } from "../../../common/types/user";
+import { IUserCheckins, IUserCheckinsRequest, IUserCreateRequest, ICheckinsId, IDeleteUserRequest, IUpdateStudent, IStudentRequest, IStudentsRequest, IPaymentsTableParams, IStudentPaymentRequest, } from "../../../common/types/user";
 import { $axiosAuth } from "../base.instance";
 
 export class UserService {
@@ -44,5 +44,14 @@ export class UserService {
     }
     static async updateStudentStatus({ StudentId, status }: (IStudentRequest & IStudentsRequest)) {
         return await $axiosAuth.patch(`/tutor/students/${StudentId}`, { Status: status })
+    }
+    static async fetchStudentPayments({StudentId, ClassId}: IPaymentsTableParams) {
+        return await $axiosAuth.get(`/tutor/payments/students/${StudentId}/classes/${ClassId}`);
+    }
+    static async sendStudentPayment(params: IStudentPaymentRequest) {
+        const { StudentId, ClassId, ...rest } = params;
+        return await $axiosAuth.post(
+            `/tutor/payments/students/${StudentId}/classes/${ClassId}`, {...rest}
+        );
     }
 }

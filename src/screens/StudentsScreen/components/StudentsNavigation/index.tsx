@@ -20,14 +20,18 @@ const STUDENTS_NAVIGATION = [
 ];
 
 interface IStudentsNavigation {
-
+    getOption?: (option: string) => void, 
+    isRequest?: boolean
 }
-export const StudentsNavigation: FC<IStudentsNavigation> = memo(() => {
+
+export const StudentsNavigation: FC<IStudentsNavigation> = memo(({ getOption, isRequest = true }) => {
     const [activeIndex, setActiveIndex] = useState(0);
     const isFocused = useIsFocused();
 
     useEffect(() => {
-        dispatch(fetchStudentsAction({ status: STUDENTS_NAVIGATION[activeIndex].status }))
+        if (isRequest) {
+            dispatch(fetchStudentsAction({ status: STUDENTS_NAVIGATION[activeIndex].status }))
+        }
     }, [activeIndex, isFocused],);
 
     return (
@@ -45,7 +49,10 @@ export const StudentsNavigation: FC<IStudentsNavigation> = memo(() => {
                             key={index}
                             active={index === activeIndex}
                             name={item.name}
-                            onPress={() => setActiveIndex(index)}
+                            onPress={() => {
+                                setActiveIndex(index);
+                                if (getOption) getOption(item.name);
+                            }}
                         />
                     ))}
                 </LinearGradient>

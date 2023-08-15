@@ -36,7 +36,7 @@ const StudentsItem: React.FC<IStudentsItem> = ({ item }) => {
 
     const handlePayment = () => {
         //@ts-ignore
-        navigation.navigate(NavigationEnum.STUDENT_PAYMENTS_SCREEN, {item})
+        navigation.navigate(NavigationEnum.STUDENT_PAYMENTS_SCREEN, {item});
     };
 
     const handleInfo = () => {

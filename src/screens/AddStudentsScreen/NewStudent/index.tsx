@@ -59,6 +59,7 @@ export const NewStudent: React.FC<INewStudentProps> = ({ handleTypeChange, onAdd
                 <InputForm
                     autoCapitalize='words'
                     labelText='First Name'
+                    //@ts-ignore
                     onChange={handleChange('FirstName')}
                     value={values.FirstName}
                     //@ts-ignore
@@ -68,6 +69,7 @@ export const NewStudent: React.FC<INewStudentProps> = ({ handleTypeChange, onAdd
                 <InputForm
                     autoCapitalize='words'
                     labelText='Last Name'
+                    //@ts-ignore
                     onChange={handleChange('LastName')}
                     value={values.LastName}
                     //@ts-ignore
@@ -75,26 +77,36 @@ export const NewStudent: React.FC<INewStudentProps> = ({ handleTypeChange, onAdd
                 />
                 <InputForm
                     labelText='Email'
+                    //@ts-ignore
                     onChange={handleChange('Email')}
                     value={values.Email}
+                    inputMode='email'
+                    keyboardType='email-address'
                     //@ts-ignore
                     validationErrorText={touched.Email && errors.Email}
                 />
                 <InputForm
                     labelText='Phone'
+                    //@ts-ignore
                     onChange={handleChange('Phone')}
                     value={values.Phone}
+                    inputMode='tel'
+                    keyboardType='phone-pad'
                     //@ts-ignore
                     validationErrorText={touched.Phone && errors.Phone}
                 />
                 <InputForm
                     autoCapitalize='sentences'
                     labelText='Notes'
+                    //@ts-ignore
                     onChange={handleChange('Notes')}
                     value={values.Notes}
                 />
                 <InputForm labelText='Attachments' />
-                <TouchableOpacity onPress={handleSubmit} disabled={!isValid}>
+                <TouchableOpacity
+                    //@ts-ignore
+                    onPress={handleSubmit} 
+                    disabled={!isValid}>
                     <Text style={styles.addMore}>Add One More</Text>
                 </TouchableOpacity>
                 <View style={{ paddingVertical: 20, height: 92, flex: 1, justifyContent: 'flex-end' }}>

@@ -59,6 +59,8 @@ export const LoginScreen: FC<ILoginScreen> = memo(({ navigation }) => {
             validationErrorText={errors.email}
             placeholder={'Email'}
             labelText={'Email'}
+            inputMode='email'
+            keyboardType='email-address'
           />
         </View>
         <View style={styles.inputWrapper}>
@@ -77,6 +79,7 @@ export const LoginScreen: FC<ILoginScreen> = memo(({ navigation }) => {
         <View style={styles.buttonWrapper}>
           <CustomButton
             text={'Login'}
+            //@ts-ignore
             onPress={handleSubmit}
             loading={loading}
             disabled={!(isValid && !!Object.keys(touched).length)}

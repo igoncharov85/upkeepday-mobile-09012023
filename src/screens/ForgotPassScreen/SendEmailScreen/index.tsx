@@ -46,11 +46,14 @@ export const SendEmailScreen: FC<ISendEmailScreen> = memo(
               validationErrorText={errors.email}
               placeholder={'Email'}
               labelText={'Email'}
+              inputMode='email'
+              keyboardType='email-address'
             />
           </View>
           <View style={styles.buttonWrapper}>
             <CustomButton
               text={'Continue'}
+              //@ts-ignore
               onPress={handleSubmit}
               disabled={!isValid}
               loading={loading}

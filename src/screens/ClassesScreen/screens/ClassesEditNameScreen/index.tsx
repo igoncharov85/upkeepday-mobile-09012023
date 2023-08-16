@@ -91,6 +91,7 @@ const ClassesEditNameScreen: React.FC<IAddClassScreen> = memo(() => {
                         <InputForm
                             labelText="Name"
                             value={values.name}
+                            //@ts-ignore
                             onChange={handleChange("name")}
                         />
                         <ListButtons
@@ -104,8 +105,9 @@ const ClassesEditNameScreen: React.FC<IAddClassScreen> = memo(() => {
                                 labelText="Online Instructions"
                                 multiline={true}
                                 value={values.url}
-                                onChange={handleChange("url")}
                                 style={{ height: 300, textAlignVertical: "top" }}
+                                //@ts-ignore
+                                onChange={handleChange("url")}                                
                             />
                         ) : (
                             <LocationSelect
@@ -124,6 +126,8 @@ const ClassesEditNameScreen: React.FC<IAddClassScreen> = memo(() => {
                     <View style={{ flex: 1, justifyContent: "flex-end", width: "100%", }}>
                         <CustomButton
                             text={"Finish"}
+                            style={{ height: 300, textAlignVertical: "top" }}
+                            //@ts-ignore
                             onPress={handleSubmit}
                             disabled={!isValid}
                         />

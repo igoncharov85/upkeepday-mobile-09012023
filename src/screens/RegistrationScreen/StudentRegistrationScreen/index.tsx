@@ -78,6 +78,8 @@ export const StudentRegistrationScreen: FC<IStudentRegistrationScreen> = memo(
               validationErrorText={errors.email}
               placeholder={'Email'}
               labelText={'Email'}
+              inputMode='email'
+              keyboardType='email-address'
             />
           </View>
           <View style={styles.inputWrapper}>
@@ -113,6 +115,8 @@ export const StudentRegistrationScreen: FC<IStudentRegistrationScreen> = memo(
               validationErrorText={errors.phone}
               placeholder={'Phone number'}
               labelText={'Phone number'}
+              inputMode='tel'
+              keyboardType='phone-pad'
             />
           </View>
           <View style={styles.inputWrapper}>
@@ -154,12 +158,15 @@ export const StudentRegistrationScreen: FC<IStudentRegistrationScreen> = memo(
               validationErrorText={errors.postalCode}
               placeholder={'Postal code'}
               labelText={'Postal code'}
+              inputMode='numeric'
+              keyboardType='numeric'
             />
           </View>
 
           <View style={styles.buttonWrapper}>
             <CustomButton
               text={'Sign Up'}
+              //@ts-ignore
               onPress={handleSubmit}
               loading={false}
               disabled={!(isValid && !!Object.keys(touched).length)}

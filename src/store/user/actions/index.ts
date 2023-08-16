@@ -21,3 +21,4 @@ export const updateStudentAction = createAction<(IStudentRequest & IStudent)>(Us
 export const updateStudentStatus = createAction<(IStudentRequest & IStudentsRequest)>(UserContactsEnum.UPDATE_STUDENTS_STATUS)
 export const fetchStudentPaymentsAction = createAction<IPaymentsTableParams>(UserContactsEnum.FETCH_STUDENT_PAYMENTS)
 export const sendStudentPaymentAction = createAction<IStudentPaymentRequest>(UserContactsEnum.SEND_STUDENT_PAYMENT)
+export const fetchStudentPaymentsClassesAction = createAction<IStudentRequest>(UserContactsEnum.FETCH_STUDENT_PAYMENTS_CLASSES)

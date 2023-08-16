@@ -6,7 +6,7 @@ import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/nativ
 import { StudentsNavigation } from "../../components/StudentsNavigation";
 import { PaymentCard } from "./PaymentCard";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
-import { fetchStudentsByIdAction } from "../../../../store/user/actions";
+import { fetchStudentPaymentsClassesAction } from "../../../../store/user/actions";
 import { ScreenLoading } from "../../../../components/UI/ScreenLoading";
 import { IStudentByIdResponse } from "../../../../common/types/user";
 import { NavigationEnum } from "../../../../common/constants/navigation";
@@ -28,7 +28,7 @@ export const StudentPayments: FC = () => {
 
   useFocusEffect(
     useCallback(() => {
-      dispatch(fetchStudentsByIdAction({StudentId: user.StudentId}));
+      dispatch(fetchStudentPaymentsClassesAction({StudentId: user.StudentId}));
     }, [])
   );
 

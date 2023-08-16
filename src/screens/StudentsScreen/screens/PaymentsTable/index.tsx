@@ -1,4 +1,5 @@
 import React, {FC, useState, useCallback} from 'react';
+import moment from 'moment';
 import { View, Text, TouchableOpacity, ScrollView , Switch} from "react-native";
 import styles from './styles';
 import { ScreenHeader } from '../../../../components/ScreenHeader';
@@ -63,7 +64,7 @@ export const PaymentsTable: FC = () => {
                     fontSize: 20, fontWeight: 'bold', 
                     color: payments.Total !== undefined && payments.Total >= 0 ? '#169861' : "#F00"
                   }]}>
-                    {payments.Total}
+                    ${payments.Total}
                   </Text>
                   <Text style={[styles.cell]} />
                 </View>
@@ -75,9 +76,10 @@ export const PaymentsTable: FC = () => {
                         <Text 
                           style={[styles.cell, {color: item.Amount >= 0 ? '#169861' : "#F00"}]}
                         >
-                          {item.Amount}
+                          ${item.Amount}
                         </Text>
-                        <Text style={[styles.cell]}>{item.Date}</Text>
+                        
+                        <Text style={[styles.cell]}>{moment(item.Date).format("MM/DD/YYYY")}</Text>
                       </View> 
                     )
                   })

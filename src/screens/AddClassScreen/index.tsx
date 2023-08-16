@@ -93,6 +93,7 @@ export const AddClassScreen: React.FC<IAddClassScreen> = memo(() => {
                             onTouchStart={() => setTouch(true)}
                             labelText="Class Name"
                             value={values.name}
+                            //@ts-ignore
                             onChange={handleChange("name")}
                         />
                         <ListButtons
@@ -106,6 +107,7 @@ export const AddClassScreen: React.FC<IAddClassScreen> = memo(() => {
                                 labelText="Online Instructions"
                                 multiline={true}
                                 value={values.url}
+                                //@ts-ignore
                                 onChange={handleChange("url")}
                                 style={{ height: 300, textAlignVertical: "top" }}
                             />
@@ -126,6 +128,7 @@ export const AddClassScreen: React.FC<IAddClassScreen> = memo(() => {
                     <View style={{ flex: 1, justifyContent: "flex-end", width: "100%", }}>
                         <CustomButton
                             text={"Next Step"}
+                            //@ts-ignore
                             onPress={handleSubmit}
                             disabled={!valid}
                         />

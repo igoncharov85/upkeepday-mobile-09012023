@@ -51,7 +51,10 @@ const userSlice = createSlice({
         },
         setStudentPayments(state, action: PayloadAction<IPaymentsTableResponse>) {
             state.payments = action.payload
-        }
+        },
+        setPaymentClassesListAction: (state, action: PayloadAction<Array<IStudentByIdResponse>>) => {
+            state.studentList = action.payload
+        },
     },
 })
 
@@ -59,6 +62,6 @@ const userSlice = createSlice({
 export const { 
     setStudentLoading, setStudentAction, addStudentAction, 
     setCheckinStudentAction, setCurrentStudentAction, setUsersAction, 
-    setStudentListAction, setStudentPayments
+    setStudentListAction, setPaymentClassesListAction, setStudentPayments
 } = userSlice.actions
 export default userSlice.reducer

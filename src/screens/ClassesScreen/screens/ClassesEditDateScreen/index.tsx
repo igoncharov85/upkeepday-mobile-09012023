@@ -120,7 +120,11 @@ export const ClassesEditDateScreen: React.FC<ISelectDateScreen> = memo(() => {
                 </View>
 
                 <View style={{ flex: 1, width: '100%', justifyContent: 'flex-end' }} >
-                    <CustomButton text={"Next Step"} onPress={handleSubmit} disabled={!isValid} />
+                    <CustomButton 
+                        text={"Next Step"} 
+                        //@ts-ignore
+                        onPress={handleSubmit} 
+                        disabled={!isValid} />
                 </View>
 
             </View>

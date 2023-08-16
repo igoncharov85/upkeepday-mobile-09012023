@@ -15,6 +15,7 @@ import { ScreenLoading } from '../../../components/UI/ScreenLoading';
 import { IGeneratedScheduleEntries } from '../../../common/types/schedule.types';
 import { useIsFocused } from '@react-navigation/native';
 import moment from 'moment';
+import { formatDateForDayScroller } from '../../../services/utils/convertDate';
 
 
 function getNextDate(dateString: string, daysToAdd: number): string {
@@ -25,13 +26,6 @@ function getNextDate(dateString: string, daysToAdd: number): string {
 	const nextMonth = (nextDate.getMonth() + 1).toString().padStart(2, '0');
 	const nextDay = nextDate.getDate().toString().padStart(2, '0');
 	return `${nextYear}-${nextMonth}-${nextDay}`;
-}
-function formatDate(dateString: string): string {
-	const date = new Date(dateString);
-	return date.toLocaleDateString('en-US', {
-		month: 'long', day: 'numeric', year: 'numeric',
-		timeZone: 'UTC',
-	});
 }
 
 function sortArrayByDateTime(arr: any[]): any[] {
@@ -86,7 +80,7 @@ export const ScheduleDayScreen: React.FC<IScheduleDayScreen> = memo(() => {
 	return loading ? <ScreenLoading /> : (
 		<View>
 			<ScheduleScroller
-				title={formatDate(currentDay)}
+				title={formatDateForDayScroller(currentDay)}
 				onPressLeft={handlePrevDay}
 				onPressRight={handleNextDay}
 			/>

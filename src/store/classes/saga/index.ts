@@ -214,14 +214,13 @@ export function* classesScheduleWorker({
             payload,
         );
         if (data) {
-            console.log('data', data)
             yield put(setClassesScheduleAction(data));
         }
 
     } catch (error) {
         yield call(ErrorFilterService.validateError, error);
     } finally {
-        console.log('loading false \n\n\n\n\n\n\n\n\n\n\n\nn\n\n\n\n\n\n\nn\\nn\n\n\n\n\n\n\n')
+        console.log('loading false \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n')
         yield put(setClassesLoading(false));
     }
 }

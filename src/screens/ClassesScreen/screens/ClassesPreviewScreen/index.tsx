@@ -15,10 +15,12 @@ import { findScheduleConflicts } from "../../../../services/utils/findConflict.u
 import { ScreenLoading } from "../../../../components/UI/ScreenLoading";
 import { WeekTable } from "./WeekTable";
 import { DaysOfWeek } from "./DaysOfWeek";
-import { fetchSessionClassesByIdAction } from "../../../../store/classes/actions";
+import { fetchClassesSchedule, fetchSessionClassesByIdAction } from "../../../../store/classes/actions";
 import { IClassesResponse } from "../../../../common/types/classes.types";
 import { fetchScheduleByPeriodAction } from "../../../../store/shedule/actions";
 import moment from "moment";
+import { DayScroller } from "../../../../components/UI/DayScroller";
+import { formatDateForDayScroller } from "../../../../services/utils/convertDate";
 
 function removeElementsFromArray(arr1: any[], arr2: any[]) {
     return arr1.filter(item1 => {
@@ -37,27 +39,27 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
 
     const { item } = route.params as { item: IClassesResponse };
     const isFocused = useIsFocused();
+    console.log(item.StartDate, 'item')
 
-    const today = new Date();
+    const { loading }: any = useAppSelector(state => state.classes);
 
-    const weekDates = getWeekDates(today);
+    const startLessonDate = moment(item.StartDate).toDate()
+    const todayDate = new Date()
+    const startOfWeekDate = todayDate > startLessonDate ? todayDate : startLessonDate;
+
+    const weekDates = getWeekDates(startOfWeekDate);
 
     const [startDateWeek, setStartDateWeek] = useState(new Date(weekDates.startDate));
     const [endDateWeek, setEndDateWeek] = useState(new Date(weekDates.endDate));
-    const { CurrentScheduledEntries, loading } = useAppSelector(state => state.schedule);
-    const { currentSession }: any = useAppSelector(state => state.classes);
 
-    const [conflict, setConflict] = useState<IGeneratedScheduleEntries[]>(findScheduleConflicts(CurrentScheduledEntries, currentSession));
-
-    const handeScheduleSlots = (slots: IGeneratedScheduleEntries[]) => {
-        setConflict(findScheduleConflicts(slots, CurrentScheduledEntries))
-    }
 
     const goToNextWeek = () => {
+        console.log('pres next')
         setStartDateWeek(new Date(addDayAndHoursToDate(startDateWeek.toISOString(), 7, 0)))
         setEndDateWeek(new Date(addDayAndHoursToDate(endDateWeek.toISOString(), 7, 0)))
     }
     const goToPrevWeek = () => {
+        console.log('pres prev')
         setStartDateWeek(new Date(addDayAndHoursToDate(startDateWeek.toISOString(), -7, 0)))
         setEndDateWeek(new Date(addDayAndHoursToDate(endDateWeek.toISOString(), -7, 0)))
     }
@@ -69,21 +71,20 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
     }
 
     useEffect(() => {
-        const startOfYear = new Date(new Date().getFullYear(), 0, 1);
-        const endOfYear = new Date(new Date().getFullYear(), 11, 31, 23, 59, 59, 999);
-
         dispatch(fetchSessionClassesByIdAction(item.ClassId))
-        dispatch(fetchScheduleByPeriodAction({ startDate: moment(startOfYear).format('YYYY-MM-DDTHH:mm:ss'), endDate: moment(endOfYear).format('YYYY-MM-DDTHH:mm:ss') }));
-        console.log('current: ', CurrentScheduledEntries)
+        dispatch(fetchClassesSchedule({ classId: item.ClassId }))
     }, []);
 
 
-    return loading ? <ScreenLoading /> : (<View style={{ height: '100%' }}>
+    return (<View style={{ height: '100%' }}>
         <View style={styles.header}>
             <ScreenHeader text={"View and Reschedule"} onBackPress={navigation.goBack} withBackButton={true} />
         </View>
         <Text style={styles.subTitle}>Hold and Drop in the desired spot to reschedule</Text>
         <View style={{ marginHorizontal: 20, marginTop: 12 }}>
+            <DayScroller
+                title={moment(startDateWeek).format('MMMM')}
+                onPressLeft={goToPrevWeek} onPressRight={goToNextWeek} />
             <DaysOfWeek
                 startOfWeek={startDateWeek}
                 goToNextWeek={goToNextWeek}
@@ -91,8 +92,8 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
             />
 
         </View>
-        {<View style={{ flex: 1 }}>
-            <WeekTable classId={item.ClassId} startOfWeek={startDateWeek} endOfWeek={endDateWeek} onHandleData={handeScheduleSlots} conflict={conflict} dryFields={removeElementsFromArray(CurrentScheduledEntries, currentSession)} />
+        {loading ? <ScreenLoading /> : <View style={{ flex: 1 }}>
+            <WeekTable classId={item.ClassId} startOfWeek={startDateWeek} endOfWeek={endDateWeek} />
         </View>}
         <View style={{ padding: 20, justifyContent: 'flex-end' }}>
             <CustomButton text={"Ok"} onPress={onSave} />

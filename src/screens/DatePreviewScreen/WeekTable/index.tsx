@@ -22,14 +22,16 @@ function findScheduleEntries(
   entries: IGeneratedScheduleEntries[],
   day: number,
   month: number,
-  hour: number
+  hour: number,
+  year: number,
 ): any[] {
   const filteredEntries = entries?.filter((entry) => {
     const startDate = new Date(entry.StartDateTime);
     return (
       startDate.getDate() === day &&
       startDate.getMonth() + 1 === month &&
-      startDate.getHours() === hour
+      startDate.getHours() === hour &&
+      startDate.getFullYear() === year
     );
   });
   return filteredEntries;
@@ -96,8 +98,8 @@ export const WeekTable: FC<ISheduleTable> = memo(
               return (
                 <Column key={dayIndex}>
                   {dayEvents?.map((_, index) => {
-                    const dryField = findScheduleEntries(CurrentScheduledEntries as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
-                    const conflictItem = findScheduleEntries(conflict as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
+                    const dryField = findScheduleEntries(CurrentScheduledEntries as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index, currentDate.getFullYear())
+                    const conflictItem = findScheduleEntries(conflict as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index, currentDate.getFullYear())
                     return <WeekTableItem
                       key={`${dayIndex}-${index}`}
                       timeIndex={index}

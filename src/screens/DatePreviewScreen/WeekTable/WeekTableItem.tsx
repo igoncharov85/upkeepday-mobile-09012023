@@ -69,7 +69,6 @@ export const WeekTableItem: FC<IWeekTableItem> =
   }) => {
     const lessonOnThisTime: IGeneratedScheduleEntries[] = findLessonOnCurrentHour(slots, timeIndex, currentDay)
     const { createCurrentClassRequest } = useAppSelector(state => state.schedule);
-    console.log('createCurrentClassRequest', createCurrentClassRequest.Class?.Name)
     const onHandleLongPress = (active: boolean) => {
 
       onLongPress(active)

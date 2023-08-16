@@ -17,17 +17,9 @@ import { fetchClassesSchedule } from '../../../../../store/classes/actions';
 
 
 interface IWeekTableItem {
-  StartDateTime: string;
   onLongPress: (value: boolean) => void;
   editMode: boolean;
-  activeItem: IGeneratedScheduleEntries;
-  onMoveSlot: (slot: IGeneratedScheduleEntries, x: number, y: number) => void;
-  conflict: boolean;
-  onDeleteSlot: (slot: IGeneratedScheduleEntries) => void;
-  dayIndex: number;
-  startOfWeek: Date;
   dryField: IGeneratedScheduleEntries[];
-
   currentDate: Date;
   timeIndex: number;
   slots: IGeneratedScheduleEntries[];
@@ -40,11 +32,7 @@ const CELL_SIZE = {
 export const WeekTableItem: FC<IWeekTableItem> = memo(
   ({
     onLongPress,
-    activeItem,
     editMode,
-    conflict,
-    onMoveSlot,
-    onDeleteSlot,
     dryField,
 
     timeIndex,

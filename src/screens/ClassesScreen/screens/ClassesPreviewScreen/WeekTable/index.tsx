@@ -14,6 +14,7 @@ import moment from 'moment';
 import PreviewModal from '../../../components/PreviewModal';
 import { ScreenLoading } from '../../../../../components/UI/ScreenLoading';
 import { fetchClassesSchedule } from '../../../../../store/classes/actions';
+import { convertSessionsToLocalTime } from '../../../../../services/utils/convertToUTC';
 
 
 
@@ -39,9 +40,6 @@ function findScheduleEntries(
 interface ISheduleTable {
   startOfWeek: Date;
   endOfWeek: Date;
-  onHandleData: (data: IGeneratedScheduleEntries[]) => void;
-  conflict: IGeneratedScheduleEntries[];
-  dryFields: IGeneratedScheduleEntries[];
   classId: number;
 }
 
@@ -49,38 +47,21 @@ interface ISheduleTable {
 
 export const startOfHour = 8;
 export const WeekTable: FC<ISheduleTable> = memo(
-  ({ startOfWeek, endOfWeek, onHandleData, conflict, dryFields, classId }) => {
-    const { GeneratedScheduleEntries, CurrentScheduledEntries } = useAppSelector(state => state.schedule);
-    const { currentSession, loading, classesSchedule } = useAppSelector(state => state.classes);
+  ({ startOfWeek, endOfWeek, classId }) => {
+    const { loading, classesSchedule } = useAppSelector(state => state.classes);
     const [editMode, setEditMode] = useState(false);
-    console.log('classId\n\n\n\n\n\n\n', classId)
 
-    const [slots, setSlots] = useState<IGeneratedScheduleEntries[]>(currentSession as []);
 
     const onChangeEditMode = (value: boolean) => {
       setEditMode(value);
+      !value && dispatch(fetchClassesSchedule({ classId }))
     }
 
-    const onDeleteSlot = (slot: any) => {
-      const newSlots = slots.filter((item) => {
-        return item.StartDateTime !== slot.StartDateTime
-      });
-      if (JSON.stringify(slots) !== JSON.stringify(newSlots)) {
-        setSlots(newSlots);
-        onHandleData(slots)
-      }
-    }
 
-    const onMoveSlot = (slot: any, x: number, y: number) => {
-      const newTime = addDayAndHoursToDate(slot.StartDateTime, x, y);
-      const newSlots = slots.filter(item => item.SlotUid !== slot.SlotUid);
-      setSlots([...newSlots, { Duration: slot.Duration, StartDateTime: newTime, SlotUid: slot.SlotUid }]);
-    }
 
-    useEffect(() => {
 
-      onHandleData(slots)
-    }, [slots])
+
+
     // useEffect(() => {
     //   dispatch(fetchClassesSchedule({ classId }))
     // }, [])
@@ -111,24 +92,15 @@ export const WeekTable: FC<ISheduleTable> = memo(
                   <Column key={dayIndex}>
                     {dayEvents?.map((_, index) => {
                       const currentDate = new Date(addDayAndHoursToDate(date.toISOString(), dayIndex, 0))
-                      const activeItem = findScheduleEntries(currentSession as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
-                      const conflictItem = findScheduleEntries(conflict as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
-                      const dryField = findScheduleEntries(dryFields as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
+                      const dryField = findScheduleEntries(convertSessionsToLocalTime(classesSchedule.OtherSessions) as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
 
                       return <WeekTableItem
-                        slots={slots}
-                        currentDate={currentDate}
                         key={`${dayIndex}-${index}`}
+                        slots={convertSessionsToLocalTime(classesSchedule.Sessions)}
+                        currentDate={currentDate}
                         timeIndex={index}
-                        dayIndex={dayIndex}
-                        startOfWeek={startOfWeek}
-                        StartDateTime={addDayAndHoursToDate(date.toISOString(), dayIndex, index)}
-                        activeItem={activeItem[0] && activeItem[0]}
-                        conflict={!!conflictItem[0]}
                         onLongPress={onChangeEditMode}
                         editMode={editMode}
-                        onDeleteSlot={onDeleteSlot}
-                        onMoveSlot={onMoveSlot}
                         dryField={dryField}
                       />;
                     })}

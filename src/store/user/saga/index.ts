@@ -1,7 +1,7 @@
 import { AxiosResponse } from "axios";
 import { SagaIterator } from "redux-saga";
 import { call, put, takeEvery } from "redux-saga/effects";
-import { addStudentAction, setCheckinStudentAction, setCurrentStudentAction, setStudentAction, setStudentListAction, setStudentLoading, setStudentPayments, setUsersAction } from "..";
+import { addStudentAction, setCheckinStudentAction, setCurrentStudentAction, setStudentAction, setStudentListAction, setPaymentClassesListAction, setStudentLoading, setStudentPayments, setUsersAction } from "..";
 import { IAction } from "../../../common/types/common.types";
 import { ICheckinUser, IUserCreateRequest, IUserStudent, ICheckinsId, IUserCheckinsRequest, IDeleteUserRequest, IUpdateStudent, IUserStudentResponse, IStudentRequest, IStudentResponse, IStudentsRequest, IStudentsResponse, IStudentByIdResponse, IPaymentsTableParams, IPaymentsTableResponse, IStudentPaymentRequest } from "../../../common/types/user";
 import { UserService } from "../../../services/axios/user";
@@ -154,8 +154,21 @@ export function* fetchStudentsByIdWorker(payload: IAction<IStudentRequest>): Sag
         );
         if (data) {
             console.log(data);
-
             yield put(setStudentListAction(data))
+        }
+    } catch (error) {
+        ErrorFilterService.validateError(error)
+    }
+}
+export function* fetchStudentPaymentsClasses(payload: IAction<IStudentRequest>): SagaIterator {
+    try {
+        const { data }: AxiosResponse<Array<IStudentByIdResponse>, any> = yield call(
+            UserService.fetchStudentPaymentsClasses,
+            payload.payload
+        );
+        if (data) {
+            console.log(data);
+            yield put(setPaymentClassesListAction(data))
         }
     } catch (error) {
         ErrorFilterService.validateError(error)
@@ -241,4 +254,5 @@ export function* userWatcher() {
     yield takeEvery(UserContactsEnum.UPDATE_STUDENTS_STATUS, updateStudentStatusWorker)
     yield takeEvery(UserContactsEnum.FETCH_STUDENT_PAYMENTS, fetchStudentPaymentsSaga)
     yield takeEvery(UserContactsEnum.SEND_STUDENT_PAYMENT, sendStudentPaymentSaga)
+    yield takeEvery(UserContactsEnum.FETCH_STUDENT_PAYMENTS_CLASSES, fetchStudentPaymentsClasses)
 }

@@ -45,6 +45,9 @@ export class UserService {
     static async updateStudentStatus({ StudentId, status }: (IStudentRequest & IStudentsRequest)) {
         return await $axiosAuth.patch(`/tutor/students/${StudentId}`, { Status: status })
     }
+    static async fetchStudentPaymentsClasses({ StudentId }: (IStudentRequest)) {
+        return await $axiosAuth.get(`/tutor/payments/students/${StudentId}/classes`);
+    }
     static async fetchStudentPayments({StudentId, ClassId}: IPaymentsTableParams) {
         return await $axiosAuth.get(`/tutor/payments/students/${StudentId}/classes/${ClassId}`);
     }

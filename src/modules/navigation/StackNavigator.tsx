@@ -1,10 +1,8 @@
-
 import React, { memo, useEffect, useState } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationEnum } from '../../common/constants/navigation';
 import { AddBusinessAccountScreen } from "../../screens/AddBusinessAccountScreen";
 import { AddNewTeacherScreen } from "../../screens/AddNewTeacher";
-import { NewStudent } from '../../screens/AddStudentsScreen/NewStudent'
 import { LoginScreen } from '../../screens/LoginScreen';
 import { NewStudentScreen } from '../../screens/NewStudentScreen'
 import { PaymentTrackingSetUp } from "../../screens/PaymentTrackingSetUp";
@@ -40,9 +38,7 @@ import MoreScreen from '../../screens/MoreScreen';
 import DurationSessionModal from '../../components/Modals/DurationSessionModal';
 import SelectDurationSessionModal from '../../components/Modals/SelectDurationSessionModal';
 import EditTimeSessionModal from '../../components/Modals/EditTimeSessionModal';
-
 import PreviewModal from '../../components/Modals/PreviewModal';
-
 import { StudentPayments } from '../../screens/StudentsScreen/screens/StudentPayments';
 import { PaymentsTable } from '../../screens/StudentsScreen/screens/PaymentsTable';
 import { PaymentTracking } from '../../screens/StudentsScreen/screens/PaymentTracking';

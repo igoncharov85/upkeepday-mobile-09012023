@@ -32,7 +32,6 @@ export const CancellationModal = () => {
 
   const navigateToCancellationScreen = () => {
     goBack()
-    //@ts-ignore
     navigation.navigate(NavigationEnum.CANCELLATION_SCREEN, { itemData: item })
   }
 

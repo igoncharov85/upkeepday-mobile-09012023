@@ -8,7 +8,7 @@ import { ChooseRoleScreen } from './ChooseRoleScreen';
 import { StudentRegistrationScreen } from './StudentRegistrationScreen';
 import styles from './styles';
 
-export const RegistrationScreen: FC<INavigationBase> = memo(
+export const RegistrationScreen: FC = memo(
   ({navigation, route}) => {
     const [currentScreen, setCurrentScreen] =
       useState<TRegistrationScreen>('type');

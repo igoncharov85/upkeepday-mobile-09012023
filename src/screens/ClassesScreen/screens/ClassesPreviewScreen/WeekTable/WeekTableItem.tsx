@@ -102,6 +102,7 @@ const LessonItem = ({ lesson, editMode, onHandleLongPress, classId }: { lesson: 
     dispatch(fetchClassesSchedule({ classId }))
     console.log(lesson)
     onHandleLongPress(false)
+    
   }
   const onDeleteSlot = () => {
     //@ts-ignore

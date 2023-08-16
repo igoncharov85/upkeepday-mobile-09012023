@@ -3,6 +3,7 @@ import { Dimensions, Platform, ScrollView, Text, TouchableOpacity, View } from "
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { FormikProps, withFormik } from "formik";
 import * as Yup from "yup";
+import { NavigationEnum } from '../../../../common/constants/navigation'
 
 import styles from "./styles";
 import { ScreenHeader } from "../../../../components/ScreenHeader";
@@ -10,10 +11,6 @@ import { InputForm } from "../../../AddClassScreen/components/InputForm";
 import { ListButtons } from "../../../AddClassScreen/components/ListButtons";
 import { CustomButton } from "../../../../components/UI/CustomButton";
 import { ListGradientCircleButtons } from "../../../AddClassScreen/components/ListGradientCircleButtons";
-import { NavigationEnum } from "../../../../common/constants/navigation";
-
-import { updateCurrentClassRequestAction } from "../../../../store/shedule";
-import { SelectedDateForFinishDateSchema, SelectedDateForNumberOfSchema, SelectedDateForTotalClassesSchema, SelectedDateSchema } from "../../../../common/shemas/addClass.shape";
 import CalendarComponent from "../../../SheduleScreen/components/CalendarComponent";
 import { convertDate } from "../../../../services/utils/fullDateToValue.util";
 import moment from "moment";
@@ -120,10 +117,10 @@ export const ClassesEditDateScreen: React.FC<ISelectDateScreen> = memo(() => {
                 </View>
 
                 <View style={{ flex: 1, width: '100%', justifyContent: 'flex-end' }} >
-                    <CustomButton 
-                        text={"Next Step"} 
+                    <CustomButton
+                        text={"Next Step"}
                         //@ts-ignore
-                        onPress={handleSubmit} 
+                        onPress={handleSubmit}
                         disabled={!isValid} />
                 </View>
 
@@ -168,7 +165,6 @@ export const ClassesEditDateScreen: React.FC<ISelectDateScreen> = memo(() => {
                 fetchGeneratedClassesAction({ id: item.ClassId, to: sendString })
             )
             navigation.navigate(
-                //@ts-ignore
                 NavigationEnum.CLASSES_EDIT_PREVIEW_SCREEN,
                 {
                     item,

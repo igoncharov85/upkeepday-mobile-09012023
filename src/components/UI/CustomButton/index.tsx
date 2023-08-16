@@ -1,13 +1,13 @@
-import React, {FC, memo} from 'react';
+import React, { FC, memo } from 'react';
 import {
   TouchableOpacity,
   TouchableOpacityProps,
   Text,
   ActivityIndicator,
 } from 'react-native';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
-import {ColorEnum} from '../../../common/constants/styles/colors.enum';
-import {StyleEnum} from '../../../common/constants/styles/styles.enum';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { ColorEnum } from '../../../common/constants/styles/colors.enum';
+import { StyleEnum } from '../../../common/constants/styles/styles.enum';
 import styles from './styles';
 
 interface ICustomButton extends TouchableOpacityProps {
@@ -17,6 +17,7 @@ interface ICustomButton extends TouchableOpacityProps {
   height?: number;
   width?: number;
   style?: {};
+  errorColor?: boolean;
 }
 export enum TypeButton {
   solid,
@@ -32,6 +33,7 @@ export const CustomButton: FC<ICustomButton> = memo(
     height,
     width,
     style,
+    errorColor,
     ...props
   }: ICustomButton) => {
     return (
@@ -44,8 +46,9 @@ export const CustomButton: FC<ICustomButton> = memo(
           type == TypeButton.opacity && styles.containerActive,
           {
             opacity: disabled ? StyleEnum.TOUCHABLE_DISABLE : 1,
+            backgroundColor: errorColor ? 'red' : '#9A80BA'
           },
-          {...style},
+          { ...style },
         ]}
         onPress={onPress}
         {...props}>

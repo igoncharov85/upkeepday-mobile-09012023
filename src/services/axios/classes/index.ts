@@ -1,4 +1,4 @@
-import { IClassesEditName, IClassesUpdateSession, IClassesUpdateStatus, IGeneratedClasses, IGeneratedClassesRequest, TClassesId, TClassesStatus } from "../../../common/types/classes.types"; import { convertToUTC } from "../../utils/convertToUTC";
+import { IClassId, IClassesEditName, IClassesUpdateSession, IClassesUpdateStatus, IGeneratedClasses, IGeneratedClassesRequest, TClassesId, TClassesStatus } from "../../../common/types/classes.types"; import { convertToUTC } from "../../utils/convertToUTC";
 ;
 import { $axiosAuth } from "../base.instance";
 
@@ -14,11 +14,16 @@ export class ClassesService {
         return $axiosAuth.get(`/tutor/classes/${id}/sessions`)
     }
     static async fetchGeneratedClasses({ id, to }: (IGeneratedClasses)) {
-        // const to = new Date();
+
         return $axiosAuth.get(`/tutor/classes/${id}/extend/${to}`)
     }
+
+    static async fetchClassesSchedule({ classId }: IClassId) {
+
+        return $axiosAuth.get(`/tutor/classes/${classId}/schedule`)
+    }
     static async GeneratedClasses({ id, to, Sessions }: (IGeneratedClassesRequest)) {
-        // const to = new Date();
+
         return $axiosAuth.patch(`/tutor/classes/${id}/extend/${to}`, { Sessions })
     }
     static async deleteClasses(id: TClassesId) {

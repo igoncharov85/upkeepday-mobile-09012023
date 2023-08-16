@@ -1,12 +1,12 @@
 import { AxiosResponse } from 'axios';
 import { SagaIterator } from 'redux-saga';
 import { call, put, takeEvery } from 'redux-saga/effects';
-import { setClassesLoading, setClassesAction, addClassesAction, setSessinAction, setClassAction, setCurrentSessionAction, setGenerateSessionAction } from '..';
+import { setClassesLoading, setClassesAction, addClassesAction, setSessinAction, setClassAction, setCurrentSessionAction, setGenerateSessionAction, setClassesScheduleAction } from '..';
 import { IAction } from '../../../common/types/common.types';
 import { ClassesService } from '../../../services/axios/classes';
 import { ErrorFilterService } from '../../../services/error-filter/error-filter.service';
 import { ClassesConstantsEnum } from '../constants';
-import { IClassesEditName, IClassesResponse, IClassesUpdateSession, IGeneratedClasses, IGeneratedClassesRequest, IGeneratedClassesResponse, ISession, ISessionSubset, TClassesId, TClassesStatus } from '../../../common/types/classes.types';
+import { IClassesEditName, IClassesResponse, IClassesUpdateSession, IGeneratedClasses, IGeneratedClassesRequest, IGeneratedClassesResponse, ISession, ISessionSubset, IclassesScheduleResponse, TClassesId, TClassesStatus } from '../../../common/types/classes.types';
 import { convertSessionsToLocalTime } from '../../../services/utils/convertToUTC';
 
 
@@ -203,6 +203,26 @@ export function* editNameClassesWorker({
     }
 }
 
+export function* classesScheduleWorker({
+    payload,
+    type,
+}: IAction<any>): SagaIterator {
+    try {
+        yield put(setClassesLoading(true));
+        const { data }: AxiosResponse<IclassesScheduleResponse, any> = yield call(
+            ClassesService.fetchClassesSchedule,
+            payload,
+        );
+        if (data) {
+            yield put(setClassesScheduleAction(data));
+        }
+
+    } catch (error) {
+        yield call(ErrorFilterService.validateError, error);
+    } finally {
+        yield put(setClassesLoading(false));
+    }
+}
 
 
 export function* ClassesSagaWatcher() {
@@ -216,4 +236,5 @@ export function* ClassesSagaWatcher() {
     yield takeEvery(ClassesConstantsEnum.EDIT_CLASS_NAME, editNameClassesWorker)
     yield takeEvery(ClassesConstantsEnum.FETCH_GENERATED_CLASSES, fetchGeneratedClassesWorker)
     yield takeEvery(ClassesConstantsEnum.FETCH_PATCH_GENERATED_CLASSES, GeneratedClassesWorker)
+    yield takeEvery(ClassesConstantsEnum.FETCH_CLASSES_SCHEDULE, classesScheduleWorker)
 }

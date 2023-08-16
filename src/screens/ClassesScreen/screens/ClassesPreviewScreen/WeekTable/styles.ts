@@ -5,7 +5,7 @@ export default StyleSheet.create({
     marginTop: 10,
     position: 'relative'
   },
-  containerItem: {
+  wrapperCell: {
     height: 64,
     minWidth: '14.28571428571429%',
     borderWidth: 1,
@@ -13,6 +13,12 @@ export default StyleSheet.create({
     borderStyle: 'solid',
     borderRadius: 3,
   },
+  containerCell: {
+    borderRadius: 4,
+    flex: 1,
+    position: 'relative',
+  },
+  rowLessons: { flex: 1, paddingRight: 20, paddingBottom: 20 },
   column: {
     flexDirection: 'column',
   },

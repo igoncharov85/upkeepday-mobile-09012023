@@ -10,11 +10,13 @@ import { ScreenHeader } from '../../ScreenHeader'
 import CustomTimePicker from './CustomTimePicker'
 
 import styles from './styles'
+import moment from 'moment'
 
 interface IDurationSessionModalModal {
 }
 interface RouteParams {
   maxDuration: number;
+  dayOfWeek: number;
   startDateTime: string;
   onCreateLesson: ({ duration, startDateTime }: { duration: number, startDateTime: number }) => void;
 }
@@ -24,15 +26,16 @@ const SelectDurationSessionModal = ({
   const navigation = useNavigation()
   const route = useRoute()
   const durationItems = useSelector((state: any) => state.duration) as string[]
-  const { maxDuration, startDateTime, onCreateLesson } = route.params as RouteParams
-  const goBack = () => navigation.goBack();
+  const { maxDuration, dayOfWeek, startDateTime, onCreateLesson } = route.params as RouteParams
   const [timeIsVisible, setTimeIsVisible] = useState(false);
   const [time, setTime] = useState(startDateTime);
   const [startTime, setStartTime] = useState(0);
   const [durations, setDurations] = useState(durationItems);
   const [duration, setDuration] = useState(maxDuration);
+
   const dispatch = useDispatch()
   const onTimePress = () => setTimeIsVisible(!timeIsVisible);
+  const goBack = () => navigation.goBack();
 
   const onSetTime = (time: any) => {
     setTime(
@@ -44,8 +47,6 @@ const SelectDurationSessionModal = ({
 
   const onSelectDuration = (duration: string) => {
     const [hours, minutes] = duration.split(':');
-    // onSetDuration(Number(hours) * 60 + Number(minutes))
-
     onCreateLesson(
       {
         duration: Number(hours) * 60 + Number(minutes),
@@ -89,6 +90,7 @@ const SelectDurationSessionModal = ({
         <View style={styles.container}>
           <ScreenHeader text="Start Time and Duration" withBackButton={true} onBackPress={goBack} />
           <InteractivePartItem title="Start Time">
+            <DateItem dateValue={moment().day(dayOfWeek).format('dddd')} width={80} />
             <DateItem dateValue={time} onSubmit={onTimePress} />
           </InteractivePartItem>
           <CustomTimePicker
@@ -113,7 +115,7 @@ const SelectDurationSessionModal = ({
                     const disabled = duration ? Number(item.split(':')[0]) * 60 + Number(item.split(':')[1]) > duration : false
                     return (
                       <View style={{ marginBottom: 20, opacity: disabled ? 0.5 : 1 }}>
-                        <DateItem dateValue={item} onSubmit={disabled ? undefined : () => onSelectDuration(item)} disabled={disabled} />
+                        <DateItem dateValue={item} onSubmit={disabled ? undefined : () => onSelectDuration(item)} />
                       </View>
 
                     )
@@ -147,12 +149,15 @@ const InteractivePartItem = ({
   );
 };
 
-const DateItem = ({ dateValue, onSubmit, disabled }: { dateValue: string, onSubmit: any, disabled?: boolean }) => {
+const DateItem = ({ dateValue, onSubmit, width }: { dateValue: string, onSubmit?: any, width?: number }) => {
 
   return (
     <TouchableOpacity onPress={onSubmit} style={{ zIndex: 9 }}>
       <LinearGradient
-        style={styles.dateContainer}
+        style={[styles.dateContainer,
+        {
+          width: width ? width : 105,
+        }]}
         colors={['rgba(154, 128, 186,0.5)', 'rgba(109,123,152,0.5)']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}

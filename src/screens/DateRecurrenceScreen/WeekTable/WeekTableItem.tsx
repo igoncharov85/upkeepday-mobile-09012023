@@ -80,7 +80,8 @@ interface IWeekTableItem {
   timeIndex: number;
   onHandleClick: (slot: IWeekTimeSlot) => void;
   activeItem?: boolean;
-  daySchedule: IWeekTimeSlot[]
+  daySchedule: IWeekTimeSlot[];
+  name: string
 }
 
 function convertArray(inputArray: any[]) {
@@ -96,7 +97,6 @@ function convertArray(inputArray: any[]) {
       let endHours = startHours + Math.floor((startMinutes + durationMinutes) / 60);
       let endMinutes = (startMinutes + durationMinutes) % 60;
 
-      // Обработка некорректных значений времени
       if (endMinutes >= 60) {
         endMinutes = 59;
       }
@@ -123,7 +123,8 @@ export const WeekTableItem: FC<IWeekTableItem> =
     dayOfWeek,
     onHandleClick,
     activeItem = false,
-    daySchedule
+    daySchedule,
+    name
 
   }) => {
 
@@ -186,6 +187,7 @@ export const WeekTableItem: FC<IWeekTableItem> =
         // @ts-ignore
         navigation.navigate(NavigationEnum.SELECT_DURATION_CLASS_MODAL, {
           timeDuration,
+          dayOfWeek,
           startDateTime: prevLesson.end,
           onCreateLesson,
           maxDuration: subtractTime(nextLesson?.start, `${timeIndex}:0`),
@@ -195,6 +197,7 @@ export const WeekTableItem: FC<IWeekTableItem> =
         // @ts-ignore
         navigation.navigate(NavigationEnum.SELECT_DURATION_CLASS_MODAL, {
           timeDuration,
+          dayOfWeek,
           startDateTime,
           onCreateLesson,
           maxDuration: subtractTime(nextLesson?.start, `${timeIndex}:0`),
@@ -239,10 +242,12 @@ export const WeekTableItem: FC<IWeekTableItem> =
       // @ts-ignore
       navigation.navigate(NavigationEnum.SELECT_DURATION_CLASS_MODAL, {
         startDateTime: startTime,
+        dayOfWeek,
         onCreateLesson,
         maxDuration: type == 'before' ? subtractTime(item.start, `${timeIndex}:00`) : subtractTime(nextLesson?.start, item.end)
       })
     }
+
     const onHandleMoreLesson = (item: any) => {
       const array = [...lessons]
       const index = array.findIndex(element => element.start === item.start);
@@ -296,10 +301,11 @@ export const WeekTableItem: FC<IWeekTableItem> =
 
                       <TouchableOpacity style={styles.lesson}
                         onPress={() => {
+                          console.log(item)
                           onHandleMoreLesson(item)
                         }}
                       >
-                        <Text style={styles.textItem}>Class</Text>
+                        <Text style={styles.textItem}>{name}</Text>
                       </TouchableOpacity>
                     </LinearGradient >
 

@@ -77,7 +77,7 @@ export const SheduleTable: FC<ISheduleTable> = memo(
                 <TimeLineItem key={index} time={item} />
               ))}
             </Column>
-            <Row style={{ flex: 1 }}>
+            <Row style={{ flex: 1, paddingRight: 20 }}>
               {weekStructure?.map((dayEvents, dayIndex) => {
                 const currentDate = new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startWeekOfDay + dayIndex);
                 return (

@@ -1,6 +1,6 @@
 import { createAction } from "@reduxjs/toolkit";
 import { ClassesConstantsEnum } from "../constants";
-import { IClassesEditName, IClassesUpdateSession, IClassesUpdateStatus, IGeneratedClasses, IGeneratedClassesRequest, TClassesId, TClassesStatus } from "../../../common/types/classes.types";
+import { IClassId, IClassesEditName, IClassesUpdateSession, IClassesUpdateStatus, IGeneratedClasses, IGeneratedClassesRequest, TClassesId, TClassesStatus } from "../../../common/types/classes.types";
 
 
 export const fetchClassesAction = createAction<TClassesStatus>(ClassesConstantsEnum.FETCH_CLASEES)
@@ -14,3 +14,4 @@ export const updatedStatusClassesAction = createAction<IClassesUpdateStatus>(Cla
 export const updatedSessionClassesAction = createAction<IClassesUpdateSession>(ClassesConstantsEnum.UPDATE_CLASEES_SESSION)
 export const deleteSessionClassesAction = createAction<TClassesId>(ClassesConstantsEnum.DELETE_CLASEES_SESSION)
 export const editNameClassesAction = createAction<IClassesEditName>(ClassesConstantsEnum.EDIT_CLASS_NAME)
+export const fetchClassesSchedule = createAction<IClassId>(ClassesConstantsEnum.FETCH_CLASSES_SCHEDULE)

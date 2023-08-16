@@ -58,7 +58,6 @@ export default StyleSheet.create({
   dateContainer: {
     zIndex: 10,
     height: 38,
-    width: 105,
     borderRadius: 9,
     overflow: 'hidden',
     justifyContent: 'center',
@@ -68,6 +67,5 @@ export default StyleSheet.create({
   dateText: {
     fontSize: 15,
     lineHeight: 18,
-    textAlign: 'center',
   },
 });

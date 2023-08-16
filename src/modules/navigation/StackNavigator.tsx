@@ -40,9 +40,14 @@ import MoreScreen from '../../screens/MoreScreen';
 import DurationSessionModal from '../../components/Modals/DurationSessionModal';
 import SelectDurationSessionModal from '../../components/Modals/SelectDurationSessionModal';
 import EditTimeSessionModal from '../../components/Modals/EditTimeSessionModal';
+
+import PreviewModal from '../../components/Modals/PreviewModal';
+
 import { StudentPayments } from '../../screens/StudentsScreen/screens/StudentPayments';
 import { PaymentsTable } from '../../screens/StudentsScreen/screens/PaymentsTable';
 import { PaymentTracking } from '../../screens/StudentsScreen/screens/PaymentTracking';
+import { CancellationModal } from '../../components/Modals/CancellationModal';
+
 
 
 const Stack = createNativeStackNavigator();
@@ -232,6 +237,22 @@ export const StackNavigator = memo(() => {
         <Stack.Screen
           name={NavigationEnum.EDIT_TIME_CLASS_MODAL}
           component={EditTimeSessionModal}
+          options={{
+            presentation: 'transparentModal',
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name={NavigationEnum.PREVIEW_MODAL}
+          component={PreviewModal}
+          options={{
+            presentation: 'transparentModal',
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name={NavigationEnum.CANCELLATION_MODAL}
+          component={CancellationModal}
           options={{
             presentation: 'transparentModal',
             headerShown: false,

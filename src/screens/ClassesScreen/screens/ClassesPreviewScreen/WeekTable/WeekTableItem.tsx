@@ -12,23 +12,18 @@ import { useNavigation } from '@react-navigation/native';
 import { findLessonOnCurrentHour } from '../../../../DatePreviewScreen/WeekTable/WeekTableItem';
 
 import { NavigationEnum } from '../../../../../common/constants/navigation';
+import { dispatch } from '../../../../../store/store';
+import { fetchClassesSchedule } from '../../../../../store/classes/actions';
 
 
 interface IWeekTableItem {
-  StartDateTime: string;
   onLongPress: (value: boolean) => void;
   editMode: boolean;
-  activeItem: IGeneratedScheduleEntries;
-  onMoveSlot: (slot: IGeneratedScheduleEntries, x: number, y: number) => void;
-  conflict: boolean;
-  onDeleteSlot: (slot: IGeneratedScheduleEntries) => void;
-  dayIndex: number;
-  startOfWeek: Date;
-  dryField: IGeneratedScheduleEntries;
-
+  dryField: IGeneratedScheduleEntries[];
   currentDate: Date;
   timeIndex: number;
   slots: IGeneratedScheduleEntries[];
+  classId: number;
 }
 
 const CELL_SIZE = {
@@ -38,38 +33,24 @@ const CELL_SIZE = {
 export const WeekTableItem: FC<IWeekTableItem> = memo(
   ({
     onLongPress,
-    activeItem,
     editMode,
-    conflict,
-    onMoveSlot,
-    onDeleteSlot,
     dryField,
 
     timeIndex,
     slots,
-    currentDate
+    currentDate,
+    classId
 
   }) => {
-    const { currentSession } = useAppSelector(state => state.classes);
-    const colorsLesson = ['#EAAFC8', '#654EA3'];
-
     const lessonOnThisTime: IGeneratedScheduleEntries[] = findLessonOnCurrentHour(slots, timeIndex, currentDate)
 
     const onHandleLongPress = (active: boolean) => {
       onLongPress(active)
     }
 
-    const deleteSlot = () => {
-      onDeleteSlot(activeItem)
-      onLongPress(false)
-    }
 
     const getInfo = () => {
       console.log(
-        // 'activeItem',
-        // activeItem,
-        // 'dryField',
-        // dryField,
         'lessonOnThisTime',
         lessonOnThisTime,
         slots
@@ -83,24 +64,23 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
         onLongPress={() => onHandleLongPress(true)}
         activeOpacity={1}
       >
-        <View style={styles.containerItem}>
-          <View style={{
-            borderRadius: 4,
-            flex: 1,
-            position: 'relative',
-          }}>
+        <View style={styles.wrapperCell}>
+          <View style={styles.containerCell}>
             {lessonOnThisTime.map((lesson, index) => {
               return (
-                <LessonItem key={`${index}-${lesson.Duration}-${lesson.StartDateTime}`} conflict={conflict} lesson={lesson} onMoveSlot={onMoveSlot} editMode={editMode} deleteSlot={deleteSlot} onHandleLongPress={onHandleLongPress} />)
+                <LessonItem
+                  classId={classId}
+                  key={`${index}-${lesson.Duration}-${lesson.StartDateTime}`}
+                  editMode={editMode}
+                  lesson={lesson}
+                  onHandleLongPress={onHandleLongPress} />)
             })}
             {dryField &&
-              <TouchableOpacity onPress={() => console.log(dryField)} style={{
-                height: '100%', width: '100%'
-              }}>
+              dryField.map((dryFieldItem) =>
                 <BusyField
-                  start={Number(dryField.StartDateTime.split('T')[1].split(':')[1])}
-                  duration={dryField.Duration} />
-              </TouchableOpacity>
+                  start={Number(dryFieldItem.StartDateTime.split('T')[1].split(':')[1])}
+                  duration={dryFieldItem.Duration} />
+              )
 
             }
           </View>
@@ -113,11 +93,24 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
 
 
 
-const LessonItem = ({ lesson, conflict, onMoveSlot, editMode, deleteSlot, onHandleLongPress }: { lesson: any, onMoveSlot: any, editMode: boolean, conflict: any, deleteSlot: any, onHandleLongPress: any }) => {
+const LessonItem = ({ lesson, editMode, onHandleLongPress, classId }: { lesson: any, editMode: boolean, onHandleLongPress: any, classId: number }) => {
 
   const colorsLesson = ['#EAAFC8', '#654EA3'];
   const navigation = useNavigation();
   const pan = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
+  const completeAction = () => {
+    dispatch(fetchClassesSchedule({ classId }))
+    console.log(lesson)
+    onHandleLongPress(false)
+  }
+  const onDeleteSlot = () => {
+    //@ts-ignore
+    navigation.navigate(NavigationEnum.PREVIEW_MODAL, {
+      SessionId: lesson?.SessionId,
+      completeAction,
+      deleteItem: false
+    })
+  }
   const panResponders = PanResponder.create({
     onStartShouldSetPanResponder: () => editMode,
     onPanResponderMove: Animated.event(
@@ -135,19 +128,14 @@ const LessonItem = ({ lesson, conflict, onMoveSlot, editMode, deleteSlot, onHand
       pan.setOffset(moveCoords);
       pan.setValue(moveCoords);
       let newTime = new Date(addDayAndHoursToDate(lesson.StartDateTime, gridCellX, gridCellY));
-      const addDuration = (time: any) => {
 
-        newTime.setMinutes(time.minute)
-        newTime.setHours(time.dayPart == "AM" ? time.hour : time.hour + 12)
-        onHandleLongPress(false)
-        onMoveSlot(lesson, moment(newTime).format('YYYY-MM-DDTHH:mm:ss'))
-      }
 
       //@ts-ignore
-      navigation.navigate(NavigationEnum.EDIT_TIME_CLASS_MODAL, {
-        addDuration,
+      navigation.navigate(NavigationEnum.PREVIEW_MODAL, {
+        SessionId: lesson?.SessionId,
         newTime,
-        conflict,
+        completeAction,
+        deleteItem: true
       })
 
       pan.setOffset({
@@ -183,12 +171,12 @@ const LessonItem = ({ lesson, conflict, onMoveSlot, editMode, deleteSlot, onHand
           style={[styles.wrapperItem, { top: `${lessonMinuteStart / 60 * 100}%` }
           ]}>
           {editMode && (
-            <TouchableOpacity style={styles.cansel} onPress={() => deleteSlot(lesson)}>
+            <TouchableOpacity style={styles.cansel} onPress={onDeleteSlot}>
               <Cancel />
             </TouchableOpacity>)}
           <Text style={[styles.textItem,
           ]
-          }>Class</Text>
+          }>{lesson.ClassName}</Text>
         </LinearGradient>
       </>
     </Animated.View>

@@ -44,7 +44,7 @@ interface IWeekTableItem {
   onDeleteSlot: (slot: IGeneratedScheduleEntries) => void;
   dayIndex: number;
   startOfWeek: Date;
-  dryField: IGeneratedScheduleEntries;
+  dryField: IGeneratedScheduleEntries[];
   currentDay: Date;
   slots: IGeneratedScheduleEntries[]
 }
@@ -68,7 +68,7 @@ export const WeekTableItem: FC<IWeekTableItem> =
 
   }) => {
     const lessonOnThisTime: IGeneratedScheduleEntries[] = findLessonOnCurrentHour(slots, timeIndex, currentDay)
-
+    const { createCurrentClassRequest } = useAppSelector(state => state.schedule);
     const onHandleLongPress = (active: boolean) => {
 
       onLongPress(active)
@@ -84,24 +84,27 @@ export const WeekTableItem: FC<IWeekTableItem> =
         onLongPress={() => onHandleLongPress(true)}
         activeOpacity={1}
       >
-        <View style={styles.containerItem}>
-          <View style={{
-            borderRadius: 4,
-            flex: 1,
-            position: 'relative',
-          }}>
+        <View style={styles.wrapperCell}>
+          <View style={styles.containerCell}>
             {lessonOnThisTime.map((lesson, index) => {
               return (
-                <LessonItem key={`${lesson.StartDateTime} ${index}`} lesson={lesson} onMoveSlot={onMoveSlot} editMode={editMode} deleteSlot={deleteSlot} onHandleLongPress={onHandleLongPress} />)
+                //remove TouchableOpacity to display cells correctly, added for testing purposes 
+                // <TouchableOpacity onPress={() => console.log('touch lesson', lesson)}>
+                <LessonItem name={createCurrentClassRequest.Class?.Name || ''} key={`${lesson.StartDateTime} ${index}`} lesson={lesson} onMoveSlot={onMoveSlot} editMode={editMode} deleteSlot={deleteSlot} onHandleLongPress={onHandleLongPress} />
+                // </TouchableOpacity>
+              )
             })}
+            {/* Must doing */}
             {dryField &&
-              <TouchableOpacity onPress={() => console.log(dryField)} style={{
-                height: '100%', width: '100%'
-              }}>
+              dryField.map((dryFieldItem) =>
+                // <TouchableOpacity onPress={() => console.log(dryField)} style={{
+                //   height: '100%', width: '100%'
+                // }}>
                 <BusyField
-                  start={Number(dryField.StartDateTime.split('T')[1].split(':')[1])}
-                  duration={dryField.Duration} />
-              </TouchableOpacity>
+                  start={Number(dryFieldItem.StartDateTime.split('T')[1].split(':')[1])}
+                  duration={dryFieldItem.Duration} />
+                // </TouchableOpacity>
+              )
 
             }
           </View>
@@ -113,7 +116,7 @@ export const WeekTableItem: FC<IWeekTableItem> =
   };
 
 
-const LessonItem = ({ lesson, onMoveSlot, editMode, deleteSlot, onHandleLongPress }: { lesson: any, onMoveSlot: any, editMode: boolean, deleteSlot: any, onHandleLongPress: any }) => {
+const LessonItem = ({ lesson, onMoveSlot, editMode, deleteSlot, onHandleLongPress, name }: { lesson: any, onMoveSlot: any, editMode: boolean, deleteSlot: any, onHandleLongPress: any, name: string }) => {
   const colorsLesson = ['#EAAFC8', '#654EA3'];
 
   const navigation = useNavigation();
@@ -132,7 +135,6 @@ const LessonItem = ({ lesson, onMoveSlot, editMode, deleteSlot, onHandleLongPres
         y: (CELL_SIZE.height / 2) * gridCellY,
       };
 
-      // Update the pan Animated value to the final position
       pan.setOffset(moveCoords);
       pan.setValue(moveCoords);
       let newTime = new Date(addDayAndHoursToDate(lesson.StartDateTime, gridCellX, gridCellY));
@@ -142,7 +144,6 @@ const LessonItem = ({ lesson, onMoveSlot, editMode, deleteSlot, onHandleLongPres
         onHandleLongPress(false)
         onMoveSlot(lesson, moment(newTime).format('YYYY-MM-DDTHH:mm:ss'))
       }
-      console.log(newTime, 'newTime')
       //@ts-ignore
       navigation.navigate(NavigationEnum.EDIT_TIME_CLASS_MODAL, {
         addDuration,
@@ -183,12 +184,15 @@ const LessonItem = ({ lesson, onMoveSlot, editMode, deleteSlot, onHandleLongPres
           style={[styles.wrapperItem, { top: `${lessonMinuteStart / 60 * 100}%` }
           ]}>
           {editMode && (
-            <TouchableOpacity style={styles.cansel} onPress={() => deleteSlot(lesson)}>
+            <TouchableOpacity style={styles.cansel} onPress={() => {
+              console.log(lesson)
+              deleteSlot(lesson)
+            }}>
               <Cancel />
             </TouchableOpacity>)}
           <Text style={[styles.textItem,
           ]
-          }>Class</Text>
+          }>{name}</Text>
         </LinearGradient>
       </>
     </Animated.View>

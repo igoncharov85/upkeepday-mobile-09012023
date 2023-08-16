@@ -75,7 +75,7 @@ export const CancellationScreen: FC<ICancellationScreen> = memo(() => {
       <DateOfChangeItem allDay={allDay} title={'End'} time={endDate} setResultData={onSetEndTime} />
 
       <View style={styles.finishBtn}>
-        <CustomButton text={'Finish'} onPress={handleSubmit} />
+        <CustomButton text={'Cancel Session(s)'} onPress={handleSubmit} />
       </View>
     </View>
   );

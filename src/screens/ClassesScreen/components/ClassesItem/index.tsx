@@ -14,7 +14,7 @@ import styles from "./styles";
 import DeleteIcon from "../../../../../assets/svg/classes/DeleteIcon";
 import { formatDateForPeriod } from "../../../../services/utils/fullDateToValue.util";
 import { dispatch } from "../../../../store/store";
-import { deleteClassesAction } from "../../../../store/classes/actions";
+import { deleteClassesAction, fetchClassesSchedule } from "../../../../store/classes/actions";
 
 interface IClassesItem {
     item: IClassesResponse
@@ -25,12 +25,14 @@ interface IClassesItem {
 const ClassesItem: React.FC<IClassesItem> = ({ item }) => {
     const navigation = useNavigation();
 
-    const handleEdit = () => {
+    const navigateToEditLesson = () => {
         //@ts-ignore
         navigation.navigate(NavigationEnum.EDIT_CLASS_SCREEN, { item });
     };
 
-    const handleDocument = () => {
+    const navigateToLessonView = () => {
+        const ClassId = item.ClassId
+        dispatch(fetchClassesSchedule({ classId: ClassId }))
         //@ts-ignore
         navigation.navigate(NavigationEnum.CLASSES_PREVIEW_SCREEN, { item });
     }
@@ -72,14 +74,14 @@ const ClassesItem: React.FC<IClassesItem> = ({ item }) => {
                         <>
                             <TouchableOpacity
                                 style={styles.linkItem}
-                                onPress={handleDocument}
+                                onPress={navigateToLessonView}
                             >
-                                <DocumentIcon />
+                                <ScheduledIcon />
                             </TouchableOpacity>
 
                             <TouchableOpacity
                                 style={styles.linkItem}
-                                onPress={handleEdit}>
+                                onPress={navigateToEditLesson}>
                                 <EditIcon />
                             </TouchableOpacity>
 
@@ -88,7 +90,7 @@ const ClassesItem: React.FC<IClassesItem> = ({ item }) => {
                             </TouchableOpacity>
 
                             <TouchableOpacity onPress={() => { }} style={styles.linkItem}>
-                                <ScheduledIcon />
+                                <DocumentIcon />
                             </TouchableOpacity>
                         </>
                     ) : (

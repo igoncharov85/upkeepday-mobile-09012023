@@ -46,6 +46,7 @@ import PreviewModal from '../../components/Modals/PreviewModal';
 import { StudentPayments } from '../../screens/StudentsScreen/screens/StudentPayments';
 import { PaymentsTable } from '../../screens/StudentsScreen/screens/PaymentsTable';
 import { PaymentTracking } from '../../screens/StudentsScreen/screens/PaymentTracking';
+import { CancellationModal } from '../../components/Modals/CancellationModal';
 
 
 
@@ -244,6 +245,14 @@ export const StackNavigator = memo(() => {
         <Stack.Screen
           name={NavigationEnum.PREVIEW_MODAL}
           component={PreviewModal}
+          options={{
+            presentation: 'transparentModal',
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name={NavigationEnum.CANCELLATION_MODAL}
+          component={CancellationModal}
           options={{
             presentation: 'transparentModal',
             headerShown: false,

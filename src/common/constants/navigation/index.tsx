@@ -13,7 +13,6 @@ export enum NavigationEnum {
   SHEDULE_MONTH = 'navigation/SHEDULE_MONTH',
   //CANCELLATION
   CANCELLATION_SCREEN = 'navigation/CancellationScreen',
-  CANCELLATION_MODAL = 'navigation/CancellationModalWrapper',
   //ADD CLASS
   ADD_CLASS_SCREEN = 'navigation/AddClassScreen',
   ADD_NEW_TEACHER_SCREEN = 'navigation/AddNewTeacherScreen',
@@ -54,5 +53,6 @@ export enum NavigationEnum {
   SELECT_DURATION_CLASS_MODAL = 'navigation/SELECT_DURATION_CLASS_MODAL',
   EDIT_DURATION_CLASS_MODAL = 'navigation/EDIT_DURATION_CLASS_MODAL',
   EDIT_TIME_CLASS_MODAL = 'navigation/EDIT_TIME_CLASS_MODAL',
-  PREVIEW_MODAL = 'navigation/PREVIEW_MODAL'
+  PREVIEW_MODAL = 'navigation/PREVIEW_MODAL',
+  CANCELLATION_MODAL = 'navigation/CANCELLATION_MODAL'
 }

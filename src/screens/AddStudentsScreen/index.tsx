@@ -25,17 +25,25 @@ enum TypeAction {
 export function removeEmptyObjects(array: any[]) {
     return array.filter(obj => Object.keys(obj).length !== 0);
 }
+function removeDuplicateStudents(students: any) {
+    const seenStudents = new Set();
 
+    return students.filter((student: any) => {
+        const key = `${student.Email}-${student.FirstName}-${student.LastName}`;
+        return seenStudents.has(key) ? false : seenStudents.add(key);
+    });
+}
 export const AddStudentsScreen: React.FC<IAddStudentsScreen> = () => {
 
     const { students } = useAppSelector(state => state.user)
-    
+
     const [typeAction, setTypeAction] = useState(0);
     const navigation = useNavigation();
     const { createCurrentClassRequest, localStudentData } = useAppSelector(state => state.schedule);
     const [selectedStudents, setSelectedStudents] = useState<Array<IExistingStudent | any>>(createCurrentClassRequest.Students || []);
     const [existingStudent, setExistingStudent] = useState<Array<any>>(localStudentData);
     const [newStudents, setNewStudents] = useState<Array<IExistingStudent>>([]);
+    console.log(localStudentData, 'localStudentData')
     //@ts-ignore
     const goNextStep = () => navigation.navigate(NavigationEnum.PREPAYMENT_CONFIGURATION_SCREEN);
     const handleTypeChange = (type: any) => {
@@ -119,7 +127,7 @@ export const AddStudentsScreen: React.FC<IAddStudentsScreen> = () => {
             <View style={{ flex: 1 }}>
                 <View style={{ flex: 1 }}>
                     {typeAction === TypeAction.ExistingStudent ?
-                        <ExistingStudent students={existingStudent} onChancheUsers={handleChancheUsers} selectedUsers={removeEmptyObjects(selectedStudents)} /> :
+                        <ExistingStudent students={removeDuplicateStudents(existingStudent)} onChancheUsers={handleChancheUsers} selectedUsers={removeEmptyObjects(selectedStudents)} /> :
                         <NewStudent handleTypeChange={setThisScreen} onAddNewStudent={handleAddNewStudent} />
                     }
                 </View>

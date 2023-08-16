@@ -187,6 +187,7 @@ export const WeekTableItem: FC<IWeekTableItem> =
         // @ts-ignore
         navigation.navigate(NavigationEnum.SELECT_DURATION_CLASS_MODAL, {
           timeDuration,
+          dayOfWeek,
           startDateTime: prevLesson.end,
           onCreateLesson,
           maxDuration: subtractTime(nextLesson?.start, `${timeIndex}:0`),
@@ -196,6 +197,7 @@ export const WeekTableItem: FC<IWeekTableItem> =
         // @ts-ignore
         navigation.navigate(NavigationEnum.SELECT_DURATION_CLASS_MODAL, {
           timeDuration,
+          dayOfWeek,
           startDateTime,
           onCreateLesson,
           maxDuration: subtractTime(nextLesson?.start, `${timeIndex}:0`),
@@ -240,10 +242,12 @@ export const WeekTableItem: FC<IWeekTableItem> =
       // @ts-ignore
       navigation.navigate(NavigationEnum.SELECT_DURATION_CLASS_MODAL, {
         startDateTime: startTime,
+        dayOfWeek,
         onCreateLesson,
         maxDuration: type == 'before' ? subtractTime(item.start, `${timeIndex}:00`) : subtractTime(nextLesson?.start, item.end)
       })
     }
+
     const onHandleMoreLesson = (item: any) => {
       const array = [...lessons]
       const index = array.findIndex(element => element.start === item.start);

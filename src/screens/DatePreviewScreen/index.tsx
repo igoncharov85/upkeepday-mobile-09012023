@@ -72,8 +72,6 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
 
 
 
-
-
     const handeScheduleSlots = (slots: IGeneratedScheduleEntries[]) => {
         setSlots(slots)
         setConflict(findScheduleConflicts(slots, CurrentScheduledEntries))
@@ -90,28 +88,16 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
     }
     const goToPrevWeekConflict = () => {
         const getConflict = getWeekDates(moment(prevConflictWeek).toDate())
-        prevConflictWeek
-            ?
-            setStartDateWeek(new Date(addDayAndHoursToDate(getConflict.startDate.toISOString(), 0, 0))) :
-            setStartDateWeek(new Date(addDayAndHoursToDate(startDateWeek.toISOString(), -7, 0)))
-        prevConflictWeek
-            ?
-            setEndDateWeek(new Date(addDayAndHoursToDate(getConflict.endDate.toISOString(), 0, 0))) :
-            setEndDateWeek(new Date(addDayAndHoursToDate(endDateWeek.toISOString(), -7, 0)))
+        setStartDateWeek(new Date(addDayAndHoursToDate(getConflict.startDate.toISOString(), 0, 0)))
+        setEndDateWeek(new Date(addDayAndHoursToDate(getConflict.endDate.toISOString(), 0, 0)))
 
     }
     const goToNextWeekConflict = () => {
         const getConflict = getWeekDates(moment(nextConflictWeek).toDate())
-        nextConflictWeek
-            ?
-            setStartDateWeek(new Date(addDayAndHoursToDate(getConflict.startDate.toISOString(), 0, 0))) :
-            setStartDateWeek(new Date(addDayAndHoursToDate(startDateWeek.toISOString(), 7, 0)))
-        nextConflictWeek
-            ?
-            setEndDateWeek(new Date(addDayAndHoursToDate(getConflict.endDate.toISOString(), 0, 0))) :
-            setEndDateWeek(new Date(addDayAndHoursToDate(endDateWeek.toISOString(), 7, 0)))
-
+        setStartDateWeek(new Date(addDayAndHoursToDate(getConflict.startDate.toISOString(), 0, 0)))
+        setEndDateWeek(new Date(addDayAndHoursToDate(getConflict.endDate.toISOString(), 0, 0)))
     }
+
     const onSave = () => {
         dispatch(updateCurrentClassRequestAction({
             Sessions: slots,
@@ -137,19 +123,9 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
         }
     }, [GeneratedScheduleEntries, loading])
 
-    // console.log('sort conflict', sortByStartDateTime(conflict).forEach((element: any) => {
-    //     console.log(element.StartDateTime)
-    // }))
 
-    // endDateWeek
-    // startDateWeek
-    // console.log('\\\\\\\\\\\\\\\\')
-    // console.log('nextConflictWeek:', nextConflictWeek);
-    // console.log('prevConflictWeek:', prevConflictWeek);
-
-    // console.log('conflict date find: \n', findAdjacentEvent(conflict, endDateWeek, direction), '\n----------------')
     const lessonHasConflict = conflict.length > 0
-    return screenLoading ? <ScreenLoading /> : (<View style={{ height: '100%' }}>
+    return loading ? <ScreenLoading /> : (<View style={{ height: '100%' }}>
         <View style={styles.header}>
             <ScreenHeader text={"Preview Day and Time"} onBackPress={navigation.goBack} withBackButton={true} />
         </View>
@@ -166,14 +142,14 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
         </View>
         <View style={[styles.conflictContainer, { marginBottom: lessonHasConflict ? 0 : -30, zIndex: 100 }]}>
             <View >
-                <CustomButton text={"<"} onPress={goToPrevWeekConflict} style={styles.arrowBtn} errorColor={prevConflictWeek} />
+                <CustomButton text={"<"} onPress={prevConflictWeek ? goToPrevWeekConflict : goToPrevWeek} style={styles.arrowBtn} errorColor={prevConflictWeek} />
             </View>
             {lessonHasConflict && <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Conflict />
                 <Text style={styles.textConflict}>You have a conflict. Please check each week</Text>
             </View>}
             <View >
-                <CustomButton text={">"} onPress={goToNextWeekConflict} style={styles.arrowBtn} errorColor={nextConflictWeek} />
+                <CustomButton text={">"} onPress={nextConflictWeek ? goToNextWeekConflict : goToNextWeek} style={styles.arrowBtn} errorColor={nextConflictWeek} />
             </View>
         </View>
         <Text style={{ textAlign: 'center' }}>

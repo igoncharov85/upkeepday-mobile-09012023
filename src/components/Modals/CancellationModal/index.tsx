@@ -17,7 +17,7 @@ import { StudentCheckInModal } from '../../../screens/SheduleScreen/components/S
 
 interface ICancellationModalScreen { }
 
-export const CancellationModal: ICancellationModalScreen = () => {
+export const CancellationModal = () => {
 
   const navigation = useNavigation()
   const route = useRoute()

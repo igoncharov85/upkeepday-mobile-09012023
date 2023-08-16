@@ -76,7 +76,7 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
     }, []);
 
 
-    return (<View style={{ height: '100%' }}>
+    return loading ? <ScreenLoading /> : (<View style={{ height: '100%' }}>
         <View style={styles.header}>
             <ScreenHeader text={"View and Reschedule"} onBackPress={navigation.goBack} withBackButton={true} />
         </View>
@@ -92,7 +92,7 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
             />
 
         </View>
-        {loading ? <ScreenLoading /> : <View style={{ flex: 1 }}>
+        {<View style={{ flex: 1 }}>
             <WeekTable classId={item.ClassId} startOfWeek={startDateWeek} endOfWeek={endDateWeek} />
         </View>}
         <View style={{ padding: 20, justifyContent: 'flex-end' }}>

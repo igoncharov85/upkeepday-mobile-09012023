@@ -58,13 +58,6 @@ export const WeekTable: FC<ISheduleTable> = memo(
     }
 
 
-
-
-
-
-    // useEffect(() => {
-    //   dispatch(fetchClassesSchedule({ classId }))
-    // }, [])
     const timeData = generateTimeData('00:00', '23:00');
 
     const weekStructure = createWeekStructure(
@@ -96,6 +89,7 @@ export const WeekTable: FC<ISheduleTable> = memo(
 
                       return <WeekTableItem
                         key={`${dayIndex}-${index}`}
+                        classId={classId}
                         slots={convertSessionsToLocalTime(classesSchedule.Sessions)}
                         currentDate={currentDate}
                         timeIndex={index}

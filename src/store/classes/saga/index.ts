@@ -220,7 +220,6 @@ export function* classesScheduleWorker({
     } catch (error) {
         yield call(ErrorFilterService.validateError, error);
     } finally {
-        console.log('loading false \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n')
         yield put(setClassesLoading(false));
     }
 }

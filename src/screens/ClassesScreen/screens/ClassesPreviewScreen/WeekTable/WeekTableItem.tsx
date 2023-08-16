@@ -23,6 +23,7 @@ interface IWeekTableItem {
   currentDate: Date;
   timeIndex: number;
   slots: IGeneratedScheduleEntries[];
+  classId: number;
 }
 
 const CELL_SIZE = {
@@ -37,10 +38,10 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
 
     timeIndex,
     slots,
-    currentDate
+    currentDate,
+    classId
 
   }) => {
-    // const { currentSession, loading, classesSchedule } = useAppSelector(state => state.classes);
     const lessonOnThisTime: IGeneratedScheduleEntries[] = findLessonOnCurrentHour(slots, timeIndex, currentDate)
 
     const onHandleLongPress = (active: boolean) => {
@@ -50,10 +51,6 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
 
     const getInfo = () => {
       console.log(
-        // 'activeItem',
-        // activeItem,
-        // 'dryField',
-        // dryField,
         'lessonOnThisTime',
         lessonOnThisTime,
         slots
@@ -72,6 +69,7 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
             {lessonOnThisTime.map((lesson, index) => {
               return (
                 <LessonItem
+                  classId={classId}
                   key={`${index}-${lesson.Duration}-${lesson.StartDateTime}`}
                   editMode={editMode}
                   lesson={lesson}
@@ -95,13 +93,13 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
 
 
 
-const LessonItem = ({ lesson, editMode, onHandleLongPress }: { lesson: any, editMode: boolean, onHandleLongPress: any }) => {
+const LessonItem = ({ lesson, editMode, onHandleLongPress, classId }: { lesson: any, editMode: boolean, onHandleLongPress: any, classId: number }) => {
 
   const colorsLesson = ['#EAAFC8', '#654EA3'];
   const navigation = useNavigation();
   const pan = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
   const completeAction = () => {
-    // dispatch(fetchClassesSchedule())
+    dispatch(fetchClassesSchedule({ classId }))
     console.log(lesson)
     onHandleLongPress(false)
   }

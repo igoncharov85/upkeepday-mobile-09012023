@@ -1,30 +1,29 @@
-import {useRoute} from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import React from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import PaymentIcon from '../../../../assets/svg/classes/PaymentIcon';
-import {useTypedNavigation} from '../../../hook/useTypedNavigation';
-import {formatDateForPeriod} from '../../../services/utils/fullDateToValue.util';
-import {fetchClassesAction} from '../../../store/classes/actions';
-import {dispatch} from '../../../store/store';
-import {CustomButton} from '../../UI/CustomButton';
+import { useTypedNavigation } from '../../../hook/useTypedNavigation';
+import { formatDateForPeriod } from '../../../services/utils/fullDateToValue.util';
+import { fetchClassesAction } from '../../../store/classes/actions';
+import { dispatch } from '../../../store/store';
+import { CustomButton } from '../../UI/CustomButton';
 
 import styles from './styles';
 
 const ResultClassModal = () => {
-  const {goBack} = useTypedNavigation();
+  const { goBack } = useTypedNavigation();
   const route = useRoute(),
-    {params}: any = route;
+    { params }: any = route;
 
   const closeModal = () => {
     goBack();
   };
-  const {item, actionBtn, nameAction} = params;
+  const { item, actionBtn, nameAction } = params;
   const handleAction = () => {
     actionBtn();
     item?.Status && dispatch(fetchClassesAction(item.Status.toLowerCase()));
   };
-
   return (
     <>
       <TouchableOpacity
@@ -33,8 +32,8 @@ const ResultClassModal = () => {
         activeOpacity={1}>
         <LinearGradient
           colors={['rgba(178, 178, 178, 0.88)', 'rgba(23, 25, 48, 0.898039)']}
-          start={{x: 0.0, y: 1.0}}
-          end={{x: 1.0, y: 0.0}}
+          start={{ x: 0.0, y: 1.0 }}
+          end={{ x: 1.0, y: 0.0 }}
           angle={223.05}
           useAngle={true}
           style={styles.container}>
@@ -72,16 +71,16 @@ const ResultClassModal = () => {
                 ) : null}
                 {item.EnrolledClasses ? (
                   <View>
-                    <Text style={[styles.title, {textAlign: 'center'}]}>
+                    <Text style={[styles.title, { textAlign: 'center' }]}>
                       {item.FirstName} {item.LastName}
                     </Text>
-                    <Text style={[styles.text, {textAlign: 'center'}]}>
+                    <Text style={[styles.text, { textAlign: 'center' }]}>
                       {item.Phone}
                     </Text>
-                    <Text style={[styles.text, {textAlign: 'center'}]}>
+                    <Text style={[styles.text, { textAlign: 'center' }]}>
                       {item.Email}
                     </Text>
-                    <Text style={[styles.text, {textAlign: 'center'}]}>
+                    <Text style={[styles.text, { textAlign: 'center' }]}>
                       <Text style={styles.title}>{item.Notes && 'Notes:'}</Text>
                       {item.Notes}
                     </Text>
@@ -89,19 +88,19 @@ const ResultClassModal = () => {
                 ) : null}
                 {item.StudentName ? (
                   <View>
-                    <Text style={[styles.title, {textAlign: 'center'}]}>
+                    <Text style={[styles.title, { textAlign: 'center' }]}>
                       Remove Student
                     </Text>
-                    <Text style={[styles.text, {textAlign: 'center'}]}>
+                    <Text style={[styles.text, { textAlign: 'center' }]}>
                       {item.StudentName}
                     </Text>
-                    <Text style={[styles.text, {textAlign: 'center'}]}>
+                    <Text style={[styles.text, { textAlign: 'center' }]}>
                       {item.ClassName}
                     </Text>
                   </View>
                 ) : null}
               </View>
-              <View style={{width: '100%', alignItems: 'center'}}>
+              <View style={{ width: '100%', alignItems: 'center' }}>
                 <CustomButton text={nameAction} onPress={handleAction} />
                 <TouchableOpacity onPress={closeModal}>
                   <Text style={styles.cancel}>Cancel</Text>

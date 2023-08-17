@@ -1,22 +1,22 @@
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import React from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import ArrowRight from '../../../assets/svg/schedule/ArrowRight';
-import {NavigationEnum} from '../../common/constants/navigation';
+import { NavigationEnum } from '../../common/constants/navigation';
 
-import {ScreenHeader} from '../../components/ScreenHeader';
-import {useTypedNavigation} from '../../hook/useTypedNavigation';
-import {useTypedRoute} from '../../hook/useTypedRoute';
-import {updatedStatusClassesAction} from '../../store/classes/actions';
-import {updateCurrentClassRequestAction} from '../../store/shedule';
-import {dispatch} from '../../store/store';
+import { ScreenHeader } from '../../components/ScreenHeader';
+import { useTypedNavigation } from '../../hook/useTypedNavigation';
+import { useTypedRoute } from '../../hook/useTypedRoute';
+import { updatedStatusClassesAction } from '../../store/classes/actions';
+import { updateCurrentClassRequestAction } from '../../store/shedule';
+import { dispatch } from '../../store/store';
 import styles from './styles';
 
 export const EditClassScreen = () => {
-  const {navigate, goBack} = useTypedNavigation();
-  const route = useTypedRoute<NavigationEnum.EDIT_CLASS_SCREEN>();
-  const {item} = route.params;
-
+  const { navigate, goBack } = useTypedNavigation();
+  const route = useRoute();
+  const { item } = route.params as any;
+  console.log(item, 'item')
   const relloverClass = () => {
     const classLesson = item;
 
@@ -67,7 +67,7 @@ export const EditClassScreen = () => {
           title={'Rollover Class'}
           navigationName={NavigationEnum.ADD_CLASS_SCREEN}
           action={relloverClass}
-          data={{screenName: 'Rollover Class', item: item?.item}}
+          data={{ screenName: 'Rollover Class', item: item?.item }}
         />
         <ClassesEditButton
           title={'Archive Class'}
@@ -104,10 +104,10 @@ const ClassesEditButton = ({
   action?: any;
 }) => {
   action && action();
-  const {navigate} = useNavigation();
+  const { navigate } = useNavigation();
   const onPress = () => {
     // @ts-ignore
-    navigate(navigationName, data ? data : null);
+    navigate(navigationName, data ? { item: data } : null);
   };
   return (
     <TouchableOpacity onPress={onPress} style={styles.block}>

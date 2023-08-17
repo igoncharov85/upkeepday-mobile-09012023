@@ -85,13 +85,7 @@ console.log('activeAmount', activeAmount)
 					<View style={{ padding: 20, paddingBottom: 0 }}>
 						<ScreenHeader text={'Payment Configuration'} onBackPress={() => goBack()} withBackButton={true} />
 					</View>
-					<View style={{ justifyContent: 'center', alignItems: 'center' }}>
-						<Text style={{
-							fontSize: 18,
-							lineHeight: 24,
-			marginTop: 15,
-						}}>Enter your payments term</Text>
-					</View>
+
 					<View style={{
 						marginHorizontal: 20,
 					}}>

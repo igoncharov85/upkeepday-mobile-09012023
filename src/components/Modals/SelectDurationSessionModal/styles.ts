@@ -68,4 +68,9 @@ export default StyleSheet.create({
     fontSize: 15,
     lineHeight: 18,
   },
+  dayText: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    marginRight: 30
+  },
 });

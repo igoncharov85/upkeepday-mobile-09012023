@@ -1,27 +1,29 @@
-import { FormikProps, withFormik } from 'formik';
-import React, { FC, memo, useEffect, useMemo } from 'react';
-import { KeyboardAvoidingView, ScrollView, Text, View } from 'react-native';
-import { NavigationEnum } from '../../../common/constants/navigation';
-import { formicDefaultProps } from '../../../common/constants/styles/form.config';
-import { keyboardSettings } from '../../../common/constants/styles/keyboard';
-import { StudentRegistrationShape } from '../../../common/shemas/auth.shape';
-import { IRegistrationRequest, TRole } from '../../../common/types/auth.types';
+import {FormikProps, withFormik} from 'formik';
+import React, {FC, memo, useEffect, useMemo} from 'react';
+import {KeyboardAvoidingView, ScrollView, Text, View} from 'react-native';
+import {NavigationEnum} from '../../../common/constants/navigation';
+import {formicDefaultProps} from '../../../common/constants/styles/form.config';
+import {keyboardSettings} from '../../../common/constants/styles/keyboard';
+import {StudentRegistrationShape} from '../../../common/shemas/auth.shape';
+import {IRegistrationRequest, TRole} from '../../../common/types/auth.types';
 import {
   INavigationBase,
-  TRegistrationScreen
+  TRegistrationScreen,
 } from '../../../common/types/component.styles';
-import { ScreenHeader } from '../../../components/ScreenHeader';
-import { CountrySelect } from '../../../components/UI/CountrySelect';
-import { CustomButton } from '../../../components/UI/CustomButton';
-import { CustomInput } from '../../../components/UI/CustomInput';
-import { StateSelect } from '../../../components/UI/StateSelect';
-import { setStatesAction } from '../../../store/auth';
+import {ScreenHeader} from '../../../components/ScreenHeader';
+import {CountrySelect} from '../../../components/UI/CountrySelect';
+import {CustomButton} from '../../../components/UI/CustomButton';
+import {CustomInput} from '../../../components/UI/CustomInput';
+import {StateSelect} from '../../../components/UI/StateSelect';
+import {useTypedNavigation} from '../../../hook/useTypedNavigation';
+import {setStatesAction} from '../../../store/auth';
 import {
-  fetchCountriesAction, registrationAction
+  fetchCountriesAction,
+  registrationAction,
 } from '../../../store/auth/actions';
-import { cacheRegistrationFormAction } from '../../../store/cached';
-import { useAppSelector } from '../../../store/hooks';
-import { dispatch } from '../../../store/store';
+import {cacheRegistrationFormAction} from '../../../store/cached';
+import {useAppSelector} from '../../../store/hooks';
+import {dispatch} from '../../../store/store';
 import styles from './styles';
 
 const registrationProps = {
@@ -41,9 +43,9 @@ interface IStudentRegistrationScreen extends INavigationBase {
   type: TRole;
 }
 export const StudentRegistrationScreen: FC<IStudentRegistrationScreen> = memo(
-  ({ setScreen, navigation, type }) => {
-    const { loading } = useAppSelector(state => state.auth);
-
+  ({setScreen, type}) => {
+    const {loading} = useAppSelector(state => state.auth);
+    const {navigate} = useTypedNavigation();
     useEffect(() => {
       dispatch(setStatesAction([]));
       dispatch(fetchCountriesAction());
@@ -78,13 +80,13 @@ export const StudentRegistrationScreen: FC<IStudentRegistrationScreen> = memo(
               validationErrorText={errors.email}
               placeholder={'Email'}
               labelText={'Email'}
-              inputMode='email'
-              keyboardType='email-address'
+              inputMode="email"
+              keyboardType="email-address"
             />
           </View>
           <View style={styles.inputWrapper}>
             <CustomInput
-              autoCapitalize='words'
+              autoCapitalize="words"
               onChangeText={handleChange('firstName')}
               onBlur={handleBlur('firstName')}
               value={values.firstName}
@@ -96,7 +98,7 @@ export const StudentRegistrationScreen: FC<IStudentRegistrationScreen> = memo(
           </View>
           <View style={styles.inputWrapper}>
             <CustomInput
-              autoCapitalize='words'
+              autoCapitalize="words"
               onChangeText={handleChange('lastName')}
               onBlur={handleBlur('lastName')}
               value={values.lastName}
@@ -115,13 +117,13 @@ export const StudentRegistrationScreen: FC<IStudentRegistrationScreen> = memo(
               validationErrorText={errors.phone}
               placeholder={'Phone number'}
               labelText={'Phone number'}
-              inputMode='tel'
-              keyboardType='phone-pad'
+              inputMode="tel"
+              keyboardType="phone-pad"
             />
           </View>
           <View style={styles.inputWrapper}>
             <CustomInput
-              autoCapitalize='words'
+              autoCapitalize="words"
               onChangeText={handleChange('address')}
               onBlur={handleBlur('address')}
               value={values.address}
@@ -158,8 +160,8 @@ export const StudentRegistrationScreen: FC<IStudentRegistrationScreen> = memo(
               validationErrorText={errors.postalCode}
               placeholder={'Postal code'}
               labelText={'Postal code'}
-              inputMode='numeric'
-              keyboardType='numeric'
+              inputMode="numeric"
+              keyboardType="numeric"
             />
           </View>
 
@@ -193,7 +195,7 @@ export const StudentRegistrationScreen: FC<IStudentRegistrationScreen> = memo(
               PostalCode: values.postalCode,
               State: values.state,
             };
-            dispatch(registrationAction({ data, type }));
+            dispatch(registrationAction({data, type}));
             dispatch(cacheRegistrationFormAction(data));
           },
           ...formicDefaultProps,
@@ -216,7 +218,7 @@ export const StudentRegistrationScreen: FC<IStudentRegistrationScreen> = memo(
           <RegistrationForm />
           <Text
             style={styles.text}
-            onPress={() => navigation.navigate(NavigationEnum.LOGIN)}>
+            onPress={() => navigate(NavigationEnum.LOGIN)}>
             I’m an existing user. Login
           </Text>
         </ScrollView>

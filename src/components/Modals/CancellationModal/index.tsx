@@ -1,39 +1,35 @@
-import { useNavigation, useRoute } from '@react-navigation/native';
 import React, { useState } from 'react';
 import {
   Text,
-  Modal,
   TouchableOpacity,
   Animated,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { NavigationEnum } from '../../../common/constants/navigation';
+import { useTypedNavigation } from '../../../hook/useTypedNavigation'
+import { useTypedRoute } from '../../../hook/useTypedRoute'
 import styles from './styles';
-import { IScheduleItem } from '../../../common/types/schedule.types';
 import { StudentCheckInModal } from '../../../screens/SheduleScreen/components/StudentCheckInModal';
 
 
 
 
-interface ICancellationModalScreen { }
 
 export const CancellationModal = () => {
 
-  const navigation = useNavigation()
-  const route = useRoute()
+  const {navigate, goBack} = useTypedNavigation()
+  const {params} = useTypedRoute<NavigationEnum.CANCELLATION_MODAL>()
 
-  const { item } = route.params as any
+  const { item } = params
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const onStudentCheckIn = () => {
     setIsModalVisible(!isModalVisible);
   }
-  const goBack = () => navigation.goBack()
 
   const navigateToCancellationScreen = () => {
     goBack()
-    //@ts-ignore
-    navigation.navigate(NavigationEnum.CANCELLATION_SCREEN, { itemData: item })
+   navigate(NavigationEnum.CANCELLATION_SCREEN, { itemData: item })
   }
 
   return (

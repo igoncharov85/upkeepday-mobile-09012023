@@ -26,6 +26,7 @@ const PreviewModal = ({ }: IPreviewModal) => {
     dispatch(deleteSessionClassesAction(SessionId as number))
     handleHideModal();
     completeAction()
+    
   };
 
   const onEditSlit = (change: TClassesChange) => {

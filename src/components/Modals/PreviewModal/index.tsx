@@ -21,7 +21,7 @@ interface IPreviewModal { }
 
 const PreviewModal = ({ }: IPreviewModal) => {
   const route = useRoute()
-  const navigation = useNavigation()
+  const { navigate, goBack } = useTypedNavigation()
   const { SessionId, newTime, completeAction, deleteItem, classId } = route.params as any
 
   const onDeleteSlot = () => {

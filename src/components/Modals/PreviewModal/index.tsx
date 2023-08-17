@@ -20,17 +20,17 @@ interface IPreviewModal { }
 const PreviewModal = ({ }: IPreviewModal) => {
   const route = useRoute()
   const navigation = useNavigation()
-  const { SessionId, newTime, completeAction, deleteItem, } = route.params as any
+  const { SessionId, newTime, completeAction, deleteItem, classId } = route.params as any
 
   const onDeleteSlot = () => {
-    dispatch(deleteSessionClassesAction(SessionId as number))
+    dispatch(deleteSessionClassesAction({ sessionId: SessionId, classId }))
     handleHideModal();
     completeAction()
-    
+
   };
 
   const onEditSlit = (change: TClassesChange) => {
-    dispatch(updatedSessionClassesAction({ id: SessionId as number, change: change, StartDateTime: newTime as string }))
+    dispatch(updatedSessionClassesAction({ id: SessionId as number, change: change, StartDateTime: newTime as string, classId }))
     handleHideModal();
     completeAction()
   }

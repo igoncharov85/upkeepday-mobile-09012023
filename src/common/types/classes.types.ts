@@ -50,7 +50,10 @@ export type TClassesStatus = 'scheduled' | 'archived';
 export type TClassesChange = 'current' | 'future';
 
 export type TClassesId = number;
-
+export type IDeleteSession = {
+    sessionId: number;
+    classId?: number
+}
 export type IClassesUpdateStatus = {
     id: TClassesId;
     Status: string;
@@ -59,6 +62,7 @@ export type IClassesUpdateSession = {
     id: TClassesId;
     change: TClassesChange;
     StartDateTime: string;
+    classId?: number
 }
 export enum EClassesStatus {
     scheduled = 'scheduled',

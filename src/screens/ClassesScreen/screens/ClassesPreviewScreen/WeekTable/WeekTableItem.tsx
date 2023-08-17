@@ -1,4 +1,4 @@
-import React, {FC, memo, useRef} from 'react';
+import React, { FC, memo, useRef } from 'react';
 import {
   Animated,
   PanResponder,
@@ -9,13 +9,11 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import Cancel from '../../../../../../assets/svg/Cancel';
 
-import {NavigationEnum} from '../../../../../common/constants/navigation';
-import {IGeneratedScheduleEntries} from '../../../../../common/types/schedule.types';
-import {useTypedNavigation} from '../../../../../hook/useTypedNavigation';
-import {addDayAndHoursToDate} from '../../../../../services/utils/generateDate.util';
-import {fetchClassesSchedule} from '../../../../../store/classes/actions';
-import {dispatch} from '../../../../../store/store';
-import {findLessonOnCurrentHour} from '../../../../DatePreviewScreen/WeekTable/WeekTableItem';
+import { NavigationEnum } from '../../../../../common/constants/navigation';
+import { IGeneratedScheduleEntries } from '../../../../../common/types/schedule.types';
+import { useTypedNavigation } from '../../../../../hook/useTypedNavigation';
+import { addDayAndHoursToDate } from '../../../../../services/utils/generateDate.util';
+import { findLessonOnCurrentHour } from '../../../../DatePreviewScreen/WeekTable/WeekTableItem';
 import BusyField from '../../../components/BusyField';
 import styles from './styles';
 
@@ -101,15 +99,14 @@ const LessonItem = ({
   classId: number;
 }) => {
   const colorsLesson = ['#EAAFC8', '#654EA3'];
-  const {navigate} = useTypedNavigation();
-  const pan = useRef(new Animated.ValueXY({x: 0, y: 0})).current;
+  const { navigate } = useTypedNavigation();
+  const pan = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
   const completeAction = () => {
-    dispatch(fetchClassesSchedule({classId}));
-    console.log(lesson);
     onHandleLongPress(false);
   };
   const onDeleteSlot = () => {
     navigate(NavigationEnum.PREVIEW_MODAL, {
+      classId,
       SessionId: lesson?.SessionId,
       completeAction,
       deleteItem: false,
@@ -117,13 +114,13 @@ const LessonItem = ({
   };
   const panResponders = PanResponder.create({
     onStartShouldSetPanResponder: () => editMode,
-    onPanResponderMove: Animated.event([null, {dx: pan.x, dy: pan.y}], {
+    onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y }], {
       useNativeDriver: false,
     }),
     onPanResponderRelease: (_, gestureState) => {
       const gridCellX = Math.floor(
-          (gestureState.dx + CELL_SIZE.width / 2) / CELL_SIZE.width,
-        ),
+        (gestureState.dx + CELL_SIZE.width / 2) / CELL_SIZE.width,
+      ),
         gridCellY = Math.floor(
           (gestureState.dy + CELL_SIZE.height / 2) / CELL_SIZE.height,
         ),
@@ -138,6 +135,7 @@ const LessonItem = ({
       );
 
       navigate(NavigationEnum.PREVIEW_MODAL, {
+        classId,
         SessionId: lesson?.SessionId,
         newTime,
         completeAction,
@@ -172,11 +170,11 @@ const LessonItem = ({
       <>
         <LinearGradient
           colors={colorsLesson}
-          start={{x: 0.5, y: 0}}
-          end={{x: 0.5, y: 1}}
+          start={{ x: 0.5, y: 0 }}
+          end={{ x: 0.5, y: 1 }}
           style={[
             styles.wrapperItem,
-            {top: `${(lessonMinuteStart / 60) * 100}%`},
+            { top: `${(lessonMinuteStart / 60) * 100}%` },
           ]}>
           {editMode && (
             <TouchableOpacity style={styles.cansel} onPress={onDeleteSlot}>

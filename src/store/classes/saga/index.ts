@@ -6,8 +6,9 @@ import { IAction } from '../../../common/types/common.types';
 import { ClassesService } from '../../../services/axios/classes';
 import { ErrorFilterService } from '../../../services/error-filter/error-filter.service';
 import { ClassesConstantsEnum } from '../constants';
-import { IClassesEditName, IClassesResponse, IClassesUpdateSession, IGeneratedClasses, IGeneratedClassesRequest, IGeneratedClassesResponse, ISession, ISessionSubset, IclassesScheduleResponse, TClassesId, TClassesStatus } from '../../../common/types/classes.types';
+import { IClassesEditName, IClassesResponse, IClassesUpdateSession, IDeleteSession, IGeneratedClasses, IGeneratedClassesRequest, IGeneratedClassesResponse, ISession, ISessionSubset, IclassesScheduleResponse, TClassesId, TClassesStatus } from '../../../common/types/classes.types';
 import { convertSessionsToLocalTime } from '../../../services/utils/convertToUTC';
+import { fetchClassesSchedule } from '../actions';
 
 
 
@@ -156,14 +157,18 @@ export function* updateClassesWorker({
 export function* deleteSessionClassesWorker({
     payload,
     type,
-}: IAction<TClassesId>): SagaIterator {
+}: IAction<IDeleteSession>): SagaIterator {
     try {
+        console.log(payload, 'delete payload in saga')
         yield put(setClassesLoading(true));
-        yield call(ClassesService.deleteSessionClasses, payload);
+        yield call(ClassesService.deleteSessionClasses, payload.sessionId);
     } catch (error) {
         yield call(ErrorFilterService.validateError, error);
     } finally {
-        yield put(setClassesLoading(false));
+        console.log(payload)
+        yield put(fetchClassesSchedule({ classId: payload.classId as number }))
+        //  it's a temporary solution. 
+        // yield put(setClassesLoading(false));
     }
 }
 
@@ -172,17 +177,21 @@ export function* updateSessionClassesWorker({
     type,
 }: IAction<IClassesUpdateSession>): SagaIterator {
     try {
+        const { classId, ...payloadData } = payload
+        console.log(payload, 'payload in saga')
         yield put(setClassesLoading(true));
         yield call(
             ClassesService.updatedSessionClasses,
-            payload,
+            payloadData,
         );
 
 
     } catch (error) {
         yield call(ErrorFilterService.validateError, error);
     } finally {
-        yield put(setClassesLoading(false));
+        yield put(fetchClassesSchedule({ classId: payload.classId as number }))
+        //  it's a temporary solution. 
+        // yield put(setClassesLoading(false));
     }
 }
 export function* editNameClassesWorker({

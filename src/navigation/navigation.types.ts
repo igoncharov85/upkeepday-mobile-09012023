@@ -71,6 +71,7 @@ export type TypeRootStackParamList = {
     newTime?: Date;
   };
   [NavigationEnum.PREVIEW_MODAL]: {
+    classId: number;
     completeAction: () => void;
     deleteItem: boolean;
     SessionId: string;

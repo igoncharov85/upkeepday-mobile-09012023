@@ -1,44 +1,35 @@
-import {useRoute} from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import moment from 'moment';
-import React, {useEffect, useState} from 'react';
-import {Text, View} from 'react-native';
-import {NavigationEnum} from '../../../../common/constants/navigation';
-import {IClassesResponse} from '../../../../common/types/classes.types';
-import {ScreenHeader} from '../../../../components/ScreenHeader';
+import React, { useEffect, useState } from 'react';
+import { Text, View } from 'react-native';
+import { NavigationEnum } from '../../../../common/constants/navigation';
+import { IClassesResponse } from '../../../../common/types/classes.types';
+import { ScreenHeader } from '../../../../components/ScreenHeader';
 
-import {CustomButton} from '../../../../components/UI/CustomButton';
-import {DayScroller} from '../../../../components/UI/DayScroller';
-import {ScreenLoading} from '../../../../components/UI/ScreenLoading';
-import {useTypedNavigation} from '../../../../hook/useTypedNavigation';
-import {getWeekDates} from '../../../../services/utils/fullDateToValue.util';
-import {addDayAndHoursToDate} from '../../../../services/utils/generateDate.util';
+import { CustomButton } from '../../../../components/UI/CustomButton';
+import { DayScroller } from '../../../../components/UI/DayScroller';
+import { ScreenLoading } from '../../../../components/UI/ScreenLoading';
+import { useTypedNavigation } from '../../../../hook/useTypedNavigation';
+import { getWeekDates } from '../../../../services/utils/fullDateToValue.util';
+import { addDayAndHoursToDate } from '../../../../services/utils/generateDate.util';
 import {
   fetchClassesSchedule,
   fetchSessionClassesByIdAction,
 } from '../../../../store/classes/actions';
-import {useAppSelector} from '../../../../store/hooks';
-import {dispatch} from '../../../../store/store';
-import {DaysOfWeek} from './DaysOfWeek';
+import { useAppSelector } from '../../../../store/hooks';
+import { dispatch } from '../../../../store/store';
+import { DaysOfWeek } from './DaysOfWeek';
 import styles from './styles';
-import {WeekTable} from './WeekTable';
+import { WeekTable } from './WeekTable';
 
-function removeElementsFromArray(arr1: any[], arr2: any[]) {
-  return arr1.filter(item1 => {
-    return !arr2.some(item2 => {
-      return (
-        item1.ClassName === item2.ClassName &&
-        item1.SessionId === item2.SessionId
-      );
-    });
-  });
-}
 
-interface IDatePreviewScreen {}
+
+interface IDatePreviewScreen { }
 const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
-  const {navigate, goBack} = useTypedNavigation();
+  const { navigate, goBack } = useTypedNavigation();
   const route = useRoute();
-  const {item} = route.params as {item: IClassesResponse};
-  const {loading}: any = useAppSelector(state => state.classes);
+  const { item } = route.params as { item: IClassesResponse };
+  const { loading }: any = useAppSelector(state => state.classes);
   const startLessonDate = moment(item.StartDate).toDate();
   const todayDate = new Date();
   const startOfWeekDate =
@@ -48,8 +39,8 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
     new Date(weekDates.startDate),
   );
   const [endDateWeek, setEndDateWeek] = useState(new Date(weekDates.endDate));
+
   const goToNextWeek = () => {
-    console.log('pres next');
     setStartDateWeek(
       new Date(addDayAndHoursToDate(startDateWeek.toISOString(), 7, 0)),
     );
@@ -57,8 +48,8 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
       new Date(addDayAndHoursToDate(endDateWeek.toISOString(), 7, 0)),
     );
   };
+
   const goToPrevWeek = () => {
-    console.log('pres prev');
     setStartDateWeek(
       new Date(addDayAndHoursToDate(startDateWeek.toISOString(), -7, 0)),
     );
@@ -72,14 +63,14 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
   };
 
   useEffect(() => {
-    dispatch(fetchSessionClassesByIdAction(item.ClassId));
-    dispatch(fetchClassesSchedule({classId: item.ClassId}));
+    // dispatch(fetchSessionClassesByIdAction(item.ClassId));
+    dispatch(fetchClassesSchedule({ classId: item.ClassId }));
   }, []);
 
   return loading ? (
     <ScreenLoading />
   ) : (
-    <View style={{height: '100%'}}>
+    <View style={{ height: '100%' }}>
       <View style={styles.header}>
         <ScreenHeader
           text={'View and Reschedule'}
@@ -90,7 +81,7 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
       <Text style={styles.subTitle}>
         Hold and Drop in the desired spot to reschedule
       </Text>
-      <View style={{marginHorizontal: 20, marginTop: 12}}>
+      <View style={{ marginHorizontal: 20, marginTop: 12 }}>
         <DayScroller
           title={moment(startDateWeek).format('MMMM')}
           onPressLeft={goToPrevWeek}
@@ -103,7 +94,7 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
         />
       </View>
       {
-        <View style={{flex: 1}}>
+        <View style={{ flex: 1 }}>
           <WeekTable
             classId={item.ClassId}
             startOfWeek={startDateWeek}
@@ -111,7 +102,7 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
           />
         </View>
       }
-      <View style={{padding: 20, justifyContent: 'flex-end'}}>
+      <View style={{ padding: 20, justifyContent: 'flex-end' }}>
         <CustomButton text={'Ok'} onPress={onSave} />
       </View>
     </View>

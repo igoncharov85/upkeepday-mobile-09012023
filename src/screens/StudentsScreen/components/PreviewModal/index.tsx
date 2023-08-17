@@ -40,7 +40,7 @@ const PreviewModal = ({
   };
 
   const onDeleteSlot = () => {
-    dispatch(deleteSessionClassesAction(currentSessionId as number))
+    dispatch(deleteSessionClassesAction({ sessionId: currentSessionId as number }))
     handleHideModal();
 
   };

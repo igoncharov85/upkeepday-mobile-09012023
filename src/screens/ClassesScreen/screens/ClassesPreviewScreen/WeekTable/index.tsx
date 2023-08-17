@@ -8,12 +8,6 @@ import { addDayAndHoursToDate, createWeekStructure, generateTimeData } from '../
 
 import { IGeneratedScheduleEntries } from '../../../../../common/types/schedule.types';
 import { useAppSelector } from '../../../../../store/hooks';
-import { dispatch } from '../../../../../store/store';
-import { fetchScheduleByPeriodAction } from '../../../../../store/shedule/actions';
-import moment from 'moment';
-import PreviewModal from '../../../components/PreviewModal';
-import { ScreenLoading } from '../../../../../components/UI/ScreenLoading';
-import { fetchClassesSchedule } from '../../../../../store/classes/actions';
 import { convertSessionsToLocalTime } from '../../../../../services/utils/convertToUTC';
 
 
@@ -54,7 +48,6 @@ export const WeekTable: FC<ISheduleTable> = memo(
 
     const onChangeEditMode = (value: boolean) => {
       setEditMode(value);
-      !value && dispatch(fetchClassesSchedule({ classId }))
     }
 
 

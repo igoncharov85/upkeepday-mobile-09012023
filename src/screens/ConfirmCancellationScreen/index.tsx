@@ -69,7 +69,7 @@ export const ConfirmCancellationScreen: FC<IConfirmCancellationScreen> = memo(()
 
             <View style={styles.finishBtn}>
                 <CustomButton text={'Confirm Cancellation'} onPress={handleSubmit} />
-                <CustomButton text={'Back'} onPress={handleSubmit}
+                <CustomButton text={'Back'} onPress={goBack}
                     style={{
                         backgroundColor: '#FA9253',
                         opacity: 0.7671,

@@ -16,14 +16,18 @@ import { MessageBlock } from './components/MessageBlock';
 import { CustomButton } from '../../components/UI/CustomButton';
 import { IScheduleItem } from '../../common/types/schedule.types';
 import { dispatch } from '../../store/store';
-import { deleteScheduleByPeriodAction } from '../../store/shedule/actions';
+import { deleteScheduleByPeriodAction, fetchScheduleByPeriodAction } from '../../store/shedule/actions';
+import { useTypedNavigation } from '../../hook/useTypedNavigation';
+import { NavigationEnum } from '../../common/constants/navigation';
+import { convertLocalToUTC } from '../../services/utils/convertToUTC';
+import moment from 'moment';
 
 interface RouteParams {
   itemData: any;
 }
 interface ICancellationScreen { }
 export const CancellationScreen: FC<ICancellationScreen> = memo(() => {
-  const navigation = useNavigation();
+  const { navigate, goBack } = useTypedNavigation()
   const route = useRoute();
   const { itemData } = route.params as RouteParams;
   const startTime = itemData.StartDateTime ? itemData.StartDateTime as string : new Date(itemData?.currentDate).toISOString();
@@ -45,9 +49,21 @@ export const CancellationScreen: FC<ICancellationScreen> = memo(() => {
   const onSetEndTime = (endDate: string) => setEndDate(endDate)
 
   const handleSubmit = () => {
-    //@ts-ignore
-    dispatch(deleteScheduleByPeriodAction({ startDate: startDate, endDate: endDate, AllDay: allDay }));
-    navigation.goBack()
+    // //@ts-ignore
+    // dispatch(deleteScheduleByPeriodAction({ startDate: startDate, endDate: endDate, AllDay: allDay }));
+    navigate(NavigationEnum.CONFIRM_CANCELLATION_SCREEN, {
+      startDate,
+      endDate,
+      allDay
+    })
+    console.log('startDate', startDate,
+      moment(startDate).utc(),)
+    console.log('endDate', endDate,
+      moment(endDate).utc(),)
+    dispatch(fetchScheduleByPeriodAction({ startDate: moment(startDate).utc().toISOString(), endDate: endDate }));
+
+
+    // goBack()
   }
   const toggleAllDay = () => setAllDay(!allDay);
   useEffect(() => {
@@ -65,7 +81,7 @@ export const CancellationScreen: FC<ICancellationScreen> = memo(() => {
       <ScreenHeader
         text={'Cancellation'}
         withBackButton={true}
-        onBackPress={() => navigation.goBack()}
+        onBackPress={() => goBack()}
       />
 
       <InteractivePartItem title={'All Day'}>

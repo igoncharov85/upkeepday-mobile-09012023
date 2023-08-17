@@ -1,9 +1,9 @@
-import {getFocusedRouteNameFromRoute, useNavigation, useRoute} from "@react-navigation/native";
+import { getFocusedRouteNameFromRoute, useNavigation, useRoute } from "@react-navigation/native";
 import React, { FC, memo } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {NavigationEnum} from "../../../../common/constants/navigation";
-import {updateCurrentClassRequestAction} from "../../../../store/shedule";
+import { NavigationEnum } from "../../../../common/constants/navigation";
+import { updateCurrentClassRequestAction } from "../../../../store/shedule";
 import { dispatch } from '../../../../store/store';
 import { NewStudentScreen } from '../../../NewStudentScreen'
 import styles from './styles';
@@ -25,7 +25,7 @@ export const AddSessionModal: FC<AddSessionModalProps> = memo(
     const route = useRoute();
     console.log(1)
     const routeName = getFocusedRouteNameFromRoute(route);
-    const studentTab = routeName === 'navigation/STUDENTS_TAB';
+    const studentTab = routeName === 'STUDENTS_TAB';
     const addClass = () => {
       visibleHandler();
       dispatch(
@@ -38,7 +38,7 @@ export const AddSessionModal: FC<AddSessionModalProps> = memo(
             EndScheduleType: '',
             MakeupRequired: false,
             TrackPrepayment: false,
-            
+
           },
           Location: {
             LocationId: 0,
@@ -54,7 +54,7 @@ export const AddSessionModal: FC<AddSessionModalProps> = memo(
       // @ts-ignore
       navigate(NavigationEnum.ADD_CLASS_SCREEN);
     }
-    const {navigate} = useNavigation();
+    const { navigate } = useNavigation();
     return visible ? (
       <TouchableOpacity onPress={visibleHandler} style={{ position: 'absolute', height: '100%', width: '100%', zIndex: 100 }} activeOpacity={1}>
         <LinearGradient
@@ -67,7 +67,7 @@ export const AddSessionModal: FC<AddSessionModalProps> = memo(
           <View />
           <View style={{ width: '100%', alignItems: 'center' }}>
             {
-            // @ts-ignore
+              // @ts-ignore
               studentTab ? <SessionButton title={'Add Student'} onPress={() => {
                 visibleHandler();
                 // @ts-ignore
@@ -92,27 +92,27 @@ const SessionButton: FC<AddSessionProps> = ({ title, onPress, disabled, rainbow 
   return (
     <LinearGradient
       colors={rainbow ? [
-      '#EAAFC8', '#654EA3'
-    ] : ['#FFF', '#FFF']}
+        '#EAAFC8', '#654EA3'
+      ] : ['#FFF', '#FFF']}
       start={{ x: 0.0, y: 1.0 }}
       end={{ x: 0.0, y: 0.0 }}
       style={{
-      marginVertical:0,
-      borderRadius: 10,
+        marginVertical: 0,
+        borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',
-         height: 60,
-         minWidth: '82%',
+        height: 60,
+        minWidth: '82%',
         marginTop: 10,
       }}
     >
-    <TouchableOpacity onPress={onPress && onPress} disabled={disabled && disabled}>
-      <View style={[{
-        backgroundColor: rainbow ? '#FFEDF4' : '#FFF',
-      }, styles.sessionBlock, disabled ? styles.sessionBlockDisabled : null]}>
-        <Text style={[ styles.sessionText, , disabled ? styles.sessionTextDisabled : null]}>{title}</Text>
-      </View>
-    </TouchableOpacity>
+      <TouchableOpacity onPress={onPress && onPress} disabled={disabled && disabled}>
+        <View style={[{
+          backgroundColor: rainbow ? '#FFEDF4' : '#FFF',
+        }, styles.sessionBlock, disabled ? styles.sessionBlockDisabled : null]}>
+          <Text style={[styles.sessionText, , disabled ? styles.sessionTextDisabled : null]}>{title}</Text>
+        </View>
+      </TouchableOpacity>
     </LinearGradient>
-      );
+  );
 };

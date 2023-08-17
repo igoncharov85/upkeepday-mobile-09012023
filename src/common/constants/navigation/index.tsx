@@ -12,6 +12,7 @@ export enum NavigationEnum {
   SHEDULE_MONTH = 'SHEDULE_MONTH',
   //CANCELLATION
   CANCELLATION_SCREEN = 'CancellationScreen',
+  CONFIRM_CANCELLATION_SCREEN = 'ConfirmCancellationScreen',
   //ADD CLASS
   ADD_CLASS_SCREEN = 'AddClassScreen',
   ADD_NEW_TEACHER_SCREEN = 'AddNewTeacherScreen',

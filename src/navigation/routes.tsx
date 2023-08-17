@@ -1,55 +1,56 @@
-import {BottomTabNavigationOptions} from '@react-navigation/bottom-tabs';
-import {NativeStackNavigationOptions} from '@react-navigation/native-stack';
+import { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs';
+import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import React from 'react';
 import Classes from '../../assets/svg/schedule/Classes';
 import More from '../../assets/svg/schedule/More';
 import Schedule from '../../assets/svg/schedule/Schedule';
 import Students from '../../assets/svg/schedule/Students';
 import Todo from '../../assets/svg/schedule/Todo';
-import {NavigationEnum} from '../common/constants/navigation';
-import {CancellationModal} from '../components/Modals/CancellationModal';
+import { NavigationEnum } from '../common/constants/navigation';
+import { CancellationModal } from '../components/Modals/CancellationModal';
 import DurationSessionModal from '../components/Modals/DurationSessionModal';
 import EditTimeSessionModal from '../components/Modals/EditTimeSessionModal';
 import PreviewModal from '../components/Modals/PreviewModal';
 import ResultClassModal from '../components/Modals/ResultClassModal';
 import SelectDurationSessionModal from '../components/Modals/SelectDurationSessionModal';
-import {TabNavigator} from '../modules/navigation/TabNavigator';
-import {AddBusinessAccountScreen} from '../screens/AddBusinessAccountScreen';
-import {AddClassScreen} from '../screens/AddClassScreen';
-import {AddNewTeacherScreen} from '../screens/AddNewTeacher';
-import {AddStudentsScreen} from '../screens/AddStudentsScreen';
-import {CancellationScreen} from '../screens/CancellationScreen';
-import {ClassesScreen} from '../screens/ClassesScreen';
+import { TabNavigator } from '../modules/navigation/TabNavigator';
+import { AddBusinessAccountScreen } from '../screens/AddBusinessAccountScreen';
+import { AddClassScreen } from '../screens/AddClassScreen';
+import { AddNewTeacherScreen } from '../screens/AddNewTeacher';
+import { AddStudentsScreen } from '../screens/AddStudentsScreen';
+import { CancellationScreen } from '../screens/CancellationScreen';
+import { ClassesScreen } from '../screens/ClassesScreen';
 import ClassesEditDateScreen from '../screens/ClassesScreen/screens/ClassesEditDateScreen';
 import ClassesEditPreviewScreen from '../screens/ClassesScreen/screens/ClassesEditDateScreen/ClassesEditPreviewScreen';
 import ClassesEditNameScreen from '../screens/ClassesScreen/screens/ClassesEditNameScreen';
 import ClassesPreviewScreen from '../screens/ClassesScreen/screens/ClassesPreviewScreen';
 import ClassesStudentScreen from '../screens/ClassesScreen/screens/ClassesStudentScreen';
 import ChangeStudentScreen from '../screens/ClassesScreen/screens/ClassesStudentScreen/ChangeStudentScreen';
-import {DatePreviewScreen} from '../screens/DatePreviewScreen';
-import {DateRecurrenceScreen} from '../screens/DateRecurrenceScreen';
-import {EditClassScreen} from '../screens/EditClassScreen';
-import {SendEmailScreen} from '../screens/ForgotPassScreen/SendEmailScreen';
-import {SetPasswordScreen} from '../screens/ForgotPassScreen/SetPasswordScreen';
-import {LoginScreen} from '../screens/LoginScreen';
+import { DatePreviewScreen } from '../screens/DatePreviewScreen';
+import { DateRecurrenceScreen } from '../screens/DateRecurrenceScreen';
+import { EditClassScreen } from '../screens/EditClassScreen';
+import { SendEmailScreen } from '../screens/ForgotPassScreen/SendEmailScreen';
+import { SetPasswordScreen } from '../screens/ForgotPassScreen/SetPasswordScreen';
+import { LoginScreen } from '../screens/LoginScreen';
 import MoreScreen from '../screens/MoreScreen';
-import {NewStudentScreen} from '../screens/NewStudentScreen';
-import {PaymentTrackingSetUp} from '../screens/PaymentTrackingSetUp';
-import {PrepaymentConfigurationScreen} from '../screens/PrepaymentConfigurationScreen';
-import {RegistrationScreen} from '../screens/RegistrationScreen';
-import {FinalRegistrationScreen} from '../screens/RegistrationScreen/FinalRegistrtionScreen';
-import {SelectDateScreen} from '../screens/SelectDateScreen';
-import {ScheduleScreen} from '../screens/SheduleScreen';
-import {ScheduleMonthScreen} from '../screens/SheduleScreen/ScheduleMonthScreen';
-import {ScheduleDayScreen} from '../screens/SheduleScreen/SheduleDayScreen';
-import {SheduleWeekScreen} from '../screens/SheduleScreen/SheduleWeekScreen';
+import { NewStudentScreen } from '../screens/NewStudentScreen';
+import { PaymentTrackingSetUp } from '../screens/PaymentTrackingSetUp';
+import { PrepaymentConfigurationScreen } from '../screens/PrepaymentConfigurationScreen';
+import { RegistrationScreen } from '../screens/RegistrationScreen';
+import { FinalRegistrationScreen } from '../screens/RegistrationScreen/FinalRegistrtionScreen';
+import { SelectDateScreen } from '../screens/SelectDateScreen';
+import { ScheduleScreen } from '../screens/SheduleScreen';
+import { ScheduleMonthScreen } from '../screens/SheduleScreen/ScheduleMonthScreen';
+import { ScheduleDayScreen } from '../screens/SheduleScreen/SheduleDayScreen';
+import { SheduleWeekScreen } from '../screens/SheduleScreen/SheduleWeekScreen';
 import StudentsScreen from '../screens/StudentsScreen';
-import {EditStudentScreen} from '../screens/StudentsScreen/screens/EditStudentScreen';
-import {PaymentsTable} from '../screens/StudentsScreen/screens/PaymentsTable';
-import {PaymentTracking} from '../screens/StudentsScreen/screens/PaymentTracking';
+import { EditStudentScreen } from '../screens/StudentsScreen/screens/EditStudentScreen';
+import { PaymentsTable } from '../screens/StudentsScreen/screens/PaymentsTable';
+import { PaymentTracking } from '../screens/StudentsScreen/screens/PaymentTracking';
 import PreviewStudentScreen from '../screens/StudentsScreen/screens/PreviewStudentScreen';
-import {StudentPayments} from '../screens/StudentsScreen/screens/StudentPayments';
-import {RoutesType} from './navigation.types';
+import { StudentPayments } from '../screens/StudentsScreen/screens/StudentPayments';
+import { RoutesType } from './navigation.types';
+import { ConfirmCancellationScreen } from '../screens/ConfirmCancellationScreen';
 
 export const routes: RoutesType<NativeStackNavigationOptions>[] = [
   {
@@ -189,6 +190,10 @@ export const routes: RoutesType<NativeStackNavigationOptions>[] = [
     component: MoreScreen,
   },
   {
+    name: NavigationEnum.CONFIRM_CANCELLATION_SCREEN,
+    component: ConfirmCancellationScreen,
+  },
+  {
     name: NavigationEnum.CANCELLATION_MODAL,
     component: CancellationModal,
     options: {
@@ -249,7 +254,7 @@ export const tabRoutes: RoutesType<BottomTabNavigationOptions>[] = [
     options: {
       title: 'Schedule',
       tabBarLabel: 'Schedule',
-      tabBarIcon: ({color, size}) => (
+      tabBarIcon: ({ color, size }) => (
         <Schedule name="calendar" size={size} color={color} />
       ),
     },
@@ -260,7 +265,7 @@ export const tabRoutes: RoutesType<BottomTabNavigationOptions>[] = [
     options: {
       title: 'To Do',
       tabBarLabel: 'To Do',
-      tabBarIcon: ({color, size}) => (
+      tabBarIcon: ({ color, size }) => (
         <Todo name="calendar" size={size} color={color} />
       ),
     },
@@ -271,7 +276,7 @@ export const tabRoutes: RoutesType<BottomTabNavigationOptions>[] = [
     options: {
       title: 'Classes',
       tabBarLabel: 'Classes',
-      tabBarIcon: ({color, size}) => (
+      tabBarIcon: ({ color, size }) => (
         <Classes name="calendar" size={size} color={color} />
       ),
     },
@@ -282,7 +287,7 @@ export const tabRoutes: RoutesType<BottomTabNavigationOptions>[] = [
     options: {
       title: 'Students',
       tabBarLabel: 'Students',
-      tabBarIcon: ({color, size}) => (
+      tabBarIcon: ({ color, size }) => (
         <Students name="calendar" size={size} color={color} />
       ),
     },
@@ -293,7 +298,7 @@ export const tabRoutes: RoutesType<BottomTabNavigationOptions>[] = [
     options: {
       title: 'More',
       tabBarLabel: 'More',
-      tabBarIcon: ({color, size}) => (
+      tabBarIcon: ({ color, size }) => (
         <More name="calendar" size={size} color={color} />
       ),
     },

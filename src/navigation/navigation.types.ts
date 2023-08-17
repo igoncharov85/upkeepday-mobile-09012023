@@ -1,5 +1,5 @@
-import {ComponentType} from 'react';
-import {NavigationEnum} from '../common/constants/navigation';
+import { ComponentType } from 'react';
+import { NavigationEnum } from '../common/constants/navigation';
 
 export type TypeRootStackParamList = {
   [NavigationEnum.LOGIN]: undefined;
@@ -53,6 +53,11 @@ export type TypeRootStackParamList = {
     item: any;
   };
   [NavigationEnum.MORE_SCREEN]: undefined;
+  [NavigationEnum.CONFIRM_CANCELLATION_SCREEN]: {
+    startDate: string;
+    endDate: string;
+    allDay: boolean;
+  };
   [NavigationEnum.CANCELLATION_MODAL]: {
     item: any;
   };

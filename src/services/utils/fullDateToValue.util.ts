@@ -54,10 +54,7 @@ export const calculateEndDate = (
   startTime: string,
   duration: number,
 ): string => {
-  const startDate = parseISO(startTime);
-  const newDate = addMinutes(startDate, duration);
-  const newDateTimeString = formatISO(newDate, { representation: 'complete' });
-  return newDateTimeString;
+  return moment(startTime).clone().add(duration, 'minutes').toISOString();;
 };
 
 type DateInput = {

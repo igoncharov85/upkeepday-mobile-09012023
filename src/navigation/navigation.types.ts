@@ -82,8 +82,8 @@ export type TypeRootStackParamList = {
     timeDuration?: number;
     startDateTime: string;
     onCreateLesson: (lesson: any) => void;
-    dayOfWeek?: number; // Add this line
-    maxDuration?: any; // Add this line
+    dayOfWeek?: number;
+    maxDuration?: any;
   };
   [NavigationEnum.REGISTRATION]: undefined;
   [NavigationEnum.ADD_NEW_TEACHER_SCREEN]: undefined;

@@ -48,7 +48,7 @@ export const EditClassScreen = () => {
   return (
     <View style={styles.container}>
       <ScreenHeader
-        text={item?.item.Name}
+        text={item?.Name}
         withBackButton={true}
         onBackPress={() => goBack()}
       />

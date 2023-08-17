@@ -1,27 +1,19 @@
-import { FormikProps, withFormik } from 'formik';
-import React, { FC, memo, useEffect } from 'react';
-import {
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  Text,
-  View,
-} from 'react-native';
+import {FormikProps, withFormik} from 'formik';
+import React, {FC, memo} from 'react';
+import {KeyboardAvoidingView, Text, View} from 'react-native';
 import CalendarSvg from '../../../assets/svg/CalendarSvg';
-import { NavigationEnum } from '../../common/constants/navigation';
-import { keyboardSettings } from '../../common/constants/styles/keyboard';
-import { LoginSchema } from '../../common/shemas/auth.shape';
-import { ILoginRequest } from '../../common/types/auth.types';
-import { INavigationBase } from '../../common/types/component.styles';
-import { KeyboardDismissHOC } from '../../components/hoc/KeyboardDismissHOC';
-import { ScreenHeader } from '../../components/ScreenHeader';
-import { CustomButton } from '../../components/UI/CustomButton';
-import { CustomInput } from '../../components/UI/CustomInput';
-import { useTypedNavigation } from '../../hook/useTypedNavigation'
-import NavigationActions from '../../services/navigation-service';
-import { loginAction } from '../../store/auth/actions';
-import { useAppSelector } from '../../store/hooks';
-import { dispatch } from '../../store/store';
+import {NavigationEnum} from '../../common/constants/navigation';
+import {keyboardSettings} from '../../common/constants/styles/keyboard';
+import {LoginSchema} from '../../common/shemas/auth.shape';
+import {ILoginRequest} from '../../common/types/auth.types';
+import {KeyboardDismissHOC} from '../../components/hoc/KeyboardDismissHOC';
+import {ScreenHeader} from '../../components/ScreenHeader';
+import {CustomButton} from '../../components/UI/CustomButton';
+import {CustomInput} from '../../components/UI/CustomInput';
+import {useTypedNavigation} from '../../hook/useTypedNavigation';
+import {loginAction} from '../../store/auth/actions';
+import {useAppSelector} from '../../store/hooks';
+import {dispatch} from '../../store/store';
 import styles from './styles';
 
 const formInitialValues = {
@@ -29,13 +21,13 @@ const formInitialValues = {
   password: '',
 };
 export const LoginScreen: FC = memo(() => {
-  const { loading } = useAppSelector(state => state.auth);
+  const {loading} = useAppSelector(state => state.auth);
   const {navigate} = useTypedNavigation();
   const onForgotPassRedirect = () => {
-   navigate(NavigationEnum.FORGOT_PASSWORD_SEND_EMAIL);
+    navigate(NavigationEnum.FORGOT_PASSWORD_SEND_EMAIL);
   };
   const onRegistrationRedirect = () => {
-   navigate(NavigationEnum.REGISTRATION);
+    navigate(NavigationEnum.REGISTRATION);
   };
   const renderForm = ({
     touched,
@@ -57,8 +49,8 @@ export const LoginScreen: FC = memo(() => {
             validationErrorText={errors.email}
             placeholder={'Email'}
             labelText={'Email'}
-            inputMode='email'
-            keyboardType='email-address'
+            inputMode="email"
+            keyboardType="email-address"
           />
         </View>
         <View style={styles.inputWrapper}>
@@ -97,11 +89,15 @@ export const LoginScreen: FC = memo(() => {
         Password: values.password,
       };
       dispatch(loginAction(data));
+      navigate(NavigationEnum.HOME_SCREEN);
     },
     validateOnChange: true,
   })(renderForm);
   return (
-    <KeyboardAvoidingView style={styles.container} {...keyboardSettings} keyboardVerticalOffset={100}>
+    <KeyboardAvoidingView
+      style={styles.container}
+      {...keyboardSettings}
+      keyboardVerticalOffset={100}>
       <KeyboardDismissHOC extraStyles={styles.contentWrapper}>
         <ScreenHeader text={'Login'} />
         <View style={styles.imgWrapper}>

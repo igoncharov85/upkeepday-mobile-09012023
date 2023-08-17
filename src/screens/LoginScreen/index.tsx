@@ -17,6 +17,7 @@ import { KeyboardDismissHOC } from '../../components/hoc/KeyboardDismissHOC';
 import { ScreenHeader } from '../../components/ScreenHeader';
 import { CustomButton } from '../../components/UI/CustomButton';
 import { CustomInput } from '../../components/UI/CustomInput';
+import { useTypedNavigation } from '../../hook/useTypedNavigation'
 import NavigationActions from '../../services/navigation-service';
 import { loginAction } from '../../store/auth/actions';
 import { useAppSelector } from '../../store/hooks';
@@ -27,18 +28,15 @@ const formInitialValues = {
   email: '',
   password: '',
 };
-interface ILoginScreen extends INavigationBase { }
-export const LoginScreen: FC<ILoginScreen> = memo(({ navigation }) => {
+export const LoginScreen: FC = memo(() => {
   const { loading } = useAppSelector(state => state.auth);
+  const {navigate} = useTypedNavigation();
   const onForgotPassRedirect = () => {
-    navigation.navigate(NavigationEnum.FORGOT_PASSWORD_SEND_EMAIL);
+   navigate(NavigationEnum.FORGOT_PASSWORD_SEND_EMAIL);
   };
   const onRegistrationRedirect = () => {
-    navigation.navigate(NavigationEnum.REGISTRATION);
+   navigate(NavigationEnum.REGISTRATION);
   };
-  useEffect(() => {
-    NavigationActions.setNavigator(navigation);
-  }, []);
   const renderForm = ({
     touched,
     errors,

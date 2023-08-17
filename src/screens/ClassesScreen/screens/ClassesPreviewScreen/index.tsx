@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import { ScreenHeader } from "../../../../components/ScreenHeader";
+import { useTypedNavigation } from '../../../../hook/useTypedNavigation'
 import styles from "./styles";
 import { useIsFocused, useNavigation, useRoute } from "@react-navigation/native";
 import { addDayAndHoursToDate } from "../../../../services/utils/generateDate.util";
@@ -34,25 +35,16 @@ function removeElementsFromArray(arr1: any[], arr2: any[]) {
 
 interface IDatePreviewScreen { }
 const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
-    const navigation = useNavigation();
+    const {navigate} = useTypedNavigation();
     const route = useRoute();
-
     const { item } = route.params as { item: IClassesResponse };
-    const isFocused = useIsFocused();
-    console.log(item.StartDate, 'item')
-
     const { loading }: any = useAppSelector(state => state.classes);
-
     const startLessonDate = moment(item.StartDate).toDate()
     const todayDate = new Date()
     const startOfWeekDate = todayDate > startLessonDate ? todayDate : startLessonDate;
-
     const weekDates = getWeekDates(startOfWeekDate);
-
     const [startDateWeek, setStartDateWeek] = useState(new Date(weekDates.startDate));
     const [endDateWeek, setEndDateWeek] = useState(new Date(weekDates.endDate));
-
-
     const goToNextWeek = () => {
         console.log('pres next')
         setStartDateWeek(new Date(addDayAndHoursToDate(startDateWeek.toISOString(), 7, 0)))
@@ -65,9 +57,7 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
     }
 
     const onSave = () => {
-
-        //@ts-ignore
-        navigation.navigate(NavigationEnum.CLASSES_TAB)
+        navigate(NavigationEnum.CLASSES_TAB)
     }
 
     useEffect(() => {

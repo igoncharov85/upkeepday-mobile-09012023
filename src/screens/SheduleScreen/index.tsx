@@ -1,36 +1,25 @@
-import React, { FC, memo, useEffect, useState } from 'react';
-import { View } from 'react-native';
-import { INavigationBase } from '../../common/types/component.styles';
-import NavigationActions from '../../services/navigation-service';
+import {useIsFocused} from '@react-navigation/native';
+import React, {FC, memo, useEffect, useState} from 'react';
+import {View} from 'react-native';
 
 import {
   fetchCountriesAction,
   fetchStatesAction,
 } from '../../store/auth/actions';
-import { dispatch } from '../../store/store';
-import { fetchUsersAction } from '../../store/user/actions';
-import { fetchLocationAction } from '../../store/location/actions';
-import { ScheduleNavigation } from './components/SheduleNavigation';
-import { NavigationEnum } from '../../common/constants/navigation';
+import {fetchLocationAction} from '../../store/location/actions';
+import {dispatch} from '../../store/store';
+import {fetchUsersAction} from '../../store/user/actions';
+import {ScheduleNavigation} from './components/SheduleNavigation';
 
 import styles from './styles';
-import { useIsFocused, useRoute } from '@react-navigation/native';
 
-interface IHomeScreen extends INavigationBase { }
-export const ScheduleScreen: FC<IHomeScreen> = memo(({ navigation }) => {
+export const ScheduleScreen: FC = memo(() => {
   const [key, setKey] = useState(0);
-
   const isFocused = useIsFocused();
-  const onPlusPress = () => {
-    //@ts-ignore
-    navigation.navigate(NavigationEnum.ADD_CLASS_SCREEN);
-  };
+
   useEffect(() => {
-    setKey(key)
+    setKey(key);
   }, [isFocused]);
-  useEffect(() => {
-    NavigationActions.setNavigator(navigation);
-  }, []);
 
   useEffect(() => {
     dispatch(fetchUsersAction());
@@ -41,7 +30,6 @@ export const ScheduleScreen: FC<IHomeScreen> = memo(({ navigation }) => {
   return (
     <View style={styles.container}>
       <ScheduleNavigation />
-    </View >
+    </View>
   );
 });
-

@@ -1,5 +1,5 @@
 import { FormikProps, withFormik } from 'formik';
-import React, { FC, memo, useEffect } from 'react';
+import React, { FC, memo, useEffect, useState } from 'react';
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -23,6 +23,7 @@ import { loginAction } from '../../store/auth/actions';
 import { useAppSelector } from '../../store/hooks';
 import { dispatch } from '../../store/store';
 import styles from './styles';
+import { AsyncStorageService } from '../../services/async-storage';
 
 const formInitialValues = {
   email: '',
@@ -30,12 +31,12 @@ const formInitialValues = {
 };
 export const LoginScreen: FC = memo(() => {
   const { loading } = useAppSelector(state => state.auth);
-  const {navigate} = useTypedNavigation();
+  const { navigate } = useTypedNavigation();
   const onForgotPassRedirect = () => {
-   navigate(NavigationEnum.FORGOT_PASSWORD_SEND_EMAIL);
+    navigate(NavigationEnum.FORGOT_PASSWORD_SEND_EMAIL);
   };
   const onRegistrationRedirect = () => {
-   navigate(NavigationEnum.REGISTRATION);
+    navigate(NavigationEnum.REGISTRATION);
   };
   const renderForm = ({
     touched,
@@ -46,6 +47,18 @@ export const LoginScreen: FC = memo(() => {
     handleSubmit,
     isValid,
   }: FormikProps<typeof formInitialValues>) => {
+    const [token, setToken] = useState('')
+    const hasToken = async () => {
+      const token = await AsyncStorageService.getToken();
+      setToken(token || '')
+
+    }
+    hasToken().then(() => {
+      if (token) {
+        navigate(NavigationEnum.HOME_SCREEN);
+      }
+    }
+    )
     return (
       <View style={styles.formWrapper}>
         <View style={styles.inputWrapper}>

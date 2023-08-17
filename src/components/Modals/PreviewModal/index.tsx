@@ -1,18 +1,20 @@
-import { useNavigation, useRoute } from '@react-navigation/native';
-import React, { useState } from 'react';
-import {
-  Text,
-  Modal,
-  TouchableOpacity,
-  Animated,
-  StyleSheet,
-} from 'react-native';
+import { useRoute } from '@react-navigation/native';
+import React from 'react';
+import { Animated, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import {
+  EClassesChange,
+  TClassesChange,
+} from '../../../common/types/classes.types';
+import { useTypedNavigation } from '../../../hook/useTypedNavigation';
+import {
+  deleteSessionClassesAction,
+  updatedSessionClassesAction,
+} from '../../../store/classes/actions';
 // import styles from './styles';
 import { dispatch } from '../../../store/store';
-import { deleteSessionClassesAction, updatedSessionClassesAction } from '../../../store/classes/actions';
-import { EClassesChange, TClassesChange } from '../../../common/types/classes.types';
 
+interface IPreviewModal { }
 
 
 interface IPreviewModal { }
@@ -32,18 +34,16 @@ const PreviewModal = ({ }: IPreviewModal) => {
   const onEditSlit = (change: TClassesChange) => {
     dispatch(updatedSessionClassesAction({ id: SessionId as number, change: change, StartDateTime: newTime as string, classId }))
     handleHideModal();
-    completeAction()
-  }
-
-  const handleHideModal = () => {
-    navigation.goBack()
-    completeAction()
+    completeAction();
   };
 
-  const editMode = deleteItem
+  const handleHideModal = () => {
+    goBack();
+    completeAction();
+  };
+
   return (
     <>
-
       <LinearGradient
         colors={['rgba(178, 178, 178, 0.88)', 'rgba(23, 25, 48, 0.898039)']}
         start={{ x: 0.0, y: 1.0 }}
@@ -55,40 +55,42 @@ const PreviewModal = ({ }: IPreviewModal) => {
       <TouchableOpacity style={{ flex: 1 }} onPress={handleHideModal} />
 
       <Animated.View
-        style={[styles.modal, {
-          height: deleteItem ? 164 : 103,
-        }]}
-      >
+        style={[
+          styles.modal,
+          {
+            height: deleteItem ? 164 : 103,
+          },
+        ]}>
         <LinearGradient
           colors={['#9A80BA', '#EFF1F5']}
           start={{ x: 0.5, y: 0 }}
           end={{ x: 0.5, y: 1 }}
           locations={[0, 1]}
-          style={styles.bgGradient}
-        >
-          {deleteItem && (<Text
-            style={styles.title}
-          >This is repeating class</Text>)}
+          style={styles.bgGradient}>
+          {deleteItem && (
+            <Text style={styles.title}>This is repeating class</Text>
+          )}
           <Text
-            onPress={deleteItem ? () => onEditSlit(EClassesChange.current) : onDeleteSlot}
-            style={styles.cancelScheduled}
-          >
+            onPress={
+              deleteItem
+                ? () => onEditSlit(EClassesChange.current)
+                : onDeleteSlot
+            }
+            style={styles.cancelScheduled}>
             Save for this session only
           </Text>
-          {deleteItem && (<Text
-            onPress={() => onEditSlit(EClassesChange.future)}
-            style={styles.cancelScheduled}
-          >
-            Save for all future sessions
-          </Text>)}
-          <TouchableOpacity onPress={handleHideModal}>
+          {deleteItem && (
             <Text
-              style={styles.cancelBtn}
-            >Cancel</Text>
+              onPress={() => onEditSlit(EClassesChange.future)}
+              style={styles.cancelScheduled}>
+              Save for all future sessions
+            </Text>
+          )}
+          <TouchableOpacity onPress={handleHideModal}>
+            <Text style={styles.cancelBtn}>Cancel</Text>
           </TouchableOpacity>
         </LinearGradient>
       </Animated.View>
-
     </>
   );
 };

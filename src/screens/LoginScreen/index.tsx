@@ -1,29 +1,20 @@
 import { FormikProps, withFormik } from 'formik';
-import React, { FC, memo, useEffect, useState } from 'react';
-import {
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  Text,
-  View,
-} from 'react-native';
+import React, { FC, memo } from 'react';
+import { KeyboardAvoidingView, Text, View } from 'react-native';
 import CalendarSvg from '../../../assets/svg/CalendarSvg';
 import { NavigationEnum } from '../../common/constants/navigation';
 import { keyboardSettings } from '../../common/constants/styles/keyboard';
 import { LoginSchema } from '../../common/shemas/auth.shape';
 import { ILoginRequest } from '../../common/types/auth.types';
-import { INavigationBase } from '../../common/types/component.styles';
 import { KeyboardDismissHOC } from '../../components/hoc/KeyboardDismissHOC';
 import { ScreenHeader } from '../../components/ScreenHeader';
 import { CustomButton } from '../../components/UI/CustomButton';
 import { CustomInput } from '../../components/UI/CustomInput';
-import { useTypedNavigation } from '../../hook/useTypedNavigation'
-import NavigationActions from '../../services/navigation-service';
+import { useTypedNavigation } from '../../hook/useTypedNavigation';
 import { loginAction } from '../../store/auth/actions';
 import { useAppSelector } from '../../store/hooks';
 import { dispatch } from '../../store/store';
 import styles from './styles';
-import { AsyncStorageService } from '../../services/async-storage';
 
 const formInitialValues = {
   email: '',
@@ -47,18 +38,6 @@ export const LoginScreen: FC = memo(() => {
     handleSubmit,
     isValid,
   }: FormikProps<typeof formInitialValues>) => {
-    const [token, setToken] = useState('')
-    const hasToken = async () => {
-      const token = await AsyncStorageService.getToken();
-      setToken(token || '')
-
-    }
-    hasToken().then(() => {
-      if (token) {
-        navigate(NavigationEnum.HOME_SCREEN);
-      }
-    }
-    )
     return (
       <View style={styles.formWrapper}>
         <View style={styles.inputWrapper}>
@@ -70,8 +49,8 @@ export const LoginScreen: FC = memo(() => {
             validationErrorText={errors.email}
             placeholder={'Email'}
             labelText={'Email'}
-            inputMode='email'
-            keyboardType='email-address'
+            inputMode="email"
+            keyboardType="email-address"
           />
         </View>
         <View style={styles.inputWrapper}>
@@ -110,11 +89,15 @@ export const LoginScreen: FC = memo(() => {
         Password: values.password,
       };
       dispatch(loginAction(data));
+      navigate(NavigationEnum.HOME_SCREEN);
     },
     validateOnChange: true,
   })(renderForm);
   return (
-    <KeyboardAvoidingView style={styles.container} {...keyboardSettings} keyboardVerticalOffset={100}>
+    <KeyboardAvoidingView
+      style={styles.container}
+      {...keyboardSettings}
+      keyboardVerticalOffset={100}>
       <KeyboardDismissHOC extraStyles={styles.contentWrapper}>
         <ScreenHeader text={'Login'} />
         <View style={styles.imgWrapper}>

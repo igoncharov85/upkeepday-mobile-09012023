@@ -30,6 +30,7 @@ export const AddSessionModal: FC<AddSessionModalProps> = memo(
       visibleHandler();
       dispatch(
         updateCurrentClassRequestAction({
+          //@ts-ignore
           Class: {
             Name: '',
             StartDate: '',

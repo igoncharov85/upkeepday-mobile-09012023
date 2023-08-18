@@ -82,7 +82,7 @@ export const PaymentsTable: FC = () => {
                           : '#F00',
                     },
                   ]}>
-                  ${payments.Total}
+                  ${payments.Total.toFixed(2)}
                 </Text>
                 <Text style={[styles.cell]} />
               </View>
@@ -98,7 +98,7 @@ export const PaymentsTable: FC = () => {
                           styles.cell,
                           {color: item.Amount >= 0 ? '#169861' : '#F00'},
                         ]}>
-                        ${item.Amount}
+                        ${item.Amount.toFixed(2)}
                       </Text>
 
                       <Text style={[styles.cell]}>

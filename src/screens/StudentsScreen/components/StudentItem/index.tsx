@@ -106,7 +106,7 @@ const StudentsItem: React.FC<IStudentsItem> = ({item}) => {
             <Text style={[styles.underlineText, styles.textRight]}>
               Total Balance:{' '}
               <Text style={{color: item.Balance >= 0 ? '#169861' : '#F00'}}>
-                {item.Balance}
+                {item.Balance.toFixed(2)}
               </Text>
             </Text>
           </TouchableOpacity>

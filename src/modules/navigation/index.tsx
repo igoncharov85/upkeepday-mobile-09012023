@@ -51,7 +51,7 @@ export const RootNavigation = memo(() => {
         : null;
   };
   const goBackDetector = Gesture.Pan()
-    .minDistance(100)
+    .minDistance(125)
     .onEnd(event => {
       if (event.translationX > 0 && navigationRef && navigationRef.current) {
         goBackPanHandler();

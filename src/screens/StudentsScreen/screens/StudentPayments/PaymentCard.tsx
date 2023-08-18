@@ -9,7 +9,7 @@ interface IProps extends IStudentByIdResponse {
 
 export const formatTimeSlot = (timeSlot: ISlot) => {
   const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-  
+
   const dayOfWeek = daysOfWeek[timeSlot.DayOfWeek];
   const startTime = new Date(`1970-01-01T${timeSlot.StartTime}Z`);
   const endTime = new Date(startTime.getTime() + timeSlot.Duration * 60000);
@@ -21,21 +21,20 @@ export const formatTimeSlot = (timeSlot: ISlot) => {
 }
 
 export const PaymentCard: FC<IProps> = (card) => {
-  
   return (
     <TouchableOpacity style={styles.card} onPress={() => {card.onPress()}}>
       <View style={styles.cardHeader}>
         <Text style={styles.title}>{card.Name}</Text>
         <Text style={styles.title}>
           Balance: <Text style={{color: card.Balance >= 0 ? '#169861' : "#F00"}}>
-            {card.Balance}
+            {card.Balance.toFixed(2)}
           </Text>
         </Text>
       </View>
       {
         card.Slots.map(item => {
           return (
-            <Text style={styles.text} key={item.SlotUid}>{formatTimeSlot(item)}</Text>  
+            <Text style={styles.text} key={item.SlotUid}>{formatTimeSlot(item)}</Text>
           )
         })
       }
@@ -45,4 +44,4 @@ export const PaymentCard: FC<IProps> = (card) => {
       <Text style={styles.text}>Payment type: {card.PaymentType}</Text>
     </TouchableOpacity>
   )
-} 
+}

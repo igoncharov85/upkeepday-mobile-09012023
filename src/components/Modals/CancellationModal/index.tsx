@@ -21,7 +21,6 @@ export const CancellationModal = () => {
   const { params } = useTypedRoute<NavigationEnum.CANCELLATION_MODAL>()
 
   const { item } = params
-  console.log(item, 'item cancellation')
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const onStudentCheckIn = () => {

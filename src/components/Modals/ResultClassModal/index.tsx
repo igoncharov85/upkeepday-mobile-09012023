@@ -15,15 +15,19 @@ const ResultClassModal = () => {
   const { goBack } = useTypedNavigation();
   const route = useRoute(),
     { params }: any = route;
-
+  console.log(params)
   const closeModal = () => {
     goBack();
   };
-  const { item, actionBtn, nameAction } = params;
+  const { item, actionBtn, nameAction } = params as any;
   const handleAction = () => {
     actionBtn();
     item?.Status && dispatch(fetchClassesAction(item.Status.toLowerCase()));
   };
+  console.log('------------------------------------')
+  console.log(item, 'item in ResultClassModal')
+  console.log(item, 'nameAction in ResultClassModal')
+  console.log(item, 'actionBtn in ResultClassModal')
   return (
     <>
       <TouchableOpacity

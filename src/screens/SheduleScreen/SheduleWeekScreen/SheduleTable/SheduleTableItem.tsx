@@ -1,12 +1,12 @@
-import React, {FC, memo} from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import React, { FC, memo } from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {NavigationEnum} from '../../../../common/constants/navigation';
+import { NavigationEnum } from '../../../../common/constants/navigation';
 import {
   IGeneratedScheduleEntries,
   IScheduleItem,
 } from '../../../../common/types/schedule.types';
-import {useTypedNavigation} from '../../../../hook/useTypedNavigation';
+import { useTypedNavigation } from '../../../../hook/useTypedNavigation';
 import styles from './styles';
 
 enum TypeSession {
@@ -27,12 +27,13 @@ const mockItem = {
   ScheduleEntryId: 0,
 };
 export const SheduleTableItem: FC<ISheduleTableItem> = memo(
-  ({item = mockItem, lessonOnThisHour = []}) => {
-    const {navigate} = useTypedNavigation();
+  ({ item = mockItem, lessonOnThisHour = [] }) => {
+    const { navigate } = useTypedNavigation();
     const colorsTrial = ['#F3AF2C', '#E9600D'];
     const colorsLesson = ['#EAAFC8', '#654EA3'];
     const navigateToCancellationModal = () => {
-      navigate(NavigationEnum.CANCELLATION_MODAL, {item: item});
+      console.log(item, 'item')
+      navigate(NavigationEnum.CANCELLATION_MODAL, { item: item });
     };
     return (
       <>
@@ -43,10 +44,10 @@ export const SheduleTableItem: FC<ISheduleTableItem> = memo(
                 lesson.StartDateTime.split('T')[1].split(':')[1],
               );
               return (
-                <View style={{height: `${(lesson.Duration / 60) * 100}%`}}>
+                <View style={{ height: `${(lesson.Duration / 60) * 100}%` }}>
                   <TouchableOpacity
                     onLongPress={navigateToCancellationModal}
-                    style={{position: 'relative'}}>
+                    style={{ position: 'relative' }}>
                     {item?.ClassName ? (
                       <View
                         style={{
@@ -56,8 +57,8 @@ export const SheduleTableItem: FC<ISheduleTableItem> = memo(
                         }}>
                         <LinearGradient
                           colors={colorsLesson}
-                          start={{x: 0.5, y: 0}}
-                          end={{x: 0.5, y: 1}}
+                          start={{ x: 0.5, y: 0 }}
+                          end={{ x: 0.5, y: 1 }}
                           style={{
                             zIndex: 10,
                             justifyContent: 'center',

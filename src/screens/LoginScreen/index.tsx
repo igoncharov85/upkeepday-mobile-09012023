@@ -21,7 +21,7 @@ const formInitialValues = {
   password: '',
 };
 export const LoginScreen: FC = memo(() => {
-  const { loading } = useAppSelector(state => state.auth);
+  const { loading, isAuth } = useAppSelector(state => state.auth);
   const { navigate } = useTypedNavigation();
   const onForgotPassRedirect = () => {
     navigate(NavigationEnum.FORGOT_PASSWORD_SEND_EMAIL);
@@ -29,6 +29,7 @@ export const LoginScreen: FC = memo(() => {
   const onRegistrationRedirect = () => {
     navigate(NavigationEnum.REGISTRATION);
   };
+  isAuth && navigate(NavigationEnum.HOME_SCREEN);
   const renderForm = ({
     touched,
     errors,
@@ -89,7 +90,6 @@ export const LoginScreen: FC = memo(() => {
         Password: values.password,
       };
       dispatch(loginAction(data));
-      navigate(NavigationEnum.HOME_SCREEN);
     },
     validateOnChange: true,
   })(renderForm);

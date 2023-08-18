@@ -23,15 +23,15 @@ import { convertLocalToUTC } from '../../services/utils/convertToUTC';
 import moment from 'moment';
 
 interface RouteParams {
-  itemData: any;
+  itemData?: any;
 }
 interface ICancellationScreen { }
 export const CancellationScreen: FC<ICancellationScreen> = memo(() => {
   const { navigate, goBack } = useTypedNavigation()
   const route = useRoute();
   const { itemData } = route.params as RouteParams;
-  const startTime = itemData.StartDateTime ? itemData.StartDateTime as string : new Date(itemData?.currentDate).toISOString();
-  const duration = itemData.Duration;
+  const startTime = itemData.StartDateTime ? itemData.StartDateTime as string : new Date().toISOString();
+  const duration = itemData.Duration || 0;
   const endTime = calculateEndDate(startTime, duration);
 
   const [startDate, setStartDate] = useState(startTime);
@@ -67,7 +67,7 @@ export const CancellationScreen: FC<ICancellationScreen> = memo(() => {
   }
   const toggleAllDay = () => setAllDay(!allDay);
   useEffect(() => {
-    const startTime = itemData.StartDateTime ? itemData.StartDateTime as string : new Date(itemData?.currentDate).toISOString();
+    const startTime = itemData.StartDateTime ? itemData.StartDateTime as string : new Date().toISOString();
     const endTime = calculateEndDate(startTime, duration);
 
     setStartDate(startTime);

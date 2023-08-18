@@ -37,6 +37,7 @@ function* loginWorker({
         }
 
     } catch (error: any) {
+        yield put(setIsAuthAction(false))
         console.warn("registrationWorker", error);
         yield call(ErrorFilterService.validateError, error)
     } finally {

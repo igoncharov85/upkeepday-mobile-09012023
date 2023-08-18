@@ -134,7 +134,6 @@ const ClassesEditNameScreen: React.FC<IAddClassScreen> = memo(() => {
           <View style={{ flex: 1, justifyContent: 'flex-end', width: '100%' }}>
             <CustomButton
               text={'Finish'}
-              style={{ height: 300, textAlignVertical: 'top' }}
               //@ts-ignore
               onPress={handleSubmit}
               disabled={!isValid}

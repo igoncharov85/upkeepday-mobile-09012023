@@ -73,11 +73,11 @@ export const EditClassScreen = () => {
           title={'Archive Class'}
           navigationName={NavigationEnum.RESULT_CLASS_MODAL}
           data={{
-            item: item?.item,
+            item: item,
             actionBtn: () => {
               dispatch(
                 updatedStatusClassesAction({
-                  id: item?.item.ClassId,
+                  id: item?.ClassId,
                   Status: 'Archived',
                 }),
               );
@@ -106,8 +106,9 @@ const ClassesEditButton = ({
   action && action();
   const { navigate } = useNavigation();
   const onPress = () => {
+    console.log('---------\ndata\n', data)
     // @ts-ignore
-    navigate(navigationName, data ? { item: data } : null);
+    navigate(navigationName, data ? data : null);
   };
   return (
     <TouchableOpacity onPress={onPress} style={styles.block}>

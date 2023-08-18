@@ -1,6 +1,6 @@
 import { useRoute } from '@react-navigation/native';
 import React from 'react';
-import { KeyboardAvoidingView, ScrollView, Text, View } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, Platform, ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { NavigationEnum } from '../../common/constants/navigation';
 import { keyboardSettings } from '../../common/constants/styles/keyboard';
 import {
@@ -30,6 +30,7 @@ export const PaymentTrackingSetUp: React.FC = () => {
   const { navigate, goBack } = useTypedNavigation();
   const [activeIndex, setActiveIndex] = React.useState(0);
   const [activeAmount, setActiveAmount] = React.useState<number>(0);
+  const [totalAmount, setTotalAmount] = React.useState<number>(0);
   const { createCurrentClassRequest } = useAppSelector(state => state.schedule)
   const location = createCurrentClassRequest.Location?.LocationType === "Online" ? {
     LocationType: createCurrentClassRequest.Location?.LocationType,
@@ -40,9 +41,9 @@ export const PaymentTrackingSetUp: React.FC = () => {
   const goTextStep = () => {
     // @ts-ignore
     const endDate = findLatestLessonWithDuration(createCurrentClassRequest?.Sessions);
-    console.log('createCurrentClassRequest', createCurrentClassRequest)
+
     //@ts-ignore
-    navigate('navigation/RESULT_CLASS_MODAL', {
+    navigate('RESULT_CLASS_MODAL', {
       item: {
         Name: createCurrentClassRequest.Class?.Name,
         StartDate: createCurrentClassRequest.Class?.StartDate,
@@ -66,7 +67,7 @@ export const PaymentTrackingSetUp: React.FC = () => {
               EndScheduleType: createCurrentClassRequest.Class?.EndScheduleType,
               MakeupRequired: !makeupRequired as boolean,
               TrackPrepayment: !trackPrepayment as boolean,
-              PaymentAmount: Number(activeAmount),
+              PaymentAmount: Number(activeIndex ? activeAmount : totalAmount),
               PaymentType: activeIndex == 0 ? 'FixedAmount' : 'PayPerSession'
             },
             Location: location,
@@ -81,12 +82,18 @@ export const PaymentTrackingSetUp: React.FC = () => {
       nameAction: 'Confirm',
     })
   };
-
+  const handleKeyboardDismiss = () => {
+    Keyboard.dismiss();
+  };
   console.log('activeAmount', activeAmount)
   return (
-    <KeyboardAvoidingView {...keyboardSettings}>
-      <ScrollView>
-        <View style={{ height: '100%' }}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      style={{ flex: 1 }}
+    >
+      {/* <ScrollView> */}
+      <TouchableWithoutFeedback onPress={handleKeyboardDismiss}>
+        <View style={{ height: '100%', }}>
           <View style={{ padding: 20, paddingBottom: 0 }}>
             <ScreenHeader text={'Payment Configuration'} onBackPress={() => goBack()} withBackButton={true} />
           </View>
@@ -124,9 +131,10 @@ export const PaymentTrackingSetUp: React.FC = () => {
                 <InputForm noMarginTop
                   keyboardType="numeric"
                   onChangeText={(text) => {
-                    setActiveAmount(Number(text))
+                    setTotalAmount(Number(text))
                   }}
-                  value={activeAmount.toString()}
+
+                  value={totalAmount.toString()}
                   style={{ width: 70, height: 40, borderRadius: 10, borderWidth: 1, borderColor: 'rgba(154, 128, 186,0.5)', textAlign: 'center' }}
                 />
               </View>
@@ -166,7 +174,8 @@ export const PaymentTrackingSetUp: React.FC = () => {
             <CustomButton text={'Save'} onPress={goTextStep} />
           </View>
         </View >
-      </ScrollView>
+      </TouchableWithoutFeedback>
+      {/* </ScrollView> */}
     </KeyboardAvoidingView>
   )
 }

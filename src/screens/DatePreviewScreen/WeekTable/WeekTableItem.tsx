@@ -1,5 +1,5 @@
 import moment from 'moment';
-import React, {FC, useRef} from 'react';
+import React, { FC, useRef } from 'react';
 import {
   Animated,
   PanResponder,
@@ -9,11 +9,11 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Cancel from '../../../../assets/svg/Cancel';
-import {NavigationEnum} from '../../../common/constants/navigation';
-import {IGeneratedScheduleEntries} from '../../../common/types/schedule.types';
-import {useTypedNavigation} from '../../../hook/useTypedNavigation';
-import {addDayAndHoursToDate} from '../../../services/utils/generateDate.util';
-import {useAppSelector} from '../../../store/hooks';
+import { NavigationEnum } from '../../../common/constants/navigation';
+import { IGeneratedScheduleEntries } from '../../../common/types/schedule.types';
+import { useTypedNavigation } from '../../../hook/useTypedNavigation';
+import { addDayAndHoursToDate } from '../../../services/utils/generateDate.util';
+import { useAppSelector } from '../../../store/hooks';
 import BusyField from '../../ClassesScreen/components/BusyField';
 import styles from './styles';
 
@@ -50,7 +50,7 @@ interface IWeekTableItem {
   onLongPress: (value: boolean) => void;
   editMode: boolean;
   onMoveSlot: (slot: IGeneratedScheduleEntries, newStartTime: string) => void;
-  conflict: boolean;
+  conflict: IGeneratedScheduleEntries[];
   onDeleteSlot: (slot: IGeneratedScheduleEntries) => void;
   dayIndex: number;
   startOfWeek: Date;
@@ -80,7 +80,7 @@ export const WeekTableItem: FC<IWeekTableItem> = ({
     timeIndex,
     currentDay,
   );
-  const {createCurrentClassRequest} = useAppSelector(state => state.schedule);
+  const { createCurrentClassRequest } = useAppSelector(state => state.schedule);
   const onHandleLongPress = (active: boolean) => {
     onLongPress(active);
   };
@@ -93,6 +93,7 @@ export const WeekTableItem: FC<IWeekTableItem> = ({
   return (
     <TouchableOpacity
       onLongPress={() => onHandleLongPress(true)}
+      onPress={() => console.log('conflict', dryField)}
       activeOpacity={1}>
       <View style={styles.wrapperCell}>
         <View style={styles.containerCell}>
@@ -151,11 +152,11 @@ const LessonItem = ({
 }) => {
   const colorsLesson = ['#EAAFC8', '#654EA3'];
 
-  const {navigate} = useTypedNavigation();
-  const pan = useRef(new Animated.ValueXY({x: 0, y: 0})).current;
+  const { navigate } = useTypedNavigation();
+  const pan = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
   const panResponders = PanResponder.create({
     onStartShouldSetPanResponder: () => editMode,
-    onPanResponderMove: Animated.event([null, {dx: pan.x, dy: pan.y}], {
+    onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y }], {
       useNativeDriver: false,
     }),
     onPanResponderRelease: (_, gestureState) => {
@@ -178,8 +179,8 @@ const LessonItem = ({
       const addDuration = (time: any) => {
         newTime.setMinutes(time.minute);
         newTime.setHours(time.dayPart == 'AM' ? time.hour : time.hour + 12);
-        onHandleLongPress(false);
         onMoveSlot(lesson, moment(newTime).format('YYYY-MM-DDTHH:mm:ss'));
+        onHandleLongPress(false);
       };
       navigate(NavigationEnum.EDIT_TIME_CLASS_MODAL, {
         addDuration,
@@ -207,7 +208,7 @@ const LessonItem = ({
       style={[
         pan.getLayout(),
         {
-          height: `${(lesson.Duration / 60) * 100}%`,
+          height: `100%`,
           width: '100%',
           top: pan.y,
         },
@@ -215,18 +216,21 @@ const LessonItem = ({
       <>
         <LinearGradient
           colors={colorsLesson}
-          start={{x: 0.5, y: 0}}
-          end={{x: 0.5, y: 1}}
+          start={{ x: 0.5, y: 0 }}
+          end={{ x: 0.5, y: 1 }}
           style={[
             styles.wrapperItem,
-            {top: `${(lessonMinuteStart / 60) * 100}%`},
+            {
+              top: `${(lessonMinuteStart / 60) * 100}%`,
+              height: `${(lesson.Duration / 60) * 100}%`
+            },
           ]}>
           {editMode && (
             <TouchableOpacity
               style={styles.cansel}
               onPress={() => {
-                console.log(lesson);
-                deleteSlot(lesson);
+                console.log(lesson, '\nstart time: ', (lessonMinuteStart / 60) * 100);
+                // deleteSlot(lesson);
               }}>
               <Cancel />
             </TouchableOpacity>

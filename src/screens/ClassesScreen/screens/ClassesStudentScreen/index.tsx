@@ -1,5 +1,5 @@
-import {useIsFocused} from '@react-navigation/native';
-import React, {useEffect, useState} from 'react';
+import { useIsFocused, useRoute } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
 import {
   ScrollView,
   Text,
@@ -10,14 +10,14 @@ import {
 import CheckIcon from '../../../../../assets/svg/classes/CheckIcon';
 import MinPlus from '../../../../../assets/svg/schedule/MinPlus';
 import SearchIcon from '../../../../../assets/svg/SearchIcon';
-import {NavigationEnum} from '../../../../common/constants/navigation';
-import {ScreenHeader} from '../../../../components/ScreenHeader';
-import {CustomButton} from '../../../../components/UI/CustomButton';
-import {ScreenLoading} from '../../../../components/UI/ScreenLoading';
-import {useTypedNavigation} from '../../../../hook/useTypedNavigation';
-import {useTypedRoute} from '../../../../hook/useTypedRoute';
-import {useAppSelector} from '../../../../store/hooks';
-import {dispatch} from '../../../../store/store';
+import { NavigationEnum } from '../../../../common/constants/navigation';
+import { ScreenHeader } from '../../../../components/ScreenHeader';
+import { CustomButton } from '../../../../components/UI/CustomButton';
+import { ScreenLoading } from '../../../../components/UI/ScreenLoading';
+import { useTypedNavigation } from '../../../../hook/useTypedNavigation';
+import { useTypedRoute } from '../../../../hook/useTypedRoute';
+import { useAppSelector } from '../../../../store/hooks';
+import { dispatch } from '../../../../store/store';
 import {
   deleteUserAction,
   fetchUsersByIdAction,
@@ -29,27 +29,27 @@ function removeEmptyObjects(array: any[]) {
 }
 
 const ClassesStudentScreen: React.FC = () => {
-  const {params} = useTypedRoute<NavigationEnum.CLASSES_STUDENT_SCREEN>();
-  const {item} = params;
+  const { params } = useRoute();
+  const item = params as any;
   const isFocused = useIsFocused();
-  const {currentStudent, loading}: any = useAppSelector(
+  const { currentStudent, loading }: any = useAppSelector(
     (state: any) => state.user,
   );
-  const {navigate, goBack} = useTypedNavigation();
+  const { navigate, goBack } = useTypedNavigation();
   const [searchText, setSearchText] = useState('');
   const [studentsList, setStudentsList] = useState(currentStudent);
   //@ts-ignore
   const goNextStep = () => navigate(NavigationEnum.CLASSES_TAB);
 
   const onDeleteStudent = (studentId: number) => {
-    dispatch(deleteUserAction({StudentId: studentId, Classes: [item.ClassId]}));
+    dispatch(deleteUserAction({ StudentId: studentId, Classes: [item.ClassId] }));
     setStudentsList(
       studentsList.filter((student: any) => student.StudentId !== studentId),
     );
   };
 
   const onAddStudent = () => {
-    navigate(NavigationEnum.CHANGE_STUDENT_SCREEN, {item, currentStudent});
+    navigate(NavigationEnum.CHANGE_STUDENT_SCREEN, { item, currentStudent });
   };
   const filteredStudents = studentsList?.filter((user: any) => {
     const fullName = `${user.FirstName} ${user.LastName}`.toLowerCase();
@@ -67,8 +67,8 @@ const ClassesStudentScreen: React.FC = () => {
     setStudentsList(currentStudent);
   }, [currentStudent]);
   return (
-    <View style={{flex: 1, height: '100%'}}>
-      <View style={{padding: 20, paddingBottom: 0}}>
+    <View style={{ flex: 1, height: '100%' }}>
+      <View style={{ padding: 20, paddingBottom: 0 }}>
         <View
           style={{
             flexDirection: 'row',
@@ -95,8 +95,8 @@ const ClassesStudentScreen: React.FC = () => {
           <MinPlus />
         </TouchableOpacity>
       </View>
-      <View style={{flex: 1}}>
-        <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
+        <View style={{ flex: 1 }}>
           <View style={{}}>
             <View
               style={{
@@ -106,8 +106,8 @@ const ClassesStudentScreen: React.FC = () => {
                 marginHorizontal: 20,
               }}>
               <View
-                style={{position: 'absolute', zIndex: 1, top: 12, left: 12}}>
-                <SearchIcon style={{positon: 'absolute'}} />
+                style={{ position: 'absolute', zIndex: 1, top: 12, left: 12 }}>
+                <SearchIcon style={{ positon: 'absolute' }} />
               </View>
               <TextInput
                 style={styles.input}
@@ -120,7 +120,7 @@ const ClassesStudentScreen: React.FC = () => {
               <ScreenLoading />
             ) : (
               <ScrollView
-                style={{overflow: 'scroll', height: '80%'}}
+                style={{ overflow: 'scroll', height: '80%' }}
                 showsVerticalScrollIndicator={false}>
                 <View style={styles.container}>
                   <View>
@@ -157,7 +157,7 @@ interface Student {
   name?: string;
   onClick: () => void;
 }
-const Student: React.FC<Student> = ({name, onClick}) => {
+const Student: React.FC<Student> = ({ name, onClick }) => {
   return (
     <>
       <View style={styles.student}>

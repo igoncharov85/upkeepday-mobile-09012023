@@ -1,24 +1,24 @@
 import moment from 'moment';
-import React, {useEffect, useState} from 'react';
-import {Text, View} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Text, View } from 'react-native';
 import Conflict from '../../../assets/svg/Conflict';
-import {NavigationEnum} from '../../common/constants/navigation';
-import {IGeneratedScheduleEntries} from '../../common/types/schedule.types';
-import {ScreenHeader} from '../../components/ScreenHeader';
+import { NavigationEnum } from '../../common/constants/navigation';
+import { IGeneratedScheduleEntries } from '../../common/types/schedule.types';
+import { ScreenHeader } from '../../components/ScreenHeader';
 
-import {CustomButton} from '../../components/UI/CustomButton';
-import {DayScroller} from '../../components/UI/DayScroller';
-import {ScreenLoading} from '../../components/UI/ScreenLoading';
-import {useTypedNavigation} from '../../hook/useTypedNavigation';
-import {findScheduleConflicts} from '../../services/utils/findConflict.util';
-import {getWeekDates} from '../../services/utils/fullDateToValue.util';
-import {addDayAndHoursToDate} from '../../services/utils/generateDate.util';
-import {useAppSelector} from '../../store/hooks';
-import {updateCurrentClassRequestAction} from '../../store/shedule';
-import {dispatch} from '../../store/store';
-import {DaysOfWeek} from './DaysOfWeek';
+import { CustomButton } from '../../components/UI/CustomButton';
+import { DayScroller } from '../../components/UI/DayScroller';
+import { ScreenLoading } from '../../components/UI/ScreenLoading';
+import { useTypedNavigation } from '../../hook/useTypedNavigation';
+import { findScheduleConflicts } from '../../services/utils/findConflict.util';
+import { getWeekDates } from '../../services/utils/fullDateToValue.util';
+import { addDayAndHoursToDate } from '../../services/utils/generateDate.util';
+import { useAppSelector } from '../../store/hooks';
+import { updateCurrentClassRequestAction } from '../../store/shedule';
+import { dispatch } from '../../store/store';
+import { DaysOfWeek } from './DaysOfWeek';
 import styles from './styles';
-import {WeekTable} from './WeekTable';
+import { WeekTable } from './WeekTable';
 
 function sortByStartDateTime(array: any) {
   return array.sort((a: any, b: any) => {
@@ -52,9 +52,9 @@ function findAdjacentEvent(
 
   return filteredEvents[0].StartDateTime;
 }
-interface IDatePreviewScreen {}
+interface IDatePreviewScreen { }
 export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
-  const {navigate, goBack} = useTypedNavigation();
+  const { navigate, goBack } = useTypedNavigation();
 
   const today = new Date();
   // const [someDate,setSomeDate] = useState(today)
@@ -71,7 +71,7 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
     GeneratedScheduleEntries,
     loading,
   } = useAppSelector(state => state.schedule);
-  const [slots, setSlots] = useState<IGeneratedScheduleEntries[]>([]);
+  const [slots, setSlots] = useState<IGeneratedScheduleEntries[]>(GeneratedScheduleEntries);
   const [conflict, setConflict] = useState<IGeneratedScheduleEntries[]>(
     findScheduleConflicts(slots, CurrentScheduledEntries),
   );
@@ -80,6 +80,7 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
   const prevConflictWeek = findAdjacentEvent(conflict, startDateWeek, false);
 
   const handeScheduleSlots = (slots: IGeneratedScheduleEntries[]) => {
+
     setSlots(slots);
     setConflict(findScheduleConflicts(slots, CurrentScheduledEntries));
   };
@@ -145,7 +146,7 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
   return loading ? (
     <ScreenLoading />
   ) : (
-    <View style={{height: '100%'}}>
+    <View style={{ height: '100%' }}>
       <View style={styles.header}>
         <ScreenHeader
           text={'Preview Day and Time'}
@@ -153,7 +154,7 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
           withBackButton={true}
         />
       </View>
-      <View style={{marginHorizontal: 20, marginTop: 12}}>
+      <View style={{ marginHorizontal: 20, marginTop: 12 }}>
         <DayScroller
           title={moment(startDateWeek).format('MMMM')}
           onPressLeft={goToPrevWeek}
@@ -161,7 +162,7 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
         />
         <DaysOfWeek startOfWeek={startDateWeek} />
       </View>
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <WeekTable
           startOfWeek={startDateWeek}
           endOfWeek={endDateWeek}
@@ -172,7 +173,7 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
       <View
         style={[
           styles.conflictContainer,
-          {marginBottom: lessonHasConflict ? 0 : -30, zIndex: 100},
+          { marginBottom: lessonHasConflict ? 0 : -30, zIndex: 100 },
         ]}>
         <View>
           <CustomButton
@@ -183,7 +184,7 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
           />
         </View>
         {lessonHasConflict && (
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Conflict />
             <Text style={styles.textConflict}>
               You have a conflict. Please check each week
@@ -199,18 +200,18 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
           />
         </View>
       </View>
-      <Text style={{textAlign: 'center'}}>
-        <Text style={{fontSize: 17, lineHeight: 34, fontWeight: '700'}}>
+      <Text style={{ textAlign: 'center' }}>
+        <Text style={{ fontSize: 17, lineHeight: 34, fontWeight: '700' }}>
           Scheduled Classes:{' '}
         </Text>
-        <Text style={{opacity: 0.4}}>
+        <Text style={{ opacity: 0.4 }}>
           {slots.length || GeneratedScheduleEntries.length || 0}
         </Text>
       </Text>
-      <View style={{padding: 20, justifyContent: 'flex-end'}}>
+      <View style={{ padding: 20, justifyContent: 'flex-end' }}>
         <CustomButton
           text={'Next Step'}
-          onPress={!lessonHasConflict ? onSave : () => {}}
+          onPress={!lessonHasConflict ? onSave : () => { }}
           disabled={lessonHasConflict}
         />
       </View>

@@ -16,14 +16,18 @@ interface IEditTimeSessionModalModal { }
 const EditTimeSessionModal = ({ }: IEditTimeSessionModalModal) => {
   const { goBack } = useTypedNavigation();
   const route = useRoute();
-  const { addDuration, newTime, lesson } = route.params as any;
-  const { GeneratedScheduleEntries } = useAppSelector(state => state.schedule);
+  const { addDuration, newTime, lesson: currentLesson } = route.params as any;
+  const { GeneratedScheduleEntries, CurrentScheduledEntries, createCurrentClassRequest } = useAppSelector(state => state.schedule);
+  // console.log('createCurrentClassRequest', createCurrentClassRequest.Sessions?.map(item => item.StartDateTime));
+
   const [time, setTime] = useState({});
   const [canBe, setCanBe] = useState(true);
 
   const onSetTime = (time: any) => {
     setTime(time);
     setCanBe(findNextLesson(time));
+    // console.log(findNextLesson(time));
+
   };
   const onSave = () => {
     addDuration(time);
@@ -38,43 +42,69 @@ const EditTimeSessionModal = ({ }: IEditTimeSessionModalModal) => {
       newLessonEndTime.getMinutes() + newLesson.Duration,
     );
 
-    const sameDayLessons = convertToLocaleTime(schedule).filter(item => {
+    const sameDayLessons = schedule.filter(item => {
       const itemStartTime = new Date(item.StartDateTime);
       const itemEndTime = new Date(item.StartDateTime)
+      const currntTime = new Date(currentLesson.StartDateTime)
       itemEndTime.setMinutes(
         newLessonEndTime.getMinutes() + item.Duration,
       );
-      return itemStartTime.toDateString() === newLessonStartTime.toDateString();
+      return itemStartTime.toDateString() === newLessonStartTime.toDateString() && itemStartTime.toDateString() !== currntTime.toDateString();
     });
+
     for (const lesson of sameDayLessons) {
-      const lessonStartTime = moment(lesson.StartDateTime).toDate()
-      const lessonEndTime = new Date(lesson.StartDateTime);
-      lessonEndTime.setMinutes(lessonEndTime.getMinutes() + lesson.Duration);
-      return checkScheduleConflict({ start: newLessonStartTime, end: newLessonEndTime }, { start: lessonStartTime, end: lessonEndTime })
+      const lessonstartTime = moment.utc(lesson.StartDateTime).toDate()
+      const lessonEndTime = moment.utc(lesson.StartDateTime).add(lesson.Duration, 'minute').toDate()
+
+
+
+      if ((
+        checkLessonInOtherLessons(lesson, newLessonStartTime) ||
+        checkLessonInOtherLessons(lesson, newLessonEndTime) ||
+        checkLessonInOtherLessons(newLesson, lessonstartTime) ||
+        checkLessonInOtherLessons(newLesson, lessonEndTime) ||
+        checkTimeCoincidence(newLessonStartTime, lessonstartTime) ||
+        checkTimeCoincidence(newLessonEndTime, lessonEndTime)
+      )) {
+        console.log('начало занятия находить в класе', checkLessonInOtherLessons(lesson, newLessonStartTime))
+        console.log('конец занятия находить в класе', checkLessonInOtherLessons(lesson, newLessonEndTime))
+        console.log('начало класса находить в занятии', checkLessonInOtherLessons(newLesson, lessonstartTime))
+        console.log('конец класса находить в занятии', checkLessonInOtherLessons(newLesson, lessonEndTime))
+        console.log('начало класса совпадает с началом занятии', checkTimeCoincidence(newLessonStartTime, lessonstartTime))
+        console.log('конец класса совпадает с концом занятии', checkTimeCoincidence(newLessonEndTime, lessonEndTime))
+        return false
+      }
+
     }
 
     return true;
   }
-  function checkScheduleConflict(lesson1: any, lesson2: any) {
-    const startTime1 = new Date(lesson1.start);
-    const endTime1 = new Date(lesson1.end);
-    const startTime2 = new Date(lesson2.start);
-    const endTime2 = new Date(lesson2.end);
 
-    if (startTime1 < endTime2 && startTime2 < endTime1) {
-      return false;
-    }
 
-    return true;
+  function checkLessonInOtherLessons(lesson: any, time: Date): boolean {
+    const lessonStartTime = moment.utc(lesson.StartDateTime).toDate()
+    const lessonEndTime = moment.utc(lesson.StartDateTime).add(lesson.Duration, 'minute').toDate()
+    return lessonStartTime < time && time < lessonEndTime;
   }
+  function checkTimeCoincidence(firstTime: Date, secondTime: Date): boolean {
+    return moment(firstTime).toDate().toISOString() === moment(secondTime).toDate().toISOString()
+  }
+
   const findNextLesson = (time: any) => {
     const newLocalTime = moment(newTime).toDate();
     newLocalTime.setSeconds(0);
     newLocalTime.setMinutes(time.minute);
     newLocalTime.setUTCHours(time.dayPart == 'AM' ? time.hour : time.hour + 12);
-    return canFitLesson(GeneratedScheduleEntries, {
+    canFitLesson(CurrentScheduledEntries, {
       StartDateTime: newLocalTime,
-      Duration: lesson.Duration,
+      Duration: currentLesson.Duration,
+    });
+    return canFitLesson(CurrentScheduledEntries, {
+      StartDateTime: newLocalTime,
+      Duration: currentLesson.Duration,
+    }) && canFitLesson(createCurrentClassRequest.Sessions, {
+      StartDateTime: newLocalTime,
+      Duration: currentLesson.Duration,
     });
   };
 

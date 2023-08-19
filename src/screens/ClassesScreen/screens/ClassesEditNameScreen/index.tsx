@@ -24,6 +24,7 @@ import { ListButtons } from './components/ListButtons';
 
 import { LocationSelect } from './components/LocationSelect';
 import styles from './styles';
+import { useRoute } from '@react-navigation/native';
 
 interface IAddClassScreen { }
 
@@ -41,9 +42,9 @@ if (Platform.OS === 'ios') {
 
 const ClassesEditNameScreen: React.FC<IAddClassScreen> = memo(() => {
   const { navigate, goBack } = useTypedNavigation();
-  const { params } = useTypedRoute<NavigationEnum.CLASSES_EDIT_NAME_SCREEN>();
-  const { item } = params;
-  console.log(item, 'item')
+  const { params } = useRoute();
+  const item = params as any;
+  console.log(params, 'params')
   const dispatch = useDispatch();
   const formInitialValues = {
     name: item?.Name,

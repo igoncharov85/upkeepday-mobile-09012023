@@ -74,6 +74,11 @@ export const WeekTable: FC<ISheduleTable> = memo(
     }
 
     useEffect(() => {
+      dispatch(
+        updateCurrentClassRequestAction({
+          Sessions: slots,
+        }),
+      );
       onHandleData(slots)
     }, [slots])
     const timeData = generateTimeData(`00:00`, '23:00');
@@ -107,7 +112,7 @@ export const WeekTable: FC<ISheduleTable> = memo(
                       slots={slots}
                       startOfWeek={startOfWeek}
                       StartDateTime={addDayAndHoursToDate(date.toISOString(), dayIndex, index)}
-                      conflict={!!conflictItem[0]}
+                      conflict={conflict}
                       onLongPress={onChangeEditMode}
                       editMode={editMode}
                       onDeleteSlot={onDeleteSlot}

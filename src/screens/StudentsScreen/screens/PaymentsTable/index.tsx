@@ -13,40 +13,36 @@ import { fetchStudentPaymentsAction } from '../../../../store/user/actions';
 import styles from './styles';
 
 export const PaymentsTable: FC = () => {
-  // const { navigate, goBack } = useTypedNavigation();
-  // const { params } = useTypedRoute<NavigationEnum.PAYMENTS_TABLE_SCREEN>();
-  // const { user, classData } = params;
-  // const dispatch = useAppDispatch();
-  // const { payments, loading } = useAppSelector(state => state.user);
-  // const [isEnabled, setIsEnabled] = useState(false);
-  // const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
+  const { navigate, goBack } = useTypedNavigation();
+  const { params } = useTypedRoute<NavigationEnum.PAYMENTS_TABLE_SCREEN>();
+  const { user, classData } = params;
+  const dispatch = useAppDispatch();
+  const { payments, loading } = useAppSelector(state => state.user);
+  const [isEnabled, setIsEnabled] = useState(false);
+  const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
 
 
-  // useEffect(() => {
+  useEffect(() => {
+    dispatch(fetchStudentPaymentsAction({
+      StudentId: user.StudentId,
+      ClassId: classData.ClassId,
+    }))
+  }, [])
 
-  //   dispatch(fetchStudentPaymentsAction({
-  //     StudentId: user.StudentId,
-  //     ClassId: classData.ClassId,
-  //   }))
-  // }, [])
-  // useEffect(() => {
-  //   console.log(payments, 'payments');
-  // }, [payments])
 
-  // const handleSubmit = () => {
-  //   const finalData = {
-  //     TransactionUid: payments.TransactionUid,
-  //     TransactionType: isEnabled ? 'Refund' : 'Payment',
-  //     user,
-  //     classData,
-  //   };
-  //   navigate(NavigationEnum.PAYMENT_STUDENT_TRACKING, finalData as any);
-  // };
+  const handleSubmit = () => {
+    const finalData = {
+      TransactionUid: payments.TransactionUid,
+      TransactionType: isEnabled ? 'Refund' : 'Payment',
+      user,
+      classData,
+    };
+    navigate(NavigationEnum.PAYMENT_STUDENT_TRACKING, finalData as any);
+  };
 
   return (
     <>
-      <Text>Some text</Text>
-      {/* <View style={{ flex: 1 }}>
+      <View style={{ flex: 1 }}>
         <View style={styles.header}>
           <ScreenHeader
             text={`${user.FirstName} ${user.LastName}`}
@@ -79,17 +75,17 @@ export const PaymentsTable: FC = () => {
                       fontSize: 20,
                       fontWeight: 'bold',
                       color:
-                        payments?.Total !== undefined && payments.Total >= 0
+                        payments.Total !== undefined && payments.Total >= 0
                           ? '#169861'
                           : '#F00',
                     },
                   ]}>
-                  ${payments?.Total.toFixed(2)}
+                  ${payments.Total.toFixed(2)}
                 </Text>
                 <Text style={[styles.cell]} />
               </View>
-              {payments?.Transactions &&
-                payments?.Transactions.map((item, idx) => {
+              {payments.Transactions &&
+                payments.Transactions.map((item, idx) => {
                   return (
                     <View
                       style={styles.tableRow}
@@ -142,7 +138,7 @@ export const PaymentsTable: FC = () => {
         <Text style={{ textAlign: 'center' }}>
           Do you want to switch to "{isEnabled ? 'Refund' : 'Payment'}"?
         </Text>
-      </ConfirmationModal> */}
+      </ConfirmationModal>
     </>
   );
 };

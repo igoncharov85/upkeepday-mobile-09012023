@@ -13,38 +13,40 @@ import { fetchStudentPaymentsAction } from '../../../../store/user/actions';
 import styles from './styles';
 
 export const PaymentsTable: FC = () => {
-  const { navigate, goBack } = useTypedNavigation();
-  const { params } = useTypedRoute<NavigationEnum.PAYMENTS_TABLE_SCREEN>();
-  const { user, classData } = params;
-  const dispatch = useAppDispatch();
-  const { payments, loading } = useAppSelector(state => state.user);
-  const [isEnabled, setIsEnabled] = useState(false);
-  const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
+  // const { navigate, goBack } = useTypedNavigation();
+  // const { params } = useTypedRoute<NavigationEnum.PAYMENTS_TABLE_SCREEN>();
+  // const { user, classData } = params;
+  // const dispatch = useAppDispatch();
+  // const { payments, loading } = useAppSelector(state => state.user);
+  // const [isEnabled, setIsEnabled] = useState(false);
+  // const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
 
 
-  useEffect(() => {
-    dispatch(fetchStudentPaymentsAction({
-      StudentId: user.StudentId,
-      ClassId: classData.ClassId,
-    }))
-  }, [])
-  useEffect(() => {
-    console.log(payments, 'payments');
-  }, [payments])
+  // useEffect(() => {
 
-  const handleSubmit = () => {
-    const finalData = {
-      TransactionUid: payments.TransactionUid,
-      TransactionType: isEnabled ? 'Refund' : 'Payment',
-      user,
-      classData,
-    };
-    navigate(NavigationEnum.PAYMENT_STUDENT_TRACKING, finalData as any);
-  };
+  //   dispatch(fetchStudentPaymentsAction({
+  //     StudentId: user.StudentId,
+  //     ClassId: classData.ClassId,
+  //   }))
+  // }, [])
+  // useEffect(() => {
+  //   console.log(payments, 'payments');
+  // }, [payments])
 
-  return loading ? <ScreenLoading /> : (
+  // const handleSubmit = () => {
+  //   const finalData = {
+  //     TransactionUid: payments.TransactionUid,
+  //     TransactionType: isEnabled ? 'Refund' : 'Payment',
+  //     user,
+  //     classData,
+  //   };
+  //   navigate(NavigationEnum.PAYMENT_STUDENT_TRACKING, finalData as any);
+  // };
+
+  return (
     <>
-      <View style={{ flex: 1 }}>
+      <Text>Some text</Text>
+      {/* <View style={{ flex: 1 }}>
         <View style={styles.header}>
           <ScreenHeader
             text={`${user.FirstName} ${user.LastName}`}
@@ -140,7 +142,7 @@ export const PaymentsTable: FC = () => {
         <Text style={{ textAlign: 'center' }}>
           Do you want to switch to "{isEnabled ? 'Refund' : 'Payment'}"?
         </Text>
-      </ConfirmationModal>
+      </ConfirmationModal> */}
     </>
   );
 };

@@ -1,6 +1,6 @@
 import { useFocusEffect } from '@react-navigation/native';
 import moment from 'moment';
-import React, { FC, useCallback, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import { ScrollView, Switch, Text, TouchableOpacity, View } from 'react-native';
 import { NavigationEnum } from '../../../../common/constants/navigation';
 import { ConfirmationModal } from '../../../../components/Modals/ConfirmationModal';
@@ -20,18 +20,17 @@ export const PaymentsTable: FC = () => {
   const { payments, loading } = useAppSelector(state => state.user);
   const [isEnabled, setIsEnabled] = useState(false);
   const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
-  console.log(payments, 'payments');
 
-  useFocusEffect(
-    useCallback(() => {
-      dispatch(
-        fetchStudentPaymentsAction({
-          StudentId: user.StudentId,
-          ClassId: classData.ClassId,
-        }),
-      );
-    }, []),
-  );
+
+  useEffect(() => {
+    dispatch(fetchStudentPaymentsAction({
+      StudentId: user.StudentId,
+      ClassId: classData.ClassId,
+    }))
+  }, [])
+  useEffect(() => {
+    console.log(payments, 'payments');
+  }, [payments])
 
   const handleSubmit = () => {
     const finalData = {
@@ -43,7 +42,7 @@ export const PaymentsTable: FC = () => {
     navigate(NavigationEnum.PAYMENT_STUDENT_TRACKING, finalData as any);
   };
 
-  return (
+  return loading ? <ScreenLoading /> : (
     <>
       <View style={{ flex: 1 }}>
         <View style={styles.header}>
@@ -83,12 +82,12 @@ export const PaymentsTable: FC = () => {
                           : '#F00',
                     },
                   ]}>
-                  ${payments.Total.toFixed(2)}
+                  ${payments?.Total.toFixed(2)}
                 </Text>
                 <Text style={[styles.cell]} />
               </View>
-              {payments.Transactions &&
-                payments.Transactions.map((item, idx) => {
+              {payments?.Transactions &&
+                payments?.Transactions.map((item, idx) => {
                   return (
                     <View
                       style={styles.tableRow}

@@ -57,14 +57,14 @@ export const PaymentsTable: FC = () => {
             <View style={{ height: 100 }}>
               <ScreenLoading />
             </View>
-          ) : (
+          ) : payments?.Total !== undefined && (
             <View style={styles.tableContainer}>
               <View style={styles.tableRow}>
                 <Text style={styles.columnHeader} />
                 <Text style={styles.columnHeader}>Amount</Text>
                 <Text style={styles.columnHeader}>Date</Text>
               </View>
-              {/* <View style={styles.tableRow}>
+              <View style={styles.tableRow}>
                 <Text style={[styles.cell, { fontSize: 20, fontWeight: 'bold' }]}>
                   Total
                 </Text>
@@ -83,7 +83,7 @@ export const PaymentsTable: FC = () => {
                   ${payments.Total.toFixed(2)}
                 </Text>
                 <Text style={[styles.cell]} />
-              </View> */}
+              </View>
               {payments.Transactions &&
                 payments.Transactions.map((item, idx) => {
                   return (

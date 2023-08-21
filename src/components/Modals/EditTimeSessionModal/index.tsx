@@ -51,12 +51,20 @@ const EditTimeSessionModal = ({ }: IEditTimeSessionModalModal) => {
       );
       return itemStartTime.toDateString() === newLessonStartTime.toDateString() && itemStartTime.toDateString() !== currntTime.toDateString();
     });
+    console.log('--------------list lesson on this day--------------', sameDayLessons,)
+    console.log('newLessonStartTime', newLessonStartTime,);
+    console.log('newLessonEndTime', newLessonEndTime,);
 
     for (const lesson of sameDayLessons) {
       const lessonstartTime = moment.utc(lesson.StartDateTime).toDate()
       const lessonEndTime = moment.utc(lesson.StartDateTime).add(lesson.Duration, 'minute').toDate()
 
-
+      console.log('начало занятия находить в класе', checkLessonInOtherLessons(lesson, newLessonStartTime))
+      console.log('конец занятия находить в класе', checkLessonInOtherLessons(lesson, newLessonEndTime))
+      console.log('начало класса находить в занятии', checkLessonInOtherLessons(newLesson, lessonstartTime))
+      console.log('конец класса находить в занятии', checkLessonInOtherLessons(newLesson, lessonEndTime))
+      console.log('начало класса совпадает с началом занятии', checkTimeCoincidence(newLessonStartTime, lessonstartTime))
+      console.log('конец класса совпадает с концом занятии', checkTimeCoincidence(newLessonEndTime, lessonEndTime))
 
       if ((
         checkLessonInOtherLessons(lesson, newLessonStartTime) ||

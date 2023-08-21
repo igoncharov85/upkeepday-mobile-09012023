@@ -19,7 +19,7 @@ const EditTimeSessionModal = ({ }: IEditTimeSessionModalModal) => {
   const { addDuration, newTime, lesson: currentLesson } = route.params as any;
   const { GeneratedScheduleEntries, CurrentScheduledEntries, createCurrentClassRequest } = useAppSelector(state => state.schedule);
   // console.log('createCurrentClassRequest', createCurrentClassRequest.Sessions?.map(item => item.StartDateTime));
-
+  console.log('\nзебра:\n', CurrentScheduledEntries,)
   const [time, setTime] = useState({});
   const [canBe, setCanBe] = useState(true);
 
@@ -103,10 +103,10 @@ const EditTimeSessionModal = ({ }: IEditTimeSessionModalModal) => {
     newLocalTime.setSeconds(0);
     newLocalTime.setMinutes(time.minute);
     newLocalTime.setUTCHours(time.dayPart == 'AM' ? time.hour : time.hour + 12);
-    canFitLesson(CurrentScheduledEntries, {
+    console.log('zebra give conflict', canFitLesson(CurrentScheduledEntries, {
       StartDateTime: newLocalTime,
       Duration: currentLesson.Duration,
-    });
+    }))
     return canFitLesson(CurrentScheduledEntries, {
       StartDateTime: newLocalTime,
       Duration: currentLesson.Duration,

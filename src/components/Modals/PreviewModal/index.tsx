@@ -27,7 +27,7 @@ const PreviewModal = ({ }: IPreviewModal) => {
   const { navigate, goBack } = useTypedNavigation()
   const { SessionId, newTime, completeAction, deleteItem, classId } = route.params as any
   console.log(classesSchedule.EndDate, 'classesSchedule');
-  console.log(classesSchedule.StartDate, 'classesSchedule', SessionId);
+  console.log(classesSchedule.OtherSessions, 'classesSchedule', SessionId);
 
   const onDeleteSlot = () => {
     dispatch(deleteSessionClassesAction({ sessionId: SessionId, classId }))

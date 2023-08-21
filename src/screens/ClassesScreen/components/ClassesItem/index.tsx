@@ -1,23 +1,23 @@
 import React from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import DeleteIcon from '../../../../../assets/svg/classes/DeleteIcon';
 import DocumentIcon from '../../../../../assets/svg/classes/DocumentIcon';
 import EditIcon from '../../../../../assets/svg/classes/EditIcon';
 import MailIcon from '../../../../../assets/svg/classes/MailIcon';
 import PaymentIcon from '../../../../../assets/svg/classes/PaymentIcon';
 import ScheduledIcon from '../../../../../assets/svg/classes/ScheduledIcon';
-import {NavigationEnum} from '../../../../common/constants/navigation';
+import { NavigationEnum } from '../../../../common/constants/navigation';
 import {
   EClassesStatus,
   IClassesResponse,
 } from '../../../../common/types/classes.types';
-import {useTypedNavigation} from '../../../../hook/useTypedNavigation';
-import {formatDateForPeriod} from '../../../../services/utils/fullDateToValue.util';
+import { useTypedNavigation } from '../../../../hook/useTypedNavigation';
+import { formatDateForPeriod } from '../../../../services/utils/fullDateToValue.util';
 import {
   deleteClassesAction,
   fetchClassesSchedule,
 } from '../../../../store/classes/actions';
-import {dispatch} from '../../../../store/store';
+import { dispatch } from '../../../../store/store';
 
 import styles from './styles';
 
@@ -25,17 +25,15 @@ interface IClassesItem {
   item: IClassesResponse;
 }
 
-const ClassesItem: React.FC<IClassesItem> = ({item}) => {
-  const {navigate} = useTypedNavigation();
+const ClassesItem: React.FC<IClassesItem> = ({ item }) => {
+  const { navigate } = useTypedNavigation();
 
   const navigateToEditLesson = () => {
-    navigate(NavigationEnum.EDIT_CLASS_SCREEN, {item});
+    navigate(NavigationEnum.EDIT_CLASS_SCREEN, { item });
   };
 
   const navigateToLessonView = () => {
-    const ClassId = item.ClassId;
-    dispatch(fetchClassesSchedule({classId: ClassId}));
-    navigate(NavigationEnum.CLASSES_PREVIEW_SCREEN, {item});
+    navigate(NavigationEnum.CLASSES_PREVIEW_SCREEN, { item });
   };
 
   const handleDelete = () => {
@@ -97,11 +95,11 @@ const ClassesItem: React.FC<IClassesItem> = ({item}) => {
                 <EditIcon />
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => {}} style={styles.linkItem}>
+              <TouchableOpacity onPress={() => { }} style={styles.linkItem}>
                 <MailIcon />
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => {}} style={styles.linkItem}>
+              <TouchableOpacity onPress={() => { }} style={styles.linkItem}>
                 <DocumentIcon />
               </TouchableOpacity>
             </>

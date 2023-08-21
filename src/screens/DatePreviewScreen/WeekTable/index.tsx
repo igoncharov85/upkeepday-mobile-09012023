@@ -77,6 +77,7 @@ export const WeekTable: FC<ISheduleTable> = memo(
       dispatch(
         updateCurrentClassRequestAction({
           Sessions: slots,
+
         }),
       );
       onHandleData(slots)

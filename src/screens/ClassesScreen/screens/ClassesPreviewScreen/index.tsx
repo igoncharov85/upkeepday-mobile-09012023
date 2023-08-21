@@ -41,6 +41,8 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
   const [endDateWeek, setEndDateWeek] = useState(new Date(weekDates.endDate));
 
   const goToNextWeek = () => {
+    const timeNow = moment().format('HH:mm:ss.SSS')
+    console.log('go next', timeNow)
     setStartDateWeek(
       new Date(addDayAndHoursToDate(startDateWeek.toISOString(), 7, 0)),
     );
@@ -50,6 +52,8 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
   };
 
   const goToPrevWeek = () => {
+    const timeNow = moment().format('HH:mm:ss.SSS')
+    console.log('go prev', timeNow)
     setStartDateWeek(
       new Date(addDayAndHoursToDate(startDateWeek.toISOString(), -7, 0)),
     );
@@ -63,7 +67,6 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
   };
 
   useEffect(() => {
-    // dispatch(fetchSessionClassesByIdAction(item.ClassId));
     dispatch(fetchClassesSchedule({ classId: item.ClassId }));
   }, []);
 

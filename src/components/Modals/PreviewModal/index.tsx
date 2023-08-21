@@ -1,6 +1,6 @@
 import { useRoute } from '@react-navigation/native';
 import React from 'react';
-import { Animated, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { Animated, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {
   EClassesChange,
@@ -13,6 +13,8 @@ import {
 } from '../../../store/classes/actions';
 // import styles from './styles';
 import { dispatch } from '../../../store/store';
+import { useAppSelector } from '../../../store/hooks';
+import moment from 'moment';
 
 interface IPreviewModal { }
 
@@ -21,8 +23,11 @@ interface IPreviewModal { }
 
 const PreviewModal = ({ }: IPreviewModal) => {
   const route = useRoute()
+  const { classesSchedule } = useAppSelector(state => state.classes);
   const { navigate, goBack } = useTypedNavigation()
   const { SessionId, newTime, completeAction, deleteItem, classId } = route.params as any
+  console.log(classesSchedule.EndDate, 'classesSchedule');
+  console.log(classesSchedule.StartDate, 'classesSchedule', SessionId);
 
   const onDeleteSlot = () => {
     dispatch(deleteSessionClassesAction({ sessionId: SessionId, classId }))
@@ -41,7 +46,8 @@ const PreviewModal = ({ }: IPreviewModal) => {
     goBack();
     completeAction();
   };
-
+  const currentSession = classesSchedule.Sessions.find(item => item.SessionId == SessionId)
+  console.log(currentSession, 'currentSession')
   return (
     <>
       <LinearGradient
@@ -52,6 +58,32 @@ const PreviewModal = ({ }: IPreviewModal) => {
         useAngle={true}
         style={styles.bgModal}
       />
+      <View style={{
+        height: '100%',
+        position: 'absolute',
+        width: '100%',
+        justifyContent: 'center',
+      }}>
+        <View style={{
+          backgroundColor: '#fff',
+          borderRadius: 12,
+          marginBottom: deleteItem ? 164 : 103,
+          marginHorizontal: 20,
+          padding: 24
+        }}>
+          <Text style={styles.subTitle}>{deleteItem ? 'Reschedule' : 'Cancel current session'}</Text>
+          <Text style={styles.subTitle}>{classesSchedule.Sessions[0].ClassName}</Text>
+          <Text style={{ textAlign: 'center', marginBottom: 12 }}>
+            {moment(classesSchedule.StartDate).format('D/MM/y')}
+            {' - '}
+            {moment(classesSchedule.EndDate).format('D/MM/y')}
+          </Text>
+          <Text style={{ textAlign: 'center', marginBottom: 12 }}>Current Session: {moment(currentSession?.StartDateTime).format('dddd, MMMM DD, YYYY, h a')}</Text>
+          {deleteItem && <Text style={{ textAlign: 'center', marginBottom: 12 }}>New Session: {moment(newTime).format('dddd, MMMM DD, YYYY, h a')}</Text>}
+
+        </View>
+
+      </View>
       <TouchableOpacity style={{ flex: 1 }} onPress={handleHideModal} />
 
       <Animated.View
@@ -161,5 +193,12 @@ const styles = StyleSheet.create({
     letterSpacing: -0.3,
     color: '#FFFFFF',
   },
+  subTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#171930',
+    textAlign: 'center',
+    marginBottom: 12
+  }
 });
 export default PreviewModal;

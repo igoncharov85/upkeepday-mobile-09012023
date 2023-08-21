@@ -66,4 +66,10 @@ export default StyleSheet.create({
     letterSpacing: -0.3,
     color: '#FFFFFF',
   },
+  subTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#171930',
+    textAlign: 'center'
+  }
 });

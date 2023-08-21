@@ -2,7 +2,7 @@ import React, { FC, memo, useEffect } from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 import ArrowLeft from '../../../../assets/svg/schedule/ArrowLeft';
 import ArrowRight from '../../../../assets/svg/schedule/ArrowRight';
-
+import moment from 'moment';
 import styles from './styles';
 
 interface IDayScroller {

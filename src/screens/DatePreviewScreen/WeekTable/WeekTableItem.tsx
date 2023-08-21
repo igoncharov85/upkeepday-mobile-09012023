@@ -229,8 +229,7 @@ const LessonItem = ({
             <TouchableOpacity
               style={styles.cansel}
               onPress={() => {
-                console.log(lesson, '\nstart time: ', (lessonMinuteStart / 60) * 100);
-                // deleteSlot(lesson);
+                deleteSlot(lesson);
               }}>
               <Cancel />
             </TouchableOpacity>

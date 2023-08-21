@@ -27,7 +27,6 @@ export const classesService = createSlice({
     initialState,
     reducers: {
         setClassesLoading: (state, action: PayloadAction<boolean>) => {
-            console.log('action.payload: \n\n\n\n\n', action.payload)
             state.loading = action.payload
         },
         setClassesAction: (state, action: PayloadAction<Array<IClassesResponse>>) => {

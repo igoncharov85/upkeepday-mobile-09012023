@@ -18,7 +18,12 @@ const initialState: IClassesState = {
     currentSession: [],
     currentClass: {} as IClassesResponse,
     generatedSessions: {},
-    classesSchedule: {} as IclassesScheduleResponse
+    classesSchedule: {
+        StartDate: '',
+        EndDate: '',
+        Sessions: [],
+        OtherSessions: []
+    }
 
 }
 

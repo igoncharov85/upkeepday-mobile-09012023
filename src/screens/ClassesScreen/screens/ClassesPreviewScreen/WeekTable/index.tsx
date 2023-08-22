@@ -19,9 +19,11 @@ export const WeekTable: FC<ISheduleTable> = memo(
   ({ startOfWeek, endOfWeek, classId }) => {
     const [editMode, setEditMode] = useState(false);
 
+
     const onChangeEditMode = (value: boolean) => {
       setEditMode(value);
     }
+
 
     const timeData = generateTimeData('00:00', '23:00');
 

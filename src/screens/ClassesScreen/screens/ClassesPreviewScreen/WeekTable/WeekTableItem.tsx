@@ -18,25 +18,17 @@ import BusyField from '../../../components/BusyField';
 import styles from './styles';
 import { useAppSelector } from '../../../../../store/hooks';
 import { convertSessionsToLocalTime } from '../../../../../services/utils/convertToUTC';
-function findScheduleEntries(
+import moment from 'moment';
+
+function getSessionOnHour(
   entries: IGeneratedScheduleEntries[],
   time: Date,
 ): any[] {
-  const filteredEntries = entries?.filter((entry) => {
-
-    const startDate = new Date(entry.StartDateTime);
-    return (
-      startDate.getDate() === time.getDate() &&
-      startDate.getMonth() === time.getMonth() &&
-      startDate.getHours() === time.getHours()
-    );
-  });
-  return filteredEntries;
+  return convertSessionsToLocalTime(entries).filter((lesson) => moment(lesson.StartDateTime).format('YYYY-MM-DDTHH:mm') === moment(time).format('YYYY-MM-DDTHH:mm'));
 }
 interface IWeekTableItem {
   onLongPress: (value: boolean) => void;
   editMode: boolean;
-  // dryField: IGeneratedScheduleEntries[];
   currentDate: Date;
   timeIndex: number;
   classId: number;
@@ -57,10 +49,10 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
   }) => {
 
     const { classesSchedule } = useAppSelector(state => state.classes);
-    const lessonOnThisTime: IGeneratedScheduleEntries[] =
-      findLessonOnCurrentHour(convertSessionsToLocalTime(classesSchedule.Sessions), timeIndex, currentDate);
 
-    const dryField = findScheduleEntries(convertSessionsToLocalTime(classesSchedule.OtherSessions), currentDate)
+    const lessonOnThisHour = getSessionOnHour(classesSchedule.Sessions, currentDate)
+    const dryFieldOnThisHour = getSessionOnHour(classesSchedule.OtherSessions, currentDate)
+
     const onHandleLongPress = (active: boolean) => {
       onLongPress(active);
     };
@@ -72,7 +64,7 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
         activeOpacity={1}>
         <View style={styles.wrapperCell}>
           <View style={styles.containerCell}>
-            {lessonOnThisTime.map((lesson, index) => {
+            {lessonOnThisHour.map((lesson, index) => {
               return (
                 <LessonItem
                   classId={classId}
@@ -83,8 +75,8 @@ export const WeekTableItem: FC<IWeekTableItem> = memo(
                 />
               );
             })}
-            {dryField &&
-              dryField.map(dryFieldItem => (
+            {dryFieldOnThisHour &&
+              dryFieldOnThisHour.map(dryFieldItem => (
                 <BusyField
                   start={Number(
                     dryFieldItem.StartDateTime.split('T')[1].split(':')[1],

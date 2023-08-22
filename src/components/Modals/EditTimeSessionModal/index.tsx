@@ -49,8 +49,7 @@ const EditTimeSessionModal = ({ }: IEditTimeSessionModalModal) => {
       itemEndTime.setMinutes(
         newLessonEndTime.getMinutes() + item.Duration,
       );
-      console.log('it is the same time:\n\n\n\n\n', (itemStartTime.toISOString() !== currntTime.toISOString()))
-      return itemStartTime.toDateString() === newLessonStartTime.toDateString();
+      return itemStartTime.toDateString() === newLessonStartTime.toDateString() && itemStartTime.toISOString() !== currntTime.toISOString();
     });
     console.log('--------------list lesson on this day--------------', sameDayLessons,)
     console.log('newLessonStartTime', newLessonStartTime,);

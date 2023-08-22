@@ -7,7 +7,7 @@ export default StyleSheet.create({
 
   },
   container: {
-    height: '60%',
+    height: '80%',
     width: '100%',
     backgroundColor: '#fff',
     justifyContent: 'space-between',

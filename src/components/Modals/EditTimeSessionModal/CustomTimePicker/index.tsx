@@ -26,6 +26,7 @@ interface ITimePicker {
   maxDuration: number
 }
 const CustomTimePicker: React.FC<ITimePicker> = ({ data, onSetTime, maxDuration }) => {
+  console.log(data, 'data')
   const [hour, setHour] = useState(data.hour || 0);
   const [minute, setMinute] = useState(data.minute || 0);
   const [dayPart, setDayPart] = useState(data.dayPart || 0);
@@ -36,7 +37,7 @@ const CustomTimePicker: React.FC<ITimePicker> = ({ data, onSetTime, maxDuration 
   const onMinuteChange = (minuteValue: number) =>
     setMinute(minuteValue)
 
-  const onDayPartChange = (dayPartValue: number) => setDayPart(dayPartValue == 0 ? 'AM' : 'PM')
+  const onDayPartChange = (dayPartValue: number) => setDayPart(dayPartValue == 0 ? 'PM' : 'AM')
 
   const stipulationForHour = () => {
     if (maxDuration % 60 < minute) {
@@ -86,49 +87,63 @@ const ItemPicker = memo(({ items, activeIndex, onChange, stipulation }: { items:
 
   const [selectedIndex, setSelectedIndex] = useState(activeIndex ? activeIndex - 1 : 0);
   const scrollViewRef = useRef(null);
+  const scrollTimeout = useRef(null);
 
-  const handleScroll = useCallback(() => (event: any) => {
-    const y = event.nativeEvent.contentOffset.y;
-    const index = Math.round(y / 50);
-    setSelectedIndex(index);
-    onChange(index);
-  }, [selectedIndex]);
+  const handleScroll = useCallback(
+    (event: any) => {
+      event.persist();
+      if (scrollTimeout.current) {
+        clearTimeout(scrollTimeout.current);
+      }
+
+      scrollTimeout.current = setTimeout(() => {
+        const y = event.nativeEvent.contentOffset.y;
+        const index = Math.round(y / 50);
+        setSelectedIndex(index);
+      }, 100);
+    },
+    []
+  );
 
   const handleItemPress = (index: number) => {
     setSelectedIndex(index);
-    onChange(index);
     //@ts-ignore
     scrollViewRef.current?.scrollTo({
       y: index * 50,
       animated: true,
     });
+    onChange(index);
   };
+
   useEffect(() => {
     //@ts-ignore
     scrollViewRef.current?.scrollTo({
       y: selectedIndex * 50,
       animated: true,
     });
-  }, [selectedIndex])
+  }, [selectedIndex]);
+
   return (
     <View style={styles.container}>
       <View style={styles.scrollContainer}>
         <ScrollView
-          contentOffset={{ x: 0, y: selectedIndex * 50 }}
+          ref={scrollViewRef}
           contentContainerStyle={styles.contentContainer}
           showsVerticalScrollIndicator={false}
-          onScroll={handleScroll}>
+          onScroll={handleScroll}
+        >
           {items.map((item, index) => (
             <TouchableOpacity
               key={index}
               style={styles.item}
-              onPress={() => handleItemPress(index)}>
+              onPress={() => handleItemPress(index)}
+            >
               <Text
                 style={[
                   styles.itemText,
                   index === selectedIndex && styles.selectedItemText,
-
-                ]}>
+                ]}
+              >
                 {item}
               </Text>
             </TouchableOpacity>
@@ -138,5 +153,7 @@ const ItemPicker = memo(({ items, activeIndex, onChange, stipulation }: { items:
     </View>
   );
 });
+
+
 
 export default CustomTimePicker;

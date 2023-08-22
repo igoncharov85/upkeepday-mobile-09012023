@@ -13,20 +13,29 @@ import styles from './styles';
 const getDate = (date: any) => {
   return moment(date).toDate().toISOString().split('T')[0]
 }
+
+export function checkLessonInOtherLessons(lesson: any, time: Date): boolean {
+  const lessonStartTime = moment.utc(lesson.StartDateTime).toDate()
+  const lessonEndTime = moment.utc(lesson.StartDateTime).add(lesson.Duration, 'minute').toDate()
+  return lessonStartTime < time && time < lessonEndTime;
+}
+export function checkTimeCoincidence(firstTime: Date, secondTime: Date): boolean {
+  return moment(firstTime).toDate().toISOString() === moment(secondTime).toDate().toISOString()
+}
 interface IEditTimeSessionModalModal { }
 
 const EditTimeSessionModal = ({ }: IEditTimeSessionModalModal) => {
   const { goBack } = useTypedNavigation();
   const route = useRoute();
   const { addDuration, newTime, lesson: currentLesson } = route.params as any;
-  const { GeneratedScheduleEntries, CurrentScheduledEntries, createCurrentClassRequest } = useAppSelector(state => state.schedule);
+  const { CurrentScheduledEntries, createCurrentClassRequest } = useAppSelector(state => state.schedule);
 
   const [time, setTime] = useState({});
   const [canBe, setCanBe] = useState(true);
 
   const onSetTime = (time: any) => {
     setTime(time);
-    setCanBe(findNextLesson(time));
+    setCanBe(onCheckConflictForLessonTime(time));
 
   };
   const onSave = () => {
@@ -57,12 +66,6 @@ const EditTimeSessionModal = ({ }: IEditTimeSessionModalModal) => {
         checkTimeCoincidence(newLessonStartTime, lessonstartTime) ||
         checkTimeCoincidence(newLessonEndTime, lessonEndTime)
       )) {
-        // console.log('начало занятия находить в класе', checkLessonInOtherLessons(lesson, newLessonStartTime))
-        // console.log('конец занятия находить в класе', checkLessonInOtherLessons(lesson, newLessonEndTime))
-        // console.log('начало класса находить в занятии', checkLessonInOtherLessons(newLesson, lessonstartTime))
-        // console.log('конец класса находить в занятии', checkLessonInOtherLessons(newLesson, lessonEndTime))
-        // console.log('начало класса совпадает с началом занятии', checkTimeCoincidence(newLessonStartTime, lessonstartTime))
-        // console.log('конец класса совпадает с концом занятии', checkTimeCoincidence(newLessonEndTime, lessonEndTime))
         return false
       }
 
@@ -72,16 +75,9 @@ const EditTimeSessionModal = ({ }: IEditTimeSessionModalModal) => {
   }
 
 
-  function checkLessonInOtherLessons(lesson: any, time: Date): boolean {
-    const lessonStartTime = moment.utc(lesson.StartDateTime).toDate()
-    const lessonEndTime = moment.utc(lesson.StartDateTime).add(lesson.Duration, 'minute').toDate()
-    return lessonStartTime < time && time < lessonEndTime;
-  }
-  function checkTimeCoincidence(firstTime: Date, secondTime: Date): boolean {
-    return moment(firstTime).toDate().toISOString() === moment(secondTime).toDate().toISOString()
-  }
 
-  const findNextLesson = (time: any) => {
+
+  const onCheckConflictForLessonTime = (time: any) => {
     const newLocalTime = moment(newTime).toDate();
     newLocalTime.setSeconds(0);
     newLocalTime.setMinutes(time.minute);

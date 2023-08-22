@@ -179,6 +179,10 @@ const LessonItem = ({
       const addDuration = (time: any) => {
         newTime.setMinutes(time.minute);
         newTime.setHours(time.dayPart == 'AM' ? time.hour : time.hour + 12);
+        if (time.hour == 12 && time.dayPart == 'AM') {
+          console.log('it is bug');
+
+        }
         onMoveSlot(lesson, moment(newTime).format('YYYY-MM-DDTHH:mm:ss'));
         onHandleLongPress(false);
       };

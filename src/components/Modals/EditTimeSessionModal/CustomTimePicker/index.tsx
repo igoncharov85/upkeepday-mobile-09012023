@@ -26,7 +26,6 @@ interface ITimePicker {
   maxDuration: number
 }
 const CustomTimePicker: React.FC<ITimePicker> = ({ data, onSetTime, maxDuration }) => {
-  console.log(data, 'data')
   const [hour, setHour] = useState(data.hour || 0);
   const [minute, setMinute] = useState(data.minute || 0);
   const [dayPart, setDayPart] = useState(data.dayPart || 0);
@@ -37,7 +36,7 @@ const CustomTimePicker: React.FC<ITimePicker> = ({ data, onSetTime, maxDuration 
   const onMinuteChange = (minuteValue: number) =>
     setMinute(minuteValue)
 
-  const onDayPartChange = (dayPartValue: number) => setDayPart(dayPartValue == 0 ? 'PM' : 'AM')
+  const onDayPartChange = (dayPartValue: number) => setDayPart(dayPartValue == 0 ? 'AM' : 'PM')
 
   const stipulationForHour = () => {
     if (maxDuration % 60 < minute) {
@@ -57,6 +56,11 @@ const CustomTimePicker: React.FC<ITimePicker> = ({ data, onSetTime, maxDuration 
       minute,
       dayPart
     });
+    console.log({
+      hour,
+      minute,
+      dayPart
+    })
 
   }, [hour, minute, dayPart])
   return (

@@ -9,8 +9,10 @@ import { CustomButton } from '../../UI/CustomButton';
 import CustomTimePicker from './CustomTimePicker';
 
 import styles from './styles';
-import { convertToLocaleTime } from '../../../services/utils/convertToUTC';
 
+const getDate = (date: any) => {
+  return moment(date).toDate().toISOString().split('T')[0]
+}
 interface IEditTimeSessionModalModal { }
 
 const EditTimeSessionModal = ({ }: IEditTimeSessionModalModal) => {
@@ -18,15 +20,13 @@ const EditTimeSessionModal = ({ }: IEditTimeSessionModalModal) => {
   const route = useRoute();
   const { addDuration, newTime, lesson: currentLesson } = route.params as any;
   const { GeneratedScheduleEntries, CurrentScheduledEntries, createCurrentClassRequest } = useAppSelector(state => state.schedule);
-  // console.log('createCurrentClassRequest', createCurrentClassRequest.Sessions?.map(item => item.StartDateTime));
-  console.log('\nзебра:\n', CurrentScheduledEntries,)
+
   const [time, setTime] = useState({});
   const [canBe, setCanBe] = useState(true);
 
   const onSetTime = (time: any) => {
     setTime(time);
     setCanBe(findNextLesson(time));
-    // console.log(findNextLesson(time));
 
   };
   const onSave = () => {
@@ -37,34 +37,17 @@ const EditTimeSessionModal = ({ }: IEditTimeSessionModalModal) => {
 
   function canFitLesson(schedule: any[], newLesson: any) {
     const newLessonStartTime = moment(newLesson.StartDateTime).toDate();
-    const newLessonEndTime = moment(newLesson.StartDateTime).toDate();
-    newLessonEndTime.setMinutes(
-      newLessonEndTime.getMinutes() + newLesson.Duration,
-    );
+    const newLessonEndTime = moment(newLesson.StartDateTime).add(newLesson.Duration, 'minutes').toDate();
 
     const sameDayLessons = schedule.filter(item => {
-      const itemStartTime = new Date(item.StartDateTime);
-      const itemEndTime = new Date(item.StartDateTime)
-      const currntTime = new Date(currentLesson.StartDateTime)
-      itemEndTime.setMinutes(
-        newLessonEndTime.getMinutes() + item.Duration,
-      );
-      return itemStartTime.toDateString() === newLessonStartTime.toDateString() && itemStartTime.toISOString() !== currntTime.toISOString();
+      const itemStartTime = moment(item.StartDateTime).toDate();
+      const currentTime = moment(currentLesson.StartDateTime).toDate()
+      return getDate(itemStartTime) == getDate(newLessonStartTime) && itemStartTime.toISOString() !== currentTime.toISOString();
     });
-    console.log('--------------list lesson on this day--------------', sameDayLessons,)
-    console.log('newLessonStartTime', newLessonStartTime,);
-    console.log('newLessonEndTime', newLessonEndTime,);
 
     for (const lesson of sameDayLessons) {
       const lessonstartTime = moment.utc(lesson.StartDateTime).toDate()
       const lessonEndTime = moment.utc(lesson.StartDateTime).add(lesson.Duration, 'minute').toDate()
-
-      console.log('начало занятия находить в класе', checkLessonInOtherLessons(lesson, newLessonStartTime))
-      console.log('конец занятия находить в класе', checkLessonInOtherLessons(lesson, newLessonEndTime))
-      console.log('начало класса находить в занятии', checkLessonInOtherLessons(newLesson, lessonstartTime))
-      console.log('конец класса находить в занятии', checkLessonInOtherLessons(newLesson, lessonEndTime))
-      console.log('начало класса совпадает с началом занятии', checkTimeCoincidence(newLessonStartTime, lessonstartTime))
-      console.log('конец класса совпадает с концом занятии', checkTimeCoincidence(newLessonEndTime, lessonEndTime))
 
       if ((
         checkLessonInOtherLessons(lesson, newLessonStartTime) ||
@@ -74,12 +57,12 @@ const EditTimeSessionModal = ({ }: IEditTimeSessionModalModal) => {
         checkTimeCoincidence(newLessonStartTime, lessonstartTime) ||
         checkTimeCoincidence(newLessonEndTime, lessonEndTime)
       )) {
-        console.log('начало занятия находить в класе', checkLessonInOtherLessons(lesson, newLessonStartTime))
-        console.log('конец занятия находить в класе', checkLessonInOtherLessons(lesson, newLessonEndTime))
-        console.log('начало класса находить в занятии', checkLessonInOtherLessons(newLesson, lessonstartTime))
-        console.log('конец класса находить в занятии', checkLessonInOtherLessons(newLesson, lessonEndTime))
-        console.log('начало класса совпадает с началом занятии', checkTimeCoincidence(newLessonStartTime, lessonstartTime))
-        console.log('конец класса совпадает с концом занятии', checkTimeCoincidence(newLessonEndTime, lessonEndTime))
+        // console.log('начало занятия находить в класе', checkLessonInOtherLessons(lesson, newLessonStartTime))
+        // console.log('конец занятия находить в класе', checkLessonInOtherLessons(lesson, newLessonEndTime))
+        // console.log('начало класса находить в занятии', checkLessonInOtherLessons(newLesson, lessonstartTime))
+        // console.log('конец класса находить в занятии', checkLessonInOtherLessons(newLesson, lessonEndTime))
+        // console.log('начало класса совпадает с началом занятии', checkTimeCoincidence(newLessonStartTime, lessonstartTime))
+        // console.log('конец класса совпадает с концом занятии', checkTimeCoincidence(newLessonEndTime, lessonEndTime))
         return false
       }
 
@@ -103,17 +86,20 @@ const EditTimeSessionModal = ({ }: IEditTimeSessionModalModal) => {
     newLocalTime.setSeconds(0);
     newLocalTime.setMinutes(time.minute);
     newLocalTime.setUTCHours(time.dayPart == 'AM' ? time.hour : time.hour + 12);
-    console.log('zebra give conflict', canFitLesson(CurrentScheduledEntries, {
+
+
+    const conflictLessonCanMove = canFitLesson(CurrentScheduledEntries, {
       StartDateTime: newLocalTime,
       Duration: currentLesson.Duration,
-    }))
-    return canFitLesson(CurrentScheduledEntries, {
+    })
+    const currentLessonCanMove = canFitLesson(createCurrentClassRequest.Sessions, {
       StartDateTime: newLocalTime,
       Duration: currentLesson.Duration,
-    }) && canFitLesson(createCurrentClassRequest.Sessions, {
-      StartDateTime: newLocalTime,
-      Duration: currentLesson.Duration,
-    });
+    })
+    console.log("поиск по зебре дал результат:", !currentLessonCanMove);
+    console.log("поиск по текушим занятиям дал результат:", !conflictLessonCanMove);
+
+    return (currentLessonCanMove && conflictLessonCanMove)
   };
 
 
@@ -131,6 +117,7 @@ const EditTimeSessionModal = ({ }: IEditTimeSessionModalModal) => {
             withBackButton={true}
             onBackPress={goBack}
           />
+          <Text style={{ fontWeight: '700', textAlign: 'center' }}>{moment(newTime).format('dddd, M/D/YYYY')}</Text>
           <CustomTimePicker
             onSetTime={onSetTime}
             data={{

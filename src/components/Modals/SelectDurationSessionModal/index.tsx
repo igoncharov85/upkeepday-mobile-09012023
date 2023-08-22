@@ -101,13 +101,7 @@ const SelectDurationSessionModal = ({ }: IDurationSessionModalModal) => {
           />
 
           <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              flex: 1,
-              marginTop: 24,
-              marginBottom: 10,
-            }}>
+            style={styles.durationLine}>
             <Text>Duration</Text>
             <View>
               <ScrollView showsVerticalScrollIndicator={false}>

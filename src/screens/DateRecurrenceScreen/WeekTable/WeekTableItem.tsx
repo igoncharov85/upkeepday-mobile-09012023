@@ -1,9 +1,9 @@
-import React, {FC, useEffect, useState} from 'react';
-import {LogBox, Text, TouchableOpacity, View} from 'react-native';
+import React, { FC, useEffect, useState } from 'react';
+import { LogBox, Text, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {NavigationEnum} from '../../../common/constants/navigation';
-import {IWeekTimeSlot} from '../../../common/types/schedule.types';
-import {useTypedNavigation} from '../../../hook/useTypedNavigation';
+import { NavigationEnum } from '../../../common/constants/navigation';
+import { IWeekTimeSlot } from '../../../common/types/schedule.types';
+import { useTypedNavigation } from '../../../hook/useTypedNavigation';
 import styles from './styles';
 
 type Interval = {
@@ -128,7 +128,7 @@ export const WeekTableItem: FC<IWeekTableItem> = ({
   name,
 }) => {
   LogBox.ignoreAllLogs();
-  const {navigate, goBack} = useTypedNavigation();
+  const { navigate, goBack } = useTypedNavigation();
   const [visible, setVisible] = useState(false);
   const [active, setActive] = useState(activeItem);
   const colorsLesson = ['#EAAFC8', '#654EA3'];
@@ -137,14 +137,12 @@ export const WeekTableItem: FC<IWeekTableItem> = ({
 
   const onCreateLesson = (lesson: any) => {
     const hour = 60;
-    const startTime = `${timeIndex}:${
-      lesson.startDateTime > 9
-        ? lesson.startDateTime
-        : `0${lesson.startDateTime}`
-    }`;
-    const endTime = `${
-      timeIndex + Math.floor((lesson.startDateTime + lesson.duration) / hour)
-    }:${(lesson.startDateTime + lesson.duration) % hour}`;
+    const startTime = `${timeIndex}:${lesson.startDateTime > 9
+      ? lesson.startDateTime
+      : `0${lesson.startDateTime}`
+      }`;
+    const endTime = `${timeIndex + Math.floor((lesson.startDateTime + lesson.duration) / hour)
+      }:${(lesson.startDateTime + lesson.duration) % hour}`;
     setLessons([
       ...lessons,
       {
@@ -159,26 +157,23 @@ export const WeekTableItem: FC<IWeekTableItem> = ({
       StartTime: startTime,
     });
   };
-  useEffect(() => {
-    daySchedule.length && console.log(daySchedule);
-  }, [daySchedule]);
+
 
   const onHandleSlot = (event: any) => {
-    const {locationX, locationY} = event.nativeEvent;
+    const { locationX, locationY } = event.nativeEvent;
 
     const userTouchMinute = (locationY / 64) * 60;
     const prevLesson = findNextElement(convertArray(daySchedule), {
       start: `${timeIndex}:59`,
       end: `${timeIndex}:59`,
-    }).previousElement || {start: '00:00', end: '00:00'};
+    }).previousElement || { start: '00:00', end: '00:00' };
+
     const nextLesson = findNextElement(convertArray(daySchedule), {
       start: `${timeIndex}:0`,
       end: `${timeIndex}:0`,
-    }).nextElement || {start: '23:59', end: '23:59'};
+    }).nextElement || { start: '24:00', end: '24:00' };
 
-    const partiallyOccupied =
-      prevLesson.end.split(':')[0] >= timeIndex &&
-      +prevLesson.end.split(':')[1] > userTouchMinute;
+
     const fullyOccupied = prevLesson.end.split(':')[0] > timeIndex;
     if (fullyOccupied) {
       console.log('delete');
@@ -223,9 +218,9 @@ export const WeekTableItem: FC<IWeekTableItem> = ({
   };
 
   const onCreateMoreLesson = (event: any, item: any, type: string) => {
-    const {locationX, locationY} = event.nativeEvent;
-
+    const { locationX, locationY } = event.nativeEvent;
     let nextLesson: any, prevLesson: any, startTime;
+
     lessons
       .sort((a, b) => {
         const dateA = new Date(0, 0, 0, ...a.start.split(':').map(Number));
@@ -257,7 +252,7 @@ export const WeekTableItem: FC<IWeekTableItem> = ({
     nextLesson = findNextElement(convertArray(daySchedule), {
       start: `${prevLesson.start}`,
       end: `${prevLesson.end}`,
-    }).nextElement || {start: '23:59', end: '23:59'};
+    }).nextElement || { start: '24:00', end: '24:00' };
 
     navigate(NavigationEnum.SELECT_DURATION_CLASS_MODAL, {
       startDateTime: startTime,
@@ -316,9 +311,8 @@ export const WeekTableItem: FC<IWeekTableItem> = ({
                               index === 0
                                 ? 0
                                 : `${(toMinutes(item.start) / 60) * 100}%`,
-                            bottom: `${
-                              ((60 - toMinutes(item.start)) / 60) * 100
-                            }%`,
+                            bottom: `${((60 - toMinutes(item.start)) / 60) * 100
+                              }%`,
                           },
                         ]}
                         onPress={event =>
@@ -328,15 +322,14 @@ export const WeekTableItem: FC<IWeekTableItem> = ({
 
                       <LinearGradient
                         colors={colorsLesson}
-                        start={{x: 0.5, y: 0}}
-                        end={{x: 0.5, y: 1}}
+                        start={{ x: 0.5, y: 0 }}
+                        end={{ x: 0.5, y: 1 }}
                         style={[
                           styles.lessonContainer,
                           {
                             top: `${(toMinutes(item.start) / 60) * 100}%`,
-                            height: `${
-                              100 * (subtractTime(item.end, item.start) / 60)
-                            }%`,
+                            height: `${100 * (subtractTime(item.end, item.start) / 60)
+                              }%`,
                           },
                         ]}>
                         <TouchableOpacity
@@ -353,13 +346,12 @@ export const WeekTableItem: FC<IWeekTableItem> = ({
                         style={[
                           styles.lessonBottom,
                           {
-                            top: `${
-                              toMinutes(item.end) > toMinutes(item.start)
-                                ? (toMinutes(item.end) / 60) * 100
-                                : toMinutes(item.end) == 0
+                            top: `${toMinutes(item.end) > toMinutes(item.start)
+                              ? (toMinutes(item.end) / 60) * 100
+                              : toMinutes(item.end) == 0
                                 ? 60
                                 : toMinutes(item.end) + 120
-                            }%`,
+                              }%`,
                           },
                         ]}
                         onPress={event =>

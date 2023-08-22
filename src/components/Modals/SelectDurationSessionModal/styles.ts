@@ -73,4 +73,11 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     marginRight: 30
   },
+  durationLine: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    flex: 1,
+    marginTop: 24,
+    marginBottom: 10,
+  }
 });

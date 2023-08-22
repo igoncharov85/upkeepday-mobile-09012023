@@ -82,7 +82,9 @@ const EditTimeSessionModal = ({ }: IEditTimeSessionModalModal) => {
     newLocalTime.setSeconds(0);
     newLocalTime.setMinutes(time.minute);
     newLocalTime.setUTCHours(time.dayPart == 'AM' ? time.hour : time.hour + 12);
-
+    if (time.dayPart == 'AM' && time.hour == 12) {
+      newLocalTime.setUTCHours(0)
+    }
 
     const conflictLessonCanMove = canFitLesson(CurrentScheduledEntries, {
       StartDateTime: newLocalTime,

@@ -13,7 +13,34 @@ import styles from './styles';
 const getDate = (date: any) => {
   return moment(date).toDate().toISOString().split('T')[0]
 }
+function convertCustomFormatToTime(customTime: any, time: any) {
+  const { dayPart, hour, minute } = customTime;
 
+  let formattedHour = hour;
+  if (dayPart === 'AM' && hour === 12) {
+    formattedHour = 0;
+  } else if (dayPart === 'PM' && hour !== 12) {
+    formattedHour += 12;
+  }
+
+  const formattedTime = moment(time)
+    .hour(formattedHour)
+    .minute(minute)
+    .toISOString();
+
+  return formattedTime;
+}
+
+
+function convertTimeToCustomFormat(inputTime: any): any[] {
+  const time = moment(inputTime);
+
+  const hour12Format = time.format('h');
+  const minutes = time.format('mm');
+  const amPm = time.format('a');
+
+  return [parseInt(hour12Format), parseInt(minutes), amPm];
+}
 export function checkLessonInOtherLessons(lesson: any, time: Date): boolean {
   const lessonStartTime = moment.utc(lesson.StartDateTime).toDate()
   const lessonEndTime = moment.utc(lesson.StartDateTime).add(lesson.Duration, 'minute').toDate()
@@ -34,12 +61,14 @@ const EditTimeSessionModal = ({ }: IEditTimeSessionModalModal) => {
   const [canBe, setCanBe] = useState(true);
 
   const onSetTime = (time: any) => {
+    console.log(convertTimeToCustomFormat(newTime), 'newTime')
+    console.log(convertCustomFormatToTime(time, newTime), 'time')
     setTime(time);
     setCanBe(onCheckConflictForLessonTime(time));
 
   };
   const onSave = () => {
-    addDuration(time);
+    addDuration(convertCustomFormatToTime(time, newTime));
     goBack();
   };
   const currentTime = new Date(newTime);
@@ -94,13 +123,11 @@ const EditTimeSessionModal = ({ }: IEditTimeSessionModalModal) => {
       StartDateTime: newLocalTime,
       Duration: currentLesson.Duration,
     })
-    console.log("поиск по зебре дал результат:", !currentLessonCanMove);
-    console.log("поиск по текушим занятиям дал результат:", !conflictLessonCanMove);
 
     return (currentLessonCanMove && conflictLessonCanMove)
   };
 
-
+  const selectTime = convertTimeToCustomFormat(newTime)
   return (
     <>
       <View style={styles.modalWrapper}>
@@ -119,12 +146,9 @@ const EditTimeSessionModal = ({ }: IEditTimeSessionModalModal) => {
           <CustomTimePicker
             onSetTime={onSetTime}
             data={{
-              hour:
-                currentTime.getHours() > 12
-                  ? currentTime.getHours() - 12
-                  : currentTime.getHours(),
-              minute: currentTime.getMinutes(),
-              dayPart: currentTime.getHours() >= 12 ? 'PM' : 'AM',
+              hour: selectTime[0],
+              minute: selectTime[1],
+              dayPart: selectTime[2].toLocaleUpperCase(),
             }}
             maxDuration={1600}
           />

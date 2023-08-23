@@ -1,4 +1,4 @@
-import React, { FC, memo, useEffect, useState } from 'react';
+import React, { FC, memo, useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View, StyleProp, ViewStyle, ActivityIndicator, ScrollView, TouchableOpacity } from 'react-native';
 
 
@@ -52,7 +52,28 @@ export const WeekTable: FC<ISheduleTable> = memo(
     const { GeneratedScheduleEntries, CurrentScheduledEntries, loading } = useAppSelector(state => state.schedule);
     const [editMode, setEditMode] = useState(false);
     const [slots, setSlots] = useState(GeneratedScheduleEntries);
+    const scrollViewRef = useRef(null);
+    const [scrollOffset, setScrollOffset] = useState(64 * 8);
 
+    const handleScroll = (event) => {
+      const offset = event.nativeEvent.contentOffset.y;
+      // console.log(scrollViewRef.current)
+      console.log(offset)
+      // setScrollOffset(offset);
+    };
+    const scrollUp = () => {
+      setScrollOffset(scrollOffset - 20)
+    };
+
+    const scrollDown = () => {
+      if (scrollViewRef.current) {
+        const currentOffset = scrollViewRef.current.contentOffset.y;
+        const maxOffset = scrollViewRef.current.contentSize.height - scrollViewRef.current.layoutMeasurement.height;
+        if (currentOffset + 200 <= maxOffset) {
+          scrollViewRef.current.scrollTo({ y: currentOffset + 200 });
+        }
+      }
+    };
 
     const onChangeEditMode = (value: boolean) => {
       setEditMode(value)
@@ -91,7 +112,10 @@ export const WeekTable: FC<ISheduleTable> = memo(
     );
     const date = (new Date(startOfWeek));
     return (<View style={styles.container}>
-      <ScrollView contentOffset={{ x: 0, y: 64 * 8 }}>
+      {/* <TouchableOpacity onPress={scrollUp}>
+        <Text>BUTTTTTTTTTTTTTTon</Text>
+      </TouchableOpacity> */}
+      <ScrollView ref={scrollViewRef} contentOffset={{ x: 0, y: scrollOffset }} onScroll={handleScroll}>
         <Row style={{ justifyContent: 'space-between' }}>
           <Column style={{ width: 56 }}>
             {timeData.map((item, index) => (
@@ -119,6 +143,7 @@ export const WeekTable: FC<ISheduleTable> = memo(
                       onDeleteSlot={onDeleteSlot}
                       onMoveSlot={onMoveSlot}
                       currentDay={currentDate}
+                      scrollUp={scrollUp}
                       dryField={dryField} />;
                   })}
 

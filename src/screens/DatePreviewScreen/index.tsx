@@ -55,22 +55,29 @@ function findAdjacentEvent(
 interface IDatePreviewScreen { }
 export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
   const { navigate, goBack } = useTypedNavigation();
-
-  const today = new Date();
-  // const [someDate,setSomeDate] = useState(today)
-  const weekDates = getWeekDates(today);
-
-  const [startDateWeek, setStartDateWeek] = useState(
-    new Date(weekDates.startDate),
-  );
-  const [endDateWeek, setEndDateWeek] = useState(new Date(weekDates.endDate));
-  const [screenLoading, setScreenLoading] = useState(true);
   const {
     CurrentScheduledEntries,
     WeekTimeSlots,
     GeneratedScheduleEntries,
     loading,
   } = useAppSelector(state => state.schedule);
+  const firstSessionTime = GeneratedScheduleEntries && moment(GeneratedScheduleEntries[0]?.StartDateTime).toDate()
+  const today = new Date();
+  console.log('firstSessionTime', firstSessionTime);
+  console.log('today', today);
+
+  console.log(firstSessionTime.getTime() > today.getTime(), firstSessionTime.getTime(), '>', today.getTime());
+
+  const weekDates = getWeekDates(firstSessionTime.getTime() > today.getTime() ? firstSessionTime : today);
+  console.log(weekDates);
+
+  const [startDateWeek, setStartDateWeek] = useState(
+    weekDates.startDate,
+  );
+  console.log(startDateWeek, 'startDateWeek');
+
+  const [endDateWeek, setEndDateWeek] = useState(weekDates.endDate);
+  const [screenLoading, setScreenLoading] = useState(true);
   const [slots, setSlots] = useState<IGeneratedScheduleEntries[]>(GeneratedScheduleEntries);
   const [conflict, setConflict] = useState<IGeneratedScheduleEntries[]>(
     findScheduleConflicts(slots, CurrentScheduledEntries),

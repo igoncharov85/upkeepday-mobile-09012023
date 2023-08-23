@@ -15,6 +15,8 @@ import { useTypedNavigation } from '../../../hook/useTypedNavigation';
 import { addDayAndHoursToDate } from '../../../services/utils/generateDate.util';
 import { useAppSelector } from '../../../store/hooks';
 import BusyField from '../../ClassesScreen/components/BusyField';
+import { Dimensions } from 'react-native';
+
 import styles from './styles';
 
 function findActivitiesByDay(
@@ -57,6 +59,7 @@ interface IWeekTableItem {
   dryField: IGeneratedScheduleEntries[];
   currentDay: Date;
   slots: IGeneratedScheduleEntries[];
+  scrollUp: any
 }
 
 const CELL_SIZE = {
@@ -74,6 +77,7 @@ export const WeekTableItem: FC<IWeekTableItem> = ({
   currentDay,
   slots,
   timeIndex,
+  scrollUp
 }) => {
   const lessonOnThisTime: IGeneratedScheduleEntries[] = findLessonOnCurrentHour(
     slots,
@@ -109,6 +113,7 @@ export const WeekTableItem: FC<IWeekTableItem> = ({
                 editMode={editMode}
                 deleteSlot={deleteSlot}
                 onHandleLongPress={onHandleLongPress}
+                scrollUp={scrollUp}
               />
               // </TouchableOpacity>
             );
@@ -142,6 +147,7 @@ const LessonItem = ({
   deleteSlot,
   onHandleLongPress,
   name,
+  scrollUp
 }: {
   lesson: any;
   onMoveSlot: any;
@@ -149,16 +155,33 @@ const LessonItem = ({
   deleteSlot: any;
   onHandleLongPress: any;
   name: string;
+  scrollUp: any
 }) => {
   const colorsLesson = ['#EAAFC8', '#654EA3'];
+  const screenHeight = Dimensions.get('window').height;
+
 
   const { navigate } = useTypedNavigation();
   const pan = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
   const panResponders = PanResponder.create({
     onStartShouldSetPanResponder: () => editMode,
-    onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y }], {
-      useNativeDriver: false,
-    }),
+    onPanResponderMove: (event, gestureState) => {
+      const { moveY } = gestureState;
+      // let newY = gestureState.moveY
+      if (moveY < 200) {
+        // scrollUp()
+        // newY -= 100;
+        console.log('Близко к верхнему краю');
+      } else if (moveY > screenHeight - 200) {
+        console.log('Близко к нижнему краю');
+      }
+      // const  = gestureState.moveY - scrollOffset;
+      // const newX = gestureState.moveX; // или что-то подобное
+      // pan.setValue({ x: newX, y: newY });
+      Animated.event([null, { dx: pan.x, dy: pan.y }], {
+        useNativeDriver: false,
+      })(event, gestureState);
+    },
     onPanResponderRelease: (_, gestureState) => {
       const gridCellX = Math.floor(
         (gestureState.dx + CELL_SIZE.width / 2) / CELL_SIZE.width,
@@ -177,13 +200,7 @@ const LessonItem = ({
         addDayAndHoursToDate(lesson.StartDateTime, gridCellX, gridCellY),
       );
       const addDuration = (time: any) => {
-        newTime.setMinutes(time.minute);
-        newTime.setHours(time.dayPart == 'AM' ? time.hour : time.hour + 12);
-        if (time.hour == 12 && time.dayPart == 'AM') {
-          console.log('it is bug');
-
-        }
-        onMoveSlot(lesson, moment(newTime).format('YYYY-MM-DDTHH:mm:ss'));
+        onMoveSlot(lesson, moment(time).format('YYYY-MM-DDTHH:mm:ss'));
         onHandleLongPress(false);
       };
       navigate(NavigationEnum.EDIT_TIME_CLASS_MODAL, {

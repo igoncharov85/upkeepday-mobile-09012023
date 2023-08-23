@@ -48,9 +48,9 @@ const ClassesItem: React.FC<IClassesItem> = ({ item }) => {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>{item.Name}</Text>
       <View style={[styles.part, styles.partTop]}>
         <View>
-          <Text style={styles.title}>{item.Name}</Text>
           <Text style={styles.text}>
             {formatDateForPeriod(item.StartDate)} -{' '}
             {formatDateForPeriod(item.EndDate)}
@@ -66,7 +66,6 @@ const ClassesItem: React.FC<IClassesItem> = ({ item }) => {
           </Text>
         </View>
         <View>
-          <Text style={styles.text} />
           <Text style={[styles.text, styles.textRight]}>
             {item.Location?.Address || 'Location Address'}
           </Text>

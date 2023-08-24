@@ -11,7 +11,6 @@ import { DayScroller } from '../../components/UI/DayScroller';
 import { ScreenLoading } from '../../components/UI/ScreenLoading';
 import { useTypedNavigation } from '../../hook/useTypedNavigation';
 import { findScheduleConflicts } from '../../services/utils/findConflict.util';
-import { getWeekDates } from '../../services/utils/fullDateToValue.util';
 import { addDayAndHoursToDate } from '../../services/utils/generateDate.util';
 import { useAppSelector } from '../../store/hooks';
 import { updateCurrentClassRequestAction } from '../../store/shedule';
@@ -19,14 +18,8 @@ import { dispatch } from '../../store/store';
 import { DaysOfWeek } from './DaysOfWeek';
 import styles from './styles';
 import { WeekTable } from './WeekTable';
+import { getWeekDates } from '../../services/utils/fullDateToValue.util';
 
-function sortByStartDateTime(array: any) {
-  return array.sort((a: any, b: any) => {
-    const timeA = new Date(a.StartDateTime).getTime();
-    const timeB = new Date(b.StartDateTime).getTime();
-    return timeA - timeB;
-  });
-}
 
 function findAdjacentEvent(
   events: any[],
@@ -61,23 +54,17 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
     GeneratedScheduleEntries,
     loading,
   } = useAppSelector(state => state.schedule);
-  const firstSessionTime = GeneratedScheduleEntries && moment(GeneratedScheduleEntries[0]?.StartDateTime).toDate()
+
   const today = new Date();
-  console.log('firstSessionTime', firstSessionTime);
-  console.log('today', today);
+  const weekDates = getWeekDates(today);
 
-  console.log(firstSessionTime.getTime() > today.getTime(), firstSessionTime.getTime(), '>', today.getTime());
-
-  const weekDates = getWeekDates(firstSessionTime.getTime() > today.getTime() ? firstSessionTime : today);
-  console.log(weekDates);
 
   const [startDateWeek, setStartDateWeek] = useState(
     weekDates.startDate,
   );
-  console.log(startDateWeek, 'startDateWeek');
-
-  const [endDateWeek, setEndDateWeek] = useState(weekDates.endDate);
-  const [screenLoading, setScreenLoading] = useState(true);
+  const [endDateWeek, setEndDateWeek] = useState(
+    weekDates.endDate
+  );
   const [slots, setSlots] = useState<IGeneratedScheduleEntries[]>(GeneratedScheduleEntries);
   const [conflict, setConflict] = useState<IGeneratedScheduleEntries[]>(
     findScheduleConflicts(slots, CurrentScheduledEntries),
@@ -141,13 +128,13 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
 
     navigate(NavigationEnum.ADD_STUDENTS_SCREEN);
   };
-
   useEffect(() => {
-    if (GeneratedScheduleEntries.length > 0) {
-      const now = new Date();
-      setScreenLoading(false);
-    }
-  }, [GeneratedScheduleEntries, loading]);
+    const today = new Date()
+    const firstSessionStartTime = moment(GeneratedScheduleEntries[0]?.StartDateTime).toDate()
+    const weekDates = getWeekDates(today > firstSessionStartTime ? today : firstSessionStartTime);
+    setStartDateWeek(weekDates.startDate)
+    setEndDateWeek(weekDates.endDate)
+  }, [GeneratedScheduleEntries]);
 
   const lessonHasConflict = conflict.length > 0;
   return loading ? (

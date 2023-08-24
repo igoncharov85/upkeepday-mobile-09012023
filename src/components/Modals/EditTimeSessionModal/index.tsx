@@ -80,8 +80,11 @@ const EditTimeSessionModal = ({ }: IEditTimeSessionModalModal) => {
     const sameDayLessons = schedule.filter(item => {
       const itemStartTime = moment(item.StartDateTime).toDate();
       const currentTime = moment(currentLesson.StartDateTime).toDate()
+      console.log('getDate(itemStartTime) == getDate(newLessonStartTime) && itemStartTime.toISOString() !== currentTime.toISOString()');
+      console.log(getDate(itemStartTime) == getDate(newLessonStartTime), '&&', itemStartTime.toISOString() !== currentTime.toISOString());
       return getDate(itemStartTime) == getDate(newLessonStartTime) && itemStartTime.toISOString() !== currentTime.toISOString();
     });
+    console.log('\n-----------------\n', sameDayLessons, '\nsameDayLessons');
 
     for (const lesson of sameDayLessons) {
       const lessonstartTime = moment.utc(lesson.StartDateTime).toDate()

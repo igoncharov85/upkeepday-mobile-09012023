@@ -1,4 +1,5 @@
 import React, { memo } from 'react';
+import { Dimensions } from 'react-native';
 import {
   NavigationContainer,
   useNavigationContainerRef,
@@ -51,7 +52,7 @@ export const RootNavigation = memo(() => {
         : null;
   };
   const goBackDetector = Gesture.Pan()
-    .minDistance(125)
+    .minDistance(Dimensions.get('window').width / 4)
     .onEnd(event => {
       if (event.translationX > 0 && navigationRef && navigationRef.current) {
         goBackPanHandler();

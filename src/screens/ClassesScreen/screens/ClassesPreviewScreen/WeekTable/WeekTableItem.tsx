@@ -163,7 +163,6 @@ const LessonItem = memo(
     const lessonMinuteStart = Number(
       lesson.StartDateTime.split('T')[1].split(':')[1],
     );
-
     return (
       <Animated.View
         {...panResponders.panHandlers}
@@ -188,12 +187,7 @@ const LessonItem = memo(
               },
             ]}>
             {editMode && (
-              <TouchableOpacity style={styles.cansel} onPress={() => {
-                console.log(lessonMinuteStart, 'lessonMinuteStart');
-
-                // onDeleteSlot
-              }
-              }>
+              <TouchableOpacity style={styles.cansel} onPress={onDeleteSlot}>
                 <Cancel />
               </TouchableOpacity>
             )}

@@ -51,10 +51,12 @@ export const RootNavigation = memo(() => {
         navigationRef.current.goBack()
         : null;
   };
+  const goBackScreenPixels = Dimensions.get('window').width * 0.5;
   const goBackDetector = Gesture.Pan()
-    .minDistance(Dimensions.get('window').width / 4)
+    .minDistance(goBackScreenPixels)
     .onEnd(event => {
       if (event.translationX > 0 && navigationRef && navigationRef.current) {
+        console.log(`Go back detector: translationX=${event.translationX}, translationY=${event.translationY}, minDistance=${goBackScreenPixels}`);
         goBackPanHandler();
       }
     });

@@ -24,7 +24,7 @@ function getSessionOnHour(
   entries: IGeneratedScheduleEntries[],
   time: Date,
 ): any[] {
-  return convertSessionsToLocalTime(entries).filter((lesson) => moment(lesson.StartDateTime).format('YYYY-MM-DDTHH:mm') === moment(time).format('YYYY-MM-DDTHH:mm'));
+  return convertSessionsToLocalTime(entries).filter((lesson) => moment(lesson.StartDateTime).format('YYYY-MM-DDTHH') === moment(time).format('YYYY-MM-DDTHH'));
 }
 interface IWeekTableItem {
   onLongPress: (value: boolean) => void;
@@ -163,13 +163,14 @@ const LessonItem = memo(
     const lessonMinuteStart = Number(
       lesson.StartDateTime.split('T')[1].split(':')[1],
     );
+
     return (
       <Animated.View
         {...panResponders.panHandlers}
         style={[
           pan.getLayout(),
           {
-            height: `${(lesson.Duration / 60) * 100}%`,
+            height: '100%',
             width: '100%',
             top: pan.y,
           },
@@ -181,10 +182,18 @@ const LessonItem = memo(
             end={{ x: 0.5, y: 1 }}
             style={[
               styles.wrapperItem,
-              { top: `${(lessonMinuteStart / 60) * 100}%` },
+              {
+                top: `${(lessonMinuteStart / 60) * 100}%`,
+                height: `${(lesson.Duration / 60) * 100}%`,
+              },
             ]}>
             {editMode && (
-              <TouchableOpacity style={styles.cansel} onPress={onDeleteSlot}>
+              <TouchableOpacity style={styles.cansel} onPress={() => {
+                console.log(lessonMinuteStart, 'lessonMinuteStart');
+
+                // onDeleteSlot
+              }
+              }>
                 <Cancel />
               </TouchableOpacity>
             )}

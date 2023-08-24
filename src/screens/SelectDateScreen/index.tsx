@@ -168,7 +168,7 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
 
           <ListButtons
             buttons={[
-              ' Fixed number of classes',
+              ' Fixed number of sessions',
               'On Specific Date',
               ' Fixed period in time',
             ]}
@@ -179,7 +179,7 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
           {typeLocation == TypeDate.FixedNumberOfClasses && (
             <InputForm
               keyboardType="numeric"
-              labelText="Enter Total Number of Classes"
+              labelText="Enter Total Number of sessions"
               onChangeText={handleChange('totalClasses')}
               value={values.totalClasses.toString()}
             />
@@ -232,7 +232,7 @@ export const SelectDateScreen: React.FC<ISelectDateScreen> = memo(() => {
         totalClasses:
           typeRef.current == EndScheduleType.FixedClassesNumber
             ? Yup.number()
-                .min(1, 'Number of totalClasses should be greater than 0')
+                .min(1, 'Number of sessions should be greater than 0')
                 .required('')
             : Yup.number(),
         finishDate:

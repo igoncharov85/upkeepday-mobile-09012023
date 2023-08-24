@@ -38,9 +38,9 @@ export const PaymentCard: FC<IProps> = (card) => {
           )
         })
       }
-      <Text style={styles.text}>Total classes held: {card.PastSessions}</Text>
-      <Text style={styles.text}>Total classes attended: {card.Attended}</Text>
-      <Text style={styles.text}>Scheduled classes: {card.Scheduled}</Text>
+      <Text style={styles.text}>Total sessions past: {card.PastSessions}</Text>
+      <Text style={styles.text}>Total sessions attended: {card.Attended}</Text>
+      <Text style={styles.text}>Scheduled sessions: {card.Scheduled}</Text>
       <Text style={styles.text}>Payment type: {card.PaymentType}</Text>
     </TouchableOpacity>
   )

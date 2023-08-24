@@ -63,7 +63,7 @@ const CancellationModalConainer = ({
             <Text
               onPress={onCancellationScreenRedirect}
               style={styles.cancelScheduled}>
-              Cancel Scheduled Class
+              Cancel Scheduled Session(s)
             </Text>
             {item.ClassName && (
               <Text onPress={onStudentCheckIn} style={styles.cancelScheduled}>

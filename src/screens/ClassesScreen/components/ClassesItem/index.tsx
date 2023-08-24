@@ -62,7 +62,7 @@ const ClassesItem: React.FC<IClassesItem> = ({ item }) => {
             <Text style={styles.underlineText}>Payment Tracking</Text>
           </View>
           <Text style={styles.text}>
-            Total classes held: {item.TotalClassesHeld}
+            Total sessions held: {item.TotalClassesHeld}
           </Text>
         </View>
         <View>
@@ -73,7 +73,7 @@ const ClassesItem: React.FC<IClassesItem> = ({ item }) => {
             {item.Students?.length} students
           </Text>
           <Text style={[styles.text, styles.textRight]}>
-            Scheduled classes: {item.ScheduledClasses}
+            Scheduled sessions: {item.ScheduledClasses}
           </Text>
         </View>
       </View>
@@ -94,13 +94,13 @@ const ClassesItem: React.FC<IClassesItem> = ({ item }) => {
                 <EditIcon />
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => { }} style={styles.linkItem}>
-                <MailIcon />
-              </TouchableOpacity>
+              {/*<TouchableOpacity onPress={() => { }} style={styles.linkItem}>*/}
+              {/*  <MailIcon />*/}
+              {/*</TouchableOpacity>*/}
 
-              <TouchableOpacity onPress={() => { }} style={styles.linkItem}>
-                <DocumentIcon />
-              </TouchableOpacity>
+              {/*<TouchableOpacity onPress={() => { }} style={styles.linkItem}>*/}
+              {/*  <DocumentIcon />*/}
+              {/*</TouchableOpacity>*/}
             </>
           ) : (
             <TouchableOpacity style={styles.linkItem} onPress={handleDelete}>

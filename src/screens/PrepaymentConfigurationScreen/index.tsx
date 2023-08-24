@@ -59,16 +59,16 @@ export const PrepaymentConfigurationScreen: React.FC<
       <View>
         <ListGradientCircleButtons
           onPress={HandleMakeupRequired}
-          label="Do you require to schedule a make-up for this Class?"
+          label="Do you require to schedule a make-up sessions for this Class?"
           buttons={[
             {
               title: 'Yes',
-              subtitle: ' - I need to make up a class if student(s) was absent',
+              subtitle: ' - I need to make up a session if student(s) was absent',
             },
             {
               title: 'No',
               subtitle:
-                ' - I don’t need to make up a class if student(s) was absent',
+                ' - I don’t need to make up a session if student(s) was absent',
             },
           ]}
         />

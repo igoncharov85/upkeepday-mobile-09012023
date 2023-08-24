@@ -55,7 +55,7 @@ export const CancellationModal = () => {
           <Text
             onPress={navigateToCancellationScreen}
             style={styles.cancelScheduled}>
-            Cancel Scheduled Class
+            Cancel Scheduled Session(s)
           </Text>
           {item.ClassName && (<Text
             onPress={onStudentCheckIn}

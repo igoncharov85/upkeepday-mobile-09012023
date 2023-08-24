@@ -71,15 +71,15 @@ const PreviewModal = ({ }: IPreviewModal) => {
           marginHorizontal: 20,
           padding: 24
         }}>
-          <Text style={styles.subTitle}>{deleteItem ? 'Reschedule' : 'Cancel current session'}</Text>
+          <Text style={styles.subTitle}>{deleteItem ? 'Reschedule confirmation' : 'Cancel current session'}</Text>
           <Text style={styles.subTitle}>{classesSchedule.Sessions[0].ClassName}</Text>
           <Text style={{ textAlign: 'center', marginBottom: 12 }}>
             {moment(classesSchedule.StartDate).format('D/MM/y')}
             {' - '}
             {moment(classesSchedule.EndDate).format('D/MM/y')}
           </Text>
-          <Text style={{ textAlign: 'center', marginBottom: 12 }}>Current Session: {moment(currentSession?.StartDateTime).format('dddd, MMMM DD, YYYY, h a')}</Text>
-          {deleteItem && <Text style={{ textAlign: 'center', marginBottom: 12 }}>New Session: {moment(newTime).format('dddd, MMMM DD, YYYY, h a')}</Text>}
+          <Text style={{ textAlign: 'center', marginBottom: 12 }}>Current Session: {moment.utc(currentSession?.StartDateTime).local().format('h a dddd, D/MM/y')}</Text>
+          {deleteItem && <Text style={{ textAlign: 'center', marginBottom: 12 }}>New Session: {moment(newTime).format('h a dddd, D/MM/y')}</Text>}
 
         </View>
 

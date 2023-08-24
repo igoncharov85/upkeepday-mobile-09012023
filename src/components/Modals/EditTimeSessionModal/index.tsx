@@ -155,7 +155,7 @@ const EditTimeSessionModal = ({ }: IEditTimeSessionModalModal) => {
           {!canBe && (
             <Text style={styles.textConflict}>You have a conflict</Text>
           )}
-          <CustomButton text="Save" onPress={onSave} disabled={!canBe} />
+          <CustomButton text="Save" onPress={canBe ? onSave : () => { }} disabled={!canBe} />
         </View>
       </View>
     </>

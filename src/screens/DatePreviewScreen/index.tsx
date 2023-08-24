@@ -150,7 +150,7 @@ export const DatePreviewScreen: React.FC<IDatePreviewScreen> = () => {
       </View>
       <View style={{ marginHorizontal: 20, marginTop: 12 }}>
         <DayScroller
-          title={moment(startDateWeek).format('MMMM')}
+          title={moment(startDateWeek).format('MMMM, yyyy')}
           onPressLeft={goToPrevWeek}
           onPressRight={goToNextWeek}
         />

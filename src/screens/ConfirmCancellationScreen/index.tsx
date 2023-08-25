@@ -33,36 +33,45 @@ export const ConfirmCancellationScreen: FC<IConfirmCancellationScreen> = memo(()
     const { params } = useTypedRoute<NavigationEnum.CONFIRM_CANCELLATION_SCREEN>()
     const { startDate, endDate, allDay } = params
 
-    const sessionItems = CurrentScheduledEntries?.map((item, index) => {
-        const startTime = moment(item.StartDateTime).format('hh:mm a')
-        const endTime = moment(item.StartDateTime).add(item.Duration, 'minute').format('hh:mm a');
+    const sessionItems = CurrentScheduledEntries
+        ?.map((item, index) => {
+            const startTime = moment(item.StartDateTime).format('hh:mm a');
+            const endTime = moment(item.StartDateTime)
+                .add(item.Duration, 'minute')
+                .format('hh:mm a');
 
-        return {
-            name: item.ClassName,
-            timeContinued: `${startTime}-${endTime}`,
-        };
-    });
+            return {
+                name: item.ClassName,
+                timeContinued: `${startTime}-${endTime}`,
+                timeStart: moment(item.StartDateTime).format('MMMM D, YYYY'),
+                startDateTime: moment(item.StartDateTime), // Преобразование строки в объект Moment.js
+            };
+        })
+        .sort((a, b) => a.startDateTime - b.startDateTime);
 
     const handleSubmit = () => {
         //@ts-ignore
         dispatch(deleteScheduleByPeriodAction({ startDate: startDate, endDate: endDate, AllDay: allDay }));
         navigate(NavigationEnum.HOME_SCREEN)
     }
-    console.log('CurrentScheduledEntries', CurrentScheduledEntries)
-    return loading ? <ScreenLoading /> : (
+    return (
         <View style={styles.container}>
             <ScreenHeader
                 text={'Cancellation'}
                 withBackButton={true}
                 onBackPress={() => goBack()}
             />
-            <Text style={styles.subtitle}>Automatic notification will be sent to all students</Text>
             <Text style={styles.sessionTitle}>Session(s) to be cancelled:</Text>
-            <View style={{ maxHeight: '45%' }}>
+            <Text style={styles.sessionTime}>Start: {moment(startDate).format('MMMM D, YYYY')}</Text>
+            <Text style={styles.sessionTime}>End:  {moment(endDate).format('MMMM D, YYYY')}</Text>
+            <View style={{ flex: 1, }}>
 
                 <ScrollView>
-                    {sessionItems.map((item, index) => (
-                        <SessionItem name={item.name} timeContinued={item.timeContinued} key={index} />
+                    {loading ? <ScreenLoading /> : sessionItems.map((item, index) => (
+                        <>
+                            {index > 0 && sessionItems[index - 1]?.timeStart != sessionItems[index]?.timeStart && <Text style={styles.sessionTime}>{item.timeStart}</Text>}
+                            <SessionItem name={item.name} timeContinued={item.timeContinued} key={index} />
+                        </>
                     ))}
                 </ScrollView>
             </View>

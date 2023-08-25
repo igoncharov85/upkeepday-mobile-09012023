@@ -32,7 +32,7 @@ export const SheduleWeekScreen: FC<ISheduleWeekScreen> = memo(() => {
   return (
     <View style={styles.container} >
       <DayScroller
-        title={moment(startDateWeek).format('MMMM')}
+        title={moment(startDateWeek).format('MMMM, yyyy')}
         onPressLeft={goToPrevWeek}
         onPressRight={goToNextWeek}
       />

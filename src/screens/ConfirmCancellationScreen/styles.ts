@@ -12,7 +12,7 @@ export default StyleSheet.create({
         height: '100%',
     },
     finishBtn: {
-        flex: 1,
+        marginTop: 24,
         justifyContent: 'flex-end',
         width: '100%'
     },
@@ -84,6 +84,15 @@ export default StyleSheet.create({
         width: '100%',
         marginTop: 32,
         marginBottom: 28,
+        textAlign: 'center'
+    },
+    sessionTime: {
+        fontWeight: '600',
+        fontSize: 17,
+        lineHeight: 18,
+        color: '#171930',
+        width: '100%',
+        marginBottom: 10,
         textAlign: 'center'
     },
     time: {

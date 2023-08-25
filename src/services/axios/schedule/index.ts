@@ -9,9 +9,9 @@ export class ScheduleService {
     static async fetchSessions({ endDate, startDate }: IScheduleRequest) {
         const utcStartDate = moment(startDate).utc().format('YYYY-MM-DDTHH:mm:ss');
         const utcEndDate = moment(endDate).utc().format('YYYY-MM-DDTHH:mm:ss');
-        console.log('--------server log--------')
-        console.log('with moment', utcStartDate, utcEndDate)
-        console.log('just ', startDate, endDate)
+        // console.log('--------server log--------')
+        // console.log('with moment', utcStartDate, utcEndDate)
+        // console.log('just ', startDate, endDate)
         return $axiosAuth.get(`/tutor/sessions/${utcStartDate}/${utcEndDate}`);
     }
     static async deleteSessions({ endDate, startDate, AllDay }: IDeleteScheduleRequest) {

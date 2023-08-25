@@ -27,13 +27,12 @@ const mockItem = {
   ScheduleEntryId: 0,
 };
 export const SheduleTableItem: FC<ISheduleTableItem> = memo(
-  ({ item = mockItem, lessonOnThisHour = [] }) => {
+  ({ item = mockItem, lessonOnThisHour = [], currentDate }) => {
     const { navigate } = useTypedNavigation();
     const colorsTrial = ['#F3AF2C', '#E9600D'];
     const colorsLesson = ['#EAAFC8', '#654EA3'];
     const navigateToCancellationModal = () => {
-      console.log(item, 'item')
-      navigate(NavigationEnum.CANCELLATION_MODAL, { item: item });
+      navigate(NavigationEnum.CANCELLATION_MODAL, { item: item, currentDate });
     };
     return (
       <>

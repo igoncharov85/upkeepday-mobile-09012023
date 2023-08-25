@@ -60,6 +60,7 @@ export type TypeRootStackParamList = {
   };
   [NavigationEnum.CANCELLATION_MODAL]: {
     item: any;
+    currentDate: any;
   };
   [NavigationEnum.EDIT_DURATION_CLASS_MODAL]: {
     addDuration: (time: any) => void;
@@ -111,6 +112,7 @@ export type TypeRootStackParamList = {
   [NavigationEnum.HOME_SCREEN]: undefined;
   [NavigationEnum.CANCELLATION_SCREEN]: {
     itemData: any;
+    currentDate: any;
   };
   [NavigationEnum.ADD_CLASS_SCREEN]: undefined;
   [NavigationEnum.CLASSES_TAB]: undefined;

@@ -24,13 +24,14 @@ import moment from 'moment';
 
 interface RouteParams {
   itemData?: any;
+  currentDate?: any
 }
 interface ICancellationScreen { }
 export const CancellationScreen: FC<ICancellationScreen> = memo(() => {
   const { navigate, goBack } = useTypedNavigation()
   const route = useRoute();
-  const { itemData } = route.params as RouteParams;
-  const startTime = itemData.StartDateTime ? itemData.StartDateTime as string : new Date().toISOString();
+  const { itemData, currentDate } = route.params as RouteParams;
+  const startTime = itemData.StartDateTime ? itemData.StartDateTime as string : moment.utc(currentDate).local().format('YYYY-MM-DDTHH:mm:ss');
   const duration = itemData.Duration || 0;
   const endTime = calculateEndDate(startTime, duration);
 
@@ -49,25 +50,22 @@ export const CancellationScreen: FC<ICancellationScreen> = memo(() => {
   const onSetEndTime = (endDate: string) => setEndDate(endDate)
 
   const handleSubmit = () => {
-    // //@ts-ignore
-    // dispatch(deleteScheduleByPeriodAction({ startDate: startDate, endDate: endDate, AllDay: allDay }));
+    let startDateTime = startDate,
+      endDateTime = endDate
+    if (allDay) {
+      startDateTime = moment(startDate).startOf('day').format('YYYY-MM-DDTHH:mm:ss');
+      endDateTime = moment(endDate).endOf('day').format('YYYY-MM-DDTHH:mm:ss')
+    }
+    dispatch(fetchScheduleByPeriodAction({ startDate: startDateTime, endDate: endDateTime }));
     navigate(NavigationEnum.CONFIRM_CANCELLATION_SCREEN, {
-      startDate,
-      endDate,
+      startDate: startDateTime,
+      endDate: endDateTime,
       allDay
     })
-    console.log('startDate', startDate,
-      moment(startDate).utc(),)
-    console.log('endDate', endDate,
-      moment(endDate).utc(),)
-    dispatch(fetchScheduleByPeriodAction({ startDate: moment(startDate).utc().toISOString(), endDate: endDate }));
-
-
-    // goBack()
   }
   const toggleAllDay = () => setAllDay(!allDay);
   useEffect(() => {
-    const startTime = itemData.StartDateTime ? itemData.StartDateTime as string : new Date().toISOString();
+    const startTime = itemData.StartDateTime ? itemData.StartDateTime as string : moment.utc(currentDate).local().format('YYYY-MM-DDTHH:mm:ss');
     const endTime = calculateEndDate(startTime, duration);
 
     setStartDate(startTime);

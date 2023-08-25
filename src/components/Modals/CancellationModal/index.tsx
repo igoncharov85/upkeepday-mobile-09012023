@@ -20,7 +20,7 @@ export const CancellationModal = () => {
   const { navigate, goBack } = useTypedNavigation()
   const { params } = useTypedRoute<NavigationEnum.CANCELLATION_MODAL>()
 
-  const { item } = params
+  const { item, currentDate } = params
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const onStudentCheckIn = () => {
@@ -29,7 +29,7 @@ export const CancellationModal = () => {
 
   const navigateToCancellationScreen = () => {
     goBack()
-    navigate(NavigationEnum.CANCELLATION_SCREEN, { itemData: item })
+    navigate(NavigationEnum.CANCELLATION_SCREEN, { itemData: item, currentDate })
   }
 
   return (

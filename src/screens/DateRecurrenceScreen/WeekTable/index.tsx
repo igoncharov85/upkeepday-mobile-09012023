@@ -63,7 +63,7 @@ export const WeekTable: FC<ISheduleTable> = memo(
 
                       const key = Date.now()
                       const activeItem = createCurrentClassRequest?.Slots && createCurrentClassRequest?.Slots.some(item => item.DayOfWeek == dayIndex && item.StartTime == `${index}:00:00`)
-                      return <WeekTableItem name={createCurrentClassRequest.Class && createCurrentClassRequest.Class.Name || ''} dayOfWeek={dayIndex} timeIndex={index} onHandleClick={onSlotPress} daySchedule={daySchedule} key={`${dayIndex}-${index}`} />;
+                      return <WeekTableItem dayOfWeek={dayIndex} timeIndex={index} onHandleClick={onSlotPress} daySchedule={daySchedule} key={`${dayIndex}-${index}`} />;
                     })}
 
                   </Column>

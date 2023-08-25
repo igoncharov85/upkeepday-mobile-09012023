@@ -5,8 +5,6 @@ import { SheduleTable } from './SheduleTable';
 import styles from './styles';
 import { addDayAndHoursToDate } from '../../../services/utils/generateDate.util';
 import { getWeekDates } from '../../../services/utils/fullDateToValue.util';
-import { DayScroller } from '../../../components/UI/DayScroller';
-import moment from 'moment';
 
 interface ISheduleWeekScreen { }
 
@@ -31,11 +29,6 @@ export const SheduleWeekScreen: FC<ISheduleWeekScreen> = memo(() => {
   }
   return (
     <View style={styles.container} >
-      <DayScroller
-        title={moment(startDateWeek).format('MMMM, yyyy')}
-        onPressLeft={goToPrevWeek}
-        onPressRight={goToNextWeek}
-      />
       <DaysOfWeek
         startOfWeek={startDateWeek}
         endOfWeek={endDateWeek}

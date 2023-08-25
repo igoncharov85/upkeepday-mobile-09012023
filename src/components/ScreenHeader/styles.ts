@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
     header: {
-        width: '90%',
+        // width: '90%',
         justifyContent: 'flex-start',
         flexDirection: 'row',
         alignItems: 'center',
@@ -15,5 +15,9 @@ export default StyleSheet.create({
     },
     buttonWrapper: {
         marginRight: 10,
+    },
+    optionalComponentWrapper:{
+        flex:1,
+        alignItems:'flex-end',
     }
 })

@@ -5,9 +5,11 @@ import { createUserAction } from '../../../store/user/actions';
 import { InputForm } from '../../AddClassScreen/components/InputForm';
 import styles from './styles';
 import { FormikProps, withFormik } from 'formik';
+import { IUserCreateRequest, IUserStudent } from '../../../common/types/user';
 import { NewStudentSchema } from '../../../common/shemas/addClass.shape';
 import { formicDefaultProps } from '../../../common/constants/styles/form.config';
 import { useAppSelector } from '../../../store/hooks';
+import { updateCurrentClassRequestAction } from '../../../store/shedule';
 import { CustomButton } from '../../../components/UI/CustomButton';
 import { IExistingStudent } from '../../../common/types/schedule.types';
 
@@ -57,7 +59,6 @@ export const NewStudent: React.FC<INewStudentProps> = ({ handleTypeChange, onAdd
                 <InputForm
                     autoCapitalize='words'
                     labelText='First Name'
-                    //@ts-ignore
                     onChange={handleChange('FirstName')}
                     value={values.FirstName}
                     //@ts-ignore
@@ -67,7 +68,6 @@ export const NewStudent: React.FC<INewStudentProps> = ({ handleTypeChange, onAdd
                 <InputForm
                     autoCapitalize='words'
                     labelText='Last Name'
-                    //@ts-ignore
                     onChange={handleChange('LastName')}
                     value={values.LastName}
                     //@ts-ignore
@@ -75,36 +75,26 @@ export const NewStudent: React.FC<INewStudentProps> = ({ handleTypeChange, onAdd
                 />
                 <InputForm
                     labelText='Email'
-                    //@ts-ignore
                     onChange={handleChange('Email')}
                     value={values.Email}
-                    inputMode='email'
-                    keyboardType='email-address'
                     //@ts-ignore
                     validationErrorText={touched.Email && errors.Email}
                 />
                 <InputForm
                     labelText='Phone'
-                    //@ts-ignore
                     onChange={handleChange('Phone')}
                     value={values.Phone}
-                    inputMode='tel'
-                    keyboardType='phone-pad'
                     //@ts-ignore
                     validationErrorText={touched.Phone && errors.Phone}
                 />
                 <InputForm
                     autoCapitalize='sentences'
                     labelText='Notes'
-                    //@ts-ignore
                     onChange={handleChange('Notes')}
                     value={values.Notes}
                 />
                 <InputForm labelText='Attachments' />
-                <TouchableOpacity
-                    //@ts-ignore
-                    onPress={handleSubmit} 
-                    disabled={!isValid}>
+                <TouchableOpacity onPress={handleSubmit} disabled={!isValid}>
                     <Text style={styles.addMore}>Add One More</Text>
                 </TouchableOpacity>
                 <View style={{ paddingVertical: 20, height: 92, flex: 1, justifyContent: 'flex-end' }}>

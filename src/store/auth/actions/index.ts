@@ -10,3 +10,4 @@ export const resetPasswordSendEmailAction = createAction<string>(AuthContactsEnu
 export const resetPasswordResetAction = createAction<IConfirmPassword>(AuthContactsEnum.RESET_PASSWORD_NEW_PASSWORD)
 export const fetchCountriesAction = createAction<undefined>(AuthContactsEnum.GET_COUNTRIES)
 export const fetchStatesAction = createAction<string>(AuthContactsEnum.GET_STATES)
+export const getUserAction = createAction(AuthContactsEnum.GET_USER)

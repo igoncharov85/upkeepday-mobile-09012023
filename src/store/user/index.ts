@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ICheckinUser, IPaymentsTableResponse, IStudentByIdResponse, IStudentResponse, IStudentsResponse, IUserStudent, IUserStudentResponse } from "../../common/types/user";
+import { ICheckinUser, IStudentByIdResponse, IStudentResponse, IStudentsResponse, IUserStudent, IUserStudentResponse } from "../../common/types/user";
 import moment from "moment";
 
 interface IUserStore {
@@ -9,7 +9,6 @@ interface IUserStore {
     users: Array<IStudentResponse>;
     studentList: Array<IStudentByIdResponse>;
     loading: boolean;
-    payments: IPaymentsTableResponse
 }
 
 const initialState: IUserStore = {
@@ -18,8 +17,8 @@ const initialState: IUserStore = {
     checkins: [],
     users: [],
     studentList: [],
-    loading: false,
-    payments: {} as any
+    loading: false
+
 }
 
 const userSlice = createSlice({
@@ -48,20 +47,10 @@ const userSlice = createSlice({
         },
         setStudentListAction: (state, action: PayloadAction<Array<IStudentByIdResponse>>) => {
             state.studentList = action.payload
-        },
-        setStudentPayments(state, action: PayloadAction<IPaymentsTableResponse>) {
-            state.payments = action.payload
-        },
-        setPaymentClassesListAction: (state, action: PayloadAction<Array<IStudentByIdResponse>>) => {
-            state.studentList = action.payload
-        },
+        }
     },
 })
 
 
-export const { 
-    setStudentLoading, setStudentAction, addStudentAction, 
-    setCheckinStudentAction, setCurrentStudentAction, setUsersAction, 
-    setStudentListAction, setPaymentClassesListAction, setStudentPayments
-} = userSlice.actions
+export const { setStudentLoading, setStudentAction, addStudentAction, setCheckinStudentAction, setCurrentStudentAction, setUsersAction, setStudentListAction } = userSlice.actions
 export default userSlice.reducer

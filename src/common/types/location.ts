@@ -1,14 +1,19 @@
 export interface ILocation {
     Name: string
     Url: string
-    LocationType: string,
+    LocationType: 'Online' | 'Office',
     AddressLine: string,
     City: string,
-    State: string
-    PostalCode: string
-    Country: string
-    LocationId: string
-}
+    State: string,
+    PostalCode: string,
+    Country: string,
+    LocationId: string,
+    rooms?: {
+        Name: string,
+        Capacity: number,
+        RoomId: number,
+    }[];
+};
 
 export interface ILocationRequest {
     Name?: string,
@@ -18,7 +23,13 @@ export interface ILocationRequest {
     City?: string,
     State?: string,
     PostalCode?: string,
-    Country?: string
+    Country?: string,
+    Rooms?: {
+        Name: string,
+        Capacity: number,
+        RoomId: number
+    }[],
+    schoolId?: number
 }
 
 export interface IIdRequest {

@@ -1,15 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, FlatList, PanResponder } from 'react-native';
 import { format } from 'date-fns';
-
-
 import styles from './styles';
 import { MonthItem } from './MonthItem';
 import { fetchScheduleByPeriodAction } from '../../../store/shedule/actions';
 import { dispatch } from '../../../store/store';
 import { useAppSelector } from '../../../store/hooks';
 import { ScreenLoading } from '../../../components/UI/ScreenLoading';
-import { el } from 'date-fns/locale';
 import { useIsFocused } from '@react-navigation/native';
 
 const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -22,8 +19,6 @@ interface Day {
     dayOfMonth: number;
     isCurrentMonth: boolean;
 }
-
-
 
 function getSectionsCountByDate(entries: any[], date: Date): number {
     const dateString = date.toISOString().substring(0, 10);
@@ -38,66 +33,63 @@ function getSectionsCountByDate(entries: any[], date: Date): number {
 
 export const ScheduleCalendar: React.FC<IScheduleCalendarProps> = ({ startingDayOfWeek }) => {
     const [days, setDays] = useState<Day[]>([]);
-
     const isFocused = useIsFocused();
     const { CurrentScheduledEntries, loading } = useAppSelector(state => state.schedule);
+    const { currentSchool } = useAppSelector(state => state.businessAccount);
     const [date, setDate] = useState('');
+    const [swipeUpCount, setSwipeUpCount] = useState(0);
+    const [swipeDownCount, setSwipeDownCount] = useState(0);
     const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
-
     const flatListRef = useRef<FlatList>(null);
 
     useEffect(() => {
         generateDays();
-    }, [currentMonth]);
+    }, []);
+
     useEffect(() => {
         generateDays();
-    }, []);
+    }, [currentMonth, currentSchool]);
+    
+    useEffect(() => {
+        isFocused && generateDays();
+    }, [isFocused]);
+
     const generateDays = () => {
         const year = currentMonth.getFullYear();
         const month = currentMonth.getMonth();
         const daysInMonth = new Date(year, month + 1, 0).getDate();
         const firstDayOfMonth = new Date(year, month, 1).getDay();
-
         const days: Day[] = [];
         let dayOfMonth = 1;
         let i = 0;
-
-
         if (firstDayOfMonth !== startingDayOfWeek) {
             const daysInPrevMonth = new Date(year, month, 0).getDate();
             const numDaysToAdd = firstDayOfMonth < startingDayOfWeek
                 ? firstDayOfMonth + 7 - startingDayOfWeek
                 : firstDayOfMonth - startingDayOfWeek;
-
             for (let j = daysInPrevMonth - numDaysToAdd + 1; j <= daysInPrevMonth; j++) {
                 days.push({ dayOfMonth: j, isCurrentMonth: false });
             }
             i = numDaysToAdd;
         }
-
-
         while (dayOfMonth <= daysInMonth) {
             days.push({ dayOfMonth, isCurrentMonth: true });
             dayOfMonth++;
             i++;
         }
-
-
         let nextMonthDay = 1;
         while (i % 7 !== 0) {
             days.push({ dayOfMonth: nextMonthDay, isCurrentMonth: false });
             nextMonthDay++;
             i++;
         }
-
         setDays(days);
         setDate(`${year}-${month + 1}`);
         if (days[0].isCurrentMonth) {
-            dispatch(fetchScheduleByPeriodAction({ startDate: `${year}-${month + 1}-1`, endDate: `${year}-${month + 2}-${days[days.length - 1].dayOfMonth}` }));
+            dispatch(fetchScheduleByPeriodAction({ startDate: `${year}-${month + 1}-1`, endDate: `${year}-${month + 2}-${days[days.length - 1].dayOfMonth}`, schoolId: currentSchool?.SchoolId }));
         } else {
-            dispatch(fetchScheduleByPeriodAction({ startDate: `${year}-${month}-${days[0].dayOfMonth}`, endDate: `${year}-${month + 2}-${days[days.length - 1].dayOfMonth}` }));
-        }
-
+            dispatch(fetchScheduleByPeriodAction({ startDate: `${year}-${month}-${days[0].dayOfMonth}`, endDate: `${year}-${month + 2}-${days[days.length - 1].dayOfMonth}`, schoolId: currentSchool?.SchoolId }));
+        };
     };
 
     const renderItem = ({ item }: { item: Day }) => {
@@ -117,8 +109,6 @@ export const ScheduleCalendar: React.FC<IScheduleCalendarProps> = ({ startingDay
         return <MonthItem day={`${dayOfMonth}`} isCurrentMonth={isCurrentMonth} sesion={sesions} item={item} />
     };
 
-
-
     const handleSwipeLeft = () => {
         const nextMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1);
         setCurrentMonth(nextMonth);
@@ -130,8 +120,6 @@ export const ScheduleCalendar: React.FC<IScheduleCalendarProps> = ({ startingDay
         setCurrentMonth(nextMonth);
         flatListRef.current?.scrollToOffset({ animated: true, offset: 0 });
     };
-    const [swipeUpCount, setSwipeUpCount] = useState(0);
-    const [swipeDownCount, setSwipeDownCount] = useState(0);
 
     const panResponder = PanResponder.create({
         onMoveShouldSetPanResponderCapture: (evt, gestureState) => {
@@ -147,9 +135,6 @@ export const ScheduleCalendar: React.FC<IScheduleCalendarProps> = ({ startingDay
             }
         },
     });
-    useEffect(() => {
-        isFocused && generateDays();
-    }, [isFocused]);
 
     return loading ? <ScreenLoading /> : (
         <View style={styles.container} {...panResponder.panHandlers}>

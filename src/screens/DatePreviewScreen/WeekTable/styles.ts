@@ -5,19 +5,13 @@ export default StyleSheet.create({
     marginTop: 10,
     position: 'relative'
   },
-  wrapperCell: {
+  containerItem: {
     height: 64,
     minWidth: '14.28571428571429%',
     borderWidth: 1,
     borderColor: 'rgba(47,48,69,0.06)',
     borderStyle: 'solid',
     borderRadius: 3,
-  },
-  containerCell: {
-    borderRadius: 4,
-    flex: 1,
-    position: 'relative',
-
   },
   column: {
     flexDirection: 'column',

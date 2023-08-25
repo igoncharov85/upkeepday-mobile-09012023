@@ -1,4 +1,4 @@
-import React, { FC, memo, useEffect, useRef, useState } from 'react';
+import React, { FC, memo, useEffect, useState } from 'react';
 import { StyleSheet, Text, View, StyleProp, ViewStyle, ActivityIndicator, ScrollView, TouchableOpacity } from 'react-native';
 
 
@@ -22,16 +22,14 @@ function findScheduleEntries(
   entries: IGeneratedScheduleEntries[],
   day: number,
   month: number,
-  hour: number,
-  year: number,
+  hour: number
 ): any[] {
   const filteredEntries = entries?.filter((entry) => {
     const startDate = new Date(entry.StartDateTime);
     return (
-      startDate.getDate() === day &&
+      startDate.getDate() === day + 1 &&
       startDate.getMonth() + 1 === month &&
-      startDate.getHours() === hour &&
-      startDate.getFullYear() === year
+      startDate.getHours() === hour
     );
   });
   return filteredEntries;
@@ -52,28 +50,7 @@ export const WeekTable: FC<ISheduleTable> = memo(
     const { GeneratedScheduleEntries, CurrentScheduledEntries, loading } = useAppSelector(state => state.schedule);
     const [editMode, setEditMode] = useState(false);
     const [slots, setSlots] = useState(GeneratedScheduleEntries);
-    const scrollViewRef = useRef(null);
-    const [scrollOffset, setScrollOffset] = useState(64 * 8);
 
-    const handleScroll = (event) => {
-      const offset = event.nativeEvent.contentOffset.y;
-      // console.log(scrollViewRef.current)
-      console.log(offset)
-      // setScrollOffset(offset);
-    };
-    const scrollUp = () => {
-      setScrollOffset(scrollOffset - 20)
-    };
-
-    const scrollDown = () => {
-      if (scrollViewRef.current) {
-        const currentOffset = scrollViewRef.current.contentOffset.y;
-        const maxOffset = scrollViewRef.current.contentSize.height - scrollViewRef.current.layoutMeasurement.height;
-        if (currentOffset + 200 <= maxOffset) {
-          scrollViewRef.current.scrollTo({ y: currentOffset + 200 });
-        }
-      }
-    };
 
     const onChangeEditMode = (value: boolean) => {
       setEditMode(value)
@@ -95,12 +72,6 @@ export const WeekTable: FC<ISheduleTable> = memo(
     }
 
     useEffect(() => {
-      dispatch(
-        updateCurrentClassRequestAction({
-          Sessions: slots,
-
-        }),
-      );
       onHandleData(slots)
     }, [slots])
     const timeData = generateTimeData(`00:00`, '23:00');
@@ -112,10 +83,7 @@ export const WeekTable: FC<ISheduleTable> = memo(
     );
     const date = (new Date(startOfWeek));
     return (<View style={styles.container}>
-      {/* <TouchableOpacity onPress={scrollUp}>
-        <Text>BUTTTTTTTTTTTTTTon</Text>
-      </TouchableOpacity> */}
-      <ScrollView ref={scrollViewRef} contentOffset={{ x: 0, y: scrollOffset }} onScroll={handleScroll}>
+      <ScrollView contentOffset={{ x: 0, y: 64 * 8 }}>
         <Row style={{ justifyContent: 'space-between' }}>
           <Column style={{ width: 56 }}>
             {timeData.map((item, index) => (
@@ -128,8 +96,8 @@ export const WeekTable: FC<ISheduleTable> = memo(
               return (
                 <Column key={dayIndex}>
                   {dayEvents?.map((_, index) => {
-                    const dryField = findScheduleEntries(CurrentScheduledEntries as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index, currentDate.getFullYear())
-                    const conflictItem = findScheduleEntries(conflict as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index, currentDate.getFullYear())
+                    const dryField = findScheduleEntries(CurrentScheduledEntries as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
+                    const conflictItem = findScheduleEntries(conflict as [], currentDate.getUTCDate(), currentDate.getUTCMonth() + 1, index)
                     return <WeekTableItem
                       key={`${dayIndex}-${index}`}
                       timeIndex={index}
@@ -137,14 +105,13 @@ export const WeekTable: FC<ISheduleTable> = memo(
                       slots={slots}
                       startOfWeek={startOfWeek}
                       StartDateTime={addDayAndHoursToDate(date.toISOString(), dayIndex, index)}
-                      conflict={conflict}
+                      conflict={!!conflictItem[0]}
                       onLongPress={onChangeEditMode}
                       editMode={editMode}
                       onDeleteSlot={onDeleteSlot}
                       onMoveSlot={onMoveSlot}
                       currentDay={currentDate}
-                      scrollUp={scrollUp}
-                      dryField={dryField} />;
+                      dryField={dryField && dryField[0]} />;
                   })}
 
                 </Column>

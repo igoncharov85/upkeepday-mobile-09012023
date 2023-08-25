@@ -7,7 +7,19 @@ export interface AuthState {
     states: Array<string>
     statesLoading: boolean
     isAuth: boolean;
-}
+    user: IUser | null;
+};
+
+export interface IUser {
+    FirstName: string;
+    LastName: string;
+    Phone: string;
+    AddressLine1: string;
+    City: string;
+    State: string;
+    PostalCode: string;
+    Country: string;
+};
 
 const initialState: AuthState = {
     loading: false,
@@ -15,6 +27,7 @@ const initialState: AuthState = {
     states: [],
     statesLoading: false,
     isAuth: false,
+    user: null,
 }
 
 export const authSlice = createSlice({
@@ -33,14 +46,16 @@ export const authSlice = createSlice({
         setStatesLoading: (state, action: PayloadAction<boolean>) => {
             state.statesLoading = action.payload
         },
-        setIsAuthAction: (state, action:  PayloadAction<boolean>) => {
+        setIsAuthAction: (state, action: PayloadAction<boolean>) => {
             state.isAuth = action.payload
-        }
+        },
+        setUserAction: (state, action: PayloadAction<IUser>) => {
+            state.user = action.payload
+        },
     },
 
 })
 
-// Action creators are generated for each case reducer function
-export const { setAuthLoadingAction, setCountriesAction, setStatesAction, setStatesLoading,setIsAuthAction } = authSlice.actions
+export const { setAuthLoadingAction, setCountriesAction, setStatesAction, setStatesLoading, setIsAuthAction, setUserAction } = authSlice.actions
 
 export default authSlice.reducer

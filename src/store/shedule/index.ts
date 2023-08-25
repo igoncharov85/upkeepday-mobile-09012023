@@ -59,6 +59,10 @@ export const scheduleSlice = createSlice({
                 Location: {
                     ...state.createCurrentClassRequest.Location,
                     ...(action.payload.Location || {})
+                },
+                Teacher:{
+                    ...state.createCurrentClassRequest.Teacher,
+                    ...(action.payload.Teacher || {})
                 }
             }
         },

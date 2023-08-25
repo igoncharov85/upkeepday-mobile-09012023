@@ -1,7 +1,6 @@
 import { FormikProps, withFormik } from 'formik';
 import React, { FC, memo, useState } from 'react';
 import { View } from 'react-native';
-import { NavigationEnum } from '../../../common/constants/navigation'
 import { formicDefaultProps } from '../../../common/constants/styles/form.config';
 import {
   EmailShape,
@@ -15,7 +14,6 @@ import {
 import { ScreenHeader } from '../../../components/ScreenHeader';
 import { CustomButton } from '../../../components/UI/CustomButton';
 import { CustomInput } from '../../../components/UI/CustomInput';
-import { useTypedRoute } from '../../../hook/useTypedRoute'
 import { resetPasswordResetAction } from '../../../store/auth/actions';
 import { useAppSelector } from '../../../store/hooks';
 import { dispatch } from '../../../store/store';
@@ -26,10 +24,10 @@ const formInitialValues = {
   password: '',
   passwordConfirmation: '',
 };
-export const SetPasswordScreen: FC = memo(
-  () => {
+interface ISetPasswordScreen extends INavigationBase { }
+export const SetPasswordScreen: FC<ISetPasswordScreen> = memo(
+  ({ navigation, route }) => {
     const { loading } = useAppSelector(state => state.auth);
-    const route =  useTypedRoute<NavigationEnum.FORGOT_PASSWORD_SEND_PASSWORD>()
     const uuidToken = route?.params?.uuid;
     const renderForm = ({
       touched,

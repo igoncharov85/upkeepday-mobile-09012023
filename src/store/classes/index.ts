@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import { IClassesResponse, ISession, ISessionSubset, IclassesScheduleResponse } from '../../common/types/classes.types';
+import { IClassesResponse, ISession, ISessionSubset } from '../../common/types/classes.types';
 
 export interface IClassesState {
     loading: boolean;
@@ -8,8 +8,7 @@ export interface IClassesState {
     classes: Array<IClassesResponse>;
     currentSession: Array<ISession>;
     currentClass: IClassesResponse;
-    generatedSessions: any;
-    classesSchedule: IclassesScheduleResponse
+    generatedSessions: any
 }
 
 const initialState: IClassesState = {
@@ -18,12 +17,6 @@ const initialState: IClassesState = {
     currentSession: [],
     currentClass: {} as IClassesResponse,
     generatedSessions: {},
-    classesSchedule: {
-        StartDate: '',
-        EndDate: '',
-        Sessions: [],
-        OtherSessions: []
-    }
 
 }
 
@@ -54,15 +47,11 @@ export const classesService = createSlice({
             state.generatedSessions = action.payload
 
         },
-        setClassesScheduleAction: (state, action: PayloadAction<IclassesScheduleResponse>) => {
-            state.classesSchedule = action.payload
-
-        },
     },
 
 })
 
 // Action creators are generated for each case reducer function
-export const { setClassesLoading, setClassesAction, setSessinAction, addClassesAction, setClassAction, setCurrentSessionAction, setGenerateSessionAction, setClassesScheduleAction } = classesService.actions
+export const { setClassesLoading, setClassesAction, setSessinAction, addClassesAction, setClassAction, setCurrentSessionAction, setGenerateSessionAction } = classesService.actions
 
 export default classesService.reducer

@@ -1,16 +1,23 @@
 import { FormikProps, withFormik } from 'formik';
-import React, { FC, memo } from 'react';
-import { KeyboardAvoidingView, Text, View } from 'react-native';
+import React, { FC, memo, useEffect } from 'react';
+import {
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  Text,
+  View,
+} from 'react-native';
 import CalendarSvg from '../../../assets/svg/CalendarSvg';
 import { NavigationEnum } from '../../common/constants/navigation';
 import { keyboardSettings } from '../../common/constants/styles/keyboard';
 import { LoginSchema } from '../../common/shemas/auth.shape';
 import { ILoginRequest } from '../../common/types/auth.types';
+import { INavigationBase } from '../../common/types/component.styles';
 import { KeyboardDismissHOC } from '../../components/hoc/KeyboardDismissHOC';
 import { ScreenHeader } from '../../components/ScreenHeader';
 import { CustomButton } from '../../components/UI/CustomButton';
 import { CustomInput } from '../../components/UI/CustomInput';
-import { useTypedNavigation } from '../../hook/useTypedNavigation';
+import NavigationActions from '../../services/navigation-service';
 import { loginAction } from '../../store/auth/actions';
 import { useAppSelector } from '../../store/hooks';
 import { dispatch } from '../../store/store';
@@ -20,16 +27,18 @@ const formInitialValues = {
   email: '',
   password: '',
 };
-export const LoginScreen: FC = memo(() => {
-  const { loading, isAuth } = useAppSelector(state => state.auth);
-  const { navigate } = useTypedNavigation();
+interface ILoginScreen extends INavigationBase { }
+export const LoginScreen: FC<ILoginScreen> = memo(({ navigation }) => {
+  const { loading } = useAppSelector(state => state.auth);
   const onForgotPassRedirect = () => {
-    navigate(NavigationEnum.FORGOT_PASSWORD_SEND_EMAIL);
+    navigation.navigate(NavigationEnum.FORGOT_PASSWORD_SEND_EMAIL);
   };
   const onRegistrationRedirect = () => {
-    navigate(NavigationEnum.REGISTRATION);
+    navigation.navigate(NavigationEnum.REGISTRATION);
   };
-  isAuth && navigate(NavigationEnum.HOME_SCREEN);
+  useEffect(() => {
+    NavigationActions.setNavigator(navigation);
+  }, []);
   const renderForm = ({
     touched,
     errors,
@@ -50,8 +59,6 @@ export const LoginScreen: FC = memo(() => {
             validationErrorText={errors.email}
             placeholder={'Email'}
             labelText={'Email'}
-            inputMode="email"
-            keyboardType="email-address"
           />
         </View>
         <View style={styles.inputWrapper}>
@@ -70,7 +77,6 @@ export const LoginScreen: FC = memo(() => {
         <View style={styles.buttonWrapper}>
           <CustomButton
             text={'Login'}
-            //@ts-ignore
             onPress={handleSubmit}
             loading={loading}
             disabled={!(isValid && !!Object.keys(touched).length)}
@@ -94,10 +100,7 @@ export const LoginScreen: FC = memo(() => {
     validateOnChange: true,
   })(renderForm);
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      {...keyboardSettings}
-      keyboardVerticalOffset={100}>
+    <KeyboardAvoidingView style={styles.container} {...keyboardSettings} keyboardVerticalOffset={100}>
       <KeyboardDismissHOC extraStyles={styles.contentWrapper}>
         <ScreenHeader text={'Login'} />
         <View style={styles.imgWrapper}>

@@ -6,6 +6,7 @@ import { useIsFocused } from '@react-navigation/native';
 import styles from './styles';
 import { dispatch } from '../../../../store/store';
 import { fetchStudentsAction } from '../../../../store/user/actions';
+import { useAppSelector } from '../../../../store/hooks';
 
 interface NavigationButtonProps {
     active: boolean;
@@ -20,19 +21,16 @@ const STUDENTS_NAVIGATION = [
 ];
 
 interface IStudentsNavigation {
-    getOption?: (option: string) => void, 
-    isRequest?: boolean
-}
 
-export const StudentsNavigation: FC<IStudentsNavigation> = memo(({ getOption, isRequest = true }) => {
+}
+export const StudentsNavigation: FC<IStudentsNavigation> = memo(() => {
     const [activeIndex, setActiveIndex] = useState(0);
     const isFocused = useIsFocused();
+    const { currentSchool } = useAppSelector(state => state.businessAccount);
 
     useEffect(() => {
-        if (isRequest) {
-            dispatch(fetchStudentsAction({ status: STUDENTS_NAVIGATION[activeIndex].status }))
-        }
-    }, [activeIndex, isFocused],);
+        dispatch(fetchStudentsAction({ status: STUDENTS_NAVIGATION?.[activeIndex]?.status || '', schoolId: currentSchool?.SchoolId }));
+    }, [activeIndex, isFocused, currentSchool],);
 
     return (
         <>
@@ -49,10 +47,7 @@ export const StudentsNavigation: FC<IStudentsNavigation> = memo(({ getOption, is
                             key={index}
                             active={index === activeIndex}
                             name={item.name}
-                            onPress={() => {
-                                setActiveIndex(index);
-                                if (getOption) getOption(item.name);
-                            }}
+                            onPress={() => setActiveIndex(index)}
                         />
                     ))}
                 </LinearGradient>

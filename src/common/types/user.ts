@@ -51,18 +51,21 @@ export interface IUserCheckins {
 }
 export interface IUserCheckinsRequest {
     chekins: Array<IUserCheckins>,
+    sessionId: ICheckinsId,
+    schoolId?: number,
 }
 export interface IStudentRequest {
     StudentId: number,
-
+    schoolId?: number,
 }
 export interface IStudentsRequest {
     status: string,
-
+    schoolId?: number,
 }
 export interface IDeleteUserRequest {
     StudentId: number,
     Classes: Array<number>,
+    schoolId?: number,
 }
 export interface IStudent {
     FirstName: string,
@@ -75,6 +78,7 @@ export interface IUpdateStudent {
     StudentId: number,
     ExistingStudents: Array<number>,
     NewStudents: Array<IStudent>,
+    schoolId?: number,
 }
 export interface ICheckinUser {
     FirstName: string,
@@ -102,42 +106,10 @@ export interface ISlot {
 export interface IStudentByIdResponse {
     Status: string;
     ClassId: number;
-    PastSessions: number;
     Name: string;
     StartDate: string;
     EndDate: string;
     Attended: number;
     Scheduled: number;
     Slots: ISlot[];
-    Balance: number;
-    PaymentType: string;
-}
-
-export interface IPaymentsTableParams {
-    StudentId: string;
-    ClassId: number;
-}
-
-export interface IPaymentsTableTransaction {
-    TransactionId: number,
-    Amount: number,
-    Date: string,
-    TimeStamp: Date
-}
-
-export interface IPaymentsTableResponse {
-    Total: number,
-    ClassId: number,
-    Name: string,
-    TransactionUid: string,
-    Transactions: Array<IPaymentsTableTransaction>
-}
-
-export interface IStudentPaymentRequest {
-    StudentId: number;
-    ClassId: number;
-    TransactionUid: string;
-    TransactionType: string;
-    Amount: number;
-    Date: string;
 }

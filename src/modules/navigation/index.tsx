@@ -42,14 +42,15 @@ export const RootNavigation = memo(() => {
   let navigationRef = useNavigationContainerRef();
   const goBackPanHandler = () => {
     currentScreen === NavigationEnum.LOGIN
-      ? Platform.OS == 'android'
-        ? BackHandler.exitApp()
-        : null
-      : //@ts-ignore
-      navigationRef.current?.canGoBack()
-        ? //@ts-ignore
-        navigationRef.current.goBack()
+        ? Platform.OS == 'android'
+            ? BackHandler.exitApp()
+            : null
         : null;
+      // : //@ts-ignore
+      // navigationRef.current?.canGoBack()
+      //   ? //@ts-ignore
+      //   navigationRef.current.goBack()
+      //   : null;
   };
   const goBackScreenPixels = Dimensions.get('window').width * 0.5;
   const goBackDetector = Gesture.Pan()

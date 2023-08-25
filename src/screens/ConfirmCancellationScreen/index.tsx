@@ -69,7 +69,7 @@ export const ConfirmCancellationScreen: FC<IConfirmCancellationScreen> = memo(()
                 <ScrollView>
                     {loading ? <ScreenLoading /> : sessionItems.map((item, index) => (
                         <>
-                            {index > 0 && sessionItems[index - 1]?.timeStart != sessionItems[index]?.timeStart && <Text style={styles.sessionTime}>{item.timeStart}</Text>}
+                            {sessionItems[index - 1]?.timeStart != sessionItems[index]?.timeStart && <Text style={styles.sessionTime}>{item.timeStart}</Text>}
                             <SessionItem name={item.name} timeContinued={item.timeContinued} key={index} />
                         </>
                     ))}

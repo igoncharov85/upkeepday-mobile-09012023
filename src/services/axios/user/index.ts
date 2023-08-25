@@ -7,7 +7,7 @@ export class UserService {
         return await $axiosAuth.get(`/tutor/students/`)
     }
     static async createUser(data: IUserCreateRequest) {
-        return await $axiosAuth.post('/tutor/students', data)
+        return await $axiosAuth.post('/tutor/students/', data)
     }
     static async fetchCheckinsUser(sessionId: ICheckinsId) {
         return await $axiosAuth.get(`/tutor/checkins/${sessionId}`)

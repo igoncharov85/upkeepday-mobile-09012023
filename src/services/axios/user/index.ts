@@ -35,8 +35,8 @@ export class UserService {
     static async deleteStudent({ StudentId }: IStudentRequest) {
         return await $axiosAuth.delete(`/tutor/students/${StudentId}`,)
     }
-    static async updateStudent(data: IStudentRequest & IUserCreateRequest) {
-        const { StudentId, ...student } = data
+    static async updateStudent(data: IStudentRequest & IUserCreateRequest & IStudentsRequest) {
+        const { StudentId, status, ...student } = data
         return await $axiosAuth.put(`/tutor/students/${StudentId}`, student)
     }
     static async fetchStudentById({ StudentId }: (IStudentRequest)) {
@@ -48,13 +48,13 @@ export class UserService {
     static async fetchStudentPaymentsClasses({ StudentId }: (IStudentRequest)) {
         return await $axiosAuth.get(`/tutor/payments/students/${StudentId}/classes`);
     }
-    static async fetchStudentPayments({StudentId, ClassId}: IPaymentsTableParams) {
+    static async fetchStudentPayments({ StudentId, ClassId }: IPaymentsTableParams) {
         return await $axiosAuth.get(`/tutor/payments/students/${StudentId}/classes/${ClassId}`);
     }
     static async sendStudentPayment(params: IStudentPaymentRequest) {
         const { StudentId, ClassId, ...rest } = params;
         return await $axiosAuth.post(
-            `/tutor/payments/students/${StudentId}/classes/${ClassId}`, {...rest}
+            `/tutor/payments/students/${StudentId}/classes/${ClassId}`, { ...rest }
         );
     }
 }

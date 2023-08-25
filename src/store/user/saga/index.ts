@@ -10,6 +10,7 @@ import { UserContactsEnum } from "../constants";
 import { IStudent } from "../../../common/types/classes.types";
 import moment from "moment";
 import Toast from 'react-native-toast-message';
+import { fetchStudentsAction, fetchStudentsByIdAction } from "../actions";
 
 export function* fetchUserWorker(payload: IAction<null>): SagaIterator {
     try {
@@ -216,7 +217,7 @@ export function* sendStudentPaymentSaga(payload: IAction<IStudentPaymentRequest>
 }
 
 // update student 
-export function* updateStudentWorker(payload: IAction<IStudentRequest & IUserCreateRequest>): SagaIterator {
+export function* updateStudentWorker(payload: IAction<IStudentRequest & IUserCreateRequest & IStudentsRequest>): SagaIterator {
     try {
         yield call(
             UserService.updateStudent,
@@ -225,6 +226,11 @@ export function* updateStudentWorker(payload: IAction<IStudentRequest & IUserCre
 
     } catch (error) {
         ErrorFilterService.validateError(error)
+    } finally {
+        console.log('payload', payload.payload.status);
+
+        yield put(fetchStudentsAction({ status: payload.payload.status }))
+
     }
 }
 export function* updateStudentStatusWorker(payload: IAction<IStudentRequest & IStudentsRequest>): SagaIterator {

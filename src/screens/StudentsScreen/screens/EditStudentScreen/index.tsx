@@ -26,6 +26,8 @@ export const EditStudentScreen: React.FC<INewStudentProps> = () => {
   const { goBack, navigate } = useTypedNavigation();
   const route = useRoute();
   const { item } = route.params as any;
+  console.log(item.Status, '\n\n\n\nitem');
+
   const formInitialValues = {
     FirstName: item.FirstName || '',
     LastName: item.LastName || '',
@@ -118,6 +120,7 @@ export const EditStudentScreen: React.FC<INewStudentProps> = () => {
           Email: values.Email,
           Phone: values.Phone,
           Notes: values.Notes || '',
+          status: item.Status
         }),
       );
       navigate(NavigationEnum.STUDENTS_TAB);

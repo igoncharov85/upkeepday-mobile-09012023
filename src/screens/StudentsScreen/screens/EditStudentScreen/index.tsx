@@ -1,31 +1,31 @@
-import {useRoute} from '@react-navigation/native';
-import {FormikProps, withFormik} from 'formik';
-import React, {useEffect, useState} from 'react';
-import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
-import {NavigationEnum} from '../../../../common/constants/navigation';
-import {formicDefaultProps} from '../../../../common/constants/styles/form.config';
-import {NewStudentSchema} from '../../../../common/shemas/addClass.shape';
-import {IExistingStudent} from '../../../../common/types/schedule.types';
-import {ScreenHeader} from '../../../../components/ScreenHeader';
-import {CustomButton} from '../../../../components/UI/CustomButton';
-import {useTypedNavigation} from '../../../../hook/useTypedNavigation';
-import {useAppSelector} from '../../../../store/hooks';
-import {dispatch} from '../../../../store/store';
+import { useRoute } from '@react-navigation/native';
+import { FormikProps, withFormik } from 'formik';
+import React, { useEffect, useState } from 'react';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { NavigationEnum } from '../../../../common/constants/navigation';
+import { formicDefaultProps } from '../../../../common/constants/styles/form.config';
+import { NewStudentSchema } from '../../../../common/shemas/addClass.shape';
+import { IExistingStudent } from '../../../../common/types/schedule.types';
+import { ScreenHeader } from '../../../../components/ScreenHeader';
+import { CustomButton } from '../../../../components/UI/CustomButton';
+import { useTypedNavigation } from '../../../../hook/useTypedNavigation';
+import { useAppSelector } from '../../../../store/hooks';
+import { dispatch } from '../../../../store/store';
 import {
   fetchStudentsByIdAction,
   updateStudentAction,
 } from '../../../../store/user/actions';
-import {InputForm} from '../../../AddClassScreen/components/InputForm';
+import { InputForm } from '../../../AddClassScreen/components/InputForm';
 import styles from './styles';
 
-interface INewStudentProps {}
+interface INewStudentProps { }
 
 export const EditStudentScreen: React.FC<INewStudentProps> = () => {
-  const {students} = useAppSelector(state => state.user);
+  const { students } = useAppSelector(state => state.user);
   const [newUser, setNewUser] = useState<IExistingStudent>();
-  const {goBack, navigate} = useTypedNavigation();
+  const { goBack, navigate } = useTypedNavigation();
   const route = useRoute();
-  const {item} = route.params as any;
+  const { item } = route.params as any;
   const formInitialValues = {
     FirstName: item.FirstName || '',
     LastName: item.LastName || '',
@@ -34,7 +34,7 @@ export const EditStudentScreen: React.FC<INewStudentProps> = () => {
     Notes: item.Notes || '',
   };
   useEffect(() => {
-    dispatch(fetchStudentsByIdAction({StudentId: item.StudentId}));
+    dispatch(fetchStudentsByIdAction({ StudentId: item.StudentId }));
   }, []);
 
   const renderForm = ({
@@ -85,7 +85,6 @@ export const EditStudentScreen: React.FC<INewStudentProps> = () => {
         <View
           style={{
             paddingVertical: 20,
-            height: 124,
             flex: 1,
             justifyContent: 'flex-end',
           }}>
@@ -94,9 +93,12 @@ export const EditStudentScreen: React.FC<INewStudentProps> = () => {
             onPress={handleSubmit}
             disabled={!isValid}
           />
-          <TouchableOpacity onPress={goBack} disabled={!isValid}>
-            <Text style={styles.addMore}>cancel</Text>
-          </TouchableOpacity>
+          <View style={{ height: 12 }} />
+          <CustomButton
+            text={'Cancel'}
+            onPress={goBack}
+            backgroundColor={'#FA6B6B'}
+          />
         </View>
       </>
     );
@@ -107,7 +109,7 @@ export const EditStudentScreen: React.FC<INewStudentProps> = () => {
     mapPropsToValues: () => {
       return formInitialValues;
     },
-    handleSubmit: (values, {resetForm}) => {
+    handleSubmit: (values, { resetForm }) => {
       dispatch(
         updateStudentAction({
           StudentId: item.StudentId,

@@ -1,18 +1,19 @@
-import {FormikProps, withFormik} from 'formik';
-import React, {useEffect, useState} from 'react';
-import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
-import {formicDefaultProps} from '../../common/constants/styles/form.config';
-import {NewStudentSchema} from '../../common/shemas/addClass.shape';
-import {IExistingStudent} from '../../common/types/schedule.types';
-import {ScreenHeader} from '../../components/ScreenHeader';
-import {CustomButton} from '../../components/UI/CustomButton';
-import {useTypedNavigation} from '../../hook/useTypedNavigation';
-import {useAppSelector} from '../../store/hooks';
-import {updateCurrentClassRequestAction} from '../../store/shedule';
-import {dispatch} from '../../store/store';
-import {InputForm} from '../AddClassScreen/components/InputForm';
-import {removeEmptyObjects} from '../AddStudentsScreen';
+import { FormikProps, withFormik } from 'formik';
+import React, { useEffect, useState } from 'react';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { formicDefaultProps } from '../../common/constants/styles/form.config';
+import { NewStudentSchema } from '../../common/shemas/addClass.shape';
+import { IExistingStudent } from '../../common/types/schedule.types';
+import { ScreenHeader } from '../../components/ScreenHeader';
+import { CustomButton } from '../../components/UI/CustomButton';
+import { useTypedNavigation } from '../../hook/useTypedNavigation';
+import { useAppSelector } from '../../store/hooks';
+import { updateCurrentClassRequestAction } from '../../store/shedule';
+import { dispatch } from '../../store/store';
+import { InputForm } from '../AddClassScreen/components/InputForm';
+import { removeEmptyObjects } from '../AddStudentsScreen';
 import styles from '../AddStudentsScreen/NewStudent/styles';
+import { createUserAction } from '../../store/user/actions';
 
 const formInitialValues = {
   FirstName: '',
@@ -23,13 +24,7 @@ const formInitialValues = {
 };
 
 export const NewStudentScreen: React.FC = () => {
-  const {goBack} = useTypedNavigation();
-  const [newUser, setNewUser] = useState<IExistingStudent>();
-
-  useEffect(() => {
-    newUser && goBack();
-  }, [newUser]);
-
+  const { goBack } = useTypedNavigation();
   const renderForm = ({
     touched,
     errors,
@@ -38,24 +33,9 @@ export const NewStudentScreen: React.FC = () => {
     handleChange,
     handleSubmit,
   }: FormikProps<typeof formInitialValues>) => {
-    const {students} = useAppSelector(state => state.user);
-
-    const handleSave = () => {
-      handleSubmit();
-      if (isValid) {
-        console.log(newUser, 'newUser');
-        setTimeout(() => {
-          dispatch(
-            updateCurrentClassRequestAction({
-              Students: removeEmptyObjects([...students, newUser]) as any,
-            }),
-          );
-        }, 1000);
-      }
-    };
 
     return (
-      <View style={{height: '100%', flex: 1, justifyContent: 'space-between'}}>
+      <View style={{ height: '100%', flex: 1, justifyContent: 'space-between' }}>
         <ScreenHeader
           text={'Add Students'}
           onBackPress={() => goBack()}
@@ -100,15 +80,18 @@ export const NewStudentScreen: React.FC = () => {
           value={values.Notes}
         />
         <InputForm labelText="Attachments" />
-        <TouchableOpacity onPress={handleSubmit} disabled={!isValid}>
-          <Text style={styles.addMore}>Add One More</Text>
-        </TouchableOpacity>
         <View
-          style={{paddingVertical: 20, height: 92, justifyContent: 'flex-end'}}>
+          style={{ paddingVertical: 20, justifyContent: 'flex-end' }}>
           <CustomButton
             text={'Save'}
-            onPress={handleSave}
+            onPress={handleSubmit}
             disabled={!isValid}
+          />
+          <View style={{ height: 12 }} />
+          <CustomButton
+            text={'Cancel'}
+            onPress={goBack}
+            backgroundColor={'#FA6B6B'}
           />
         </View>
       </View>
@@ -118,15 +101,17 @@ export const NewStudentScreen: React.FC = () => {
   const NewStudentForm = withFormik<any, typeof formInitialValues>({
     validationSchema: NewStudentSchema,
 
-    handleSubmit: (values, {resetForm}) => {
-      setNewUser({
-        FirstName: values.FirstName,
-        LastName: values.LastName,
-        Email: values.Email,
-        Phone: values.Phone,
-        Notes: values.Notes || '',
-      });
-      resetForm();
+    handleSubmit: (values) => {
+      dispatch(createUserAction(
+        {
+          FirstName: values.FirstName,
+          LastName: values.LastName,
+          Email: values.Email,
+          Phone: values.Phone,
+          Notes: values.Notes || '',
+        }
+      ))
+      goBack()
     },
     ...formicDefaultProps,
   })(renderForm);

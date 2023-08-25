@@ -63,7 +63,7 @@ export const ConfirmCancellationScreen: FC<IConfirmCancellationScreen> = memo(()
             />
             <Text style={styles.sessionTitle}>Session(s) to be cancelled:</Text>
             <Text style={styles.sessionTime}>Start: {moment(startDate).format('MMMM D, YYYY')}</Text>
-            <Text style={styles.sessionTime}>End:  {moment(endDate).format('MMMM D, YYYY')}</Text>
+            <Text style={styles.sessionTime}>End: {moment(endDate).format('MMMM D, YYYY')}</Text>
             <View style={{ flex: 1, }}>
 
                 <ScrollView>

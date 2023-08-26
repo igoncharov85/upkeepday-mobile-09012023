@@ -12,7 +12,7 @@ import {
   IClassesResponse,
 } from '../../../../common/types/classes.types';
 import { useTypedNavigation } from '../../../../hook/useTypedNavigation';
-import { formatDateForPeriod } from '../../../../services/utils/fullDateToValue.util';
+import {formatUtcDateTimeToLocal} from '../../../../services/utils/fullDateToValue.util';
 import {
   deleteClassesAction,
   fetchClassesSchedule,
@@ -52,8 +52,8 @@ const ClassesItem: React.FC<IClassesItem> = ({ item }) => {
       <View style={[styles.part, styles.partTop]}>
         <View>
           <Text style={styles.text}>
-            {formatDateForPeriod(item.StartDate)} -{' '}
-            {formatDateForPeriod(item.EndDate)}
+            {formatUtcDateTimeToLocal(item.StartDateTime)} -{' '}
+            {formatUtcDateTimeToLocal(item.EndDateTime)}
           </Text>
           <View style={styles.payment}>
             <View style={styles.paymentItem}>
@@ -67,7 +67,7 @@ const ClassesItem: React.FC<IClassesItem> = ({ item }) => {
         </View>
         <View>
           <Text style={[styles.text, styles.textRight]}>
-            {item.Location?.Address || 'Location Address'}
+            {item.Location?.AddressLine || 'Location Address'}
           </Text>
           <Text style={[styles.underlineText, styles.textRight]}>
             {item.Students?.length} students

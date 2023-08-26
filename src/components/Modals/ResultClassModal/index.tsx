@@ -63,7 +63,7 @@ const ResultClassModal = () => {
                       {item.Students.length} students
                     </Text>
                     <Text style={styles.text}>
-                      {item.Location.Address || 'Location Address'}
+                      {item.Location.AddressLine || 'Location Address'}
                     </Text>
                     <View style={styles.payment}>
                       <View style={styles.paymentItem}>

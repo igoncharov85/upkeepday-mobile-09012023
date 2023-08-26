@@ -4,11 +4,15 @@ export interface IStudent {
     StudentId: number;
     FullName: string;
 }
-
 export interface ILocation {
     LocationId: number;
     LocationType: string;
-    Address: string;
+    Url: string;
+    AddressLine: string;
+    City: string;
+    State: string;
+    PostalCode: string;
+    Country: string;
 }
 export interface ISession {
     ClassName: string;
@@ -32,8 +36,10 @@ export interface IClassesResponse {
     ClassId: number;
     Name: string;
     StartDate: string;
+    StartDateTime: string;
     EndScheduleType: string;
     EndDate: string;
+    EndDateTime: string;
     EndNumber: number | null;
     MakeupRequired: boolean;
     TrackPrepayment: boolean;

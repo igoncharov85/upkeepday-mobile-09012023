@@ -50,6 +50,11 @@ export const formatDate = (
 export const formatDateForPeriod = (time: string) => {
   return convertDate(moment(time, "YYYY-MM-DD").format("MMM D, YYYY"))[2]
 }
+
+export const formatUtcDateTimeToLocal = (dateTime: string) => {
+  return moment.utc(dateTime).local().format('MM/DD/YYYY');
+}
+
 export const calculateEndDate = (
   startTime: string,
   duration: number,

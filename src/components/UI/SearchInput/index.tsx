@@ -7,41 +7,77 @@ import { styles } from "./styles";
 import { useAppSelector } from "../../../store/hooks";
 import { dispatch } from "../../../store/store";
 import { setFinderCurrentEntriesAction } from "../../../store/shedule";
-
+import { useRoute } from "@react-navigation/native";
+import { NavigationEnum } from "../../../common/constants/navigation";
+import { setFinderClassesAction } from "../../../store/classes";
+import { setFindUsersAction } from "../../../store/user";
+interface IFindState {
+    name: string;
+    state: any[];
+    updateAction: any;
+    searchCondition: any;
+}
 const SearchInput = ({ editMode }: { editMode: any }) => {
     const { CurrentScheduledEntries } = useAppSelector(state => state.schedule);
-    const [searchText, setSearchText] = useState(""); // Состояние для хранения введенного текста поиска
+    const { classes } = useAppSelector(state => state.classes);
+    const [searchText, setSearchText] = useState("");
+    const { users } = useAppSelector(state => state.user);
+    const route = useRoute();
+    const findState: IFindState[] = [
+        {
+            name: NavigationEnum.SCHEDULE_TAB,
+            state: CurrentScheduledEntries,
+            updateAction: setFinderCurrentEntriesAction,
+            searchCondition: (item: any, searchText: string) => {
+                return item.ClassName?.toLocaleLowerCase()?.includes(searchText?.toLocaleLowerCase())
+            }
+        },
+        {
+            name: NavigationEnum.CLASSES_TAB,
+            state: classes,
+            updateAction: setFinderClassesAction,
+            searchCondition: (item: any, searchText: string) => {
+                return item.Name?.toLocaleLowerCase()?.includes(searchText?.toLocaleLowerCase())
+            }
+        },
+        {
+            name: NavigationEnum.STUDENTS_TAB,
+            state: users,
+            updateAction: setFindUsersAction,
+            searchCondition: (item: any, searchText: string) => {
+                return `${item.FirstName} ${item.LastName}`?.toLocaleLowerCase()?.includes(searchText?.toLocaleLowerCase())
+            }
+        },
+    ]
+    const currentOption = findState.find(item => item.name == route.name) || findState[0]
 
 
     const handleSearchTextChange = (text: string) => {
         setSearchText(text);
+        searchAndLogResults(text)
     };
     const cleanText = () => {
         setSearchText('');
+        dispatch(currentOption.updateAction(currentOption.state))
     };
-    const searchAndLogResults = () => {
-        const searchResults = CurrentScheduledEntries.filter((entry: any) =>
-            entry.ClassName.toLocaleLowerCase().includes(searchText.toLocaleLowerCase())
-        );
-        dispatch(setFinderCurrentEntriesAction(searchResults))
-        console.log("Search Results:", searchResults);
+    const searchAndLogResults = (searchText: string) => {
+        const searchResults = currentOption.state?.filter((entry: any) => currentOption.searchCondition(entry, searchText));
+        dispatch(currentOption.updateAction(searchResults))
     };
     useEffect(() => {
-        console.log('открыли поиск');
-        dispatch(setFinderCurrentEntriesAction(CurrentScheduledEntries))
+        dispatch(currentOption.updateAction(currentOption.state))
         return () => {
-            dispatch(setFinderCurrentEntriesAction(CurrentScheduledEntries))
-            console.log('закрыли поиск');
+            dispatch(currentOption.updateAction(currentOption.state))
         }
     }, [])
     return (
-        <View style={{ flex: 1, maxHeight: 36 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+        <View style={styles.wrapper}>
+            <View style={styles.container}>
                 <TouchableOpacity onPress={editMode}>
                     <BackIcon />
                 </TouchableOpacity>
                 <View style={styles.input}>
-                    <TouchableOpacity onPress={searchAndLogResults}>
+                    <TouchableOpacity onPress={() => searchAndLogResults(searchText)}>
                         <SearchIcon />
                     </TouchableOpacity>
                     <TextInput
@@ -50,8 +86,7 @@ const SearchInput = ({ editMode }: { editMode: any }) => {
                             paddingLeft: 22
                         }}
                         value={searchText}
-                        onChangeText={handleSearchTextChange}
-                        onEndEditing={searchAndLogResults}
+                        onChangeText={(event) => handleSearchTextChange(event)}
                     />
                     <TouchableOpacity onPress={cleanText}>
                         <Cancel />

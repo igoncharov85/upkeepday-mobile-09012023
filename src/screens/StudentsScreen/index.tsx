@@ -8,14 +8,14 @@ import { ScreenLoading } from '../../components/UI/ScreenLoading';
 import moment from 'moment';
 
 const StudentsScreen = () => {
-    const { users, loading } = useAppSelector(state => state.user);
+    const { users, findUsers, loading } = useAppSelector(state => state.user);
     return (
         <View style={{ flex: 1 }}>
             <StudentsNavigation />
             {loading ? <ScreenLoading /> : <ScrollView>
                 <View style={styles.container}>
                     {
-                        users.map((item, index) => (
+                        findUsers?.map((item, index) => (
                             <StudentItem key={index} item={item} />
                         ))
                     }

@@ -62,11 +62,11 @@ export const SheduleTable: FC<ISheduleTable> = memo(
     const startWeekOfDay = getToday(startOfWeek)[1];
     const timeData = generateTimeData('00:00', '23:00');
     const weekStructure = createWeekStructure(startOfWeek, endOfWeek, timeData);
-    const { CurrentScheduledEntries, loading } = useAppSelector(state => state.schedule);
+    const { finderCurrentEntries, loading } = useAppSelector(state => state.schedule);
 
     useEffect(() => {
       dispatch(fetchScheduleByPeriodAction({ startDate: moment(startOfWeek).toISOString(), endDate: endOfWeek.toISOString() }));
-      console.log('current: ', CurrentScheduledEntries)
+      console.log('current: ', finderCurrentEntries)
     }, [isFocused, startOfWeek]);
     return loading ? <ScreenLoading /> : (
       <View style={styles.container} >
@@ -89,9 +89,9 @@ export const SheduleTable: FC<ISheduleTable> = memo(
                           dayNumber = dayIndex + startWeekOfDay - getDaysInMonth(startOfWeek.getMonth() + 1, endOfWeek.getFullYear())
                         }
                       }
-                      const item = findObject(CurrentScheduledEntries, index, dayNumber)
-                      const items = filterArrayByDayAndHour(CurrentScheduledEntries, currentDate, index)
-                      if (findObject(CurrentScheduledEntries, index, dayNumber)) {
+                      const item = findObject(finderCurrentEntries, index, dayNumber)
+                      const items = filterArrayByDayAndHour(finderCurrentEntries, currentDate, index)
+                      if (findObject(finderCurrentEntries, index, dayNumber)) {
                         return (
                           <SheduleTableItem
                             lessonOnThisHour={items}

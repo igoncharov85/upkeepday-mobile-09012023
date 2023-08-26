@@ -1,8 +1,8 @@
-import React, {FC, memo} from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
-import {NavigationEnum} from '../../../../common/constants/navigation';
-import {IScheduleItem} from '../../../../common/types/schedule.types';
-import {useTypedNavigation} from '../../../../hook/useTypedNavigation';
+import React, { FC, memo } from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
+import { NavigationEnum } from '../../../../common/constants/navigation';
+import { IScheduleItem } from '../../../../common/types/schedule.types';
+import { useTypedNavigation } from '../../../../hook/useTypedNavigation';
 import styles from './styles';
 
 enum LessonType {
@@ -20,14 +20,18 @@ interface SessionItemProps {
 }
 
 export const SessionItem: FC<SessionItemProps> = memo(
-  ({name, timeContinued, timeStart, type, data, id}) => {
-    const {navigate} = useTypedNavigation();
+  ({ name, timeContinued, timeStart, type, data, id }) => {
+    const { navigate } = useTypedNavigation();
     const isTrialLesson = type === LessonType.Trial;
     const navigateToCancellationModal = () => {
-      navigate(NavigationEnum.CANCELLATION_MODAL, {item: data});
+      navigate(NavigationEnum.CANCELLATION_MODAL, { item: data });
     };
+    const navigationClassInfo = () => {
+      navigate(NavigationEnum.CLASSES_TAB);
+    }
     return (
       <TouchableOpacity
+        onPress={navigationClassInfo}
         onLongPress={navigateToCancellationModal}
         style={styles.container}>
         <Text style={styles.timeStart}>{timeStart}</Text>

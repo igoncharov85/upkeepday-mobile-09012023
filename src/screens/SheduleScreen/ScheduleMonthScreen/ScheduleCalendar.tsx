@@ -40,7 +40,7 @@ export const ScheduleCalendar: React.FC<IScheduleCalendarProps> = ({ startingDay
     const [days, setDays] = useState<Day[]>([]);
 
     const isFocused = useIsFocused();
-    const { CurrentScheduledEntries, loading } = useAppSelector(state => state.schedule);
+    const { CurrentScheduledEntries, finderCurrentEntries, loading } = useAppSelector(state => state.schedule);
     const [date, setDate] = useState('');
     const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
 
@@ -112,7 +112,7 @@ export const ScheduleCalendar: React.FC<IScheduleCalendarProps> = ({ startingDay
         } else {
             today = new Date(`${date}-${item.dayOfMonth}`)
         }
-        sesions = getSectionsCountByDate(CurrentScheduledEntries, today)
+        sesions = getSectionsCountByDate(finderCurrentEntries, today)
         const { isCurrentMonth, dayOfMonth } = item;
         return <MonthItem day={`${dayOfMonth}`} isCurrentMonth={isCurrentMonth} sesion={sesions} item={item} />
     };

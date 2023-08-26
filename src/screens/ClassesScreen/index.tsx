@@ -17,7 +17,7 @@ export const ClassesScreen = () => {
             <ScrollView>
                 <View style={styles.container}>
                     {loading ? <ScreenLoading /> :
-                        finderClasses.map((item, index) => (
+                        finderClasses?.map((item, index) => (
                             <ClassesItem item={item} key={index} />
                         ))
                     }

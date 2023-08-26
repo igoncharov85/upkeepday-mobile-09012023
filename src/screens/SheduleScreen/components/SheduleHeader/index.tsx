@@ -8,7 +8,7 @@ interface ISheduleHeader {
   text: string
 }
 export const SheduleHeader: FC<ISheduleHeader> = memo(({ text }) => {
-  const [searchMode, setSearchMode] = useState(true)
+  const [searchMode, setSearchMode] = useState(false)
   const toggleSearchMOde = () => {
     setSearchMode(!searchMode)
   }

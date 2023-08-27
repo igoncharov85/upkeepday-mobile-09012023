@@ -16,12 +16,13 @@ interface IFindState {
     state: any[];
     updateAction: any;
     searchCondition: any;
+    loading: boolean;
 }
 const SearchInput = ({ editMode }: { editMode: any }) => {
-    const { CurrentScheduledEntries } = useAppSelector(state => state.schedule);
-    const { classes } = useAppSelector(state => state.classes);
+    const { CurrentScheduledEntries, loading: loadingSchedule } = useAppSelector(state => state.schedule);
+    const { classes, loading: loadingClasses } = useAppSelector(state => state.classes);
+    const { users, loading: loadingUser } = useAppSelector(state => state.user);
     const [searchText, setSearchText] = useState("");
-    const { users } = useAppSelector(state => state.user);
     const route = useRoute();
     const findState: IFindState[] = [
         {
@@ -30,7 +31,8 @@ const SearchInput = ({ editMode }: { editMode: any }) => {
             updateAction: setFinderCurrentEntriesAction,
             searchCondition: (item: any, searchText: string) => {
                 return item.ClassName?.toLocaleLowerCase()?.includes(searchText?.toLocaleLowerCase())
-            }
+            },
+            loading: loadingSchedule
         },
         {
             name: NavigationEnum.CLASSES_TAB,
@@ -38,7 +40,8 @@ const SearchInput = ({ editMode }: { editMode: any }) => {
             updateAction: setFinderClassesAction,
             searchCondition: (item: any, searchText: string) => {
                 return item.Name?.toLocaleLowerCase()?.includes(searchText?.toLocaleLowerCase())
-            }
+            },
+            loading: loadingClasses,
         },
         {
             name: NavigationEnum.STUDENTS_TAB,
@@ -46,11 +49,17 @@ const SearchInput = ({ editMode }: { editMode: any }) => {
             updateAction: setFindUsersAction,
             searchCondition: (item: any, searchText: string) => {
                 return `${item.FirstName} ${item.LastName}`?.toLocaleLowerCase()?.includes(searchText?.toLocaleLowerCase())
-            }
+            },
+            loading: loadingUser
         },
     ]
     const currentOption = findState.find(item => item.name == route.name) || findState[0]
 
+    useEffect(() => {
+        if (!loadingSchedule && !loadingClasses && !loadingUser) {
+            searchAndLogResults(searchText)
+        }
+    }, [loadingSchedule, loadingClasses, loadingUser])
 
     const handleSearchTextChange = (text: string) => {
         setSearchText(text);

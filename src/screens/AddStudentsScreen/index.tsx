@@ -1,20 +1,20 @@
-import React, {useEffect, useState} from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
-import {NavigationEnum} from '../../common/constants/navigation';
-import {IExistingStudent} from '../../common/types/schedule.types';
-import {ScreenHeader} from '../../components/ScreenHeader';
-import {useTypedNavigation} from '../../hook/useTypedNavigation';
-import {useAppSelector} from '../../store/hooks';
+import React, { useEffect, useState } from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
+import { NavigationEnum } from '../../common/constants/navigation';
+import { IExistingStudent } from '../../common/types/schedule.types';
+import { ScreenHeader } from '../../components/ScreenHeader';
+import { useTypedNavigation } from '../../hook/useTypedNavigation';
+import { useAppSelector } from '../../store/hooks';
 import {
   setLocalStudentData,
   updateCurrentClassRequestAction,
 } from '../../store/shedule';
-import {dispatch} from '../../store/store';
-import {ListButtons} from '../AddClassScreen/components/ListButtons';
-import {ExistingStudent} from './ExistingStudent';
-import {NewStudent} from './NewStudent';
+import { dispatch } from '../../store/store';
+import { ListButtons } from '../AddClassScreen/components/ListButtons';
+import { ExistingStudent } from './ExistingStudent';
+import { NewStudent } from './NewStudent';
 
-interface IAddStudentsScreen {}
+interface IAddStudentsScreen { }
 
 enum TypeAction {
   ExistingStudent = 0,
@@ -24,7 +24,7 @@ enum TypeAction {
 export function removeEmptyObjects(array: any[]) {
   return array.filter(obj => Object.keys(obj).length !== 0);
 }
-function removeDuplicateStudents(students: any) {
+export function removeDuplicateStudents(students: any) {
   const seenStudents = new Set();
 
   return students.filter((student: any) => {
@@ -33,11 +33,11 @@ function removeDuplicateStudents(students: any) {
   });
 }
 export const AddStudentsScreen: React.FC<IAddStudentsScreen> = () => {
-  const {students} = useAppSelector(state => state.user);
+  const { students } = useAppSelector(state => state.user);
 
   const [typeAction, setTypeAction] = useState(0);
-  const {navigate, goBack: navigateBack} = useTypedNavigation();
-  const {createCurrentClassRequest, localStudentData} = useAppSelector(
+  const { navigate, goBack: navigateBack } = useTypedNavigation();
+  const { createCurrentClassRequest, localStudentData } = useAppSelector(
     state => state.schedule,
   );
   const [selectedStudents, setSelectedStudents] = useState<
@@ -73,7 +73,7 @@ export const AddStudentsScreen: React.FC<IAddStudentsScreen> = () => {
             event => event.StudentId !== StudentId,
           );
         } else {
-          return [...existingStudents, {StudentId}];
+          return [...existingStudents, { StudentId }];
         }
       } else {
         const index = existingStudents?.findIndex(
@@ -117,8 +117,8 @@ export const AddStudentsScreen: React.FC<IAddStudentsScreen> = () => {
   };
 
   return (
-    <View style={{flex: 1, height: '100%'}}>
-      <View style={{padding: 20, paddingBottom: 0}}>
+    <View style={{ flex: 1, height: '100%' }}>
+      <View style={{ padding: 20, paddingBottom: 0 }}>
         <View
           style={{
             flexDirection: 'row',
@@ -133,7 +133,7 @@ export const AddStudentsScreen: React.FC<IAddStudentsScreen> = () => {
           />
         </View>
         <TouchableOpacity
-          style={{position: 'absolute', top: 24, right: 20, zIndex: 1}}
+          style={{ position: 'absolute', top: 24, right: 20, zIndex: 1 }}
           onPress={goNextStep}>
           <Text
             style={{
@@ -146,7 +146,7 @@ export const AddStudentsScreen: React.FC<IAddStudentsScreen> = () => {
           </Text>
         </TouchableOpacity>
 
-        <View style={{marginTop: -30}}>
+        <View style={{ marginTop: -30 }}>
           <ListButtons
             buttons={['Existing student', 'New Student']}
             onPress={handleTypeChange}
@@ -154,8 +154,8 @@ export const AddStudentsScreen: React.FC<IAddStudentsScreen> = () => {
           />
         </View>
       </View>
-      <View style={{flex: 1}}>
-        <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
+        <View style={{ flex: 1 }}>
           {typeAction === TypeAction.ExistingStudent ? (
             <ExistingStudent
               students={removeDuplicateStudents(existingStudent)}

@@ -1,17 +1,18 @@
-import {useRoute} from '@react-navigation/native';
-import React, {useEffect, useState} from 'react';
-import {View} from 'react-native';
-import {IExistingStudent} from '../../../../../common/types/schedule.types';
-import {ScreenHeader} from '../../../../../components/ScreenHeader';
-import {useTypedNavigation} from '../../../../../hook/useTypedNavigation';
-import {useAppSelector} from '../../../../../store/hooks';
-import {dispatch} from '../../../../../store/store';
-import {updateUserAction} from '../../../../../store/user/actions';
-import {ListButtons} from '../../ClassesEditNameScreen/components/ListButtons';
-import {ExistingStudent} from './ExistingStudent';
-import {NewStudent} from './NewStudent';
+import { useRoute } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+import { View } from 'react-native';
+import { IExistingStudent } from '../../../../../common/types/schedule.types';
+import { ScreenHeader } from '../../../../../components/ScreenHeader';
+import { useTypedNavigation } from '../../../../../hook/useTypedNavigation';
+import { useAppSelector } from '../../../../../store/hooks';
+import { dispatch } from '../../../../../store/store';
+import { updateUserAction } from '../../../../../store/user/actions';
+import { ListButtons } from '../../ClassesEditNameScreen/components/ListButtons';
+import { ExistingStudent } from './ExistingStudent';
+import { NewStudent } from './NewStudent';
+import { removeDuplicateStudents } from '../../../../AddStudentsScreen';
 
-interface IAddStudentsScreen {}
+interface IAddStudentsScreen { }
 
 enum TypeAction {
   ExistingStudent = 0,
@@ -23,13 +24,13 @@ function removeEmptyObjects(array: any[]) {
 }
 
 const ChangeStudentScreen: React.FC<IAddStudentsScreen> = () => {
-  const {goBack, navigate} = useTypedNavigation();
+  const { goBack, navigate } = useTypedNavigation();
   const route = useRoute();
-  const {item, currentStudent}: any = route.params;
+  const { item, currentStudent }: any = route.params;
 
-  const {students} = useAppSelector(state => state.user);
+  const { students } = useAppSelector(state => state.user);
   const [typeAction, setTypeAction] = useState(0);
-  const {createCurrentClassRequest} = useAppSelector(state => state.schedule);
+  const { createCurrentClassRequest } = useAppSelector(state => state.schedule);
   const [selectedStudents, setSelectedStudents] = useState<
     Array<IExistingStudent | any>
   >([]);
@@ -73,7 +74,7 @@ const ChangeStudentScreen: React.FC<IAddStudentsScreen> = () => {
             event => event.StudentId !== StudentId,
           );
         } else {
-          return [...existingStudents, {StudentId}];
+          return [...existingStudents, { StudentId }];
         }
       } else {
         const index = existingStudents?.findIndex(
@@ -112,17 +113,17 @@ const ChangeStudentScreen: React.FC<IAddStudentsScreen> = () => {
     });
   }, [selectedStudents, newStudents]);
   useEffect(() => {
-    const {currentStudent}: any = route.params;
+    const { currentStudent }: any = route.params;
     const currentStudentArray = currentStudent.map((item: any) => {
-      return {StudentId: item.StudentId};
+      return { StudentId: item.StudentId };
     });
     setSelectedStudents(currentStudentArray);
   }, [currentStudent]);
 
   return (
-    <View style={{flex: 1, height: '100%'}}>
-      <View style={{padding: 20, paddingBottom: 0}}>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+    <View style={{ flex: 1, height: '100%' }}>
+      <View style={{ padding: 20, paddingBottom: 0 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <ScreenHeader
             text={'Update Students '}
             onBackPress={goBack}
@@ -130,7 +131,7 @@ const ChangeStudentScreen: React.FC<IAddStudentsScreen> = () => {
           />
         </View>
 
-        <View style={{marginTop: 0}}>
+        <View style={{ marginTop: 0 }}>
           <ListButtons
             buttons={['Existing student', 'New Student']}
             onPress={handleTypeChange}
@@ -138,12 +139,12 @@ const ChangeStudentScreen: React.FC<IAddStudentsScreen> = () => {
           />
         </View>
       </View>
-      <View style={{flex: 1}}>
-        <View style={{flex: 1, paddingBottom: 12}}>
+      <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, paddingBottom: 12 }}>
           {typeAction === TypeAction.ExistingStudent ? (
             <ExistingStudent
               onSave={goNextStep}
-              students={existingStudent}
+              students={removeDuplicateStudents(existingStudent)}
               onChancheUsers={handleChancheUsers}
               selectedUsers={selectedStudents}
             />

@@ -3,7 +3,7 @@ import React, { FC, memo } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { NavigationEnum } from "../../../../common/constants/navigation";
-import { updateCurrentClassRequestAction } from "../../../../store/shedule";
+import { setLocalStudentData, updateCurrentClassRequestAction } from "../../../../store/shedule";
 import { dispatch } from '../../../../store/store';
 import { NewStudentScreen } from '../../../NewStudentScreen'
 import styles from './styles';
@@ -28,6 +28,7 @@ export const AddSessionModal: FC<AddSessionModalProps> = memo(
     const studentTab = routeName === 'STUDENTS_TAB';
     const addClass = () => {
       visibleHandler();
+      dispatch(setLocalStudentData([]))
       dispatch(
         updateCurrentClassRequestAction({
           //@ts-ignore
@@ -50,6 +51,7 @@ export const AddSessionModal: FC<AddSessionModalProps> = memo(
           Students: [],
           Slots: [],
           Sessions: [],
+
         })
       );
       // @ts-ignore

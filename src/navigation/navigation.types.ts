@@ -62,6 +62,10 @@ export type TypeRootStackParamList = {
     item: any;
     currentDate: any;
   };
+  [NavigationEnum.LOCATION_CLASS_MODAL]: {
+    item?: any;
+    currentDate?: any;
+  };
   [NavigationEnum.EDIT_DURATION_CLASS_MODAL]: {
     addDuration: (time: any) => void;
     duration: number;

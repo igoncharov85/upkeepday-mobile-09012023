@@ -51,6 +51,7 @@ import PreviewStudentScreen from '../screens/StudentsScreen/screens/PreviewStude
 import { StudentPayments } from '../screens/StudentsScreen/screens/StudentPayments';
 import { RoutesType } from './navigation.types';
 import { ConfirmCancellationScreen } from '../screens/ConfirmCancellationScreen';
+import LocationClassModal from '../components/Modals/LocationClassModal';
 
 export const routes: RoutesType<NativeStackNavigationOptions>[] = [
   {
@@ -236,6 +237,14 @@ export const routes: RoutesType<NativeStackNavigationOptions>[] = [
   {
     name: NavigationEnum.SELECT_DURATION_CLASS_MODAL,
     component: SelectDurationSessionModal,
+    options: {
+      presentation: 'transparentModal',
+      headerShown: false,
+    },
+  },
+  {
+    name: NavigationEnum.LOCATION_CLASS_MODAL,
+    component: LocationClassModal,
     options: {
       presentation: 'transparentModal',
       headerShown: false,

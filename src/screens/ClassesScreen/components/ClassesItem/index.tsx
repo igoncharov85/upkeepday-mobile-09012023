@@ -12,7 +12,7 @@ import {
   IClassesResponse,
 } from '../../../../common/types/classes.types';
 import { useTypedNavigation } from '../../../../hook/useTypedNavigation';
-import {formatUtcDateTimeToLocal} from '../../../../services/utils/fullDateToValue.util';
+import { formatUtcDateTimeToLocal } from '../../../../services/utils/fullDateToValue.util';
 import {
   deleteClassesAction,
   fetchClassesSchedule,
@@ -34,6 +34,9 @@ const ClassesItem: React.FC<IClassesItem> = ({ item }) => {
 
   const navigateToLessonView = () => {
     navigate(NavigationEnum.CLASSES_PREVIEW_SCREEN, { item });
+  };
+  const navigateToLocationClassModal = () => {
+    navigate(NavigationEnum.LOCATION_CLASS_MODAL, { item });
   };
 
   const handleDelete = () => {
@@ -66,9 +69,11 @@ const ClassesItem: React.FC<IClassesItem> = ({ item }) => {
           </Text>
         </View>
         <View>
-          <Text style={[styles.text, styles.textRight]}>
-            {item.Location?.AddressLine || 'Location Address'}
-          </Text>
+          <TouchableOpacity onPress={navigateToLocationClassModal}>
+            <Text style={[styles.underlineText, styles.textRight]}>
+              {item.Location?.AddressLine || 'Location Address'}
+            </Text>
+          </TouchableOpacity>
           <Text style={[styles.underlineText, styles.textRight]}>
             {item.Students?.length} students
           </Text>

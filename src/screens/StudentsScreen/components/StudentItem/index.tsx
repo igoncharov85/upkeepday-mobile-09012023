@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import BankCardIcon from '../../../../../assets/svg/classes/BankCardIcon';
 import CheckIcon from '../../../../../assets/svg/classes/CheckIcon';
 
@@ -7,10 +7,10 @@ import EditIcon from '../../../../../assets/svg/classes/EditIcon';
 import MailIcon from '../../../../../assets/svg/students/MailIcon';
 import OrangeCrossIcon from '../../../../../assets/svg/students/OrangeCrossIcon';
 import PhoneIcon from '../../../../../assets/svg/students/PhoneIcon';
-import {NavigationEnum} from '../../../../common/constants/navigation';
-import {IStudentResponse} from '../../../../common/types/user';
-import {useTypedNavigation} from '../../../../hook/useTypedNavigation';
-import {dispatch} from '../../../../store/store';
+import { NavigationEnum } from '../../../../common/constants/navigation';
+import { IStudentResponse } from '../../../../common/types/user';
+import { useTypedNavigation } from '../../../../hook/useTypedNavigation';
+import { dispatch } from '../../../../store/store';
 import {
   deleteStudentAction,
   updateStudentStatus,
@@ -28,27 +28,27 @@ export enum EClassesStatus {
   nonScheduled = 'NonScheduled',
 }
 
-const StudentsItem: React.FC<IStudentsItem> = ({item}) => {
-  const {navigate} = useTypedNavigation();
+const StudentsItem: React.FC<IStudentsItem> = ({ item }) => {
+  const { navigate } = useTypedNavigation();
 
   const studentStatus = item.Status;
   const handleEdit = () => {
-    navigate(NavigationEnum.EDIT_STUDENTS_SCREEN, {item});
+    navigate(NavigationEnum.EDIT_STUDENTS_SCREEN, { item });
   };
 
   const handlePayment = () => {
-    navigate(NavigationEnum.STUDENT_PAYMENTS_SCREEN, {item});
+    navigate(NavigationEnum.STUDENT_PAYMENTS_SCREEN, { item });
   };
 
   const handleInfo = () => {
-    navigate(NavigationEnum.PREVIEW_STUDENTS_SCREEN, {item});
+    navigate(NavigationEnum.PREVIEW_STUDENTS_SCREEN, { item });
   };
   const onArchived = () => {
     navigate(NavigationEnum.RESULT_CLASS_MODAL, {
       item: item,
       actionBtn: () => {
         dispatch(
-          updateStudentStatus({status: 'Archived', StudentId: item.StudentId}),
+          updateStudentStatus({ status: 'Archived', StudentId: item.StudentId }),
         );
         navigate(NavigationEnum.STUDENTS_TAB);
       },
@@ -56,14 +56,16 @@ const StudentsItem: React.FC<IStudentsItem> = ({item}) => {
     });
   };
   const handleDelete = () => {
-    navigate(NavigationEnum.RESULT_CLASS_MODAL, {
-      item: item,
-      actionBtn: () => {
-        dispatch(deleteStudentAction({StudentId: item.StudentId}));
-        navigate(NavigationEnum.STUDENTS_TAB);
-      },
-      nameAction: 'Delete  Permanently',
-    });
+    // navigate(NavigationEnum.RESULT_CLASS_MODAL, {
+    //   item: item,
+    //   actionBtn: () => {
+    //     dispatch(deleteStudentAction({StudentId: item.StudentId}));
+    //     navigate(NavigationEnum.STUDENTS_TAB);
+    //   },
+    //   nameAction: 'Delete  Permanently',
+    // });
+    console.log('click');
+
   };
   return (
     <View style={styles.container}>
@@ -105,7 +107,7 @@ const StudentsItem: React.FC<IStudentsItem> = ({item}) => {
           <TouchableOpacity onPress={handlePayment}>
             <Text style={[styles.underlineText, styles.textRight]}>
               Total Balance:{' '}
-              <Text style={{color: item.Balance >= 0 ? '#169861' : '#F00'}}>
+              <Text style={{ color: item.Balance >= 0 ? '#169861' : '#F00' }}>
                 {item.Balance.toFixed(2)}
               </Text>
             </Text>
@@ -134,7 +136,7 @@ const StudentsItem: React.FC<IStudentsItem> = ({item}) => {
           )}
           {studentStatus === EClassesStatus.archived && (
             <TouchableOpacity style={styles.linkItem} onPress={handleDelete}>
-              <CheckIcon />
+              <CheckIcon size={40} />
             </TouchableOpacity>
           )}
           <TouchableOpacity style={[styles.buttonIcon]} onPress={handlePayment}>

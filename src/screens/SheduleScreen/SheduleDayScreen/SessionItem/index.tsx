@@ -34,7 +34,6 @@ export const SessionItem: FC<SessionItemProps> = memo(
         onPress={navigationClassInfo}
         onLongPress={navigateToCancellationModal}
         style={styles.container}>
-        <Text style={styles.timeStart}>{timeStart}</Text>
         <View
           style={[
             styles.item,

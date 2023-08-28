@@ -17,6 +17,7 @@ import {
 } from '../../../../store/user/actions';
 
 import styles from './styles';
+import ActivetedIcon from '../../../../../assets/svg/students/Activeted';
 
 interface IStudentsItem {
   item: IStudentResponse | any;
@@ -56,16 +57,26 @@ const StudentsItem: React.FC<IStudentsItem> = ({ item }) => {
     });
   };
   const handleDelete = () => {
-    // navigate(NavigationEnum.RESULT_CLASS_MODAL, {
-    //   item: item,
-    //   actionBtn: () => {
-    //     dispatch(deleteStudentAction({StudentId: item.StudentId}));
-    //     navigate(NavigationEnum.STUDENTS_TAB);
-    //   },
-    //   nameAction: 'Delete  Permanently',
-    // });
-    console.log('click');
-
+    navigate(NavigationEnum.RESULT_CLASS_MODAL, {
+      item: item,
+      actionBtn: () => {
+        dispatch(deleteStudentAction({ StudentId: item.StudentId }));
+        navigate(NavigationEnum.STUDENTS_TAB);
+      },
+      nameAction: 'Delete  Permanently',
+    });
+  };
+  const handleActiveted = () => {
+    navigate(NavigationEnum.RESULT_CLASS_MODAL, {
+      item: item,
+      actionBtn: () => {
+        dispatch(
+          updateStudentStatus({ status: 'Active', StudentId: item.StudentId }),
+        );
+        navigate(NavigationEnum.STUDENTS_TAB);
+      },
+      nameAction: 'Activate',
+    });
   };
   return (
     <View style={styles.container}>
@@ -135,9 +146,14 @@ const StudentsItem: React.FC<IStudentsItem> = ({ item }) => {
             </>
           )}
           {studentStatus === EClassesStatus.archived && (
-            <TouchableOpacity style={styles.linkItem} onPress={handleDelete}>
-              <CheckIcon size={40} />
-            </TouchableOpacity>
+            <>
+              <TouchableOpacity style={styles.linkItem} onPress={handleActiveted}>
+                <ActivetedIcon />
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.linkItem} onPress={handleDelete}>
+                <CheckIcon size={40} />
+              </TouchableOpacity>
+            </>
           )}
           <TouchableOpacity style={[styles.buttonIcon]} onPress={handlePayment}>
             <BankCardIcon />

@@ -20,6 +20,7 @@ interface IRegistrationCard {
   text: string;
   renderIcon: () => ReactNode;
   onPress: () => any;
+  disabled: boolean;
 }
 interface IChooseRoleScreen extends INavigationBase {
   setScreen: (screen: TRegistrationScreen) => any;
@@ -31,23 +32,27 @@ export const ChooseRoleScreen: FC<IChooseRoleScreen> = memo(({setScreen}) => {
       text: 'I am a private Tutor',
       onPress: () => setScreen('teacher'),
       renderIcon: () => <TeacherCardRegSvg />,
+      disabled: false,
     },
     {
-      text: 'I am a student or parent',
+      text: 'I am a student or parent (coming soon!)',
       onPress: () => setScreen('student'),
       renderIcon: () => <StudentCardSvg />,
+      disabled: true,
     },
   ];
   const renderRegistrationCard = ({
     onPress,
     renderIcon,
     text,
+    disabled
   }: IRegistrationCard) => {
     return (
       <TouchableOpacity
         activeOpacity={StyleEnum.TOUCHABLE_OPACITY}
         style={styles.cardWrapper}
-        onPress={onPress}>
+        onPress={onPress}
+        disabled={disabled}>
         {renderIcon()}
         <Text style={styles.cardText}>{text}</Text>
       </TouchableOpacity>

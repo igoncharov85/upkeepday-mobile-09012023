@@ -45,6 +45,7 @@ export const NewStudentScreen: React.FC = () => {
         <InputForm
           autoCapitalize="words"
           labelText="First Name"
+          placeholder="Student's First Name"
           onChange={handleChange('FirstName')}
           value={values.FirstName}
           //@ts-ignore
@@ -54,6 +55,7 @@ export const NewStudentScreen: React.FC = () => {
         <InputForm
           autoCapitalize="words"
           labelText="Last Name"
+          placeholder="Student's Last name"
           onChange={handleChange('LastName')}
           value={values.LastName}
           //@ts-ignore
@@ -61,13 +63,15 @@ export const NewStudentScreen: React.FC = () => {
         />
         <InputForm
           labelText="Email"
+          placeholder="Email"
           onChange={handleChange('Email')}
           value={values.Email}
           //@ts-ignore
           validationErrorText={touched.Email && errors.Email}
         />
         <InputForm
-          labelText="Phone"
+          labelText="Phone (optional)"
+          placeholder="Phone (optional)"
           onChange={handleChange('Phone')}
           value={values.Phone}
           //@ts-ignore
@@ -75,11 +79,12 @@ export const NewStudentScreen: React.FC = () => {
         />
         <InputForm
           autoCapitalize="sentences"
-          labelText="Notes"
+          labelText="Notes (optional)"
+          placeholder="Some Notes (optional)"
           onChange={handleChange('Notes')}
           value={values.Notes}
         />
-        <InputForm labelText="Attachments" />
+        {/*<InputForm labelText="Attachments" />*/}
         <View
           style={{ paddingVertical: 20, justifyContent: 'flex-end' }}>
           <CustomButton

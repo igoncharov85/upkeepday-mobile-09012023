@@ -54,15 +54,14 @@ export const NewStudentSchema = Yup.object().shape({
     FirstName: Yup.string()
         .min(2)
         .max(64)
-        .matches(/^[a-zA-Z]+$/),
+        .matches(RegexEnum.FIRST_AND_LAST_NAMES),
     LastName: Yup.string()
         .min(2)
         .max(64)
-        .matches(/^[a-zA-Z]+$/),
+        .matches(RegexEnum.FIRST_AND_LAST_NAMES),
     Email: Yup.string()
         .email()
         .required(),
     Phone: Yup.string()
-        .matches(RegexEnum.PHONE, "Phone number is not valid")
-        .required(),
+        .matches(RegexEnum.PHONE, "Phone number is not valid"),
 });

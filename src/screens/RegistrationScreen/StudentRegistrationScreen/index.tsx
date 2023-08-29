@@ -115,8 +115,8 @@ export const StudentRegistrationScreen: FC<IStudentRegistrationScreen> = memo(
               value={values.phone}
               touched={!!touched.phone}
               validationErrorText={errors.phone}
-              placeholder={'Phone number'}
-              labelText={'Phone number'}
+              placeholder={'Phone number (optional)'}
+              labelText={'Phone number (optional)'}
               inputMode="tel"
               keyboardType="phone-pad"
             />

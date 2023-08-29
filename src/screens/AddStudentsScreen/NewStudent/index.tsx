@@ -24,8 +24,6 @@ const formInitialValues = {
     Notes: ''
 };
 
-
-
 export const NewStudent: React.FC<INewStudentProps> = ({ handleTypeChange, onAddNewStudent }) => {
     const { students } = useAppSelector(state => state.user);
     const [newUser, setNewUser] = useState<IExistingStudent>();
@@ -57,6 +55,7 @@ export const NewStudent: React.FC<INewStudentProps> = ({ handleTypeChange, onAdd
                 <InputForm
                     autoCapitalize='words'
                     labelText='First Name'
+                    placeholder="Student's First Name"
                     //@ts-ignore
                     onChange={handleChange('FirstName')}
                     value={values.FirstName}
@@ -67,6 +66,7 @@ export const NewStudent: React.FC<INewStudentProps> = ({ handleTypeChange, onAdd
                 <InputForm
                     autoCapitalize='words'
                     labelText='Last Name'
+                    placeholder="Student's Last Name"
                     //@ts-ignore
                     onChange={handleChange('LastName')}
                     value={values.LastName}
@@ -75,6 +75,7 @@ export const NewStudent: React.FC<INewStudentProps> = ({ handleTypeChange, onAdd
                 />
                 <InputForm
                     labelText='Email'
+                    placeholder="Email"
                     //@ts-ignore
                     onChange={handleChange('Email')}
                     value={values.Email}
@@ -84,7 +85,8 @@ export const NewStudent: React.FC<INewStudentProps> = ({ handleTypeChange, onAdd
                     validationErrorText={touched.Email && errors.Email}
                 />
                 <InputForm
-                    labelText='Phone'
+                    labelText='Phone (optional)'
+                    placeholder="Phone (optional)"
                     //@ts-ignore
                     onChange={handleChange('Phone')}
                     value={values.Phone}
@@ -95,15 +97,16 @@ export const NewStudent: React.FC<INewStudentProps> = ({ handleTypeChange, onAdd
                 />
                 <InputForm
                     autoCapitalize='sentences'
-                    labelText='Notes'
+                    labelText='Notes (optional)'
+                    placeholder="Some Notes (optional)"
                     //@ts-ignore
                     onChange={handleChange('Notes')}
                     value={values.Notes}
                 />
-                <InputForm labelText='Attachments' />
+                {/*<InputForm labelText='Attachments' />*/}
                 <TouchableOpacity
                     //@ts-ignore
-                    onPress={handleSubmit} 
+                    onPress={handleSubmit}
                     disabled={!isValid}>
                     <Text style={styles.addMore}>Add One More</Text>
                 </TouchableOpacity>
@@ -122,7 +125,7 @@ export const NewStudent: React.FC<INewStudentProps> = ({ handleTypeChange, onAdd
                 FirstName: values.FirstName,
                 LastName: values.LastName,
                 Email: values.Email,
-                Phone: values.Phone,
+                Phone: values.Phone || '',
                 Notes: values.Notes || '',
             });
             resetForm();

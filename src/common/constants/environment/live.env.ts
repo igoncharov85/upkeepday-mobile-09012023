@@ -6,4 +6,5 @@ export const environment = {
     // qa
     apiUrl: 'https://api.upkeepday.com',
     apiUrlProd: 'https://tip.upkeepday.com',
+    apiUrlLocal: 'http://127.0.0.1:5000'
 }

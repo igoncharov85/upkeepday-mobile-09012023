@@ -51,6 +51,7 @@ export const EditStudentScreen: React.FC<INewStudentProps> = () => {
       <>
         <InputForm
           labelText="First Name"
+          placeholder="Student's First Name"
           onChange={handleChange('FirstName')}
           value={values.FirstName}
           //@ts-ignore
@@ -59,6 +60,7 @@ export const EditStudentScreen: React.FC<INewStudentProps> = () => {
 
         <InputForm
           labelText="Last Name"
+          placeholder="Student's Last Name"
           onChange={handleChange('LastName')}
           value={values.LastName}
           //@ts-ignore
@@ -66,24 +68,27 @@ export const EditStudentScreen: React.FC<INewStudentProps> = () => {
         />
         <InputForm
           labelText="Email"
+          placeholder="Email"
           onChange={handleChange('Email')}
           value={values.Email}
           //@ts-ignore
           validationErrorText={touched.Email && errors.Email}
         />
         <InputForm
-          labelText="Phone"
+          labelText="Phone (optional)"
+          placeholder={'Phone number (optional)'}
           onChange={handleChange('Phone')}
           value={values.Phone}
           //@ts-ignore
           validationErrorText={touched.Phone && errors.Phone}
         />
         <InputForm
-          labelText="Notes"
+          labelText="Notes (optional)"
+          placeholder={'Some Notes (optional)'}
           onChange={handleChange('Notes')}
           value={values.Notes}
         />
-        <InputForm labelText="Attachments" />
+        {/*<InputForm labelText="Attachments" />*/}
         <View
           style={{
             paddingVertical: 20,
@@ -118,7 +123,7 @@ export const EditStudentScreen: React.FC<INewStudentProps> = () => {
           FirstName: values.FirstName,
           LastName: values.LastName,
           Email: values.Email,
-          Phone: values.Phone,
+          Phone: values.Phone || '',
           Notes: values.Notes || '',
           status: item.Status
         }),

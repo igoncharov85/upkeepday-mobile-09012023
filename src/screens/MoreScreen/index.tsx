@@ -9,19 +9,22 @@ import { ScreenContainer } from '../../components/UI/screenContainer';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { NavigationEnum } from '../../common/constants/navigation';
+import { useAppSelector } from '../../store/hooks';
+import { selectBusinessAccount } from '../../store/businessAccount';
 
 export const MoreScreen: FC = () => {
     const { t, colors } = useUiContext();
     const styles = useMemo(() => getStyles(colors), [colors]);
     const navigation = useNavigation<NativeStackNavigationProp<any>>();
+    const { currentSchool } = useAppSelector(selectBusinessAccount);
 
     const onLogout = () => { dispatch(logoutAction()) };
-    const onOpenStudents = () => {navigation.navigate(NavigationEnum.STUDENTS_SCREEN) };
+    const onOpenStudents = () => { navigation.navigate(NavigationEnum.STUDENTS_SCREEN) };
 
     return (
         <ScreenContainer containerStyle={styles.container}>
             <CustomButton onPress={onLogout} style={styles.button} textStyle={styles.text} text={t('logout')} icon={<ChevronIcon color={colors.text} position={'RIGHT'} />} />
-            <CustomButton onPress={onOpenStudents} style={styles.button} textStyle={styles.text} text={t('students')} icon={<ChevronIcon color={colors.text} position={'RIGHT'} />} />
+            {currentSchool && <CustomButton onPress={onOpenStudents} style={styles.button} textStyle={styles.text} text={t('students')} icon={<ChevronIcon color={colors.text} position={'RIGHT'} />} />}
         </ScreenContainer>
     );
 };

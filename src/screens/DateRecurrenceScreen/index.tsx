@@ -17,6 +17,8 @@ import { calculateEndTimeDate, calculateNumberOfClasses } from "../../services/u
 import { EndScheduleType } from "../SelectDateScreen";
 import { call } from "redux-saga/effects";
 import { useUiContext } from "../../UIProvider";
+import { ScreenContainer } from "../../components/UI/screenContainer";
+import { scaleVertical } from "../../services/utils/Utils";
 
 const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
@@ -80,10 +82,8 @@ export const DateRecurrenceScreen: React.FC<IDateRecurrenceScreen> = () => {
 
 
     return (
-        <View style={{ height: '100%' }}>
-            <View style={styles.header}>
-                <ScreenHeader text={"Day and Time Recurrence"} onBackPress={navigation.goBack} withBackButton={true} />
-            </View>
+        <ScreenContainer >
+            <ScreenHeader containerStyle={styles.header} text={"Day and Time Recurrence"} onBackPress={navigation.goBack} withBackButton={true} />
             <View style={{ alignItems: 'center' }}>
                 <Text style={styles.title}>Populate a week and UpkeepDay will replicate other recurrences</Text>
             </View>
@@ -97,9 +97,9 @@ export const DateRecurrenceScreen: React.FC<IDateRecurrenceScreen> = () => {
             <View style={{ flex: 1 }}>
                 <WeekTable startOfWeek={weekDates.startDate} endOfWeek={weekDates.endDate} onHandleData={setDataForWeek} />
             </View>
-            <View style={{ padding: 20, justifyContent: 'flex-end' }}>
-                <CustomButton text={buttonTitle || 'Next step'} disabled={!weekTimeSlots.length} onPress={weekTimeSlots.length ? goNextStep : () => { }} />
+            <View style={{ padding: scaleVertical(20), justifyContent: 'flex-end' }}>
+                <CustomButton text={buttonTitle || "Next Step"} disabled={!weekTimeSlots.length} onPress={weekTimeSlots.length ? goNextStep : () => { }} />
             </View>
-        </View >
+        </ScreenContainer >
     )
 }

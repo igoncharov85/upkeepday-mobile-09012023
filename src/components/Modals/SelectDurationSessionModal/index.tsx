@@ -99,8 +99,7 @@ const SelectDurationSessionModal = ({
               { hour: false, minute: true, dayPart: false }
             }
           />
-
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', flex: 1, marginTop: 24, marginBottom: 10 }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', flex: 1, marginTop: 24 }}>
             <Text>Duration</Text>
             <View>
               <ScrollView showsVerticalScrollIndicator={false}>
@@ -118,13 +117,11 @@ const SelectDurationSessionModal = ({
 
                     )
                   })}
-
-
               </ScrollView>
             </View>
             <View style={{ width: 50 }} />
           </View>
-          <TouchableOpacity onPress={goToCreateDuration}>
+          <TouchableOpacity style={styles.setUpDuration} onPress={goToCreateDuration}>
             <Text style={{ fontSize: 14, textDecorationLine: 'underline', textAlign: 'center', marginBottom: 20 }}>Set-up your own duration</Text>
           </TouchableOpacity>
         </View>

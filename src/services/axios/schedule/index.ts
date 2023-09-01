@@ -16,6 +16,7 @@ export class ScheduleService {
     static async deleteSessions({ endDate, startDate, AllDay }: IDeleteScheduleRequest) {
         const utcStartDate = moment(startDate).utc().format('YYYY-MM-DDTHH:mm:ss');
         const utcEndDate = moment(endDate).utc().format('YYYY-MM-DDTHH:mm:ss');
+
         return $axiosAuth.delete(`/tutor/sessions/${utcStartDate}/${utcEndDate}`, {
             data: {
                 AllDay

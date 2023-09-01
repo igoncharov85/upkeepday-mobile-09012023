@@ -2,15 +2,11 @@ export interface IStudent {
     StudentId: number;
     FullName: string;
 }
+
 export interface ILocation {
     LocationId: number;
     LocationType: string;
-    Url: string;
-    AddressLine: string;
-    City: string;
-    State: string;
-    PostalCode: string;
-    Country: string;
+    Address: string;
 }
 export interface ISession {
     ClassName: string;
@@ -34,10 +30,8 @@ export interface IClassesResponse {
     ClassId: number;
     Name: string;
     StartDate: string;
-    StartDateTime: string;
     EndScheduleType: string;
     EndDate: string;
-    EndDateTime: string;
     EndNumber: number | null;
     MakeupRequired: boolean;
     TrackPrepayment: boolean;
@@ -50,8 +44,8 @@ export type TClassesChange = 'current' | 'future';
 export type TClassesId = number;
 
 export type IClassesUpdateStatus = {
-    id: TClassesId;
-    Status: string;
+    id?: TClassesId;
+    Status: 'Archived' | 'Scheduled';
     schoolId?: number;
 }
 export type IClassesUpdateSession = {

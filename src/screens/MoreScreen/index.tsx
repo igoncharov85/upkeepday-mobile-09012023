@@ -1,33 +1,27 @@
-import React from 'react'
-import { Text, TouchableOpacity, View } from 'react-native'
-import {PaymentTrackingSetUp} from "../PaymentTrackingSetUp";
-import styles from './styles'
-import ArrowRight from '../../../assets/svg/schedule/ArrowRight'
+import React, { FC, useMemo } from 'react'
 import { dispatch } from '../../store/store'
 import { logoutAction } from '../../store/auth/actions'
+import { CustomButton } from '../../components/UI/CustomButton';
+import { ChevronIcon } from '../../../assets/svg/chevronIcon';
+import { useUiContext } from '../../UIProvider';
+import { getStyles } from './styles'
+import { ScreenContainer } from '../../components/UI/screenContainer';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { NavigationEnum } from '../../common/constants/navigation';
 
-const MoreScreen: React.FC = () => {
-    const onLogout = () => {
-        dispatch(logoutAction())
-    }
+export const MoreScreen: FC = () => {
+    const { t, colors } = useUiContext();
+    const styles = useMemo(() => getStyles(colors), [colors]);
+    const navigation = useNavigation<NativeStackNavigationProp<any>>();
+
+    const onLogout = () => { dispatch(logoutAction()) };
+    const onOpenStudents = () => {navigation.navigate(NavigationEnum.STUDENTS_SCREEN) };
 
     return (
-        <View style={styles.container}>
-            <TouchableOpacity onPress={onLogout} style={styles.block}>
-                <View style={{
-                    paddingVertical: 10,
-                    paddingHorizontal: 16,
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between'
-                }}>
-                    <Text>Logout</Text>
-                    <ArrowRight />
-                </View>
-            </TouchableOpacity>
-
-        </View>
-    )
-}
-
-export default MoreScreen;
+        <ScreenContainer containerStyle={styles.container}>
+            <CustomButton onPress={onLogout} style={styles.button} textStyle={styles.text} text={t('logout')} icon={<ChevronIcon color={colors.text} position={'RIGHT'} />} />
+            <CustomButton onPress={onOpenStudents} style={styles.button} textStyle={styles.text} text={t('students')} icon={<ChevronIcon color={colors.text} position={'RIGHT'} />} />
+        </ScreenContainer>
+    );
+};

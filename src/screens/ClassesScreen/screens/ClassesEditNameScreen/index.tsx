@@ -19,6 +19,7 @@ import { fetchUsersAction } from "../../../../store/user/actions";
 import { fetchLocationAction } from "../../../../store/location/actions";
 import { useAppSelector } from "../../../../store/hooks";
 import { editNameClassesAction } from "../../../../store/classes/actions";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 interface IAddClassScreen { }
 
@@ -36,23 +37,23 @@ if (Platform.OS === 'ios') {
 }
 
 const ClassesEditNameScreen: React.FC<IAddClassScreen> = memo(() => {
-    const navigation = useNavigation();
+    const navigation = useNavigation<NativeStackNavigationProp<any>>();
     const route = useRoute();
     const { item }: any = route.params;
     const dispatch = useDispatch();
     const formInitialValues = {
         name: item.Name,
-        locationType: item.Location.LocationType,
-        addressLine: item.Location.Address,
+        locationType: item.Location?.LocationType,
+        addressLine: item.Location?.Address,
         url: "",
-        locationId: item.Location.LocationId,
+        locationId: item.Location?.LocationId,
     };
     const { locations } = useAppSelector(state => state.location);
-    const [typeLocation, setTypeLocation] = useState<TypeLocation>(item.Location.LocationType === "Online" ? TypeLocation.Online : TypeLocation.InPerson);
+    const [typeLocation, setTypeLocation] = useState<TypeLocation>(item.Location?.LocationType === "Online" ? TypeLocation.Online : TypeLocation.InPerson);
     const [modalVisible, setModalVisible] = useState(false);
-    const [classLocation, setClassLocation] = useState(item.Location.Address || '');
-    const [locationId, setLocationId] = useState(item.Location.LocationId);
-    const { currentSchool } = useAppSelector(state => state.businessAccount);
+    const [classLocation, setClassLocation] = useState(item.Location?.Address || '');
+    const [locationId, setLocationId] = useState(item.Location?.LocationId);
+    const { currentSchool } = useAppSelector(state => state?.businessAccount);
 
 
     const handleShowModal = useCallback(() => {
@@ -137,8 +138,7 @@ const ClassesEditNameScreen: React.FC<IAddClassScreen> = memo(() => {
 
     const handleSubmit = useCallback(
         (values: any) => {
-            const Location = values.url ? { LocationId: values.locationId, Url: values.url } : { LocationId: values.locationId }
-            //@ts-ignore
+            const Location = { LocationId: values?.locationId, Url: values?.url };
             navigation.navigate(NavigationEnum.RESULT_CLASS_MODAL, {
                 item:
                 {
@@ -167,7 +167,7 @@ const ClassesEditNameScreen: React.FC<IAddClassScreen> = memo(() => {
     );
     useEffect(() => {
         dispatch(fetchLocationAction(currentSchool?.SchoolId));
-    }, [currentSchool]);
+    }, [currentSchool, item]);
 
     return (
         <KeyboardAvoidingView

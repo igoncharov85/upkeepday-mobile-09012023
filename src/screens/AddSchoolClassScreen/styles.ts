@@ -1,10 +1,10 @@
 import { StyleSheet } from "react-native";
-import { scaleHorizontal } from "../../services/utils/Utils";
+import { scaleHorizontal, scaleVertical } from "../../services/utils/Utils";
 
 export const getStyles = () => {
     return StyleSheet.create({
         container: {
-            padding: scaleHorizontal(20),
+            padding: scaleVertical(20),
         },
         header: {
             paddingBottom: scaleHorizontal(20),

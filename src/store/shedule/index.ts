@@ -15,7 +15,6 @@ export interface ScheduleState {
     createCurrentClassRequest: Partial<ICreateClassRequest>,
 
     localStudentData: Array<any>,
-    finderCurrentEntries: Array<IGeneratedScheduleEntries>,
 }
 
 const initialState: ScheduleState = {
@@ -24,8 +23,7 @@ const initialState: ScheduleState = {
     CurrentScheduledEntries: [],
     WeekTimeSlots: [],
     createCurrentClassRequest: {},
-    localStudentData: [],
-    finderCurrentEntries: []
+    localStudentData: []
 }
 
 export const scheduleSlice = createSlice({
@@ -42,14 +40,13 @@ export const scheduleSlice = createSlice({
             state.WeekTimeSlots = action.payload
         },
         setLocalStudentData: (state, action: PayloadAction<Array<any>>) => {
-            state.localStudentData = action.payload
+           state.localStudentData = action.payload
         },
         setGeneratedScheduleEntriesAction: (state, action: PayloadAction<Array<IGeneratedScheduleEntries>>) => {
             state.GeneratedScheduleEntries = action.payload
         },
         setCurrentScheduleEntries: (state, action: PayloadAction<Array<IGeneratedScheduleEntries>>) => {
             state.CurrentScheduledEntries = action.payload
-            state.finderCurrentEntries = action.payload
         },
         updateCurrentClassRequestAction: (state, action: PayloadAction<Partial<ICreateClassRequest>>) => {
             state.createCurrentClassRequest = {
@@ -69,21 +66,11 @@ export const scheduleSlice = createSlice({
                 }
             }
         },
-        setFinderCurrentEntriesAction: (state, action: PayloadAction<Array<IGeneratedScheduleEntries>>) => {
-            state.finderCurrentEntries = action.payload
-        },
     },
 
 })
 
 // Action creators are generated for each case reducer function
-export const {
-    setScheduleLoading,
-    setGeneratedScheduleEntriesAction,
-    setCurrentScheduleEntries,
-    setTimeSlotsAction,
-    updateCurrentClassRequestAction,
-    setLocalStudentData,
-    setFinderCurrentEntriesAction } = scheduleSlice.actions
+export const { setScheduleLoading, setGeneratedScheduleEntriesAction, setCurrentScheduleEntries, setTimeSlotsAction, updateCurrentClassRequestAction, setLocalStudentData } = scheduleSlice.actions
 
 export default scheduleSlice.reducer

@@ -152,9 +152,6 @@ export const WeekTableItem: FC<IWeekTableItem> =
         StartTime: startTime,
       })
     }
-    useEffect(() => {
-      daySchedule.length && console.log(daySchedule)
-    }, [daySchedule])
 
     const onHandleSlot = (event: any) => {
       const { locationX, locationY } = event.nativeEvent;
@@ -166,7 +163,6 @@ export const WeekTableItem: FC<IWeekTableItem> =
       const partiallyOccupied = prevLesson.end.split(':')[0] >= timeIndex && +prevLesson.end.split(':')[1] > userTouchMinute
       const fullyOccupied = prevLesson.end.split(':')[0] > timeIndex
       if (fullyOccupied) {
-        console.log('delete')
         onHandleClick({
           Duration: subtractTime(prevLesson.end, prevLesson.start),
           DayOfWeek: dayOfWeek,

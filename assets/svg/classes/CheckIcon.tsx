@@ -2,12 +2,12 @@ import * as React from "react"
 import { View } from "react-native";
 import Svg, { ClipPath, Defs, G, LinearGradient, Path, Rect, Stop } from "react-native-svg"
 
-const CheckIcon = ({ active, size }: { active?: any, size?: number }) => {
+const CheckIcon = ({ active }: any) => {
   const IconComponent = active ? CheckIconTrue : CheckIconFalse;
 
   return (
     <View >
-      <IconComponent size={size} />
+      <IconComponent />
     </View>
   );
 };
@@ -40,10 +40,10 @@ const CheckIconTrue = () => {
   );
 };
 
-const CheckIconFalse = ({ size = 29 }: { size?: number }) => {
+const CheckIconFalse = () => {
   return (
     <View>
-      <Svg width={size} height={size} viewBox={`0 0 29 29`} fill="none">
+      <Svg width={29} height={29} viewBox="0 0 29 29" fill="none">
         <Rect width={29} height={29} rx={4} fill="url(#paint0_linear_10_13585)" />
         <G clipPath="url(#clip0_10_13585)">
           <Path

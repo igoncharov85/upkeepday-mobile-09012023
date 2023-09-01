@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { View, TouchableOpacity, Text } from 'react-native';
 
@@ -12,7 +12,7 @@ import { updateCurrentClassRequestAction } from '../../store/shedule';
 import { useAppSelector } from '../../store/hooks';
 
 
-export const EditClassScreen = () => {
+export const EditClassScreen: FC = () => {
     const navigation = useNavigation();
     const route = useRoute();
     const item: any = route.params;
@@ -24,25 +24,25 @@ export const EditClassScreen = () => {
         classLesson && dispatch(
             updateCurrentClassRequestAction({
                 Class: {
-                    Name: classLesson.Name,
+                    Name: classLesson?.Name,
                     StartDate: '',
                     EndDate: '',
-                    EndNumber: classLesson.EndNumber,
-                    EndScheduleType: classLesson.EndScheduleType,
-                    MakeupRequired: classLesson.MakeupRequired,
-                    TrackPrepayment: classLesson.TrackPrepayment,
+                    EndNumber: classLesson?.EndNumber,
+                    EndScheduleType: classLesson?.EndScheduleType,
+                    MakeupRequired: classLesson?.MakeupRequired,
+                    TrackPrepayment: classLesson?.TrackPrepayment,
 
                 },
                 Location: {
-                    Name: classLesson.Location.Address,
-                    Url: classLesson.Location.Url,
-                    LocationType: classLesson.Location.LocationType,
-                    AddressLine: classLesson.Location.Address,
-                    LocationId: classLesson.Location.LocationId
+                    Name: classLesson?.Location?.Address,
+                    Url: classLesson?.Location?.Url,
+                    LocationType: classLesson?.Location?.LocationType,
+                    AddressLine: classLesson?.Location?.Address,
+                    LocationId: classLesson?.Location?.LocationId
 
                 },
-                Students: classLesson.Students,
-                Slots: classLesson.Slots,
+                Students: classLesson?.Students,
+                Slots: classLesson?.Slots,
                 Sessions: [],
             })
         );

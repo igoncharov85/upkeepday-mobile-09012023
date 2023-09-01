@@ -1,40 +1,32 @@
-import React from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
-import {PaymentTrackingSetUp} from '../PaymentTrackingSetUp';
-import styles from './styles';
-import ArrowRight from '../../../assets/svg/schedule/ArrowRight';
-import {dispatch} from '../../store/store';
-import {logoutAction, userDeactivateAction} from '../../store/auth/actions';
+import React, { FC, useMemo } from 'react'
+import { dispatch } from '../../store/store'
+import { logoutAction } from '../../store/auth/actions'
+import { CustomButton } from '../../components/UI/CustomButton';
+import { ChevronIcon } from '../../../assets/svg/chevronIcon';
+import { useUiContext } from '../../UIProvider';
+import { getStyles } from './styles'
+import { ScreenContainer } from '../../components/UI/screenContainer';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { NavigationEnum } from '../../common/constants/navigation';
+import { useAppSelector } from '../../store/hooks';
+import { selectBusinessAccount } from '../../store/businessAccount';
 
-const MoreScreen: React.FC = () => {
-  const { navigate, goBack } = useNavigation<NativeStackNavigationProp<any>>()
-  const onLogout = () => {
-    dispatch(logoutAction());
-  };
-  const onDeactivated = () => {
-    // dispatch(userDeactivateAction(''));
-    navigate(NavigationEnum.INFO_MODAL)
-  };
+export const MoreScreen: FC = () => {
+    const { t, colors } = useUiContext();
+    const styles = useMemo(() => getStyles(colors), [colors]);
+    const navigation = useNavigation<NativeStackNavigationProp<any>>();
+    const { currentSchool } = useAppSelector(selectBusinessAccount);
 
-  return (
-    <View style={styles.container}>
-      <MorePoint action={onLogout} label="Logout" />
-      <MorePoint action={onDeactivated} label="Deactivate and Delete my account" />
-    </View>
-  );
+    const onLogout = () => { dispatch(logoutAction()) };
+    const onOpenStudents = () => { navigation.navigate(NavigationEnum.STUDENTS_SCREEN) };
+    const onDeactivated = () => {navigation.navigate(NavigationEnum.INFO_MODAL)};
+  
+    return (
+        <ScreenContainer containerStyle={styles.container}>
+            <CustomButton onPress={onLogout} style={styles.button} textStyle={styles.text} text={t('logout')} icon={<ChevronIcon color={colors.text} position={'RIGHT'} />} />
+            <CustomButton onPress={onDeactivated} style={styles.button} textStyle={styles.text} text={t('Deactivate and Delete my account')} icon={<ChevronIcon color={colors.text} position={'RIGHT'} />} />
+            {currentSchool && <CustomButton onPress={onOpenStudents} style={styles.button} textStyle={styles.text} text={t('students')} icon={<ChevronIcon color={colors.text} position={'RIGHT'} />} />}
+        </ScreenContainer>
+    );
 };
-const MorePoint = ({action, label}: {label: string; action: any}) => {
-  return (
-    <TouchableOpacity onPress={action} style={styles.block}>
-      <View
-        style={styles.labelWrapper}>
-        <Text>{label}</Text>
-        <ArrowRight />
-      </View>
-    </TouchableOpacity>
-  );
-};
-export default MoreScreen;

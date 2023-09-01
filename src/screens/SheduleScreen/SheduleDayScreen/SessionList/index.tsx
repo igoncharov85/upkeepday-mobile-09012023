@@ -4,8 +4,6 @@ import { ScrollView, Text, View } from 'react-native';
 import { SessionItem } from '../SessionItem';
 import styles from './styles';
 import { IScheduleItem } from '../../../../common/types/schedule.types';
-import { generateTimeData } from '../../../../services/utils/generateDate.util';
-import { TimeLineItem } from '../../SheduleWeekScreen/SheduleTable';
 
 enum LessonType {
   Lesson,
@@ -46,33 +44,20 @@ export const SessionItemList: React.FC<ISessionItemListProps> = memo(
       };
     });
 
-    const timeData = generateTimeData('00:00', '23:00');
     return (
       <>
-        <ScrollView style={{ marginBottom: 40, paddingHorizontal: 20 }}>
-          <View style={{ flexDirection: 'row' }}>
-
-            <View>
-              {timeData.map((item, index) => (
-                <TimeLineItem key={index} time={item} />
-              ))}
-            </View>
-            <View style={{ paddingLeft: 12 }}>
-
-              {sessionItems?.map((item, index) => (
-                <SessionItem
-                  key={item.id}
-                  name={item.name}
-                  timeContinued={item.timeContinued}
-                  timeStart={item.timeStart}
-                  type={item.type}
-                  id={item.id}
-                  data={data[index]}
-                />
-              ))}
-
-            </View>
-          </View>
+        <ScrollView style={{ marginBottom: 40 }}>
+          {sessionItems?.map((item, index) => (
+            <SessionItem
+              key={item.id}
+              name={item.name}
+              timeContinued={item.timeContinued}
+              timeStart={item.timeStart}
+              type={item.type}
+              id={item.id}
+              data={data[index]}
+            />
+          ))}
         </ScrollView>
         <View style={styles.line} />
       </>

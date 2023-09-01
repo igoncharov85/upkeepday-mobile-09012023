@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { scaleFontSize, scaleVertical } from "../../../../services/utils/Utils";
+import { scaleFontSize, scaleHorizontal, scaleVertical } from "../../../../services/utils/Utils";
 import { IColors } from "../../../../UIProvider/theme/IColors";
 
 export const getStyles = (colors: IColors) => {
@@ -19,6 +19,9 @@ export const getStyles = (colors: IColors) => {
             fontSize: scaleFontSize(24),
             textAlign: 'left',
         },
+        search:{
+            marginLeft: scaleHorizontal(20),
+        }
     });
     return styles;
 };

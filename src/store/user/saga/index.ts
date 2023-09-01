@@ -8,10 +8,8 @@ import { UserService } from "../../../services/axios/user";
 import { ErrorFilterService } from "../../../services/error-filter/error-filter.service";
 import { UserContactsEnum } from "../constants";
 import { loggerActions } from "../../logger";
-import { IStudent } from "../../../common/types/classes.types";
-import moment from "moment";
-import Toast from 'react-native-toast-message';
-import { fetchStudentsAction, fetchStudentsByIdAction } from "../actions";
+import { selectBusinessAccount } from "../../businessAccount";
+import { getSchoolStudentsAction } from "../../businessAccount/actions";
 
 export function* fetchUserWorker({ payload }: IAction<number>): SagaIterator {
     try {
@@ -88,7 +86,12 @@ export function* checkinUserWorker(payload: IAction<IUserCheckinsRequest>): Saga
 
 export function* deleteUserWorker(payload: IAction<IDeleteUserRequest>): SagaIterator {
     try {
-        const { status } = yield call(UserService.deleteUser, payload.payload);
+        const { currentSchool, currentClass } = yield select(selectBusinessAccount);
+        const { status } = yield call(UserService.deleteUser, {
+            StudentId: payload.payload.StudentId,
+            Classes: [currentClass.ClassId],
+            schoolId: currentSchool.SchoolId,
+        });
         yield put(loggerActions.add({ type: 'response', name: 'deleteUserWorker: ', message: status }));
     } catch (error) {
         console.log('deleteUserWorker: ', error);
@@ -97,9 +100,15 @@ export function* deleteUserWorker(payload: IAction<IDeleteUserRequest>): SagaIte
     }
 }
 
-export function* updateUserWorker(payload: IAction<{ data: IUpdateStudent, schoolId?: number }>): SagaIterator {
+export function* updateUserWorker(payload: IAction<IUpdateStudent>): SagaIterator {
     try {
-        const { status } = yield call(UserService.updatedUser, payload.payload);
+        const { currentClass, currentSchool } = yield select(selectBusinessAccount);
+        const { status } = yield call(UserService.updatedUser, {
+            schoolId: currentSchool.SchoolId,
+            StudentId: currentClass.ClassId,
+            ExistingStudents: payload.payload.ExistingStudents,
+            NewStudents: payload.payload.NewStudents,
+        });
         yield put(loggerActions.add({ type: 'response', name: 'updateUserWorker: ', message: status }));
     } catch (error) {
         console.log('updateUserWorker: ', error);
@@ -110,8 +119,10 @@ export function* updateUserWorker(payload: IAction<{ data: IUpdateStudent, schoo
 
 export function* deleteStudentWorker(payload: IAction<IStudentRequest>): SagaIterator {
     try {
-        const { status } = yield call(UserService.deleteStudent, payload.payload);
+        const { currentSchool } = yield select(selectBusinessAccount);
+        const { status } = yield call(UserService.deleteStudent, { schoolId: currentSchool?.SchoolId, StudentId: payload.payload.StudentId });
         yield put(loggerActions.add({ type: 'response', name: 'deleteStudentWorker: ', message: status }));
+        yield put(getSchoolStudentsAction());
     } catch (error) {
         console.log('deleteStudentWorker: ', error);
         yield put(loggerActions.add({ type: 'error', name: 'deleteStudentWorker: ', message: error }));
@@ -150,8 +161,7 @@ export function* fetchStudentsByIdWorker(payload: IAction<IStudentRequest>): Sag
     }
 }
 
-// update student 
-export function* updateStudentWorker(payload: IAction<IStudentRequest & IUserCreateRequest & IStudentsRequest>): SagaIterator {
+export function* updateStudentWorker(payload: IAction<IStudentRequest & IUserCreateRequest>): SagaIterator {
     try {
         const { status } = yield call(UserService.updateStudent, payload.payload);
         yield put(loggerActions.add({ type: 'response', name: 'updateStudentWorker: ', message: status }));
@@ -159,11 +169,6 @@ export function* updateStudentWorker(payload: IAction<IStudentRequest & IUserCre
         console.log('updateStudentWorker: ', error);
         yield put(loggerActions.add({ type: 'error', name: 'updateStudentWorker: ', message: error }));
         ErrorFilterService.validateError(error)
-    } finally {
-        console.log('payload', payload.payload.status);
-
-        yield put(fetchStudentsAction({ status: payload.payload.status }))
-
     }
 }
 

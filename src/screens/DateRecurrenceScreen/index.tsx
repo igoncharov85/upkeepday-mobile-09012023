@@ -98,7 +98,7 @@ export const DateRecurrenceScreen: React.FC<IDateRecurrenceScreen> = () => {
                 <WeekTable startOfWeek={weekDates.startDate} endOfWeek={weekDates.endDate} onHandleData={setDataForWeek} />
             </View>
             <View style={{ padding: 20, justifyContent: 'flex-end' }}>
-                <CustomButton text={buttonTitle} disabled={!weekTimeSlots.length} onPress={weekTimeSlots.length ? goNextStep : () => { }} />
+                <CustomButton text={buttonTitle || 'Next step'} disabled={!weekTimeSlots.length} onPress={weekTimeSlots.length ? goNextStep : () => { }} />
             </View>
         </View >
     )

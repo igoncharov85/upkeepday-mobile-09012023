@@ -6,7 +6,7 @@ import { NewStudentSchema } from '../../common/shemas/addClass.shape';
 import { IExistingStudent } from '../../common/types/schedule.types';
 import { ScreenHeader } from '../../components/ScreenHeader';
 import { CustomButton } from '../../components/UI/CustomButton';
-import { useTypedNavigation } from '../../hook/useTypedNavigation';
+// import { useTypedNavigation } from '../../hook/useTypedNavigation';
 import { useAppSelector } from '../../store/hooks';
 import { updateCurrentClassRequestAction } from '../../store/shedule';
 import { dispatch } from '../../store/store';
@@ -14,6 +14,8 @@ import { InputForm } from '../AddClassScreen/components/InputForm';
 import { removeEmptyObjects } from '../AddStudentsScreen';
 import styles from '../AddStudentsScreen/NewStudent/styles';
 import { createUserAction } from '../../store/user/actions';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 const formInitialValues = {
   FirstName: '',
@@ -24,7 +26,7 @@ const formInitialValues = {
 };
 
 export const NewStudentScreen: React.FC = () => {
-  const { goBack } = useTypedNavigation();
+  const { goBack } = useNavigation<NativeStackNavigationProp<any>>();
   const renderForm = ({
     touched,
     errors,

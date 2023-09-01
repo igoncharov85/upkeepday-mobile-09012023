@@ -77,7 +77,7 @@ export function* createSchedule({ payload }: IAction<ICreateClassRequest>): Saga
   try {
     yield put(setScheduleLoading(true));
     const { currentSchool } = yield select(state => state.businessAccount);
-    const { data }: AxiosResponse<Array<IGeneratedScheduleResponse>, any> = yield call(ScheduleService.createClass, { data: payload, schoolId: currentSchool.SchoolId });
+    const { data }: AxiosResponse<Array<IGeneratedScheduleResponse>, any> = yield call(ScheduleService.createClass, { data: payload, schoolId: currentSchool?.SchoolId });
     yield put(loggerActions.add({ type: 'response', name: 'createSchedule: ', message: data }));
   } catch (error) {
     console.warn("createSchedule: ", error);

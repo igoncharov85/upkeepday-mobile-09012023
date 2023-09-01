@@ -12,7 +12,7 @@ export interface IDeleteScheduleRequest {
 
 
 export interface IExistingStudent {
-    StudentId?: number,
+    Id?: number,
     FirstName?: string
     LastName?: string,
     Email?: string,

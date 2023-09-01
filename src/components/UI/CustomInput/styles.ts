@@ -5,7 +5,7 @@ export default StyleSheet.create({
     container: {
         width: '100%',
         backgroundColor: ColorEnum.ACCENT_BC,
-        padding:2
+        overflow:'visible',
     },
     labelText: {
         fontSize: 12,

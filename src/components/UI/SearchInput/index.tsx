@@ -67,16 +67,16 @@ const SearchInput = ({ editMode }: { editMode: any }) => {
     };
     const cleanText = () => {
         setSearchText('');
-        dispatch(currentOption?.updateAction(currentOption?.state))
+        dispatch(currentOption.updateAction(currentOption.state))
     };
     const searchAndLogResults = (searchText: string) => {
-        const searchResults = currentOption?.state?.filter((entry: any) => currentOption?.searchCondition(entry, searchText));
-        dispatch(currentOption?.updateAction(searchResults))
+        const searchResults = currentOption.state?.filter((entry: any) => currentOption.searchCondition(entry, searchText));
+        dispatch(currentOption.updateAction(searchResults))
     };
     useEffect(() => {
-        dispatch(currentOption?.updateAction(currentOption?.state))
+        dispatch(currentOption.updateAction(currentOption.state))
         return () => {
-            dispatch(currentOption?.updateAction(currentOption?.state))
+            dispatch(currentOption.updateAction(currentOption.state))
         }
     }, [])
     return (

@@ -6,13 +6,12 @@ import styles from './styles';
 
 interface ScreenHeader {
     text: string;
-    center?: boolean;
     withBackButton?: boolean;
     onBackPress?: any;
     optionalComponent?: ReactNode;
     containerStyle?: ViewStyle;
 }
-export const ScreenHeader: FC<ScreenHeader> = memo(({ text, center = false, onBackPress, withBackButton, optionalComponent, containerStyle }) => {
+export const ScreenHeader: FC<ScreenHeader> = memo(({ text, onBackPress, withBackButton, optionalComponent, containerStyle }) => {
     return (
         <View style={[styles.header, containerStyle]}>
             {withBackButton && (
@@ -24,7 +23,7 @@ export const ScreenHeader: FC<ScreenHeader> = memo(({ text, center = false, onBa
                 </TouchableOpacity>
             )}
             <Text style={[styles.headerText,]} >{text}</Text>
-            <View style={center ? undefined : styles.optionalComponentWrapper}>
+            <View style={styles.optionalComponentWrapper}>
                 {optionalComponent}
             </View>
         </View>

@@ -20,8 +20,6 @@ import { NavigationEnum } from "../../common/constants/navigation";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useUiContext } from "../../UIProvider";
 import { updateCurrentClassRequestAction } from "../../store/shedule";
-import { selectBusinessAccount } from "../../store/businessAccount";
-import { ScreenContainer } from "../../components/UI/screenContainer";
 
 enum TypeDate {
     FixedNumberOfClasses = 0,
@@ -62,12 +60,11 @@ if (Platform.OS === 'ios') {
 
 export const SelectSchoolDateScreen: React.FC<ISelectDateScreen> = memo(() => {
     const { t } = useUiContext();
-    const { createCurrentClassRequest } = useAppSelector(state => state.schedule);
-    const { currentClass, isEdit } = useAppSelector(selectBusinessAccount);
-    const [numberOf, setNumberOf] = useState(currentClass?.EndNumber || createCurrentClassRequest.Class?.EndNumber || '');
-    const [totalClasses, setTotalClasses] = useState(currentClass?.EndNumber || createCurrentClassRequest.Class?.EndNumber || '');
-    const [startDate, setStartDate] = useState(currentClass?.StartDate || createCurrentClassRequest.Class?.StartDate || '');
-    const [finishDate, setFinishDate] = useState(currentClass?.EndDate || createCurrentClassRequest.Class?.EndDate || '');
+    const { createCurrentClassRequest } = useAppSelector(state => state.schedule)
+    const [numberOf, setNumberOf] = useState(createCurrentClassRequest.Class?.EndNumber ? createCurrentClassRequest.Class?.EndNumber : '');
+    const [totalClasses, setTotalClasses] = useState(createCurrentClassRequest.Class?.EndNumber ? createCurrentClassRequest.Class?.EndNumber : '');
+    const [startDate, setStartDate] = useState(createCurrentClassRequest.Class?.StartDate ? createCurrentClassRequest.Class?.StartDate : '');
+    const [finishDate, setFinishDate] = useState(createCurrentClassRequest.Class?.EndDate ? createCurrentClassRequest.Class?.EndDate : '');
     const formInitialValues = {
         typeLocation: 0,
         endScheduleType: "",
@@ -124,7 +121,8 @@ export const SelectSchoolDateScreen: React.FC<ISelectDateScreen> = memo(() => {
         };
 
         return (
-            <ScreenContainer scrollEnabled containerStyle={styles.container} headerComponent={<ScreenHeader onBackPress={navigation.goBack} text={t('startFinishDates')} withBackButton={true} />}>
+            <View style={[styles.container, { minHeight: windowHeight, justifyContent: 'flex-start' }]}>
+                <ScreenHeader onBackPress={navigation.goBack} text={t('startFinishDates')} withBackButton={true} />
                 <View>
                     <InputWithDate labelText={"Enter Start Date"} handleChange={setFieldValue} nameField="startDate" dateValue={startDate} />
                     <ListButtons buttons={[' Fixed number of classes', 'On Specific Date', ' Fixed period in time']} label="Class Type" onPress={handleTypeLocation} index={typeNumberRef.current} />
@@ -152,9 +150,11 @@ export const SelectSchoolDateScreen: React.FC<ISelectDateScreen> = memo(() => {
                         </View>}
                 </View>
                 <View style={{ flex: 1, width: '100%', justifyContent: 'flex-end' }} >
-                    <CustomButton text={t('stepCounter').replace('{step}', '2').replace('{total}', '10')} onPress={handleSubmit} disabled={!isValid} />
+                    <CustomButton text={t('stepCounter').replace('{step}', '2').replace('{total}', '10')} onPress={handleSubmit} disabled={
+                        !isValid
+                    } />
                 </View>
-            </ScreenContainer>
+            </View>
         )
     };
 
@@ -172,43 +172,34 @@ export const SelectSchoolDateScreen: React.FC<ISelectDateScreen> = memo(() => {
                 numberOf: typeRef.current == EndScheduleType.FixedWeekNumber || typeRef.current == EndScheduleType.FixedMonthNumber ? Yup.number().min(1, "NumberOf").required('') : Yup.number(),
             })
         },
-        handleSubmit: (values) => {
-            if (isEdit) {
-                dispatch(updateCurrentClassRequestAction({
-                    Class: {
-                        EndScheduleType: typeRef.current,
-                        StartDate: values.startDate,
-                        EndDate: values.finishDate,
-                        EndNumber: +values.totalClasses as number,
-                    }
-                }));
-            } else {
-                dispatch(businessClassFormActions.setClass({
+        handleSubmit: (values,) => {
+            dispatch(businessClassFormActions.setClass({
+                EndScheduleType: typeRef.current,
+                StartDate: values.startDate,
+                EndDate: values.finishDate,
+                EndNumber: +values.totalClasses,
+            } as IClass));
+            dispatch(updateCurrentClassRequestAction({
+                Class: {
                     EndScheduleType: typeRef.current,
                     StartDate: values.startDate,
                     EndDate: values.finishDate,
-                    EndNumber: +values.totalClasses,
-                } as IClass));
-                dispatch(updateCurrentClassRequestAction({
-                    Class: {
-                        EndScheduleType: typeRef.current,
-                        StartDate: values.startDate,
-                        EndDate: values.finishDate,
-                        EndNumber: +values.totalClasses as number,
-                    }
-                }));
-                dispatch(businessClassFormActions.setNumberOf(+values.numberOf as number));
-                setNumberOf(+values.numberOf as number)
-                setTotalClasses(+values.totalClasses as number)
-                setFinishDate(values.finishDate)
-                setStartDate(values.startDate);
-                navigation.navigate(NavigationEnum.SELECT_SCHOOL_CLASS_TEACHER);
-            };
+                    EndNumber: +values.totalClasses as number,
+                }
+            }));
+            dispatch(businessClassFormActions.setNumberOf(+values.numberOf as number));
+            setNumberOf(+values.numberOf as number)
+            setTotalClasses(+values.totalClasses as number)
+            setFinishDate(values.finishDate)
+            setStartDate(values.startDate);
+            navigation.navigate(NavigationEnum.SELECT_SCHOOL_CLASS_TEACHER);
         },
     })(SelectDateForm);
 
     return (
-        <FormikSelectDateScreen />
+        <ScrollView style={{ height: '100%' }}>
+            <FormikSelectDateScreen />
+        </ScrollView>
     );
 });
 
@@ -231,10 +222,12 @@ const InputWithDate = ({ labelText, nameField, handleChange, dateValue }: { labe
     };
 
     return (
-        <View style={{ padding: 2 }}>
+        <View>
             <Text style={styles.label}>{labelText && labelText}</Text>
-            <TouchableOpacity style={styles.interactive} onPress={handleChangeVisible} activeOpacity={1}>
-                <Text>{convertDateFormat(date)}</Text>
+            <TouchableOpacity onPress={handleChangeVisible} activeOpacity={1}>
+                <View style={styles.interactive}>
+                    <Text>{convertDateFormat(date)}</Text>
+                </View>
             </TouchableOpacity>
             <CalendarComponent
                 visible={visible}

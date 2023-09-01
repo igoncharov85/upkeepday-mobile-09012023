@@ -1,18 +1,14 @@
 import { AxiosResponse } from 'axios';
 import { SagaIterator } from 'redux-saga';
-import { call, put, select, takeEvery } from 'redux-saga/effects';
+import { call, put, takeEvery } from 'redux-saga/effects';
 import { setClassesLoading, setClassesAction, setSessinAction, setClassAction, setCurrentSessionAction, setGenerateSessionAction } from '..';
 import { IAction } from '../../../common/types/common.types';
 import { ClassesService } from '../../../services/axios/classes';
 import { ErrorFilterService } from '../../../services/error-filter/error-filter.service';
 import { ClassesConstantsEnum } from '../constants';
-import { EClassesStatus, IClassesEditName, IClassesResponse, IClassesUpdateSession, IGeneratedClasses, IGeneratedClassesRequest, IGeneratedClassesResponse, ISession, TClassesId, TClassesStatus } from '../../../common/types/classes.types';
+import { IClassesEditName, IClassesResponse, IClassesUpdateSession, IGeneratedClasses, IGeneratedClassesRequest, IGeneratedClassesResponse, ISession, TClassesId, TClassesStatus } from '../../../common/types/classes.types';
 import { convertSessionsToLocalTime } from '../../../services/utils/convertToUTC';
 import { loggerActions } from '../../logger';
-import { businessAccountActions, selectBusinessAccount } from '../../businessAccount';
-import { fetchClassesAction } from '../actions';
-import NavigationActions from '../../../services/navigation-service';
-import { NavigationEnum } from '../../../common/constants/navigation';
 
 export function* fetchClassesWorker({ payload }: IAction<{ status: TClassesStatus, schoolId?: number }>): SagaIterator {
     try {
@@ -99,8 +95,7 @@ export function* GeneratedClassesWorker({ payload }: IAction<IGeneratedClassesRe
 export function* deleteClassesWorker({ payload }: IAction<{ id: TClassesId; schoolId?: number }>): SagaIterator {
     try {
         yield put(setClassesLoading(true));
-        const { status, data } = yield call(ClassesService.deleteClasses, payload);
-        yield put(loggerActions.add({ type: 'response', name: 'deleteClassesWorker: ', message: { status, data } }));
+        yield call(ClassesService.deleteClasses, payload);
     } catch (error) {
         console.warn("deleteClassesWorker: ", error);
         yield put(loggerActions.add({ type: 'error', name: 'deleteClassesWorker: ', message: error }));
@@ -110,17 +105,9 @@ export function* deleteClassesWorker({ payload }: IAction<{ id: TClassesId; scho
     }
 }
 
-export function* updateClassesWorker({ payload }: IAction<'Archived' | 'Scheduled'>): SagaIterator {
+export function* updateClassesWorker(): SagaIterator {
     try {
         yield put(setClassesLoading(true));
-        const { currentSchool, currentClass } = yield select(selectBusinessAccount);
-        const { status, data } = yield call(ClassesService.updatedStatusClasses, {
-            schoolId: currentSchool.SchoolId,
-            Status: payload,
-            id: currentClass?.ClassId,
-        });
-        NavigationActions.navigate(NavigationEnum.CLASSES_TAB);
-        yield put(loggerActions.add({ type: 'response', name: 'deleteClassesWorker: ', message: { status, data } }));
     } catch (error) {
         console.warn("updateClassesWorker: ", error);
         yield put(loggerActions.add({ type: 'error', name: 'updateClassesWorker: ', message: error }));
@@ -155,11 +142,10 @@ export function* updateSessionClassesWorker({ payload }: IAction<IClassesUpdateS
         yield put(setClassesLoading(false));
     }
 }
-export function* editNameClassesWorker({ payload }: IAction<IClassesEditName>): SagaIterator {
+export function* editNameClassesWorker({ payload }: IAction<{data: IClassesEditName, schoolId?: number }>): SagaIterator {
     try {
         yield put(setClassesLoading(true));
-        const { currentSchool } = yield select(state => state.businessAccount);
-        yield call(ClassesService.editNameClasses, { data: payload, schoolId: currentSchool?.SchoolId });
+        yield call(ClassesService.editNameClasses, payload);
     } catch (error) {
         console.warn("editNameClassesWorker: ", error);
         yield put(loggerActions.add({ type: 'error', name: 'editNameClassesWorker: ', message: error }));

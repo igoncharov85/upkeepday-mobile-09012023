@@ -67,9 +67,7 @@ export default StyleSheet.create({
   },
   dateText: {
     fontSize: 15,
+    lineHeight: 18,
     textAlign: 'center',
   },
-  setUpDuration:{
-    marginBottom: 20
-  }
 });

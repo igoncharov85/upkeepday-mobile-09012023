@@ -10,26 +10,15 @@ export const EmailShape = Yup.object().shape({
     email: Yup.string().matches(RegexEnum.EMAIL, 'Invalid email format').required('Required'),
 });
 
-export const TutorRegistrationShape = Yup.object().shape({
-    email: Yup.string().matches(RegexEnum.EMAIL, 'Invalid email format').required('Required'),
-    firstName: Yup.string().min(2, 'First Name must contain at least 2 characters').required('Required').max(64, 'firstName must contain less than 64 symbols').matches(/^[a-zA-Z]+$/, 'must contain only letters'),
-    lastName: Yup.string().min(2, 'Last Name must contain at least 2 characters').required('Required').max(64, 'lastName must contain less than 64 symbols').matches(/^[a-zA-Z]+$/, 'must contain only letters'),
-    phone: Yup.string().matches(RegexEnum.PHONE, 'Phone number is not valid').required('Required'),
-    address: Yup.string().required('Required'),
-    postalCode: Yup.string().required('Required'),
-    country: Yup.string().required('Required'),
-    state: Yup.string().required('Required'),
-});
-
 export const StudentRegistrationShape = Yup.object().shape({
-    email: Yup.string().matches(RegexEnum.EMAIL, 'Invalid email format').required('Required'),
-    firstName: Yup.string().min(2, 'First Name must contain at least 2 characters').required('Required').max(64, 'firstName must contain less than 64 symbols').matches(/^[a-zA-Z]+$/, 'must contain only letters'),
-    lastName: Yup.string().min(2, 'Last Name must contain at least 2 characters').required('Required').max(64, 'lastName must contain less than 64 symbols').matches(/^[a-zA-Z]+$/, 'must contain only letters'),
-    phone: Yup.string().matches(RegexEnum.PHONE, 'Phone number is not valid').required('Required'),
-    address: Yup.string().required('Required'),
-    postalCode: Yup.string().required('Required'),
-    country: Yup.string().required('Required'),
-    state: Yup.string().required('Required'),
+    email: Yup.string().matches(RegexEnum.EMAIL, 'Invalid email format').required('Email is required'),
+    firstName: Yup.string().min(2, 'First Name should be at least 2 characters').required('First Name is required').max(64, 'First Name should be less than 64 symbols').matches(RegexEnum.FIRST_AND_LAST_NAMES, 'First Name is not valid'),
+    lastName: Yup.string().min(2, 'Last Name should be at least 2 characters').required('Last Name is required').max(64, 'Last Name should be less than 64 symbols').matches(RegexEnum.FIRST_AND_LAST_NAMES, 'Last Name is not valid'),
+    phone: Yup.string().matches(RegexEnum.PHONE, 'Phone number is not valid'),
+    address: Yup.string().required('Address is required'),
+    postalCode: Yup.string().required('Postal Code is required'),
+    country: Yup.string().required('Select your Country'),
+    state: Yup.string().required('Select your state'),
 });
 
 export const RegistrationGeneralShape = Yup.object().shape({

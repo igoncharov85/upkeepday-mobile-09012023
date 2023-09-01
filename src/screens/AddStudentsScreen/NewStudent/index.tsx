@@ -12,7 +12,6 @@ import { useAppSelector } from '../../../store/hooks';
 import { updateCurrentClassRequestAction } from '../../../store/shedule';
 import { CustomButton } from '../../../components/UI/CustomButton';
 import { IExistingStudent } from '../../../common/types/schedule.types';
-import { scaleVertical } from '../../../services/utils/Utils';
 
 interface INewStudentProps {
     handleTypeChange: () => void;
@@ -26,8 +25,6 @@ const formInitialValues = {
     Phone: '',
     Notes: ''
 };
-
-
 
 export const NewStudent: React.FC<INewStudentProps> = ({ handleTypeChange, onAddNewStudent }) => {
     const { students } = useAppSelector(state => state.user);
@@ -60,6 +57,8 @@ export const NewStudent: React.FC<INewStudentProps> = ({ handleTypeChange, onAdd
                 <InputForm
                     autoCapitalize='words'
                     labelText='First Name'
+                    placeholder="Student's First Name"
+                    //@ts-ignore
                     onChange={handleChange('FirstName')}
                     value={values.FirstName}
                     //@ts-ignore
@@ -69,6 +68,8 @@ export const NewStudent: React.FC<INewStudentProps> = ({ handleTypeChange, onAdd
                 <InputForm
                     autoCapitalize='words'
                     labelText='Last Name'
+                    placeholder="Student's Last Name"
+                    //@ts-ignore
                     onChange={handleChange('LastName')}
                     value={values.LastName}
                     //@ts-ignore
@@ -76,13 +77,17 @@ export const NewStudent: React.FC<INewStudentProps> = ({ handleTypeChange, onAdd
                 />
                 <InputForm
                     labelText='Email'
+                    placeholder="Email"
+                    //@ts-ignore
                     onChange={handleChange('Email')}
                     value={values.Email}
                     //@ts-ignore
                     validationErrorText={touched.Email && errors.Email}
                 />
                 <InputForm
-                    labelText='Phone'
+                    labelText='Phone (optional)'
+                    placeholder="Phone (optional)"
+                    //@ts-ignore
                     onChange={handleChange('Phone')}
                     value={values.Phone}
                     //@ts-ignore
@@ -90,15 +95,20 @@ export const NewStudent: React.FC<INewStudentProps> = ({ handleTypeChange, onAdd
                 />
                 <InputForm
                     autoCapitalize='sentences'
-                    labelText='Notes'
+                    labelText='Notes (optional)'
+                    placeholder="Some Notes (optional)"
+                    //@ts-ignore
                     onChange={handleChange('Notes')}
                     value={values.Notes}
                 />
-                <InputForm labelText='Attachments' />
-                <TouchableOpacity onPress={handleSubmit} disabled={!isValid}>
+                {/*<InputForm labelText='Attachments' />*/}
+                <TouchableOpacity
+                    //@ts-ignore
+                    onPress={handleSubmit}
+                    disabled={!isValid}>
                     <Text style={styles.addMore}>Add One More</Text>
                 </TouchableOpacity>
-                <View style={{ paddingVertical: scaleVertical(20), height: 92, flex: 1, justifyContent: 'flex-end' }}>
+                <View style={{ paddingVertical: 20, height: 92, flex: 1, justifyContent: 'flex-end' }}>
                     <CustomButton text={'Save'} onPress={handleSave} disabled={!isValid} />
                 </View>
             </>
@@ -113,7 +123,7 @@ export const NewStudent: React.FC<INewStudentProps> = ({ handleTypeChange, onAdd
                 FirstName: values.FirstName,
                 LastName: values.LastName,
                 Email: values.Email,
-                Phone: values.Phone,
+                Phone: values.Phone || '',
                 Notes: values.Notes || '',
             });
             resetForm();

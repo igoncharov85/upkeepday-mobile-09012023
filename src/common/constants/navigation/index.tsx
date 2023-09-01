@@ -26,22 +26,17 @@ export enum NavigationEnum {
   ADD_TEACHERS_SCREEN = 'navigation/AddTeachersScreen',
   ADD_BUSINESS_ACCOUNT_SCREEN = 'navigation/AddBusinessAccountScreen',
   SAVE_BUSINESS_ACCOUNT_SCREEN = 'navigation/saveBusinessAccountScreen',
-  //SCHOOL CLASS
+  //ADD SCHOOL CLASS
   ADD_SCHOOL_CLASS_SCREEN = 'navigation/AddSchoolClassScreen',
   SELECT_SCHOOL_DATE_SCREEN = 'navigation/SelectSchoolDateScreen',
   SELECT_SCHOOL_CLASS_TEACHER = 'navigation/SelectClassTeacherScreen',
   SCHOOL_CLASS_LOCATION_TEACHER = 'navigation/SchoolClassLocationScreen',
-  UPDATE_CLASS_STUDENTS_SCREEN = 'navigation/UpdateClassStudentsScreen',
-  //SCHOOL TEACHERS
-  EDIT_TEACHER = 'navigation/EDIT_TEACHER',
-  TEACHERS_CLASSES_SCREEN = 'navigation/TEACHERS_CLASSES_SCREEN',
   //TABS
   HOME_SCREEN = 'navigation/HOME_SCREEN',
   STUDENTS_TAB = 'navigation/STUDENTS_TAB',
   SCHEDULE_TAB = 'navigation/SCHEDULE_TAB',
   TO_DO_TAB = 'navigation/TO_DO_TAB',
   CLASSES_TAB = 'navigation/CLASSES_TAB',
-  TEACHERS_TAB = 'navigation/TEACHERS_TAB',
   MORE_TAB = 'navigation/MORE_TAB',
   //CLASSES
   CLASS_SCREEN = 'navigation/CLASS_SCREEN',
@@ -52,7 +47,6 @@ export enum NavigationEnum {
   CLASSES_EDIT_PREVIEW_SCREEN = 'navigation/CLASSES_EDIT_PREVIEW_SCREEN',
   CLASSES_STUDENT_SCREEN = 'navigation/CLASSES_STUDENT_SCREEN',
   CHANGE_STUDENT_SCREEN = 'navigation/CHANGE_STUDENT_SCREEN',
-  MORE_OPTIONS_SCREEN = 'navigation/MORE_OPTIONS_SCREEN',
   //STUDENTS
   STUDENTS_SCREEN = 'navigation/STUDENTS_SCREEN',
   EDIT_STUDENTS_SCREEN = 'navigation/EDIT_STUDENTS_SCREEN',

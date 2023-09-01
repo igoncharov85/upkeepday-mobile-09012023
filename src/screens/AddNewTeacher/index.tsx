@@ -20,7 +20,7 @@ export const AddNewTeacherScreen: FC = () => {
 	const styles = useMemo(() => getStyles(), []);
 	const {
 		name, lastName, email, phone, permission, notes, isValid,
-		setName, setLastName, setEmail, setPhone, setPermission, setNotes, goBack, onAddTeacher
+		setName, setLastName, setEmail, setPhone, setPermission, setNotes, goBack, onAddTeacher, onPermissionFocus
 	} = useAddNewTeacher();
 
 	return (
@@ -68,6 +68,7 @@ export const AddNewTeacherScreen: FC = () => {
 						labelField={'label'}
 						title={'Type of Rights'}
 						containerStyle={styles.input}
+						onFocus={onPermissionFocus}
 					/>
 					<CustomInput
 						wrapperStyle={styles.input}

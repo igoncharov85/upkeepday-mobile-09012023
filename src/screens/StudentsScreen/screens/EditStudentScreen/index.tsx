@@ -20,10 +20,6 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 interface INewStudentProps {
 }
 
-
-
-
-
 export const EditStudentScreen: React.FC<INewStudentProps> = () => {
     const { students } = useAppSelector(state => state.user);
     const [newUser, setNewUser] = useState<IExistingStudent>();

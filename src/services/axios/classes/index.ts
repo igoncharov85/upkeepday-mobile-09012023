@@ -5,7 +5,7 @@ import { $axiosAuth } from "../base.instance";
 export class ClassesService {
     static async fetchClasses({ status, schoolId }: { status: TClassesStatus, schoolId?: number }) {
         const link = typeof schoolId === 'number'
-            ? `/schools/${schoolId}/classes/${status}`
+            ? `/schools/${schoolId}/classes`//TODO: add request with status if it will be on back
             : `/tutor/classes/${status}`;
         return $axiosAuth.get(link)
     }
@@ -67,10 +67,11 @@ export class ClassesService {
     }
 
     static async editNameClasses({ data, schoolId }: { data: IClassesEditName, schoolId?: number }) {
+        const { Class, Location } = data;
         const link = typeof schoolId === 'number'
-            ? `/schools/${schoolId}/classes/${data?.id}/name_location`
-            : `/tutor/classes/${data?.id}/name_location`;
-        return $axiosAuth.patch(link, { Class: data?.Class, Location: data?.Location })
+            ? `/schools/${schoolId}/classes/${data.id}/name_location`
+            : `/tutor/classes/${data.id}/name_location`;
+        return $axiosAuth.patch(link, { Class, Location })
     }
 
 }

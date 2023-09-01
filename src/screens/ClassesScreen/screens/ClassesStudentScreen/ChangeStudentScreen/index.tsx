@@ -13,7 +13,6 @@ import { updateCurrentClassRequestAction } from '../../../../../store/shedule';
 import { dispatch } from '../../../../../store/store';
 import { ListButtons } from '../../ClassesEditNameScreen/components/ListButtons';
 import { updateUserAction } from '../../../../../store/user/actions';
-import { updateSchoolClassStudentsAction } from '../../../../../store/businessAccount/actions';
 
 interface IAddStudentsScreen {
 
@@ -35,6 +34,7 @@ const ChangeStudentScreen: React.FC<IAddStudentsScreen> = () => {
 
     const { students } = useAppSelector(state => state.user)
     const [typeAction, setTypeAction] = useState(0);
+    const { createCurrentClassRequest } = useAppSelector(state => state.schedule);
     const { currentSchool } = useAppSelector(state => state.businessAccount);
     const [selectedStudents, setSelectedStudents] = useState<Array<IExistingStudent | any>>([]);
     const [existingStudent, setExistingStudent] = useState<Array<any>>(students || []);
@@ -43,21 +43,13 @@ const ChangeStudentScreen: React.FC<IAddStudentsScreen> = () => {
         existingStudents: [],
         newStudents: [],
     });
-    console.log(existingStudent)
-
     const goNextStep = () => {
-        if (currentSchool) {
-            dispatch(updateSchoolClassStudentsAction({
-                ExistingStudents: resultData.existingStudents,
-                NewStudents: resultData.newStudents,
-            }));
-        } else {
-            dispatch(updateUserAction({
-                StudentId: item?.ClassId,
-                ExistingStudents: resultData.existingStudents,
-                NewStudents: resultData.newStudents,
-            }))
-        };
+        dispatch(updateUserAction({
+            StudentId: item.ClassId,
+            ExistingStudents: resultData.existingStudents,
+            NewStudents: resultData.newStudents,
+            schoolId: currentSchool?.SchoolId
+        }))
         navigation.goBack();
     };
     const handleTypeChange = (type: any) => {

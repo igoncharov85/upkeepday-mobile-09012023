@@ -1,5 +1,5 @@
-import React, { FC, useEffect, useState } from 'react';
-import { ScrollView, Text, View, TouchableOpacity, TextInput, ViewStyle } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ScrollView, Text, View, TouchableOpacity, TextInput } from 'react-native';
 import { useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
 import { NavigationEnum } from '../../../../common/constants/navigation';
 import { CustomButton } from '../../../../components/UI/CustomButton';
@@ -14,7 +14,14 @@ import { useAppSelector } from '../../../../store/hooks';
 import { ScreenLoading } from '../../../../components/UI/ScreenLoading';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-const ClassesStudentScreen: FC = () => {
+interface IAddStudentsScreen { }
+
+
+function removeEmptyObjects(array: any[]) {
+    return array.filter(obj => Object.keys(obj).length !== 0);
+}
+
+const ClassesStudentScreen: React.FC<IAddStudentsScreen> = () => {
     const route = useRoute();
     const { item }: any = route.params;
     const isFocused = useIsFocused();
@@ -25,9 +32,8 @@ const ClassesStudentScreen: FC = () => {
     const { currentSchool } = useAppSelector(state => state.businessAccount);
     const goNextStep = () => navigation.navigate(NavigationEnum.CLASSES_TAB);
 
-
     const onDeleteStudent = (studentId: number) => {
-        dispatch(deleteUserAction({ StudentId: studentId, Classes: [item.ClassId] }));
+        dispatch(deleteUserAction({ StudentId: studentId, Classes: [item.ClassId], schoolId: currentSchool?.SchoolId }));
         setStudentsList(studentsList.filter((student: any) => student.StudentId !== studentId));
     }
 
@@ -98,13 +104,11 @@ const ClassesStudentScreen: FC = () => {
 interface Student {
     name?: string,
     onClick: () => void,
-    containerStyle?: ViewStyle;
 }
-
-export const Student: React.FC<Student> = ({ name, onClick, containerStyle }) => {
+const Student: React.FC<Student> = ({ name, onClick }) => {
     return (
         <>
-            <View style={[styles.student, containerStyle]}>
+            <View style={styles.student}>
                 <Text style={styles.studentName}>{name}</Text>
                 <TouchableOpacity onPress={onClick}>
                     <CheckIcon />

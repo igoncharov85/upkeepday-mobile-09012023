@@ -64,7 +64,7 @@ export interface IStudentsRequest {
 }
 export interface IDeleteUserRequest {
     StudentId: number,
-    Classes?: Array<number>,
+    Classes: Array<number>,
     schoolId?: number,
 }
 export interface IStudent {

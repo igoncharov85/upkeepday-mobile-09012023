@@ -1,18 +1,16 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
   container: {
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingBottom: 18,
-    paddingTop: 6,
+
   },
   item: {
     backgroundColor: 'white',
     position: 'relative',
-    width: '85%',
+    width: '100%',
     borderColor: '#E2E2EA',
     borderStyle: 'solid',
     borderWidth: 1,

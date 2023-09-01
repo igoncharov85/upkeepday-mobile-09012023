@@ -87,6 +87,7 @@ export type TypeRootStackParamList = {
     actionBtn: any;
     nameAction: string;
   };
+  [NavigationEnum.INFO_MODAL]: undefined;
   [NavigationEnum.SELECT_DURATION_CLASS_MODAL]: {
     onSetDuration?: (duration: number) => void;
     onSetStartTime?: (data: any) => void;

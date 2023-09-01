@@ -44,6 +44,7 @@ import { AddSchoolClassScreen } from '../../screens/AddSchoolClassScreen';
 import { SelectSchoolDateScreen } from '../../screens/SelectSchoolDateScreen';
 import { SelectClassTeacherScreen } from '../../screens/SelectClassTeacherScreen';
 import { SchoolClassLocationScreen } from '../../screens/SchoolClassLocationScreen';
+import InfoModal from '../../components/Modals/InfoModal';
 
 
 const Stack = createNativeStackNavigator();
@@ -240,6 +241,14 @@ export const StackNavigator = memo(() => {
         <Stack.Screen
           name={NavigationEnum.EDIT_TIME_CLASS_MODAL}
           component={EditTimeSessionModal}
+          options={{
+            presentation: 'transparentModal',
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name={NavigationEnum.INFO_MODAL}
+          component={InfoModal}
           options={{
             presentation: 'transparentModal',
             headerShown: false,

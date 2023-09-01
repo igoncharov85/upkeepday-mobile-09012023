@@ -52,6 +52,7 @@ import { StudentPayments } from '../screens/StudentsScreen/screens/StudentPaymen
 import { RoutesType } from './navigation.types';
 import { ConfirmCancellationScreen } from '../screens/ConfirmCancellationScreen';
 import LocationClassModal from '../components/Modals/LocationClassModal';
+import InfoModal from '../components/Modals/InfoModal';
 
 export const routes: RoutesType<NativeStackNavigationOptions>[] = [
   {
@@ -245,6 +246,14 @@ export const routes: RoutesType<NativeStackNavigationOptions>[] = [
   {
     name: NavigationEnum.LOCATION_CLASS_MODAL,
     component: LocationClassModal,
+    options: {
+      presentation: 'transparentModal',
+      headerShown: false,
+    },
+  },
+  {
+    name: NavigationEnum.INFO_MODAL,
+    component: InfoModal,
     options: {
       presentation: 'transparentModal',
       headerShown: false,

@@ -22,6 +22,7 @@ export const RootNavigation = memo(() => {
             screens: {
                 [NavigationEnum.REGISTRATION_FINAL]: 'verif/:uuid',
                 [NavigationEnum.FORGOT_PASSWORD_SEND_PASSWORD]: 'reset/:uuid',
+                [NavigationEnum.INFO_MODAL]: 'deactivate/:uuid',
             },
         },
     };

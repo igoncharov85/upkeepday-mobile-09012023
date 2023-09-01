@@ -10,6 +10,13 @@ export default StyleSheet.create({
     buttonWrapper: {
         marginTop: 60,
     },
+    labelWrapper: {
+        paddingVertical: 10,
+        paddingHorizontal: 16,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+      },
     block: {
         marginBottom: 1,
         height: 52,

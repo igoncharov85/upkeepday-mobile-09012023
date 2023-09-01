@@ -147,6 +147,22 @@ function* logoutWorker(): SagaIterator {
         console.error("logoutWorker", error);
     };
 };
+function* userDeactivateWorker({ payload }: IAction<any>): SagaIterator {
+    try {
+        yield call(AuthService.userDeactivate, payload);
+    } catch (error) {
+      yield call(ErrorFilterService.validateError, error);
+    } finally {
+    };
+};
+function* userSendMainDeactivateWorker(): SagaIterator {
+    try {
+        yield call(AuthService.userSendMainDeactivate);
+    } catch (error) {
+      yield call(ErrorFilterService.validateError, error);
+    } finally {
+    };
+};
 
 function* getUserWorker(): SagaIterator {
     try {
@@ -172,4 +188,6 @@ export function* authWatcher() {
     yield takeEvery(AuthContactsEnum.GET_STATES, getStatesWorker)
     yield takeEvery(AuthContactsEnum.GET_COUNTRIES, getCountriesWorker)
     yield takeEvery(AuthContactsEnum.GET_USER, getUserWorker)
+    yield takeEvery(AuthContactsEnum.USER_DEACTIVATE, userDeactivateWorker)
+    yield takeEvery(AuthContactsEnum.USER_SEND_MAIN_DEACTIVATE, userSendMainDeactivateWorker)
 };

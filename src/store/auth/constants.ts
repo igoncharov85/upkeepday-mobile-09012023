@@ -9,4 +9,6 @@ export enum AuthContactsEnum {
     GET_COUNTRIES = 'IAuthContacts/GET_COUNTRIES',
     GET_STATES = 'IAuthContacts/GET_STATES',
     GET_USER = 'IAuthContacts/GET_USER',
+    USER_DEACTIVATE = 'IAuthContacts/USER_DEACTIVATE',
+    USER_SEND_MAIN_DEACTIVATE = 'IAuthContacts/USER_SEND_MAIN_DEACTIVATE',
 }

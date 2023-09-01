@@ -1,22 +1,22 @@
-import { FormikProps, withFormik } from 'formik';
-import React, { FC, memo, useState } from 'react';
-import { View } from 'react-native';
-import { formicDefaultProps } from '../../../common/constants/styles/form.config';
+import {FormikProps, withFormik} from 'formik';
+import React, {FC, memo, useState} from 'react';
+import {View} from 'react-native';
+import {formicDefaultProps} from '../../../common/constants/styles/form.config';
 import {
   EmailShape,
   PasswordConfirmShape,
 } from '../../../common/shemas/auth.shape';
-import { IConfirmPassword } from '../../../common/types/auth.types';
+import {IConfirmPassword} from '../../../common/types/auth.types';
 import {
   INavigationBase,
   TSetPasswordScreen,
 } from '../../../common/types/component.styles';
-import { ScreenHeader } from '../../../components/ScreenHeader';
-import { CustomButton } from '../../../components/UI/CustomButton';
-import { CustomInput } from '../../../components/UI/CustomInput';
-import { resetPasswordResetAction } from '../../../store/auth/actions';
-import { useAppSelector } from '../../../store/hooks';
-import { dispatch } from '../../../store/store';
+import {ScreenHeader} from '../../../components/ScreenHeader';
+import {CustomButton} from '../../../components/UI/CustomButton';
+import {CustomInput} from '../../../components/UI/CustomInput';
+import {resetPasswordResetAction} from '../../../store/auth/actions';
+import {useAppSelector} from '../../../store/hooks';
+import {dispatch} from '../../../store/store';
 
 import styles from './styles';
 
@@ -24,10 +24,10 @@ const formInitialValues = {
   password: '',
   passwordConfirmation: '',
 };
-interface ISetPasswordScreen extends INavigationBase { }
+interface ISetPasswordScreen extends INavigationBase {}
 export const SetPasswordScreen: FC<ISetPasswordScreen> = memo(
-  ({ navigation, route }) => {
-    const { loading } = useAppSelector(state => state.auth);
+  ({navigation, route}) => {
+    const {loading} = useAppSelector(state => state.auth);
     const uuidToken = route?.params?.uuid;
     const renderForm = ({
       touched,
@@ -87,7 +87,7 @@ export const SetPasswordScreen: FC<ISetPasswordScreen> = memo(
           Password: values.password,
           uuid: uuidToken,
         };
-        dispatch(resetPasswordResetAction(data))
+        dispatch(resetPasswordResetAction(data));
       },
       ...formicDefaultProps,
     })(renderForm);

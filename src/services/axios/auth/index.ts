@@ -35,4 +35,10 @@ export class AuthService {
     static async getUser() {
         return $axiosAuth.get('/tutor/account');
     }
+    static async userSendMainDeactivate() {
+        return $axiosAuth.post(`/account/deactivate`);
+    }
+    static async userDeactivate({uuid}:{uuid:string}) {
+        return $axiosAuth.delete(`/account/deactivate/${uuid}`);
+    }
 }

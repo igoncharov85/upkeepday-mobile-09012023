@@ -11,3 +11,5 @@ export const resetPasswordResetAction = createAction<IConfirmPassword>(AuthConta
 export const fetchCountriesAction = createAction<undefined>(AuthContactsEnum.GET_COUNTRIES)
 export const fetchStatesAction = createAction<string>(AuthContactsEnum.GET_STATES)
 export const getUserAction = createAction(AuthContactsEnum.GET_USER)
+export const userDeactivateAction = createAction<string>(AuthContactsEnum.USER_DEACTIVATE)
+export const userSendMainDeactivateAction = createAction<undefined>(AuthContactsEnum.USER_SEND_MAIN_DEACTIVATE)

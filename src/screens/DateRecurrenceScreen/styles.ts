@@ -1,9 +1,11 @@
 import { StyleSheet } from "react-native";
+import { scaleVertical } from "../../services/utils/Utils";
 
 export default StyleSheet.create({
     header: {
-        paddingHorizontal: 20,
-        paddingTop: 8
+        paddingHorizontal: scaleVertical(20),
+        paddingTop: scaleVertical(20),
+        paddingBottom: scaleVertical(8),
     },
     title: {
         width: '70%',

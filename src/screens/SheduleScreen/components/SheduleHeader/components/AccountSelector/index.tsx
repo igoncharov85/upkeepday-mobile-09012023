@@ -9,7 +9,11 @@ import { scaleHorizontal } from '../../../../../../services/utils/Utils';
 import { dispatch } from '../../../../../../store/store';
 import { businessAccountActions } from '../../../../../../store/businessAccount';
 
-export const AccountSelector: FC = () => {
+interface IProps {
+    isTitle: boolean;
+};
+
+export const AccountSelector: FC<IProps> = ({ isTitle }) => {
     const { colors } = useUiContext();
     const styles = useMemo(() => getStyle(colors), [colors]);
     const { currentSchool } = useAppSelector(store => store.businessAccount);
@@ -26,9 +30,9 @@ export const AccountSelector: FC = () => {
                 <Text numberOfLines={1} style={styles.title}>{currentSchool?.BusinessName || `${user?.FirstName} ${user?.LastName}`}</Text>
                 <ChevronIcon position={isSelectAccount ? 'UP' : 'DOWN'} color={colors.title} />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.editButton}>
+            {!isTitle && <TouchableOpacity style={styles.editButton}>
                 <EditIcon height={scaleHorizontal(20)} width={scaleHorizontal(20)} />
-            </TouchableOpacity>
+            </TouchableOpacity>}
         </View>
     );
 };

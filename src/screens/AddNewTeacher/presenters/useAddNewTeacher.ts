@@ -3,8 +3,9 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useCallback, useMemo, useState } from "react";
 import { dispatch } from "../../../store/store";
 import { NavigationEnum } from "../../../common/constants/navigation";
-import { TPermission, ITeacher, businessAccountFormActions } from "../../../store/businessAccountForm";
 import { pushToastsAction } from "../../../store/app";
+import { TPermission, ITeacher } from "../../../store/businessAccount/entities/ITeacher";
+import { businessAccountFormActions } from "../../../store/businessAccountForm";
 
 export const useAddNewTeacher = () => {
     const { goBack, pop, push } = useNavigation<NativeStackNavigationProp<any>>();
@@ -31,12 +32,8 @@ export const useAddNewTeacher = () => {
         push(NavigationEnum.ADD_NEW_TEACHER_SCREEN);
     }, [form]);
 
-    const onPermissionFocus = useCallback(() => {
-
-    }, [form]);
-
     return {
         name, lastName, email, phone, permission, notes, isValid,
-        setName, setLastName, setEmail, setPhone, setPermission, setNotes, goBack, onAddTeacher, onPermissionFocus
+        setName, setLastName, setEmail, setPhone, setPermission, setNotes, goBack, onAddTeacher
     };
 };

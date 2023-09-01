@@ -131,7 +131,7 @@ const Column = ({ children }: { children: React.ReactNode }) => {
   return <View style={styles.column}>{children}</View>;
 };
 
-export const TimeLineItem = ({ time }: { time: string }) => {
+const TimeLineItem = ({ time }: { time: string }) => {
   return (
     <View style={styles.timeLineBlock}>
       <Text style={styles.timeLineText}>{time}</Text>

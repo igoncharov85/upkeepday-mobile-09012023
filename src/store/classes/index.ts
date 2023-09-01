@@ -5,7 +5,8 @@ import { IClassesResponse, ISession, ISessionSubset } from '../../common/types/c
 export interface IClassesState {
     loading: boolean;
     //USE for classes
-    classes: Array<IClassesResponse>;
+    classes: Array<IClassesResponse>; 
+    finderClasses: Array<IClassesResponse>;
     currentSession: Array<ISession>;
     currentClass: IClassesResponse;
     generatedSessions: any
@@ -14,6 +15,7 @@ export interface IClassesState {
 const initialState: IClassesState = {
     loading: false,
     classes: [],
+    finderClasses: [],
     currentSession: [],
     currentClass: {} as IClassesResponse,
     generatedSessions: {},
@@ -29,6 +31,10 @@ export const classesService = createSlice({
         },
         setClassesAction: (state, action: PayloadAction<Array<IClassesResponse>>) => {
             state.classes = action.payload
+            state.finderClasses = action.payload
+        },
+        setFinderClassesAction: (state, action: PayloadAction<Array<IClassesResponse>>) => {
+            state.finderClasses = action.payload
         },
         setSessinAction: (state, action: PayloadAction<Array<ISession>>) => {
             state.currentSession = action.payload
@@ -52,6 +58,15 @@ export const classesService = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setClassesLoading, setClassesAction, setSessinAction, addClassesAction, setClassAction, setCurrentSessionAction, setGenerateSessionAction } = classesService.actions
+export const {
+    setClassesLoading,
+    setClassesAction,
+    setSessinAction,
+    addClassesAction,
+    setClassAction,
+    setCurrentSessionAction,
+    setGenerateSessionAction,
+    // setClassesScheduleAction,
+    setFinderClassesAction } = classesService.actions
 
 export default classesService.reducer

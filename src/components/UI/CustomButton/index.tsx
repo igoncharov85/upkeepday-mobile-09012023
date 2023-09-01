@@ -16,6 +16,8 @@ interface ICustomButton extends TouchableOpacityProps {
   height?: number;
   width?: number;
   style?: {};
+  errorColor?: boolean;
+  backgroundColor?: string;
 }
 export enum TypeButton {
   solid,
@@ -31,6 +33,8 @@ export const CustomButton: FC<ICustomButton> = memo(
     height,
     width,
     style,
+    errorColor,
+    backgroundColor,
     ...props
   }: ICustomButton) => {
     return (
@@ -44,6 +48,7 @@ export const CustomButton: FC<ICustomButton> = memo(
           type == TypeButton.opacity && styles.containerActive,
           {
             opacity: disabled ? StyleEnum.TOUCHABLE_DISABLE : 1,
+            backgroundColor: errorColor ? 'red' : backgroundColor ? backgroundColor : '#9A80BA'
           },
           { ...style },
         ]}

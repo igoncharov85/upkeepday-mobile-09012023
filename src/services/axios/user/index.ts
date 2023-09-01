@@ -87,5 +87,16 @@ export class UserService {
             : `/tutor/students/${StudentId}`;
         return await $axiosAuth.patch(link, { Status: status })
     }
-
-};
+    static async fetchStudentPaymentsClasses({ StudentId }: (IStudentRequest)) {
+        return await $axiosAuth.get(`/tutor/payments/students/${StudentId}/classes`);
+    }
+    static async fetchStudentPayments({ StudentId, ClassId }: IPaymentsTableParams) {
+        return await $axiosAuth.get(`/tutor/payments/students/${StudentId}/classes/${ClassId}`);
+    }
+    static async sendStudentPayment(params: IStudentPaymentRequest) {
+        const { StudentId, ClassId, ...rest } = params;
+        return await $axiosAuth.post(
+            `/tutor/payments/students/${StudentId}/classes/${ClassId}`, { ...rest }
+        );
+    }
+}

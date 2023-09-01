@@ -34,8 +34,8 @@ function getSectionsCountByDate(entries: any[], date: Date): number {
 export const ScheduleCalendar: React.FC<IScheduleCalendarProps> = ({ startingDayOfWeek }) => {
     const [days, setDays] = useState<Day[]>([]);
     const isFocused = useIsFocused();
-    const { CurrentScheduledEntries, loading } = useAppSelector(state => state.schedule);
     const { currentSchool } = useAppSelector(state => state.businessAccount);
+    const { CurrentScheduledEntries, finderCurrentEntries, loading } = useAppSelector(state => state.schedule);
     const [date, setDate] = useState('');
     const [swipeUpCount, setSwipeUpCount] = useState(0);
     const [swipeDownCount, setSwipeDownCount] = useState(0);
@@ -104,7 +104,7 @@ export const ScheduleCalendar: React.FC<IScheduleCalendarProps> = ({ startingDay
         } else {
             today = new Date(`${date}-${item.dayOfMonth}`)
         }
-        sesions = getSectionsCountByDate(CurrentScheduledEntries, today)
+        sesions = getSectionsCountByDate(finderCurrentEntries, today)
         const { isCurrentMonth, dayOfMonth } = item;
         return <MonthItem day={`${dayOfMonth}`} isCurrentMonth={isCurrentMonth} sesion={sesions} item={item} />
     };

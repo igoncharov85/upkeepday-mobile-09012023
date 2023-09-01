@@ -9,7 +9,7 @@ import { ScreenLoading } from '../../components/UI/ScreenLoading';
 
 
 export const ClassesScreen = () => {
-    const { classes, loading } = useAppSelector(state => state.classes);
+    const { classes, finderClasses, loading } = useAppSelector(state => state.classes);
 
     return (
         <View style={{ flex: 1 }}>
@@ -17,8 +17,7 @@ export const ClassesScreen = () => {
             <ScrollView>
                 <View style={styles.container}>
                     {loading ? <ScreenLoading /> :
-                        classes.map((item, index) => (
-
+                        finderClasses?.map((item, index) => (
                             <ClassesItem item={item} key={index} />
                         ))
                     }

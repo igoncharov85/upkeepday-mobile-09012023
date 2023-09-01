@@ -8,6 +8,10 @@ import { UserService } from "../../../services/axios/user";
 import { ErrorFilterService } from "../../../services/error-filter/error-filter.service";
 import { UserContactsEnum } from "../constants";
 import { loggerActions } from "../../logger";
+import { IStudent } from "../../../common/types/classes.types";
+import moment from "moment";
+import Toast from 'react-native-toast-message';
+import { fetchStudentsAction, fetchStudentsByIdAction } from "../actions";
 
 export function* fetchUserWorker({ payload }: IAction<number>): SagaIterator {
     try {
@@ -146,7 +150,8 @@ export function* fetchStudentsByIdWorker(payload: IAction<IStudentRequest>): Sag
     }
 }
 
-export function* updateStudentWorker(payload: IAction<IStudentRequest & IUserCreateRequest>): SagaIterator {
+// update student 
+export function* updateStudentWorker(payload: IAction<IStudentRequest & IUserCreateRequest & IStudentsRequest>): SagaIterator {
     try {
         const { status } = yield call(UserService.updateStudent, payload.payload);
         yield put(loggerActions.add({ type: 'response', name: 'updateStudentWorker: ', message: status }));
@@ -154,6 +159,11 @@ export function* updateStudentWorker(payload: IAction<IStudentRequest & IUserCre
         console.log('updateStudentWorker: ', error);
         yield put(loggerActions.add({ type: 'error', name: 'updateStudentWorker: ', message: error }));
         ErrorFilterService.validateError(error)
+    } finally {
+        console.log('payload', payload.payload.status);
+
+        yield put(fetchStudentsAction({ status: payload.payload.status }))
+
     }
 }
 

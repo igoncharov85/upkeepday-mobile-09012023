@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import DocumentIcon from "../../../../../assets/svg/classes/DocumentIcon";
@@ -8,51 +8,43 @@ import ScheduledIcon from "../../../../../assets/svg/classes/ScheduledIcon";
 import PaymentIcon from "../../../../../assets/svg/classes/PaymentIcon";
 import { NavigationEnum } from "../../../../common/constants/navigation";
 import { EClassesStatus, IClassesResponse } from "../../../../common/types/classes.types";
+import styles from "./styles";
 import DeleteIcon from "../../../../../assets/svg/classes/DeleteIcon";
 import { formatDateForPeriod } from "../../../../services/utils/fullDateToValue.util";
 import { dispatch } from "../../../../store/store";
 import { deleteClassesAction } from "../../../../store/classes/actions";
 import { useAppSelector } from "../../../../store/hooks";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import More from "../../../../../assets/svg/schedule/More";
-import { useUiContext } from "../../../../UIProvider";
-import { getStyles } from "./styles";
-import { businessAccountActions, selectBusinessAccount } from "../../../../store/businessAccount";
 
 interface IClassesItem {
     item: IClassesResponse
-};
+}
 
 const ClassesItem: React.FC<IClassesItem> = ({ item }) => {
-    const { colors } = useUiContext();
-    const styles = useMemo(() => getStyles(), [])
     const navigation = useNavigation<NativeStackNavigationProp<any>>();
-    const { currentSchool } = useAppSelector(selectBusinessAccount);
+    const { currentSchool } = useAppSelector(state => state.businessAccount);
 
     const handleEdit = () => {
-        dispatch(businessAccountActions.setCurrentClass(item));
-        dispatch(businessAccountActions.setIsEdit(true));
-        navigation.navigate(currentSchool ? NavigationEnum.ADD_SCHOOL_CLASS_SCREEN : NavigationEnum.EDIT_CLASS_SCREEN, { item, isClear: false });
+        navigation.navigate(NavigationEnum.EDIT_CLASS_SCREEN, { item });
     };
 
     const handleDocument = () => {
         navigation.navigate(NavigationEnum.CLASSES_PREVIEW_SCREEN, { item });
     }
+  const navigateToLessonView = () => {
+    navigation.navigate(NavigationEnum.CLASSES_PREVIEW_SCREEN, { item });
+  };
+  const navigateToLocationClassModal = () => {
+    navigation.navigate(NavigationEnum.LOCATION_CLASS_MODAL, { item });
+  };
 
     const handleDelete = () => {
+        //@ts-ignore
         navigation.navigate(NavigationEnum.RESULT_CLASS_MODAL, {
             item: item,
-            actionBtn: () => { 
-                dispatch(deleteClassesAction({ id: item.ClassId, schoolId: currentSchool?.SchoolId }));
-                navigation.goBack();
-            },
+            actionBtn: () => { dispatch(deleteClassesAction({ id: item.ClassId, schoolId: currentSchool?.SchoolId })) },
             nameAction: 'Delete  Permanently',
         })
-    };
-
-    const onOpenMoreOptions = () => {
-        dispatch(businessAccountActions.setCurrentClass(item));
-        navigation.navigate(NavigationEnum.MORE_OPTIONS_SCREEN, { currentClass: item });
     };
 
     return (
@@ -76,34 +68,37 @@ const ClassesItem: React.FC<IClassesItem> = ({ item }) => {
                     <Text style={[styles.text, styles.textRight]}>Scheduled classes: {item.ScheduledClasses}</Text>
                 </View>
             </View>
+
             <View style={styles.part}>
                 <View style={styles.link}>
                     {item.Status?.toLocaleLowerCase() === EClassesStatus.scheduled ? (
                         <>
                             <TouchableOpacity
                                 style={styles.linkItem}
+                                onPress={handleDocument}
+                            >
+                                <DocumentIcon />
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                style={styles.linkItem}
                                 onPress={handleEdit}>
                                 <EditIcon />
                             </TouchableOpacity>
+
                             <TouchableOpacity onPress={() => { }} style={styles.linkItem}>
                                 <MailIcon />
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.linkItem} onPress={handleDocument}>
-                                <DocumentIcon />
+
+                            <TouchableOpacity onPress={() => { }} style={styles.linkItem}>
+                                <ScheduledIcon />
                             </TouchableOpacity>
-                            {currentSchool
-                                ? <View style={styles.moreWrapper}>
-                                    <TouchableOpacity onPress={onOpenMoreOptions} style={styles.moreButton}>
-                                        <More color={colors.border} />
-                                    </TouchableOpacity>
-                                </View>
-                                : <TouchableOpacity onPress={() => { }} style={styles.linkItem}>
-                                    <ScheduledIcon />
-                                </TouchableOpacity>
-                            }
                         </>
                     ) : (
-                        <TouchableOpacity style={styles.linkItem} onPress={handleDelete}>
+                        <TouchableOpacity
+                            style={styles.linkItem}
+                            onPress={handleDelete}
+                        >
                             <DeleteIcon />
                         </TouchableOpacity>
                     )}
@@ -111,6 +106,6 @@ const ClassesItem: React.FC<IClassesItem> = ({ item }) => {
             </View>
         </View>
     );
-};
+}
 
 export default ClassesItem;

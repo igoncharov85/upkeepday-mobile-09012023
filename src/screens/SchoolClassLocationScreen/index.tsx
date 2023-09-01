@@ -20,7 +20,8 @@ export const SchoolClassLocationScreen = () => {
     } = useAddSchoolClass();
 
     return (
-        <ScreenContainer containerStyle={styles.container} headerComponent={<ScreenHeader containerStyle={styles.header} text={t('addLocation')} withBackButton={true} onBackPress={goBack} />}        >
+        <ScreenContainer containerStyle={styles.container}>
+            <ScreenHeader containerStyle={styles.header} text={t('addLocation')} withBackButton={true} onBackPress={goBack} />
             <View style={styles.formWrapper}>
                 <ListButtons
                     buttons={types}

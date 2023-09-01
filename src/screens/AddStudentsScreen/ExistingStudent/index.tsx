@@ -12,13 +12,13 @@ import { useNavigation } from '@react-navigation/native';
 import { NavigationEnum } from '../../../common/constants/navigation';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useAppSelector } from '../../../store/hooks';
-import { scaleVertical } from '../../../services/utils/Utils';
 
 interface IExistingStudentProps {
     students: IExistingStudent[],
     selectedUsers: any[],
     onChancheUsers: (student: IExistingStudent) => void
-};
+}
+
 
 export const ExistingStudent: React.FC<IExistingStudentProps> = ({ students, onChancheUsers, selectedUsers }) => {
     const navigation = useNavigation<NativeStackNavigationProp<any>>();
@@ -72,7 +72,7 @@ export const ExistingStudent: React.FC<IExistingStudentProps> = ({ students, onC
                     </View>
                 </View >
             </ScrollView>
-            <View style={{ padding: scaleVertical(20), height: 92, flex: 1, justifyContent: 'flex-end' }}>
+            <View style={{ padding: 20, height: 92, flex: 1, justifyContent: 'flex-end' }}>
                 <CustomButton text={'Next Step'} onPress={goNextStep} />
             </View>
         </View >

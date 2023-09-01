@@ -1,5 +1,5 @@
 
-import React, { memo, useEffect } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationEnum } from '../../common/constants/navigation';
 import { AddBusinessAccountScreen } from "../../screens/AddBusinessAccountScreen";
@@ -15,14 +15,13 @@ import { ScheduleDayScreen } from '../../screens/SheduleScreen/SheduleDayScreen'
 import { SheduleWeekScreen } from '../../screens/SheduleScreen/SheduleWeekScreen';
 import { CancellationScreen } from '../../screens/CancellationScreen';
 import { AddClassScreen } from '../../screens/AddClassScreen';
-import { SelectDateScreen } from '../../screens/SelectDateScreen';
+import { EndScheduleType, SelectDateScreen } from '../../screens/SelectDateScreen';
 import { useAppSelector } from '../../store/hooks';
 import { DateRecurrenceScreen } from '../../screens/DateRecurrenceScreen';
 import { DatePreviewScreen } from '../../screens/DatePreviewScreen';
 import { AddStudentsScreen } from '../../screens/AddStudentsScreen';
 import { PrepaymentConfigurationScreen } from '../../screens/PrepaymentConfigurationScreen';
-import { TutorTabNavigator } from './TutorTabNavigator';
-import { SchoolTabNavigator } from './SchoolTabNavigator';
+import { TabNavigator } from './TabNavigator';
 import { ClassesScreen } from '../../screens/ClassesScreen';
 import { EditClassScreen } from '../../screens/EditClassScreen';
 import ClassesPreviewScreen from '../../screens/ClassesScreen/screens/ClassesPreviewScreen';
@@ -35,7 +34,7 @@ import ChangeStudentScreen from '../../screens/ClassesScreen/screens/ClassesStud
 import StudentsScreen from '../../screens/StudentsScreen';
 import { EditStudentScreen } from '../../screens/StudentsScreen/screens/EditStudentScreen';
 import PreviewStudentScreen from '../../screens/StudentsScreen/screens/PreviewStudentScreen';
-import { MoreScreen } from '../../screens/MoreScreen';
+import MoreScreen from '../../screens/MoreScreen';
 import DurationSessionModal from '../../components/Modals/DurationSessionModal';
 import SelectDurationSessionModal from '../../components/Modals/SelectDurationSessionModal';
 import EditTimeSessionModal from '../../components/Modals/EditTimeSessionModal';
@@ -46,23 +45,17 @@ import { SelectSchoolDateScreen } from '../../screens/SelectSchoolDateScreen';
 import { SelectClassTeacherScreen } from '../../screens/SelectClassTeacherScreen';
 import { SchoolClassLocationScreen } from '../../screens/SchoolClassLocationScreen';
 import InfoModal from '../../components/Modals/InfoModal';
-import { businessAccountActions, selectBusinessAccount } from '../../store/businessAccount';
-import { dispatch } from '../../store/store';
 
 
 const Stack = createNativeStackNavigator();
-
 export const StackNavigator = memo(() => {
-  const { isAuth } = useAppSelector((store) => store.auth);
-  const { currentSchool } = useAppSelector(selectBusinessAccount);
 
+  const { isAuth } = useAppSelector((store) => store.auth)
   useEffect(() => {
-    if (isAuth) {
-      dispatch(businessAccountActions.setIsSelectAccount(true));
-    };
-  }, [isAuth]);
 
+  }, [])
   return (
+
     <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName={isAuth ? NavigationEnum.HOME_SCREEN : NavigationEnum.LOGIN}>
 
       <Stack.Group >
@@ -121,10 +114,7 @@ export const StackNavigator = memo(() => {
 
         <Stack.Screen
           name={NavigationEnum.HOME_SCREEN}
-          component={currentSchool
-            ? SchoolTabNavigator
-            : TutorTabNavigator
-          }
+          component={TabNavigator}
         />
 
         <Stack.Screen
@@ -138,7 +128,6 @@ export const StackNavigator = memo(() => {
         <Stack.Screen
           name={NavigationEnum.ADD_SCHOOL_CLASS_SCREEN}
           component={AddSchoolClassScreen}
-          initialParams={{ isClear: true }}
         />
         <Stack.Screen
           name={NavigationEnum.SELECT_SCHOOL_CLASS_TEACHER}

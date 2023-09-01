@@ -51,7 +51,7 @@ export const ChooseAddressModal: React.FC<IChooseAddressModal> = memo(({ visible
                 </View>
                 <DecorationLine />
                 <ScrollView style={{ height: 125, }}>
-                    {locations.map((item, index) => <AddressItem activeIndex={activeIndex} index={index} key={index} address={item.Name || `${item.AddressLine}, ${item.City}, ${item.State}, ${item.Country} ${item.PostalCode}`} onTouch={handlePress} />)}
+                    {locations.map((item, index) => item.AddressLine && <AddressItem activeIndex={activeIndex} index={index} key={index} address={item.Name} onTouch={handlePress} />)}
 
                     <NewAddressButton addAddress={onShowModal} />
                 </ScrollView>

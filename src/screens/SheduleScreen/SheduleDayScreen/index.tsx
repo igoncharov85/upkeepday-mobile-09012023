@@ -51,7 +51,7 @@ function sortArrayByDateTime(arr: any[]): any[] {
 interface IScheduleDayScreen { }
 
 export const ScheduleDayScreen: React.FC<IScheduleDayScreen> = memo(() => {
-	const { CurrentScheduledEntries, loading } = useAppSelector(state => state.schedule);
+	const { CurrentScheduledEntries, loading, finderCurrentEntries } = useAppSelector(state => state.schedule);
 	const { currentSchool } = useAppSelector(state => state.businessAccount);
 	const isFocused = useIsFocused();
 	const today = new Date;
@@ -79,11 +79,6 @@ export const ScheduleDayScreen: React.FC<IScheduleDayScreen> = memo(() => {
 		isFocused && dispatch(fetchScheduleByPeriodAction({ startDate: localCurrentDay.toISOString(), endDate: addDayAndHoursToDate(currentDay, 1, 0), schoolId: currentSchool?.SchoolId }));
 	}, [isFocused, currentSchool]);
 
-	useEffect(() => {
-		const time = Date.now();
-		// console.log('\n----SheduleDay Screen----\n', loading, ' - loading status\n', moment(time).format('HH:mm:ss.SSS'), ' - time set loading')
-	}, [loading]);
-
 	return loading ? <ScreenLoading /> : (
 		<View>
 			<ScheduleScroller
@@ -92,8 +87,7 @@ export const ScheduleDayScreen: React.FC<IScheduleDayScreen> = memo(() => {
 				onPressRight={handleNextDay}
 			/>
 			<SessionItemList
-				//@ts-ignore
-				data={sortArrayByDateTime(CurrentScheduledEntries)}
+				data={sortArrayByDateTime(finderCurrentEntries)}
 			/>
 		</View>
 	);

@@ -18,7 +18,4 @@ export type IColors = {
     inactiveIcon: string;
     inactiveText: string;
     borderGradient: string[];
-    secondaryBorder: string;
-    shadow: string;
-    error: string;
 }

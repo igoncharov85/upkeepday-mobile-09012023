@@ -7,19 +7,18 @@ import { dispatch } from "../../../store/store";
 import { getSchoolTeachersAction } from "../../../store/businessAccount/actions";
 import { ITeacher } from "../../../store/businessAccount/entities/ITeacher";
 import { updateCurrentClassRequestAction } from "../../../store/shedule";
-import { selectBusinessAccount } from "../../../store/businessAccount";
 
 export const useAddTeachers = () => {
-    const { schoolTeachers, currentSchool } = useAppSelector(selectBusinessAccount);
+    const { currentTeachers, currentSchool } = useAppSelector(state => state.businessAccount);
     const { goBack, navigate } = useNavigation<NativeStackNavigationProp<any>>();
     const [search, setSearch] = useState('');
-    const [currentTeacher, setCurrentTeacher] = useState<ITeacher | undefined>(schoolTeachers?.find(item => item.TeacherId === schoolTeachers?.TeacherId));
-    const filteredTeachers = useMemo(() => search ? schoolTeachers.filter(item => `${item.FirstName} ${item.LastName}`.toLowerCase().includes(search.toLowerCase())) : schoolTeachers, [schoolTeachers, search]);
+    const [currentTeacher, setCurrentTeacher] = useState<ITeacher>();
+    const filteredTeachers = useMemo(() => search ? currentTeachers.filter(item => `${item.FirstName} ${item.LastName}`.toLowerCase().includes(search.toLowerCase())) : currentTeachers, [currentTeachers, search]);
 
     useEffect(() => {
         if (currentSchool?.SchoolId) {
-            dispatch(getSchoolTeachersAction());
-        };
+            dispatch(getSchoolTeachersAction(currentSchool?.SchoolId));
+        }
     }, [currentSchool]);
 
     const onAddLater = useCallback(() => {
@@ -37,5 +36,5 @@ export const useAddTeachers = () => {
         navigate(NavigationEnum.SCHOOL_CLASS_LOCATION_TEACHER);
     }, [currentTeacher]);
 
-    return { filteredTeachers, search, currentTeacher, goBack, setSearch, onAddLater, onSave, onSetCurrentTeacher };
+    return { currentTeachers, filteredTeachers, search, currentTeacher, goBack, setSearch, onAddLater, onSave, onSetCurrentTeacher };
 };

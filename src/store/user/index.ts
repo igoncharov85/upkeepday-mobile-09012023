@@ -3,7 +3,7 @@ import { ICheckinUser, IStudentByIdResponse, IStudentResponse, IStudentsResponse
 import moment from "moment";
 
 interface IUserStore {
-    students: Array<IUserStudent>; 
+    students: Array<IUserStudent>;
     currentStudent: Array<IUserStudentResponse>;
     checkins: Array<ICheckinUser>;
     users: Array<IStudentResponse>;

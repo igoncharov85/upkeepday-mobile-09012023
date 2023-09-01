@@ -22,14 +22,12 @@ export const useAddSchoolClass = () => {
     const [url, setUrl] = useState('');
     const [type, setType] = useState(1);
     const isDisabled = useMemo(() => type === 0 ? !url : !classLocation, [type, url, classLocation]);
-    console.log(locations);
+console.log(locations);
     const onSave = useCallback(() => {
         dispatch(updateCurrentClassRequestAction({
-            Location: {
-                LocationId: Number(classLocation?.LocationId),
-                LocationType: type === 0 ? 'Online' : 'Office',
-                Url: classLocation?.Url || '',
-            }
+            LocationId: Number(classLocation?.LocationId),
+            LocationType: classLocation?.LocationType,
+            Url: classLocation?.Url,
         }));
         dispatch(businessClassFormActions.setRoom(classRoom?.RoomId));
         navigate(
@@ -40,7 +38,7 @@ export const useAddSchoolClass = () => {
                 finishDate: Class.EndDate,
                 numberOf: numberOf,
             });
-    }, [type, url, classLocation, Class, classRoom, numberOf]);
+    }, [type, url, classLocation, Class]);
 
     const onSetIsVisible = useCallback(() => { setIsVisible(prev => !prev) }, []);
     const onSetIsRoomVisible = useCallback(() => { setIsRoomVisible(prev => !prev) }, []);

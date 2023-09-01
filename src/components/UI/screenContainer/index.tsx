@@ -34,7 +34,7 @@ export const ScreenContainer: FC<IProps> = ({ headerComponent, edges, setRef, ch
                 >
                     {children}
                 </ScrollView>
-                : <View style={[styles.container, contentContainerStyle]} onStartShouldSetResponder={keyboardShouldPersistTaps ? Keyboard.dismiss : undefined as any}>
+                : <View style={[styles.container, containerStyle]} onStartShouldSetResponder={keyboardShouldPersistTaps ? Keyboard.dismiss : undefined as any}>
                     {children}
                 </View>}
         </SafeAreaView>

@@ -7,23 +7,21 @@ import { useUiContext } from '../../../../UIProvider';
 import SearchInput from '../../../../components/UI/SearchInput';
 import { useRoute } from '@react-navigation/native';
 
-export const allowedScreen = ['navigation/SCHEDULE_TAB', 'navigation/CLASSES_TAB', 'navigation/STUDENTS_TAB']
-
 interface ISheduleHeader {
-  text?: string
+  text: string
   isSelection?: boolean;
-};
-
+}
+export const allowedScreen = ['SCHEDULE_TAB', 'CLASSES_TAB', 'STUDENTS_TAB']
 export const SheduleHeader: FC<ISheduleHeader> = memo(({ text, isSelection }) => {
   const { colors } = useUiContext();
-  const route = useRoute();
   const styles = useMemo(() => getStyles(colors), [colors]);
-  const [searchMode, setSearchMode] = useState(false);
+  const route = useRoute();
+  const [searchMode, setSearchMode] = useState(false)
 
   const toggleSearchMOde = () => {
-    if (allowedScreen.includes(route.name)) {
-    setSearchMode(!searchMode);
-    };
+    // if (allowedScreen.includes(route.name)) {
+      setSearchMode(!searchMode);
+    // };
   };
 
   return (
@@ -32,8 +30,10 @@ export const SheduleHeader: FC<ISheduleHeader> = memo(({ text, isSelection }) =>
         searchMode
           ? <SearchInput editMode={toggleSearchMOde} />
           : <>
-            {isSelection && <AccountSelector isTitle={!!text} />}
-            {text && <Text numberOfLines={1} style={styles.headerText}>{text}</Text>}
+            {isSelection
+              ? <AccountSelector />
+              : <Text style={styles.headerText}>{text}</Text>
+            }
             <TouchableOpacity onPress={toggleSearchMOde}>
               <SearchIcon />
             </TouchableOpacity>

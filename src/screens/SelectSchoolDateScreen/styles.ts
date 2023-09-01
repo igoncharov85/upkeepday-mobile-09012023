@@ -1,10 +1,11 @@
 import { StyleSheet } from "react-native";
-import { scaleVertical } from "../../services/utils/Utils";
 
 export default StyleSheet.create({
     container: {
-        padding: scaleVertical(20),
+        padding: 20,
         justifyContent: 'space-between',
+        flex: 1,
+        height: '200%'
     },
     interactive: {
         width: '100%',
@@ -16,6 +17,7 @@ export default StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#FFFFFF',
         borderRadius: 8,
+        position: 'relative',
         shadowColor: '#000',
         shadowOffset: {
             width: 0,

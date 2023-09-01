@@ -5,7 +5,7 @@ import { IClassesResponse, ISession, ISessionSubset } from '../../common/types/c
 export interface IClassesState {
     loading: boolean;
     //USE for classes
-    classes: Array<IClassesResponse>; 
+    classes: Array<IClassesResponse>;
     finderClasses: Array<IClassesResponse>;
     currentSession: Array<ISession>;
     currentClass: IClassesResponse;

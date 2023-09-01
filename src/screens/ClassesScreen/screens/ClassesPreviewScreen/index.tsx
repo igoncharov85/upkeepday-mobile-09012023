@@ -71,8 +71,10 @@ const ClassesPreviewScreen: React.FC<IDatePreviewScreen> = () => {
     useEffect(() => {
         const startOfYear = new Date(new Date().getFullYear(), 0, 1);
         const endOfYear = new Date(new Date().getFullYear(), 11, 31, 23, 59, 59, 999);
+
         dispatch(fetchSessionClassesByIdAction({id: item.ClassId, schoolId: currentSchool?.SchoolId}))
         dispatch(fetchScheduleByPeriodAction({ startDate: moment(startOfYear).format('YYYY-MM-DDTHH:mm:ss'), endDate: moment(endOfYear).format('YYYY-MM-DDTHH:mm:ss'), schoolId: currentSchool?.SchoolId }));
+        console.log('current: ', CurrentScheduledEntries)
     }, [currentSchool]);
 
 

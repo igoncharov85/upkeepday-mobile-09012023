@@ -37,11 +37,12 @@ export class UserService {
         return await $axiosAuth.delete(link, { data })
     }
 
-    static async updatedUser({ schoolId, ...data }: IUpdateStudent) {
+    static async updatedUser({ data, schoolId }: { data: IUpdateStudent, schoolId?: number }) {
+        const { StudentId, ExistingStudents, NewStudents } = data;
         const link = typeof schoolId === 'number'
-            ? `/schools/${schoolId}/classes/${data?.StudentId}/students`
-            : `/tutor/classes/${data?.StudentId}/students`;
-        return await $axiosAuth.put(link, { ExistingStudents: data?.ExistingStudents || [], NewStudents: data?.NewStudents || [] });
+            ? `/schools/${schoolId}/classes/${StudentId}/students`
+            : `/tutor/classes/${StudentId}/students`;
+        return await $axiosAuth.put(link, { ExistingStudents, NewStudents });
     }
 
     static async fetchUsersById({ sessionId, schoolId }: { sessionId: ICheckinsId, schoolId?: number }) {
@@ -86,5 +87,16 @@ export class UserService {
             : `/tutor/students/${StudentId}`;
         return await $axiosAuth.patch(link, { Status: status })
     }
-
-};
+    static async fetchStudentPaymentsClasses({ StudentId }: (IStudentRequest)) {
+        return await $axiosAuth.get(`/tutor/payments/students/${StudentId}/classes`);
+    }
+    static async fetchStudentPayments({ StudentId, ClassId }: IPaymentsTableParams) {
+        return await $axiosAuth.get(`/tutor/payments/students/${StudentId}/classes/${ClassId}`);
+    }
+    static async sendStudentPayment(params: IStudentPaymentRequest) {
+        const { StudentId, ClassId, ...rest } = params;
+        return await $axiosAuth.post(
+            `/tutor/payments/students/${StudentId}/classes/${ClassId}`, { ...rest }
+        );
+    }
+}

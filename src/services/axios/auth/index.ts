@@ -1,7 +1,7 @@
 import axios from "axios";
 import { BASE_URL } from "../../../common/constants/server";
 import { IConfirmPassword, ILoginRequest, IRegistrationRequest, IResetItemData, IResetItemRequest, TRole } from "../../../common/types/auth.types";
-import { $axiosBase } from "../base.instance";
+import { $axiosAuth, $axiosBase } from "../base.instance";
 
 export class AuthService {
     static async login(data: ILoginRequest) {
@@ -30,5 +30,9 @@ export class AuthService {
     }
     static async logout() {
         return $axiosBase.post('/account/logout')
+    }
+
+    static async getUser() {
+        return $axiosAuth.get('/tutor/account');
     }
 }

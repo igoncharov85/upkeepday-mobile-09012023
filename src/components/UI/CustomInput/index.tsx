@@ -1,4 +1,4 @@
-import React, {FC, memo, useState} from 'react';
+import React, { FC, memo, useState } from 'react';
 import {
   Text,
   TextInput,
@@ -29,11 +29,12 @@ export const CustomInput: FC<ICustomInputProps> = memo(
     touched,
     secureTextEntry,
     disabled,
-   wrapperStyle,
+    wrapperStyle,
     style,
     ...props
   }) => {
     const [isVisible, setIsVisible] = useState<boolean>(!!secureTextEntry);
+
     const switchVisible = () => {
       setIsVisible(!isVisible);
     };

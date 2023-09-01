@@ -2,8 +2,10 @@ import React, { FC, memo } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { NavigationEnum } from '../../../../common/constants/navigation';
 import { IScheduleItem } from '../../../../common/types/schedule.types';
-import { useTypedNavigation } from '../../../../hook/useTypedNavigation';
+// import { useTypedNavigation } from '../../../../hook/useTypedNavigation';
 import styles from './styles';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 enum LessonType {
   Lesson,
@@ -21,7 +23,7 @@ interface SessionItemProps {
 
 export const SessionItem: FC<SessionItemProps> = memo(
   ({ name, timeContinued, timeStart, type, data, id }) => {
-    const { navigate } = useTypedNavigation();
+    const { navigate } = useNavigation<NativeStackNavigationProp<any>>();
     const isTrialLesson = type === LessonType.Trial;
     const navigateToCancellationModal = () => {
       navigate(NavigationEnum.CANCELLATION_MODAL, { item: data });

@@ -15,7 +15,7 @@ import {CountrySelect} from '../../../components/UI/CountrySelect';
 import {CustomButton} from '../../../components/UI/CustomButton';
 import {CustomInput} from '../../../components/UI/CustomInput';
 import {StateSelect} from '../../../components/UI/StateSelect';
-import {useTypedNavigation} from '../../../hook/useTypedNavigation';
+// import {useTypedNavigation} from '../../../hook/useTypedNavigation';
 import {setStatesAction} from '../../../store/auth';
 import {
   fetchCountriesAction,
@@ -25,6 +25,8 @@ import {cacheRegistrationFormAction} from '../../../store/cached';
 import {useAppSelector} from '../../../store/hooks';
 import {dispatch} from '../../../store/store';
 import styles from './styles';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 const registrationProps = {
   email: '',
@@ -45,7 +47,7 @@ interface IStudentRegistrationScreen extends INavigationBase {
 export const StudentRegistrationScreen: FC<IStudentRegistrationScreen> = memo(
   ({setScreen, type}) => {
     const {loading} = useAppSelector(state => state.auth);
-    const {navigate} = useTypedNavigation();
+    const {navigate} = useNavigation<NativeStackNavigationProp<any>>();
     useEffect(() => {
       dispatch(setStatesAction([]));
       dispatch(fetchCountriesAction());

@@ -58,6 +58,7 @@ export default StyleSheet.create({
   dateContainer: {
     zIndex: 10,
     height: 38,
+    width: 105,
     borderRadius: 9,
     overflow: 'hidden',
     justifyContent: 'center',
@@ -67,17 +68,6 @@ export default StyleSheet.create({
   dateText: {
     fontSize: 15,
     lineHeight: 18,
+    textAlign: 'center',
   },
-  dayText: {
-    fontSize: 15,
-    fontWeight: 'bold',
-    marginRight: 30
-  },
-  durationLine: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    flex: 1,
-    marginTop: 24,
-    marginBottom: 10,
-  }
 });

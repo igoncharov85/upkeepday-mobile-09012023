@@ -3,7 +3,7 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import { NavigationEnum } from '../../common/constants/navigation';
 import { IExistingStudent } from '../../common/types/schedule.types';
 import { ScreenHeader } from '../../components/ScreenHeader';
-import { useTypedNavigation } from '../../hook/useTypedNavigation';
+// import { useTypedNavigation } from '../../hook/useTypedNavigation';
 import { useAppSelector } from '../../store/hooks';
 import {
   setLocalStudentData,
@@ -13,6 +13,8 @@ import { dispatch } from '../../store/store';
 import { ListButtons } from '../AddClassScreen/components/ListButtons';
 import { ExistingStudent } from './ExistingStudent';
 import { NewStudent } from './NewStudent';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 interface IAddStudentsScreen { }
 
@@ -36,7 +38,7 @@ export const AddStudentsScreen: React.FC<IAddStudentsScreen> = () => {
   const { students } = useAppSelector(state => state.user);
 
   const [typeAction, setTypeAction] = useState(0);
-  const { navigate, goBack: navigateBack } = useTypedNavigation();
+  const { navigate, goBack: navigateBack } = useNavigation<NativeStackNavigationProp<any>>();
   const { createCurrentClassRequest, localStudentData } = useAppSelector(
     state => state.schedule,
   );

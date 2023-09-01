@@ -1,13 +1,13 @@
 import React from 'react';
 import Svg, { Rect, Path, Defs, LinearGradient, Stop, ClipPath } from 'react-native-svg';
 
-const OrangeCrossIcon = () => (
+const OrangeCrossIcon = ({ colorStart, colorEnd }: { colorStart?: string, colorEnd?: string }) => (
     <Svg width={40} height={40} viewBox="0 0 40 40" fill="none">
-        <Rect width={40} height={40} rx={4} fill="url(#paint0_linear_3819_8013)" />
+        <Rect width={40} height={40} rx={4} fill={"url(#paint0_linear_3819_8013)"} />
         <Defs>
             <LinearGradient id="paint0_linear_3819_8013" x1={0} y1={0} x2={0} y2={40} gradientUnits="userSpaceOnUse">
-                <Stop stopColor="#F3AF2C" />
-                <Stop offset={1} stopColor="#E9600D" />
+                <Stop stopColor={colorStart || "#F3AF2C"} />
+                <Stop offset={1} stopColor={colorEnd || "#E9600D"} />
             </LinearGradient>
             <ClipPath id="clip0_3819_8013">
                 <Rect width={23.4483} height={23.4483} fill="white" transform="translate(8.27588 8.27588)" />

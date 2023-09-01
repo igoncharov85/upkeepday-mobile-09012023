@@ -1,6 +1,6 @@
 import { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
-import React from 'react';
+import React from 'react'; 
 import Classes from '../../assets/svg/schedule/Classes';
 import More from '../../assets/svg/schedule/More';
 import Schedule from '../../assets/svg/schedule/Schedule';

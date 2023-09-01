@@ -55,66 +55,66 @@ function isTodayInWeekRange(start: Date, end: Date): boolean {
 }
 
 
-export const SheduleTable: FC<ISheduleTable> = memo(
-  ({ startOfWeek, endOfWeek }) => {
+export const SheduleTable: FC<ISheduleTable> = memo(({ startOfWeek, endOfWeek }) => {
+  const isFocused = useIsFocused();
+  const startWeekOfDay = getToday(startOfWeek)[1];
+  const timeData = generateTimeData('00:00', '23:00');
+  const weekStructure = createWeekStructure(startOfWeek, endOfWeek, timeData);
+  const { CurrentScheduledEntries, loading } = useAppSelector(state => state.schedule);
+  const { currentSchool } = useAppSelector(state => state.businessAccount);
 
-    const isFocused = useIsFocused();
-    const startWeekOfDay = getToday(startOfWeek)[1];
-    const timeData = generateTimeData('00:00', '23:00');
-    const weekStructure = createWeekStructure(startOfWeek, endOfWeek, timeData);
-    const { finderCurrentEntries, loading } = useAppSelector(state => state.schedule);
+  useEffect(() => {
+    dispatch(fetchScheduleByPeriodAction({ startDate: moment(startOfWeek).toISOString(), endDate: endOfWeek.toISOString(), schoolId: currentSchool?.SchoolId }));
+    console.log('current: ', CurrentScheduledEntries)
+  }, [isFocused, startOfWeek, currentSchool]);
 
-    useEffect(() => {
-      dispatch(fetchScheduleByPeriodAction({ startDate: moment(startOfWeek).toISOString(), endDate: endOfWeek.toISOString() }));
-      console.log('current: ', finderCurrentEntries)
-    }, [isFocused, startOfWeek]);
-    return loading ? <ScreenLoading /> : (
-      <View style={styles.container} >
-        <ScrollView contentOffset={{ x: 0, y: 64 * 8 }} >
-          <Row style={{ justifyContent: 'space-between' }} >
-            <Column>
-              {timeData.map((item, index) => (
-                <TimeLineItem key={index} time={item} />
-              ))}
-            </Column>
-            <Row style={{ flex: 1, paddingRight: 20 }}>
-              {weekStructure?.map((dayEvents, dayIndex) => {
-                const currentDate = new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startWeekOfDay + dayIndex);
-                return (
-                  <Column key={dayIndex}>
-                    {dayEvents?.map((event, index) => {
-                      let dayNumber: any = dayIndex + startWeekOfDay;
-                      if (startOfWeek.getMonth() !== endOfWeek.getMonth()) {
-                        if (dayIndex + startWeekOfDay > getDaysInMonth(startOfWeek.getMonth() + 1, endOfWeek.getFullYear())) {
-                          dayNumber = dayIndex + startWeekOfDay - getDaysInMonth(startOfWeek.getMonth() + 1, endOfWeek.getFullYear())
-                        }
+  return loading ? <ScreenLoading /> : (
+    <View style={styles.container} >
+      <ScrollView contentOffset={{ x: 0, y: 64 * 8 }} >
+        <Row style={{ justifyContent: 'space-between' }} >
+          <Column>
+            {timeData.map((item, index) => (
+              <TimeLineItem key={index} time={item} />
+            ))}
+          </Column>
+          <Row style={{ flex: 1 }}>
+            {weekStructure?.map((dayEvents, dayIndex) => {
+              const currentDate = new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startWeekOfDay + dayIndex);
+              return (
+                <Column key={dayIndex}>
+                  {dayEvents?.map((event, index) => {
+                    let dayNumber: any = dayIndex + startWeekOfDay;
+                    if (startOfWeek.getMonth() !== endOfWeek.getMonth()) {
+                      if (dayIndex + startWeekOfDay > getDaysInMonth(startOfWeek.getMonth() + 1, endOfWeek.getFullYear())) {
+                        dayNumber = dayIndex + startWeekOfDay - getDaysInMonth(startOfWeek.getMonth() + 1, endOfWeek.getFullYear())
                       }
-                      const item = findObject(finderCurrentEntries, index, dayNumber)
-                      const items = filterArrayByDayAndHour(finderCurrentEntries, currentDate, index)
-                      if (findObject(finderCurrentEntries, index, dayNumber)) {
-                        return (
-                          <SheduleTableItem
-                            lessonOnThisHour={items}
-                            key={`${index}-${dayNumber}`}
-                            item={item}
-                            currentDate={currentDate}
-                          />
-                        );
-                      }
-                      return <SheduleTableItem key={`${index}-${dayNumber}`} currentDate={currentDate} />;
-                    })}
-                    {isToday(dayIndex) && isTodayInWeekRange(startOfWeek, endOfWeek) && (
-                      <View style={[styles.absoluteFill, styles.mask]} />
-                    )}
-                  </Column>
-                );
-              })}
-            </Row>
+                    }
+                    const item = findObject(CurrentScheduledEntries, index, dayNumber)
+                    const items = filterArrayByDayAndHour(CurrentScheduledEntries, currentDate, index)
+                    if (findObject(CurrentScheduledEntries, index, dayNumber)) {
+                      return (
+                        <SheduleTableItem
+                          lessonOnThisHour={items}
+                          key={`${index}-${dayNumber}`}
+                          item={item}
+                          currentDate={currentDate}
+                        />
+                      );
+                    }
+                    return <SheduleTableItem key={`${index}-${dayNumber}`} currentDate={currentDate} />;
+                  })}
+                  {isToday(dayIndex) && isTodayInWeekRange(startOfWeek, endOfWeek) && (
+                    <View style={[styles.absoluteFill, styles.mask]} />
+                  )}
+                </Column>
+              );
+            })}
           </Row>
-        </ScrollView>
-      </View>
-    );
-  },
+        </Row>
+      </ScrollView>
+    </View>
+  );
+},
 );
 
 const Row = ({

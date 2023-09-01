@@ -1,50 +1,38 @@
-import moment from 'moment';
-import React, { FC, useRef } from 'react';
-import {
-  Animated,
-  PanResponder,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import React, { FC, memo, useEffect, useMemo, useRef, useState } from 'react';
+import { Animated, PanResponder, Text, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import styles from './styles';
 import Cancel from '../../../../assets/svg/Cancel';
-import { NavigationEnum } from '../../../common/constants/navigation';
-import { IGeneratedScheduleEntries } from '../../../common/types/schedule.types';
-import { useTypedNavigation } from '../../../hook/useTypedNavigation';
-import { addDayAndHoursToDate } from '../../../services/utils/generateDate.util';
 import { useAppSelector } from '../../../store/hooks';
 import BusyField from '../../ClassesScreen/components/BusyField';
-import { Dimensions } from 'react-native';
+import { IGeneratedScheduleEntries } from '../../../common/types/schedule.types';
+import { useNavigation } from '@react-navigation/native';
+import { NavigationEnum } from '../../../common/constants/navigation';
+import { addDayAndHoursToDate } from '../../../services/utils/generateDate.util';
+import moment from 'moment';
 
-import styles from './styles';
 
-function findActivitiesByDay(
-  activities: IGeneratedScheduleEntries[],
-  date: Date,
-) {
-  const activitiesByDay = activities.filter(
-    (activity: IGeneratedScheduleEntries) => {
-      const startDateTime = new Date(activity.StartDateTime);
-      return (
-        startDateTime.getDate() === date.getDate() &&
-        startDateTime.getMonth() === date.getMonth()
-      );
-    },
-  );
+
+
+function findActivitiesByDay(activities: IGeneratedScheduleEntries[], date: Date) {
+
+
+  const activitiesByDay = activities.filter((activity: IGeneratedScheduleEntries) => {
+    const startDateTime = new Date(activity.StartDateTime);
+    return startDateTime.getDate() === date.getDate() && startDateTime.getMonth() === date.getMonth();
+  });
 
   return activitiesByDay;
 }
 
-export function findLessonOnCurrentHour(
-  lessonsOnDay: any[],
-  currentHour: number,
-  currentDay: Date,
-) {
-  return findActivitiesByDay(lessonsOnDay, currentDay).filter(lesson => {
-    return +lesson.StartDateTime.split('T')[1].split(':')[0] == currentHour;
-  });
+
+export function findLessonOnCurrentHour(lessonsOnDay: any[], currentHour: number, currentDay: Date) {
+  return findActivitiesByDay(lessonsOnDay, currentDay).filter((lesson) => {
+    return +lesson.StartDateTime.split('T')[1].split(':')[0] == currentHour
+  })
 }
+
+
 
 interface IWeekTableItem {
   StartDateTime: string;
@@ -52,14 +40,13 @@ interface IWeekTableItem {
   onLongPress: (value: boolean) => void;
   editMode: boolean;
   onMoveSlot: (slot: IGeneratedScheduleEntries, newStartTime: string) => void;
-  conflict: IGeneratedScheduleEntries[];
+  conflict: boolean;
   onDeleteSlot: (slot: IGeneratedScheduleEntries) => void;
   dayIndex: number;
   startOfWeek: Date;
-  dryField: IGeneratedScheduleEntries[];
+  dryField: IGeneratedScheduleEntries;
   currentDay: Date;
-  slots: IGeneratedScheduleEntries[];
-  scrollUp: any
+  slots: IGeneratedScheduleEntries[]
 }
 
 const CELL_SIZE = {
@@ -67,147 +54,101 @@ const CELL_SIZE = {
   height: 64,
 };
 
-export const WeekTableItem: FC<IWeekTableItem> = ({
-  onLongPress,
-  editMode,
-  conflict,
-  onMoveSlot,
-  onDeleteSlot,
-  dryField,
-  currentDay,
-  slots,
-  timeIndex,
-  scrollUp
-}) => {
-  const lessonOnThisTime: IGeneratedScheduleEntries[] = findLessonOnCurrentHour(
-    slots,
-    timeIndex,
+export const WeekTableItem: FC<IWeekTableItem> =
+  ({
+    onLongPress,
+    editMode,
+    conflict,
+    onMoveSlot,
+    onDeleteSlot,
+    dryField,
     currentDay,
-  );
-  const { createCurrentClassRequest } = useAppSelector(state => state.schedule);
-  const onHandleLongPress = (active: boolean) => {
-    onLongPress(active);
-  };
+    slots,
+    timeIndex
 
-  const deleteSlot = (item: any) => {
-    onDeleteSlot(item);
-    onLongPress(false);
-  };
+  }) => {
+    const lessonOnThisTime: IGeneratedScheduleEntries[] = findLessonOnCurrentHour(slots, timeIndex, currentDay)
 
-  return (
-    <TouchableOpacity
-      onLongPress={() => onHandleLongPress(true)}
-      onPress={() => console.log('conflict', dryField)}
-      activeOpacity={1}>
-      <View style={styles.wrapperCell}>
-        <View style={styles.containerCell}>
-          {lessonOnThisTime.map((lesson, index) => {
-            return (
-              //remove TouchableOpacity to display cells correctly, added for testing purposes
-              // <TouchableOpacity onPress={() => console.log('touch lesson', lesson)}>
-              <LessonItem
-                name={createCurrentClassRequest.Class?.Name || ''}
-                key={`${lesson.StartDateTime} ${index}`}
-                lesson={lesson}
-                onMoveSlot={onMoveSlot}
-                editMode={editMode}
-                deleteSlot={deleteSlot}
-                onHandleLongPress={onHandleLongPress}
-                scrollUp={scrollUp}
-              />
-              // </TouchableOpacity>
-            );
-          })}
-          {/* Must doing */}
-          {dryField &&
-            dryField.map(
-              dryFieldItem => (
-                // <TouchableOpacity onPress={() => console.log(dryField)} style={{
-                //   height: '100%', width: '100%'
-                // }}>
+    const onHandleLongPress = (active: boolean) => {
+
+      onLongPress(active)
+    }
+
+    const deleteSlot = (item: any) => {
+      onDeleteSlot(item)
+      onLongPress(false)
+    }
+
+    return (
+      <TouchableOpacity
+        onLongPress={() => onHandleLongPress(true)}
+        activeOpacity={1}
+      >
+        <View style={styles.containerItem}>
+          <View style={{
+            borderRadius: 4,
+            flex: 1,
+            position: 'relative',
+          }}>
+            {lessonOnThisTime.map((lesson, index) => {
+              return (
+                <LessonItem key={`${lesson.StartDateTime} ${index}`} lesson={lesson} onMoveSlot={onMoveSlot} editMode={editMode} deleteSlot={deleteSlot} onHandleLongPress={onHandleLongPress} />)
+            })}
+            {dryField &&
+              <TouchableOpacity onPress={() => console.log(dryField)} style={{
+                height: '100%', width: '100%'
+              }}>
                 <BusyField
-                  start={Number(
-                    dryFieldItem.StartDateTime.split('T')[1].split(':')[1],
-                  )}
-                  duration={dryFieldItem.Duration}
-                />
-              ),
-              // </TouchableOpacity>
-            )}
+                  start={Number(dryField.StartDateTime.split('T')[1].split(':')[1])}
+                  duration={dryField.Duration} />
+              </TouchableOpacity>
+
+            }
+          </View>
         </View>
-      </View>
-    </TouchableOpacity>
-  );
-};
 
-const LessonItem = ({
-  lesson,
-  onMoveSlot,
-  editMode,
-  deleteSlot,
-  onHandleLongPress,
-  name,
-  scrollUp
-}: {
-  lesson: any;
-  onMoveSlot: any;
-  editMode: boolean;
-  deleteSlot: any;
-  onHandleLongPress: any;
-  name: string;
-  scrollUp: any
-}) => {
+      </TouchableOpacity >
+    );
+
+  };
+
+
+const LessonItem = ({ lesson, onMoveSlot, editMode, deleteSlot, onHandleLongPress }: { lesson: any, onMoveSlot: any, editMode: boolean, deleteSlot: any, onHandleLongPress: any }) => {
   const colorsLesson = ['#EAAFC8', '#654EA3'];
-  const screenHeight = Dimensions.get('window').height;
 
-
-  const { navigate } = useTypedNavigation();
+  const navigation = useNavigation();
   const pan = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
   const panResponders = PanResponder.create({
     onStartShouldSetPanResponder: () => editMode,
-    onPanResponderMove: (event, gestureState) => {
-      const { moveY } = gestureState;
-      // let newY = gestureState.moveY
-      if (moveY < 200) {
-        // scrollUp()
-        // newY -= 100;
-        console.log('Близко к верхнему краю');
-      } else if (moveY > screenHeight - 200) {
-        console.log('Близко к нижнему краю');
-      }
-      // const  = gestureState.moveY - scrollOffset;
-      // const newX = gestureState.moveX; // или что-то подобное
-      // pan.setValue({ x: newX, y: newY });
-      Animated.event([null, { dx: pan.x, dy: pan.y }], {
-        useNativeDriver: false,
-      })(event, gestureState);
-    },
+    onPanResponderMove: Animated.event(
+      [null, { dx: pan.x, dy: pan.y }],
+      { useNativeDriver: false }
+    ),
     onPanResponderRelease: (_, gestureState) => {
-      const gridCellX = Math.floor(
-        (gestureState.dx + CELL_SIZE.width / 2) / CELL_SIZE.width,
-      );
-      const gridCellY = Math.floor(
-        (gestureState.dy + CELL_SIZE.height / 2) / CELL_SIZE.height,
-      );
+      const gridCellX = Math.floor((gestureState.dx + CELL_SIZE.width / 2) / CELL_SIZE.width);
+      const gridCellY = Math.floor((gestureState.dy + CELL_SIZE.height / 2) / CELL_SIZE.height);
       const moveCoords = {
         x: (CELL_SIZE.width / 2) * gridCellX,
         y: (CELL_SIZE.height / 2) * gridCellY,
       };
 
+      // Update the pan Animated value to the final position
       pan.setOffset(moveCoords);
       pan.setValue(moveCoords);
-      let newTime = new Date(
-        addDayAndHoursToDate(lesson.StartDateTime, gridCellX, gridCellY),
-      );
+      let newTime = new Date(addDayAndHoursToDate(lesson.StartDateTime, gridCellX, gridCellY));
       const addDuration = (time: any) => {
-        onMoveSlot(lesson, moment(time).format('YYYY-MM-DDTHH:mm:ss'));
-        onHandleLongPress(false);
-      };
-      navigate(NavigationEnum.EDIT_TIME_CLASS_MODAL, {
+        newTime.setMinutes(time.minute)
+        newTime.setHours(time.dayPart == "AM" ? time.hour : time.hour + 12)
+        onHandleLongPress(false)
+        onMoveSlot(lesson, moment(newTime).format('YYYY-MM-DDTHH:mm:ss'))
+      }
+      console.log(newTime, 'newTime')
+      //@ts-ignore
+      navigation.navigate(NavigationEnum.EDIT_TIME_CLASS_MODAL, {
         addDuration,
         newTime,
-        lesson,
-      });
+        lesson
+      })
 
       pan.setOffset({
         x: 0,
@@ -218,46 +159,39 @@ const LessonItem = ({
         y: 0,
       });
     },
-  });
+  })
 
-  const lessonMinuteStart = Number(
-    lesson.StartDateTime.split('T')[1].split(':')[1],
-  );
+
+  const lessonMinuteStart = Number(lesson.StartDateTime.split('T')[1].split(':')[1])
   return (
     <Animated.View
       {...panResponders.panHandlers}
-      style={[
-        pan.getLayout(),
-        {
-          height: `100%`,
-          width: '100%',
-          top: pan.y,
-        },
-      ]}>
+      style={
+        [
+          pan.getLayout(), {
+            height: `${lesson.Duration / 60 * 100}%`,
+            width: '100%',
+            top: pan.y,
+          }
+        ]
+      }>
       <>
         <LinearGradient
           colors={colorsLesson}
           start={{ x: 0.5, y: 0 }}
           end={{ x: 0.5, y: 1 }}
-          style={[
-            styles.wrapperItem,
-            {
-              top: `${(lessonMinuteStart / 60) * 100}%`,
-              height: `${(lesson.Duration / 60) * 100}%`
-            },
+          style={[styles.wrapperItem, { top: `${lessonMinuteStart / 60 * 100}%` }
           ]}>
           {editMode && (
-            <TouchableOpacity
-              style={styles.cansel}
-              onPress={() => {
-                deleteSlot(lesson);
-              }}>
+            <TouchableOpacity style={styles.cansel} onPress={() => deleteSlot(lesson)}>
               <Cancel />
-            </TouchableOpacity>
-          )}
-          <Text style={[styles.textItem]}>{name}</Text>
+            </TouchableOpacity>)}
+          <Text style={[styles.textItem,
+          ]
+          }>Class</Text>
         </LinearGradient>
       </>
     </Animated.View>
-  );
-};
+  )
+
+}

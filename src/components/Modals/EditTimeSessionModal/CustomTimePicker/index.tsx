@@ -56,11 +56,6 @@ const CustomTimePicker: React.FC<ITimePicker> = ({ data, onSetTime, maxDuration 
       minute,
       dayPart
     });
-    console.log({
-      hour,
-      minute,
-      dayPart
-    })
 
   }, [hour, minute, dayPart])
   return (

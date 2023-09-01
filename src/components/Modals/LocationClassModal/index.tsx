@@ -1,18 +1,19 @@
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import PaymentIcon from '../../../../assets/svg/classes/PaymentIcon';
-import { useTypedNavigation } from '../../../hook/useTypedNavigation';
+// import { useTypedNavigation } from '../../../hook/useTypedNavigation';
 import { formatDateForPeriod } from '../../../services/utils/fullDateToValue.util';
 import { fetchClassesAction } from '../../../store/classes/actions';
 import { dispatch } from '../../../store/store';
 import { CustomButton } from '../../UI/CustomButton';
 
 import styles from './styles';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 const LocationClassModal = () => {
-  const { goBack } = useTypedNavigation();
+  const { goBack } = useNavigation<NativeStackNavigationProp<any>>();
   const route = useRoute(),
     { params }: any = route;
 
@@ -22,7 +23,6 @@ const LocationClassModal = () => {
   };
   const { item } = params as any;
 
-  console.log('------------------------------------')
   const {
     AddressLine,
     City,

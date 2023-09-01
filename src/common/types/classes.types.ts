@@ -1,5 +1,3 @@
-import { string } from "yup";
-
 export interface IStudent {
     StudentId: number;
     FullName: string;
@@ -45,30 +43,22 @@ export interface IClassesResponse {
     TrackPrepayment: boolean;
 }
 
-export interface IclassesScheduleResponse {
-    StartDate: string;
-    EndDate: string;
-    Sessions: ISession[];
-    OtherSessions: ISession[];
-}
 
 export type TClassesStatus = 'scheduled' | 'archived';
 export type TClassesChange = 'current' | 'future';
 
 export type TClassesId = number;
-export type IDeleteSession = {
-    sessionId: number;
-    classId?: number
-}
+
 export type IClassesUpdateStatus = {
     id: TClassesId;
     Status: string;
+    schoolId?: number;
 }
 export type IClassesUpdateSession = {
     id: TClassesId;
     change: TClassesChange;
     StartDateTime: string;
-    classId?: number
+    schoolId?: number;
 }
 export enum EClassesStatus {
     scheduled = 'scheduled',
@@ -79,16 +69,16 @@ export enum EClassesChange {
     future = 'future'
 }
 
-export interface IClassId {
-    classId: number;
-}
+
 export interface IGeneratedClasses {
     id: TClassesId;
     to: string;
+    schoolId?: number;
 }
 
 export interface IGeneratedClassesRequest extends IGeneratedClasses {
     Sessions: Array<ISessionSubset>;
+    schoolId?: number;
 }
 export interface IClassesEditName {
     id: TClassesId;

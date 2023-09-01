@@ -77,13 +77,12 @@ export const AddSessionModal: FC<AddSessionModalProps> = memo(
                 navigate(NavigationEnum.NEW_STUDENT_SCREEN)
               }} /> : <>
                 <SessionButton title={'Add Class'} onPress={addClass} />
-                {/* Временно выключается
                 <SessionButton rainbow title={'Add Business Account 💎'} onPress={() => {
                   visibleHandler();
                   // @ts-ignore
                   navigate(NavigationEnum.ADD_BUSINESS_ACCOUNT_SCREEN)
                 }} />
-                */}
+
               </>
             }
           </View>

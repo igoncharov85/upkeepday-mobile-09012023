@@ -1,70 +1,85 @@
-import React from 'react';
-import {Text, View} from 'react-native';
-import {ScreenHeader} from '../../components/ScreenHeader';
-import {CustomButton} from '../../components/UI/CustomButton';
-import {CustomInput} from '../../components/UI/CustomInput';
-import {useTypedNavigation} from '../../hook/useTypedNavigation';
+import React, { FC, useMemo } from "react";
+import { KeyboardAvoidingView, View } from "react-native";
+import { ScreenHeader } from "../../components/ScreenHeader";
+import { CustomButton } from "../../components/UI/CustomButton";
+import { CustomInput } from "../../components/UI/CustomInput";
+import { useAddNewTeacher } from "./presenters/useAddNewTeacher";
+import { MainDropdown } from "../../components/UI/mainDropdown";
+import { ScreenContainer } from "../../components/UI/screenContainer";
+import { Utils } from "../../services/utils/Utils";
+import { getStyles } from "./styles";
 
-export const AddNewTeacherScreen = () => {
-  const {goBack} = useTypedNavigation();
-  return (
-    <View
-      style={{
-        height: '100%',
-      }}>
-      <View
-        style={{
-          padding: 20,
-        }}>
-        <ScreenHeader
-          text="Add new Teacher"
-          withBackButton={true}
-          onBackPress={goBack}
-        />
-      </View>
-      <View
-        style={{
-          paddingHorizontal: 20,
-        }}>
-        <CustomInput
-          wrapperStyle={{marginTop: 15}}
-          placeholder={'Anna'}
-          labelText={'First Name'}
-        />
-        <CustomInput
-          wrapperStyle={{marginTop: 15}}
-          placeholder={'Asol'}
-          labelText={'Last Name'}
-        />
-        <CustomInput
-          wrapperStyle={{marginTop: 15}}
-          placeholder={'your.email@gmail.com'}
-          labelText={'Email'}
-        />
-        <CustomInput
-          wrapperStyle={{marginTop: 15}}
-          placeholder={'+1'}
-          labelText={'Phone'}
-        />
-        <CustomInput
-          wrapperStyle={{marginTop: 15}}
-          placeholder={'View Schedule - cannot setup classes'}
-          labelText={'Type of Rights'}
-        />
-        <CustomInput wrapperStyle={{marginTop: 15}} labelText={'Notes'} />
-      </View>
-      <View style={{flex: 1, padding: 20, justifyContent: 'flex-end'}}>
-        <CustomButton text={'Next step'} />
-        <Text
-          style={{
-            textAlign: 'center',
-            marginTop: 10,
-            fontSize: 16,
-            color: '#ccc',
-          }}>
-          Skip - Do later
-        </Text>
-      </View>
-    </View>
-  );
+const PERMISSIONS = [
+	{ label: 'View Schedule - cannot setup classes', value: 'ViewOwnSchedule' },
+	{ label: 'Manage own schedule', value: 'ManageOwnSchedule' },
+	{ label: 'Manage schedule', value: 'ManageSchedule' },
+	{ label: 'Full access', value: 'FullAccess' },
+]
+
+export const AddNewTeacherScreen: FC = () => {
+	const styles = useMemo(() => getStyles(), []);
+	const {
+		name, lastName, email, phone, permission, notes, isValid,
+		setName, setLastName, setEmail, setPhone, setPermission, setNotes, goBack, onAddTeacher, onPermissionFocus
+	} = useAddNewTeacher();
+
+	return (
+		<KeyboardAvoidingView behavior={Utils.isIOS ? 'padding' : undefined} style={styles.container}>
+			<ScreenContainer scrollEnabled headerComponent={<ScreenHeader containerStyle={styles.header} text="Add new Teacher" withBackButton={true} onBackPress={goBack} />}>
+				<View style={styles.formWrapper}>
+					<CustomInput
+						wrapperStyle={styles.input}
+						placeholder={'Anna'}
+						labelText={'First Name'}
+						value={name}
+						onChangeText={setName}
+						touched={!!name}
+					/>
+					<CustomInput
+						wrapperStyle={styles.input}
+						placeholder={'Asol'}
+						labelText={'Last Name'}
+						value={lastName}
+						onChangeText={setLastName}
+						touched={!!lastName}
+					/>
+					<CustomInput
+						wrapperStyle={styles.input}
+						placeholder={'your.email@gmail.com'}
+						labelText={'Email'}
+						value={email}
+						onChangeText={setEmail}
+						touched={!!email}
+					/>
+					<CustomInput
+						wrapperStyle={styles.input}
+						placeholder={'+1'}
+						labelText={'Phone'}
+						value={phone}
+						onChangeText={setPhone}
+						touched={!!phone}
+					/>
+					<MainDropdown
+						fullScreen={true}
+						data={PERMISSIONS}
+						selected={permission}
+						setSelected={setPermission}
+						valueField={'value'}
+						labelField={'label'}
+						title={'Type of Rights'}
+						containerStyle={styles.input}
+						onFocus={onPermissionFocus}
+					/>
+					<CustomInput
+						wrapperStyle={styles.input}
+						labelText={'Notes'}
+						value={notes}
+						onChangeText={setNotes}
+						touched={!!notes}
+					/>
+				</View>
+				<CustomButton style={styles.button} disabled={!isValid} text={'Save Teacher'} onPress={onAddTeacher} />
+			</ScreenContainer>
+		</KeyboardAvoidingView>
+	);
 };

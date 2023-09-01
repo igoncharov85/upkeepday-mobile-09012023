@@ -7,6 +7,7 @@ import styles from './styles';
 import { dispatch } from '../../../../store/store';
 import { fetchClassesAction } from '../../../../store/classes/actions';
 import { EClassesStatus } from '../../../../common/types/classes.types';
+import { useAppSelector } from '../../../../store/hooks';
 
 interface NavigationButtonProps {
     active: boolean;
@@ -25,10 +26,11 @@ interface IClassesNavigation {
 export const ClassesNavigation: FC<IClassesNavigation> = memo(() => {
     const [activeIndex, setActiveIndex] = useState(0);
     const isFocused = useIsFocused();
+    const { currentSchool } = useAppSelector(state => state.businessAccount);
 
     useEffect(() => {
-        dispatch(fetchClassesAction(activeIndex ? EClassesStatus.archived : EClassesStatus.scheduled))
-    }, [activeIndex, isFocused],);
+        dispatch(fetchClassesAction({ status: activeIndex ? EClassesStatus.archived : EClassesStatus.scheduled, schoolId: currentSchool?.SchoolId }))
+    }, [activeIndex, isFocused, currentSchool]);
 
     return (
         <>

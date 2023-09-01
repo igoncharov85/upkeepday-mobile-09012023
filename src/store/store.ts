@@ -11,13 +11,16 @@ import locationReducer from './location'
 import rootSaga from './saga/rootSaga'
 import scheduleReducer from './shedule'
 import userReducer from './user'
+import loggerReducer from './logger'
+import { businessAccountFormReducer } from './businessAccountForm'
+import { businessAccountReducer } from './businessAccount'
+import { businessClassFormReducer } from './businessClassForm'
 
 const persistConfig = {
     key: "root",
     storage: AsyncStorage,
 };
 
-//reducer
 const reducer = combineReducers({
     auth: authReducer,
     app: appReducer,
@@ -26,8 +29,12 @@ const reducer = combineReducers({
     location: locationReducer,
     user: userReducer,
     classes: classesReducer,
-    duration: durationReducer
-})
+    duration: durationReducer,
+    logger: loggerReducer,
+    businessAccountForm: businessAccountFormReducer,
+    businessAccount: businessAccountReducer,
+    businessClassForm: businessClassFormReducer,
+});
 
 const sagaMiddleware = createSagaMiddleware();
 const persistedReducer = persistReducer(persistConfig, reducer);

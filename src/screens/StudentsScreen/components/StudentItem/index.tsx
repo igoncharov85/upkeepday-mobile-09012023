@@ -1,89 +1,67 @@
-import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
-import BankCardIcon from '../../../../../assets/svg/classes/BankCardIcon';
-import CheckIcon from '../../../../../assets/svg/classes/CheckIcon';
+import React from "react";
+import { Text, TouchableOpacity, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
-import EditIcon from '../../../../../assets/svg/classes/EditIcon';
-import MailIcon from '../../../../../assets/svg/students/MailIcon';
-import OrangeCrossIcon from '../../../../../assets/svg/students/OrangeCrossIcon';
-import PhoneIcon from '../../../../../assets/svg/students/PhoneIcon';
-import { NavigationEnum } from '../../../../common/constants/navigation';
-import { IStudentResponse } from '../../../../common/types/user';
-import { useTypedNavigation } from '../../../../hook/useTypedNavigation';
-import { dispatch } from '../../../../store/store';
-import {
-  deleteStudentAction,
-  updateStudentStatus,
-} from '../../../../store/user/actions';
+import EditIcon from "../../../../../assets/svg/classes/EditIcon";
+import MailIcon from "../../../../../assets/svg/students/MailIcon";
+import { NavigationEnum } from "../../../../common/constants/navigation";
 
-import styles from './styles';
-import ActivetedIcon from '../../../../../assets/svg/students/Activeted';
+import styles from "./styles";
+import { IStudentResponse } from "../../../../common/types/user";
+import PhoneIcon from "../../../../../assets/svg/students/PhoneIcon";
+import { dispatch } from "../../../../store/store";
+import { deleteStudentAction, updateStudentStatus } from "../../../../store/user/actions";
+import CheckIcon from "../../../../../assets/svg/classes/CheckIcon";
+import OrangeCrossIcon from "../../../../../assets/svg/students/OrangeCrossIcon";
+import { useAppSelector } from "../../../../store/hooks";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 interface IStudentsItem {
-  item: IStudentResponse | any;
+  item: IStudentResponse | any
 }
 
 export enum EClassesStatus {
   scheduled = 'Scheduled',
   archived = 'Archived',
-  nonScheduled = 'NonScheduled',
+  nonScheduled = 'NonScheduled'
 }
 
 const StudentsItem: React.FC<IStudentsItem> = ({ item }) => {
-  const { navigate } = useTypedNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const { currentSchool } = useAppSelector(state => state.businessAccount);
 
   const studentStatus = item.Status;
   const handleEdit = () => {
-    navigate(NavigationEnum.EDIT_STUDENTS_SCREEN, { item });
-  };
-
-  const handlePayment = () => {
-    navigate(NavigationEnum.STUDENT_PAYMENTS_SCREEN, { item });
+    navigation.navigate(NavigationEnum.EDIT_STUDENTS_SCREEN, { item });
   };
 
   const handleInfo = () => {
-    navigate(NavigationEnum.PREVIEW_STUDENTS_SCREEN, { item });
-  };
+    navigation.navigate(NavigationEnum.PREVIEW_STUDENTS_SCREEN, { item });
+  }
   const onArchived = () => {
-    navigate(NavigationEnum.RESULT_CLASS_MODAL, {
+    navigation.navigate(NavigationEnum.RESULT_CLASS_MODAL, {
       item: item,
       actionBtn: () => {
-        dispatch(
-          updateStudentStatus({ status: 'Archived', StudentId: item.StudentId }),
-        );
-        navigate(NavigationEnum.STUDENTS_TAB);
+        dispatch(updateStudentStatus({ status: 'Archived', StudentId: item.StudentId, schoolId: currentSchool?.SchoolId }));
+        navigation.navigate(NavigationEnum.STUDENTS_TAB)
       },
       nameAction: 'Archive Student',
-    });
-  };
+    })
+  }
   const handleDelete = () => {
-    navigate(NavigationEnum.RESULT_CLASS_MODAL, {
+    navigation.navigate(NavigationEnum.RESULT_CLASS_MODAL, {
       item: item,
       actionBtn: () => {
-        dispatch(deleteStudentAction({ StudentId: item.StudentId }));
-        navigate(NavigationEnum.STUDENTS_TAB);
+        dispatch(deleteStudentAction({ StudentId: item.StudentId, schoolId: currentSchool?.SchoolId }))
+        navigation.navigate(NavigationEnum.STUDENTS_TAB)
       },
       nameAction: 'Delete  Permanently',
-    });
-  };
-  const handleActiveted = () => {
-    navigate(NavigationEnum.RESULT_CLASS_MODAL, {
-      item: item,
-      actionBtn: () => {
-        dispatch(
-          updateStudentStatus({ status: 'Active', StudentId: item.StudentId }),
-        );
-        navigate(NavigationEnum.STUDENTS_TAB);
-      },
-      nameAction: 'Activate',
-    });
+    })
   };
   return (
     <View style={styles.container}>
       <View style={[styles.part]}>
-        <Text style={styles.title}>
-          {item.FirstName} {item.LastName}
-        </Text>
+        <Text style={styles.title}>{item.FirstName} {item.LastName}</Text>
       </View>
       <View style={[styles.part, styles.partTop]}>
         <View>
@@ -91,12 +69,7 @@ const StudentsItem: React.FC<IStudentsItem> = ({ item }) => {
             <View style={styles.paymentItem}>
               <PhoneIcon />
             </View>
-            <Text style={styles.text}>
-              {
-                //@ts-ignore
-                item.Phone
-              }
-            </Text>
+            <Text style={styles.text}>{item.Phone}</Text>
           </View>
           <View style={styles.payment}>
             <View style={styles.paymentItem}>
@@ -110,58 +83,55 @@ const StudentsItem: React.FC<IStudentsItem> = ({ item }) => {
           </Text>
         </View>
         <View>
-          <TouchableOpacity onPress={handleInfo}>
-            <Text style={[styles.underlineText, styles.textRight]}>
-              Enrolled Classes: {item.EnrolledClasses.length}
-            </Text>
+          <TouchableOpacity
+            onPress={handleInfo}>
+            <Text style={[styles.underlineText, styles.textRight]}>Enrolled Classes: {item.EnrolledClasses?.length}</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={handlePayment}>
-            <Text style={[styles.underlineText, styles.textRight]}>
-              Total Balance:{' '}
-              <Text style={{ color: item.Balance >= 0 ? '#169861' : '#F00' }}>
-                {item.Balance.toFixed(2)}
-              </Text>
-            </Text>
-          </TouchableOpacity>
+          <Text style={[styles.underlineText, styles.textRight]}>Balance: <Text style={{ color: '#169861' }}>
+            {item.Balance}
+          </Text>
+          </Text>
         </View>
       </View>
-
       <View style={styles.part}>
         <View style={styles.link}>
           {studentStatus === EClassesStatus.scheduled && (
             <>
-              <TouchableOpacity style={styles.linkItem} onPress={handleEdit}>
+              <TouchableOpacity
+                style={styles.linkItem}
+                onPress={handleEdit}>
                 <EditIcon />
               </TouchableOpacity>
             </>
           )}
           {studentStatus === EClassesStatus.nonScheduled && (
             <>
-              <TouchableOpacity style={styles.linkItem} onPress={handleEdit}>
+              <TouchableOpacity
+                style={styles.linkItem}
+                onPress={handleEdit}
+              >
                 <EditIcon />
               </TouchableOpacity>
-              <TouchableOpacity style={styles.linkItem} onPress={onArchived}>
+              <TouchableOpacity
+                style={styles.linkItem}
+                onPress={onArchived}
+              >
                 <OrangeCrossIcon />
               </TouchableOpacity>
             </>
           )}
           {studentStatus === EClassesStatus.archived && (
-            <>
-              <TouchableOpacity style={styles.linkItem} onPress={handleActiveted}>
-                <ActivetedIcon />
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.linkItem} onPress={handleDelete}>
-                <CheckIcon size={40} />
-              </TouchableOpacity>
-            </>
+            <TouchableOpacity
+              style={styles.linkItem}
+              onPress={handleDelete}
+            >
+              <CheckIcon />
+            </TouchableOpacity>
           )}
-          <TouchableOpacity style={[styles.buttonIcon]} onPress={handlePayment}>
-            <BankCardIcon />
-          </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </View >
   );
-};
+}
 
 export default StudentsItem;

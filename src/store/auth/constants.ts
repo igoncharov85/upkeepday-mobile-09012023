@@ -8,4 +8,5 @@ export enum AuthContactsEnum {
     CONFIRM_REGISTRATION_PASSWORD = 'IAuthContacts/CONFIRM_REGISTRATION_PASSWORD',
     GET_COUNTRIES = 'IAuthContacts/GET_COUNTRIES',
     GET_STATES = 'IAuthContacts/GET_STATES',
+    GET_USER = 'IAuthContacts/GET_USER',
 }

@@ -25,7 +25,7 @@ interface IScheduleNavigation {
 export const ScheduleNavigation: FC<IScheduleNavigation> = memo(() => {
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const ActiveScreen = SCHEDULE_NAVIGATION[activeIndex].component;
+  const ActiveScreen = SCHEDULE_NAVIGATION?.[activeIndex]?.component;
 
   return (
     <>
@@ -36,7 +36,8 @@ export const ScheduleNavigation: FC<IScheduleNavigation> = memo(() => {
           end={{ x: 1, y: 0.5 }}
           locations={[0, 1]}
           angle={180}
-          style={styles.buttonWrapper}>
+          style={styles.buttonWrapper}
+        >
           {SCHEDULE_NAVIGATION.map((item, index) => (
             <NavigationButton
               key={index}
@@ -47,7 +48,7 @@ export const ScheduleNavigation: FC<IScheduleNavigation> = memo(() => {
           ))}
         </LinearGradient>
       </View>
-      <ActiveScreen />
+      {ActiveScreen && <ActiveScreen />}
     </>
   );
 });

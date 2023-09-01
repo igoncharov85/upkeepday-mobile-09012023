@@ -4,7 +4,8 @@ import { ColorEnum } from "../../../common/constants/styles/colors.enum";
 export default StyleSheet.create({
     container: {
         width: '100%',
-        backgroundColor: ColorEnum.ACCENT_BC
+        backgroundColor: ColorEnum.ACCENT_BC,
+        overflow:'visible',
     },
     labelText: {
         fontSize: 12,

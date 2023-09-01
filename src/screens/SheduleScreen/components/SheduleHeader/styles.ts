@@ -1,20 +1,24 @@
 import { StyleSheet } from "react-native";
+import { scaleFontSize, scaleVertical } from "../../../../services/utils/Utils";
+import { IColors } from "../../../../UIProvider/theme/IColors";
 
-export default StyleSheet.create({
-    container:{
-        paddingHorizontal: 20,
-        paddingTop: 20,
-        paddingBottom: 14,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        width: '100%',
-        minHeight: 34,
-    },
-    headerText: {
-        color: 'black',
-        fontWeight: '700',
-        fontSize: 32,
-        textAlign: 'left',
-    },
-})
+export const getStyles = (colors: IColors) => {
+    const styles = StyleSheet.create({
+        container: {
+            height: scaleVertical(60),
+            paddingHorizontal: 20,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            width: '100%',
+            minHeight: 34,
+        },
+        headerText: {
+            color: colors.title,
+            fontWeight: '700',
+            fontSize: scaleFontSize(24),
+            textAlign: 'left',
+        },
+    });
+    return styles;
+};

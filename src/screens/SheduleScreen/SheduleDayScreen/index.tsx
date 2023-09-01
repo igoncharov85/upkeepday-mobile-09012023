@@ -15,7 +15,6 @@ import { ScreenLoading } from '../../../components/UI/ScreenLoading';
 import { IGeneratedScheduleEntries } from '../../../common/types/schedule.types';
 import { useIsFocused } from '@react-navigation/native';
 import moment from 'moment';
-import { formatDateForDayScroller } from '../../../services/utils/convertDate';
 
 
 function getNextDate(dateString: string, daysToAdd: number): string {
@@ -26,6 +25,13 @@ function getNextDate(dateString: string, daysToAdd: number): string {
 	const nextMonth = (nextDate.getMonth() + 1).toString().padStart(2, '0');
 	const nextDay = nextDate.getDate().toString().padStart(2, '0');
 	return `${nextYear}-${nextMonth}-${nextDay}`;
+}
+function formatDate(dateString: string): string {
+	const date = new Date(dateString);
+	return date.toLocaleDateString('en-US', {
+		month: 'long', day: 'numeric', year: 'numeric',
+		timeZone: 'UTC',
+	});
 }
 
 function sortArrayByDateTime(arr: any[]): any[] {
@@ -45,7 +51,8 @@ function sortArrayByDateTime(arr: any[]): any[] {
 interface IScheduleDayScreen { }
 
 export const ScheduleDayScreen: React.FC<IScheduleDayScreen> = memo(() => {
-	const { finderCurrentEntries, loading } = useAppSelector(state => state.schedule);
+	const { CurrentScheduledEntries, loading, finderCurrentEntries } = useAppSelector(state => state.schedule);
+	const { currentSchool } = useAppSelector(state => state.businessAccount);
 	const isFocused = useIsFocused();
 	const today = new Date;
 	const [dateString, day] = getToday(today)
@@ -64,24 +71,22 @@ export const ScheduleDayScreen: React.FC<IScheduleDayScreen> = memo(() => {
 	};
 	useEffect(() => {
 		let localCurrentDay = new Date(currentDay);
-		dispatch(fetchScheduleByPeriodAction({ startDate: localCurrentDay.toISOString(), endDate: addDayAndHoursToDate(currentDay, 1, 0) }));
-	}, [currentDay])
+		dispatch(fetchScheduleByPeriodAction({ startDate: localCurrentDay.toISOString(), endDate: addDayAndHoursToDate(currentDay, 1, 0), schoolId: currentSchool?.SchoolId }));
+	}, [currentDay, currentSchool]);
+
 	useEffect(() => {
 		let localCurrentDay = new Date(currentDay);
-		isFocused && dispatch(fetchScheduleByPeriodAction({ startDate: localCurrentDay.toISOString(), endDate: addDayAndHoursToDate(currentDay, 1, 0) }));
-	}, [isFocused]);
-
+		isFocused && dispatch(fetchScheduleByPeriodAction({ startDate: localCurrentDay.toISOString(), endDate: addDayAndHoursToDate(currentDay, 1, 0), schoolId: currentSchool?.SchoolId }));
+	}, [isFocused, currentSchool]);
 
 	return loading ? <ScreenLoading /> : (
 		<View>
 			<ScheduleScroller
-				title={formatDateForDayScroller(currentDay)}
+				title={formatDate(currentDay)}
 				onPressLeft={handlePrevDay}
 				onPressRight={handleNextDay}
 			/>
-
 			<SessionItemList
-				//@ts-ignore
 				data={sortArrayByDateTime(finderCurrentEntries)}
 			/>
 		</View>

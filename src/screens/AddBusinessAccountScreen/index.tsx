@@ -1,82 +1,83 @@
-import React from 'react';
-import {View} from 'react-native';
-import {NavigationEnum} from '../../common/constants/navigation';
-import {ScreenHeader} from '../../components/ScreenHeader';
-import {CustomButton} from '../../components/UI/CustomButton';
-import {CustomInput} from '../../components/UI/CustomInput';
-import {useTypedNavigation} from '../../hook/useTypedNavigation';
+import React, { useMemo } from "react";
+import { KeyboardAvoidingView, View } from "react-native";
+import { ScreenHeader } from "../../components/ScreenHeader";
+import { CustomButton } from "../../components/UI/CustomButton";
+import { CustomInput } from "../../components/UI/CustomInput";
+import { useAddBusinessAccount } from "./presenters/useAddBusinessAccount";
+import { getStyles } from "./styles";
+import { ScreenContainer } from "../../components/UI/screenContainer";
+import { LocationDropdowns } from "./components/locationDropdowns";
 
 export const AddBusinessAccountScreen = () => {
-  const {goBack, navigate} = useTypedNavigation();
-  return (
-    <View
-      style={{
-        height: '100%',
-      }}>
-      <View
-        style={{
-          padding: 20,
-        }}>
-        <ScreenHeader
-          text="Add Business Account"
-          withBackButton={true}
-          onBackPress={goBack}
-        />
-      </View>
-      <View
-        style={{
-          paddingHorizontal: 20,
-        }}>
-        <CustomInput
-          wrapperStyle={{marginTop: 10}}
-          placeholder={'Name'}
-          labelText={'Business Name'}
-        />
-        <CustomInput
-          wrapperStyle={{marginTop: 10}}
-          placeholder={'+1'}
-          labelText={'Phone Number'}
-        />
-        <CustomInput
-          wrapperStyle={{marginTop: 10}}
-          placeholder={'Address Text'}
-          labelText={'Address Line 1'}
-        />
-        <CustomInput
-          wrapperStyle={{marginTop: 10}}
-          placeholder={'City Name'}
-          labelText={'City'}
-        />
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginTop: 10,
-          }}>
-          <CustomInput
-            wrapperStyle={{width: '45%'}}
-            placeholder={'USA'}
-            labelText={'Country'}
-          />
-          <CustomInput
-            wrapperStyle={{width: '45%'}}
-            placeholder={'Business Name'}
-            labelText={'State'}
-          />
-        </View>
-        <CustomInput
-          wrapperStyle={{marginTop: 10}}
-          placeholder={'113245'}
-          labelText={'Postal Code'}
-        />
-      </View>
-      <View style={{flex: 1, padding: 20, justifyContent: 'flex-end'}}>
-        <CustomButton
-          text={'Next step'}
-          onPress={() => navigate(NavigationEnum.ADD_NEW_TEACHER_SCREEN)}
-        />
-      </View>
-    </View>
-  );
+    const styles = useMemo(() => getStyles(), []);
+    const {
+        name, phone, address, city, country, state, postalCode, isValid, countries, states,
+        goBack, setName, setPhone, setAddress, setCity, setCountry, setState, setPostalCode, onPress
+    } = useAddBusinessAccount();
+
+    return (
+        <KeyboardAvoidingView style={styles.container}>
+            <ScreenContainer scrollEnabled>
+                <ScreenHeader containerStyle={styles.header} text="Add Business Account" withBackButton={true} onBackPress={goBack} />
+                <View style={styles.formWrapper}>
+                    <CustomInput
+                        wrapperStyle={styles.input}
+                        placeholder={'Name'}
+                        labelText={'Business Name'}
+                        value={name}
+                        onChangeText={setName}
+                        touched={!!name}
+                        validationErrorText={!name ? 'fill row' : ''}
+                    />
+                    <CustomInput
+                        wrapperStyle={styles.input}
+                        placeholder={'+1'}
+                        labelText={'Phone Number'}
+                        value={phone}
+                        onChangeText={setPhone}
+                        touched={!!phone}
+                        validationErrorText={!phone ? 'fill row' : ''}
+                    />
+                    <CustomInput
+                        wrapperStyle={styles.input}
+                        placeholder={'Address Text'}
+                        labelText={'Address Line 1'}
+                        value={address}
+                        onChangeText={setAddress}
+                        touched={!!address}
+                        validationErrorText={!address ? 'fill row' : ''}
+                    />
+                    <CustomInput
+                        wrapperStyle={styles.input}
+                        placeholder={'City Name'}
+                        labelText={'City'}
+                        value={city}
+                        onChangeText={setCity}
+                        touched={!!city}
+                        validationErrorText={!city ? 'fill row' : ''}
+                    />
+                    <LocationDropdowns
+                        countries={countries}
+                        states={states}
+                        country={country}
+                        state={state}
+                        setCountry={setCountry}
+                        setState={setState}
+                    />
+                    <CustomInput
+                        wrapperStyle={styles.input}
+                        placeholder={'113245'}
+                        labelText={'Postal Code'}
+                        value={postalCode}
+                        onChangeText={setPostalCode}
+                        touched={!!postalCode}
+                        validationErrorText={!postalCode ? 'fill row' : ''}
+                    />
+                </View>
+                <View style={styles.buttonWrapper}>
+                    <CustomButton disabled={!isValid} text={'Next step'} onPress={onPress} />
+                </View>
+            </ScreenContainer>
+        </KeyboardAvoidingView>
+    );
 };

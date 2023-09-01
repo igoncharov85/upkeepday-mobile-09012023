@@ -1,20 +1,22 @@
-import React, {FC, memo, ReactNode} from 'react';
-import {Linking, Text, TouchableOpacity, View} from 'react-native';
+import React, { FC, memo, ReactNode } from 'react';
+import { Linking, Text, TouchableOpacity, View } from 'react-native';
 import StudentCardSvg from '../../../../assets/svg/StudentCardSvg';
 import TeacherCardRegSvg from '../../../../assets/svg/TeacherCardRegSvg';
-import {NavigationEnum} from '../../../common/constants/navigation';
+import { NavigationEnum } from '../../../common/constants/navigation';
 import {
   PRIVACY_POLICY,
   TERMS_OF_USE_LINK,
 } from '../../../common/constants/server';
-import {StyleEnum} from '../../../common/constants/styles/styles.enum';
+import { StyleEnum } from '../../../common/constants/styles/styles.enum';
 import {
   INavigationBase,
   TRegistrationScreen,
 } from '../../../common/types/component.styles';
-import {ScreenHeader} from '../../../components/ScreenHeader';
-import {useTypedNavigation} from '../../../hook/useTypedNavigation';
+import { ScreenHeader } from '../../../components/ScreenHeader';
+// import {useTypedNavigation} from '../../../hook/useTypedNavigation';
 import styles from './styles';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 interface IRegistrationCard {
   text: string;
@@ -25,8 +27,8 @@ interface IRegistrationCard {
 interface IChooseRoleScreen extends INavigationBase {
   setScreen: (screen: TRegistrationScreen) => any;
 }
-export const ChooseRoleScreen: FC<IChooseRoleScreen> = memo(({setScreen}) => {
-  const {navigate} = useTypedNavigation();
+export const ChooseRoleScreen: FC<IChooseRoleScreen> = memo(({ setScreen }) => {
+  const { navigate } = useNavigation<NativeStackNavigationProp<any>>();
   const registrationCards: Array<IRegistrationCard> = [
     {
       text: 'I am a private Tutor',

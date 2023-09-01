@@ -1,47 +1,77 @@
-import { IClassId, IClassesEditName, IClassesUpdateSession, IClassesUpdateStatus, IGeneratedClasses, IGeneratedClassesRequest, TClassesId, TClassesStatus } from "../../../common/types/classes.types"; import { convertToUTC } from "../../utils/convertToUTC";
-;
+import { IClassesEditName, IClassesUpdateSession, IClassesUpdateStatus, IGeneratedClasses, IGeneratedClassesRequest, TClassesId, TClassesStatus } from "../../../common/types/classes.types"; 
 import { $axiosAuth } from "../base.instance";
 
 
 export class ClassesService {
-    static async fetchClasses(status: TClassesStatus) {
-        return $axiosAuth.get(`/tutor/classes/${status}`)
-    }
-    static async fetchClassesById(id: TClassesId) {
-        return $axiosAuth.get(`/tutor/classes/${id}`)
-    }
-    static async fetchSessionClassesById(id: TClassesId) {
-        return $axiosAuth.get(`/tutor/classes/${id}/sessions`)
-    }
-    static async fetchGeneratedClasses({ id, to }: (IGeneratedClasses)) {
-
-        return $axiosAuth.get(`/tutor/classes/${id}/extend/${to}`)
+    static async fetchClasses({ status, schoolId }: { status: TClassesStatus, schoolId?: number }) {
+        const link = typeof schoolId === 'number'
+            ? `/schools/${schoolId}/classes`//TODO: add request with status if it will be on back
+            : `/tutor/classes/${status}`;
+        return $axiosAuth.get(link)
     }
 
-    static async fetchClassesSchedule({ classId }: IClassId) {
-
-        return $axiosAuth.get(`/tutor/classes/${classId}/schedule`)
-    }
-    static async GeneratedClasses({ id, to, Sessions }: (IGeneratedClassesRequest)) {
-
-        return $axiosAuth.patch(`/tutor/classes/${id}/extend/${to}`, { Sessions })
-    }
-    static async deleteClasses(id: TClassesId) {
-        return $axiosAuth.delete(`/tutor/classes/${id}`)
-    }
-    static async updatedStatusClasses({ id, Status }: IClassesUpdateStatus) {
-        return $axiosAuth.patch(`/tutor/classes/${id}`, { Status })
+    static async fetchClassesById({ id, schoolId }: { id: TClassesId, schoolId?: number }) {
+        const link = typeof schoolId === 'number'
+            ? `/schools/${schoolId}/classes/${id}`
+            : `/tutor/classes/${id}`;
+        return $axiosAuth.get(link)
     }
 
-    static async updatedSessionClasses({ id, change, StartDateTime }: IClassesUpdateSession) {
-        return $axiosAuth.put(`/tutor/sessions/${id}/${change}`, { StartDateTime })
+    static async fetchSessionClassesById({ id, schoolId }: { id: TClassesId, schoolId?: number }) {
+        const link = typeof schoolId === 'number'
+            ? `/schools/${schoolId}/classes/${id}/sessions`
+            : `/tutor/classes/${id}/sessions`;
+        return $axiosAuth.get(link)
     }
-    static async deleteSessionClasses(id: TClassesId) {
-        return $axiosAuth.delete(`/tutor/sessions/${id}`)
+
+    static async fetchGeneratedClasses({ id, to, schoolId }: (IGeneratedClasses)) {
+        const link = typeof schoolId === 'number'
+            ? `/schools/${schoolId}/classes/${id}/extend/${to}`
+            : `/tutor/classes/${id}/extend/${to}`;
+        return $axiosAuth.get(link);
     }
-    static async editNameClasses(data: IClassesEditName) {
+
+    static async GeneratedClasses({ id, to, Sessions, schoolId }: (IGeneratedClassesRequest)) {
+        const link = typeof schoolId === 'number'
+            ? `/schools/${schoolId}/classes/${id}/extend/${to}`
+            : `/tutor/classes/${id}/extend/${to}`;
+        return $axiosAuth.patch(link, { Sessions })
+    }
+
+    static async deleteClasses({ id, schoolId }: { id: TClassesId, schoolId?: number }) {
+        const link = typeof schoolId === 'number'
+            ? `/schools/${schoolId}/classes/${id}`
+            : `/tutor/classes/${id}`;
+        return $axiosAuth.delete(link)
+    }
+
+    static async updatedStatusClasses({ id, Status, schoolId }: IClassesUpdateStatus) {
+        const link = typeof schoolId === 'number'
+            ? `/schools/${schoolId}/classes/${id}`
+            : `/tutor/classes/${id}`;
+        return $axiosAuth.patch(link, { Status })
+    }
+
+    static async updatedSessionClasses({ id, change, StartDateTime, schoolId }: IClassesUpdateSession) {
+        const link = typeof schoolId === 'number'
+            ? `/schools/${schoolId}/sessions/${id}/${change}`
+            : `/tutor/sessions/${id}/${change}`;
+        return $axiosAuth.put(link, { StartDateTime })
+    }
+
+    static async deleteSessionClasses({ id, schoolId }: { id: TClassesId, schoolId?: number }) {
+        const link = typeof schoolId === 'number'
+            ? `/schools/${schoolId}/sessions/${id}`
+            : `/tutor/sessions/${id}`;
+        return $axiosAuth.delete(link)
+    }
+
+    static async editNameClasses({ data, schoolId }: { data: IClassesEditName, schoolId?: number }) {
         const { Class, Location } = data;
-        return $axiosAuth.patch(`/tutor/classes/${data.id}/name_location`, { Class, Location })
+        const link = typeof schoolId === 'number'
+            ? `/schools/${schoolId}/classes/${data.id}/name_location`
+            : `/tutor/classes/${data.id}/name_location`;
+        return $axiosAuth.patch(link, { Class, Location })
     }
 
 }

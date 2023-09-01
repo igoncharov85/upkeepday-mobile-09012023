@@ -16,23 +16,18 @@ import { MessageBlock } from './components/MessageBlock';
 import { CustomButton } from '../../components/UI/CustomButton';
 import { IScheduleItem } from '../../common/types/schedule.types';
 import { dispatch } from '../../store/store';
-import { deleteScheduleByPeriodAction, fetchScheduleByPeriodAction } from '../../store/shedule/actions';
-import { useTypedNavigation } from '../../hook/useTypedNavigation';
-import { NavigationEnum } from '../../common/constants/navigation';
-import { convertLocalToUTC } from '../../services/utils/convertToUTC';
-import moment from 'moment';
+import { deleteScheduleByPeriodAction } from '../../store/shedule/actions';
 
 interface RouteParams {
-  itemData?: any;
-  currentDate?: any
+  itemData: any;
 }
 interface ICancellationScreen { }
 export const CancellationScreen: FC<ICancellationScreen> = memo(() => {
-  const { navigate, goBack } = useTypedNavigation()
+  const navigation = useNavigation();
   const route = useRoute();
-  const { itemData, currentDate } = route.params as RouteParams;
-  const startTime = itemData.StartDateTime ? itemData.StartDateTime as string : moment.utc(currentDate).local().format('YYYY-MM-DDTHH:mm:ss');
-  const duration = itemData.Duration || 0;
+  const { itemData } = route.params as RouteParams;
+  const startTime = itemData.StartDateTime ? itemData.StartDateTime as string : new Date(itemData?.currentDate).toISOString();
+  const duration = itemData.Duration;
   const endTime = calculateEndDate(startTime, duration);
 
   const [startDate, setStartDate] = useState(startTime);
@@ -50,22 +45,13 @@ export const CancellationScreen: FC<ICancellationScreen> = memo(() => {
   const onSetEndTime = (endDate: string) => setEndDate(endDate)
 
   const handleSubmit = () => {
-    let startDateTime = startDate,
-      endDateTime = endDate
-    if (allDay) {
-      startDateTime = moment(startDate).startOf('day').format('YYYY-MM-DDTHH:mm:ss');
-      endDateTime = moment(endDate).endOf('day').format('YYYY-MM-DDTHH:mm:ss')
-    }
-    dispatch(fetchScheduleByPeriodAction({ startDate: startDateTime, endDate: endDateTime }));
-    navigate(NavigationEnum.CONFIRM_CANCELLATION_SCREEN, {
-      startDate: startDateTime,
-      endDate: endDateTime,
-      allDay
-    })
+    //@ts-ignore
+    dispatch(deleteScheduleByPeriodAction({ startDate: startDate, endDate: endDate, AllDay: allDay }));
+    navigation.goBack()
   }
   const toggleAllDay = () => setAllDay(!allDay);
   useEffect(() => {
-    const startTime = itemData.StartDateTime ? itemData.StartDateTime as string : moment.utc(currentDate).local().format('YYYY-MM-DDTHH:mm:ss');
+    const startTime = itemData.StartDateTime ? itemData.StartDateTime as string : new Date(itemData?.currentDate).toISOString();
     const endTime = calculateEndDate(startTime, duration);
 
     setStartDate(startTime);
@@ -79,7 +65,7 @@ export const CancellationScreen: FC<ICancellationScreen> = memo(() => {
       <ScreenHeader
         text={'Cancellation'}
         withBackButton={true}
-        onBackPress={() => goBack()}
+        onBackPress={() => navigation.goBack()}
       />
 
       <InteractivePartItem title={'All Day'}>
@@ -89,7 +75,7 @@ export const CancellationScreen: FC<ICancellationScreen> = memo(() => {
       <DateOfChangeItem allDay={allDay} title={'End'} time={endDate} setResultData={onSetEndTime} />
 
       <View style={styles.finishBtn}>
-        <CustomButton text={'Cancel Session(s)'} onPress={handleSubmit} />
+        <CustomButton text={'Finish'} onPress={handleSubmit} />
       </View>
     </View>
   );

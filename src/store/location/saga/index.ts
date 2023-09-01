@@ -7,81 +7,61 @@ import { IIdRequest, ILocation, ILocationRequest } from '../../../common/types/l
 import { LocationService } from '../../../services/axios/location';
 import { ErrorFilterService } from '../../../services/error-filter/error-filter.service';
 import { LocationConstantsEnum } from '../constants';
+import { loggerActions } from '../../logger';
 
-
-export function* fetchLocationsWorker({
-    payload,
-    type,
-}: IAction<null>): SagaIterator {
+export function* fetchLocationsWorker({ payload }: IAction<number | undefined>): SagaIterator {
     try {
         yield put(setLocationLoading(true));
-        const data: AxiosResponse<Array<ILocation>, any> = yield call(
-            LocationService.fetchLocations,
-        );
-
-        if (data?.data) {
-            yield put(setLocationsAction(data?.data))
-        }
-
-
-    } catch (error) {
-        yield call(ErrorFilterService.validateError, error)
-    } finally {
-        yield put(setLocationLoading(false));
-    }
-}
-
-export function* addLocationWorker({
-    payload,
-    type,
-}: IAction<ILocationRequest>): SagaIterator {
-    try {
-        yield put(setLocationLoading(true));
-        const { data }: AxiosResponse<ILocation, any> = yield call(
-            LocationService.addLocation,
-            payload,
-        );
-
+        const { data, config }: AxiosResponse<Array<ILocation>, any> = yield call(LocationService.fetchLocations, payload);
+        yield put(loggerActions.add({ type: 'response', name: 'fetchLocationsWorker: ', message: { data, config } }));
         if (data) {
-
-            yield put(addLocationsAction(data))
-        }
-
-
+            yield put(setLocationsAction(data));
+        };
     } catch (error) {
-        yield call(ErrorFilterService.validateError, error)
+        console.warn("fetchLocationsWorker: ", error);
+        yield put(loggerActions.add({ type: 'error', name: 'fetchLocationsWorker: ', message: error }));
+        yield call(ErrorFilterService.validateError, error);
     } finally {
         yield put(setLocationLoading(false));
-    }
-}
+    };
+};
 
-export function* fetchLocationByIdWorker({
-    payload,
-    type,
-}: IAction<IIdRequest>): SagaIterator {
+export function* addLocationWorker({ payload }: IAction<ILocationRequest>): SagaIterator {
     try {
         yield put(setLocationLoading(true));
-        const { data }: AxiosResponse<ILocation, any> = yield call(
-            LocationService.fetchLocationById,
-            payload.Id,
-        );
-
+        const { data }: AxiosResponse<ILocation, any> = yield call(LocationService.addLocation, payload);
+        yield put(loggerActions.add({ type: 'response', name: 'addLocationWorker: ', message: data }));
         if (data) {
-            yield put(addLocationsAction(data))
-        }
-
-
+            yield put(addLocationsAction(data));
+        };
     } catch (error) {
-        yield call(ErrorFilterService.validateError, error)
+        console.warn("addLocationWorker: ", error);
+        yield put(loggerActions.add({ type: 'error', name: 'addLocationWorker: ', message: error }));
+        yield call(ErrorFilterService.validateError, error);
     } finally {
         yield put(setLocationLoading(false));
-    }
-}
+    };
+};
 
-
+export function* fetchLocationByIdWorker({ payload }: IAction<IIdRequest>): SagaIterator {
+    try {
+        yield put(setLocationLoading(true));
+        const { data }: AxiosResponse<ILocation, any> = yield call(LocationService.fetchLocationById, payload.Id);
+        yield put(loggerActions.add({ type: 'response', name: 'fetchLocationByIdWorker: ', message: data }));
+        if (data) {
+            yield put(addLocationsAction(data));
+        };
+    } catch (error) {
+        console.warn("fetchLocationByIdWorker: ", error);
+        yield put(loggerActions.add({ type: 'error', name: 'fetchLocationByIdWorker: ', message: error }));
+        yield call(ErrorFilterService.validateError, error);
+    } finally {
+        yield put(setLocationLoading(false));
+    };
+};
 
 export function* locationSagaWatcher() {
     yield takeEvery(LocationConstantsEnum.FETCH_LOCATIONS, fetchLocationsWorker)
     yield takeEvery(LocationConstantsEnum.ADD_LOCATION, addLocationWorker)
     yield takeEvery(LocationConstantsEnum.GET_LOCATION_BY_ID, fetchLocationByIdWorker)
-}
+};
